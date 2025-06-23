@@ -10,6 +10,8 @@ import sys
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import rasterio
+from rasterio.warp import reproject, Resampling
+from rasterio.transform import from_bounds
 from matplotlib.colors import LightSource
 from scipy.ndimage import gaussian_filter
 import numpy as np
@@ -63,25 +65,45 @@ def draw_map_from_config(
     hs_cfg = mcfg.get("hillshade", {})
     if dem_path:
         with rasterio.open(dem_path) as dem_ds:
-            # read DEM
-            dem = dem_ds.read(1)
-            # Upsample DEM to double resolution for smoother hillshade.
-            # This is a simple nearest-neighbor upsampling (np.repeat).
-            # Note: This increases the pixel count by 2x in each dimension, so the pixel size halves.
-            dem = np.repeat(np.repeat(dem, 2, axis=0), 2, axis=1)
-            # Gaussian smoothing: sigma is configurable via YAML (default 1.0)
-            sigma = hs_cfg.get("sigma", 1.0)
-            dem = gaussian_filter(dem, sigma=sigma)
-            # Calculate true pixel size from DEM transform: after doubling resolution, pixel size halves
-            trans = dem_ds.transform
-            dx = trans.a / 2.0
-            dy = -trans.e / 2.0
-            # Hillshade parameters
-            ls = LightSource(
-                azdeg=hs_cfg.get("azimuth", 315), altdeg=hs_cfg.get("altitude", 45)
-            )
-            shade = ls.hillshade(dem, vert_exag=1, dx=dx, dy=dy)
+            # DEM bounds and CRS
             left, bottom, right, top = dem_ds.bounds
+
+            # target output pixels based on figure size and dpi
+            width_px = int(width * dpi)
+            height_px = int(height * dpi)
+
+            # build transform for target raster
+            target_transform = from_bounds(left, bottom, right, top, width_px, height_px)
+
+            # prepare destination array
+            dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
+
+            # reproject/resample DEM into target grid
+            reproject(
+                source=rasterio.band(dem_ds, 1),
+                destination=dem_resampled,
+                src_transform=dem_ds.transform,
+                src_crs=dem_ds.crs,
+                dst_transform=target_transform,
+                dst_crs=dem_ds.crs,
+                resampling=Resampling.bilinear,
+            )
+
+            # Gaussian smoothing: sigma configurable
+            sigma = hs_cfg.get("sigma", 1.0)
+            dem_smoothed = gaussian_filter(dem_resampled, sigma=sigma)
+
+            # compute pixel sizes in map units
+            dx = target_transform.a
+            dy = -target_transform.e
+
+            # hillshade
+            ls = LightSource(
+                azdeg=hs_cfg.get("azimuth", 315),
+                altdeg=hs_cfg.get("altitude", 45),
+            )
+            shade = ls.hillshade(dem_smoothed, vert_exag=1, dx=dx, dy=dy)
+
             ax.imshow(
                 shade,
                 cmap=hs_cfg.get("cmap", "gray"),

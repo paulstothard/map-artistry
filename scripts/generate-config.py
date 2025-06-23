@@ -61,11 +61,11 @@ DESIGN_SETTINGS = {
         },
         "ocean": {
             "fc": "#ffffff",
-            "ec": "#cccccc",
+            "ec": "#888888",
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0.1,
-            "hatch": "ooo...",
+            "hatch": "///",
             "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
@@ -365,11 +365,11 @@ DESIGN_SETTINGS = {
         },
         "ocean": {
             "fc": "#ff6666",
-            "ec": "#cc5555",
+            "ec": "#883333",
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0.1,
-            "hatch": "ooo...",
+            "hatch": "///",
             "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
