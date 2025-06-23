@@ -1,0 +1,12 @@
+# VS Code / Workspace
+mapartistry.code-workspace
+.vscode/
+
+# Data files
+data/
+
+# Output files
+output/
+
+# macOS system files
+.DS_Store
