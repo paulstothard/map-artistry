@@ -13,6 +13,8 @@ Usage:
 Dependencies:
     pip install geopandas osmnx shapely fiona
 """
+import sys
+from pathlib import Path
 import os
 import argparse
 import geopandas as gpd
@@ -123,11 +125,12 @@ def main():
     os.makedirs(args.output_dir, exist_ok=True)
 
     # Clean the output directory (guarded and safe)
-    import sys
-    from pathlib import Path
-    if not os.path.abspath(args.output_dir).startswith(os.path.abspath("output-shapefiles")):
-        print(f"⚠️ Refusing to clean unexpected directory: {args.output_dir}")
-        sys.exit(1)
+    output_dir = os.path.abspath(args.output_dir)
+    trusted_base = os.path.abspath("output/shp")
+
+    if os.path.commonpath([output_dir, trusted_base]) != trusted_base:
+        print(f"⚠️ Refusing to clean unexpected directory: {output_dir}")
+        return
     SHAPE_EXTS = {".shp", ".shx", ".dbf", ".prj", ".cpg", ".zip"}
     for f in os.listdir(args.output_dir):
         fpath = os.path.join(args.output_dir, f)

@@ -1,46 +1,95 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage:
-#   ./scripts/test-all.sh "Place Name" [buffer_km]
-# Example:
-#   ./scripts/test-all.sh "Edmonton, Alberta" 2
+# Usage: ./scripts/test-all.sh "Place Name" BUFFER_KM [step]
 #
-# This script:
-#   1. Creates a buffered GeoJSON boundary from a place name.
-#   2. Downloads elevation (DEM), shapefiles, and satellite image for the area.
-#   3. Generates a YAML config referencing the satellite and shapefiles.
-#   4. Renders a final map using all data layers.
+# Example: ./scripts/test-all.sh "Edmonton, Alberta" 2
+# Optional third argument lets you jump to a specific step:
+#   "geojson"   — Start at GeoJSON generation (default)
+#   "dem"       — Start at DEM download
+#   "shapefiles"— Start at shapefile download
+#   "satellite" — Start at satellite image download
+#   "config"    — Start at config generation
+#   "map"       — Start at map drawing
+
 
 AREA_NAME="$1"
 BUFFER_KM="${2:-2}"  # default buffer if not specified
+STEP=${3:-all}
 SAFE_NAME=$(echo "$AREA_NAME" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9' | cut -c1-20)
 
-echo "=== Step 1: Create GeoJSON ==="
-OUT_GEOJSON="output/geojson/${SAFE_NAME}_buf${BUFFER_KM}km.geojson"
-mkdir -p output/geojson
-python ./scripts/download-geojson.py --place "$AREA_NAME" --buffer "${BUFFER_KM}km" --output "$OUT_GEOJSON"
+# Set output paths based on area and buffer
+set_output_paths() {
+  PLACE="$AREA_NAME"
+  BUFFER="$BUFFER_KM"
+  GEOJSON_BASENAME="$(echo "$PLACE" | tr '[:upper:]' '[:lower:]' | tr -dc '[:alnum:]')_buf${BUFFER}km"
+  GEOJSON_PATH="output/geojson/${GEOJSON_BASENAME}.geojson"
+  DEM_PATH="output/dem/${GEOJSON_BASENAME}_dem.tif"
+  SHP_DIR="output/shp/testall"
+  SATELLITE_PATH="output/satellite/${GEOJSON_BASENAME}.tif"
+  CONFIG_PATH="output/config/${GEOJSON_BASENAME}.yaml"
+  MAP_PATH="output/map/${GEOJSON_BASENAME}.png"
+}
 
-echo "=== Step 2: Download DEM ==="
-mkdir -p data/dem
-DEM_OUT="data/dem/${SAFE_NAME}_dem.tif"
-python ./scripts/download-dem.py --geojson "$OUT_GEOJSON" --output "$DEM_OUT"
+# Step 1: Create GeoJSON
+if [[ "$STEP" == "all" || "$STEP" == "geojson" ]]; then
+  set_output_paths
+  echo "=== Step 1: Create GeoJSON ==="
+  mkdir -p output/geojson
+  python ./scripts/download-geojson.py "$AREA_NAME" --buffer "$BUFFER_KM" --output "$GEOJSON_PATH"
+else
+  set_output_paths
+fi
 
-echo "=== Step 3: Download Shapefiles ==="
-mkdir -p output/shp/testall
-python ./scripts/download-shapefiles.py "$OUT_GEOJSON" --output-dir output/shp/testall
+# Step 2: Download DEM
+if [[ "$STEP" == "all" || "$STEP" == "dem" ]]; then
+  set_output_paths
+  echo "=== Step 2: Download DEM ==="
+  mkdir -p data/dem
+  python ./scripts/download-dem.py --boundary "$GEOJSON_PATH" --output "$DEM_PATH"
+else
+  set_output_paths
+fi
 
-echo "=== Step 4: Download Satellite Image ==="
-mkdir -p output/satellite
-SAT_OUT="output/satellite/${SAFE_NAME}.tif"
-python ./scripts/download-satellite-image.py --geojson "$OUT_GEOJSON" --output "$SAT_OUT"
+# Step 3: Download Shapefiles
+if [[ "$STEP" == "all" || "$STEP" == "shp" ]]; then
+  set_output_paths
+  echo "=== Step 3: Download Shapefiles ==="
+  mkdir -p "$SHP_DIR"
+  python ./scripts/download-shapefiles.py --geojson "$GEOJSON_PATH" --output-dir "$SHP_DIR"
+fi
 
-echo "=== Step 5: Generate Config ==="
-mkdir -p output/config
-YAML_OUT="output/config/${SAFE_NAME}.yaml"
-python ./scripts/generate-config.py output/shp/testall/*.zip --output "$YAML_OUT" --geojson "$OUT_GEOJSON" --satellite "$SAT_OUT"
+# Step 4: Download Satellite Image
+if [[ "$STEP" == "all" || "$STEP" == "satellite" ]]; then
+  set_output_paths
+  echo "=== Step 4: Download Satellite Image ==="
+  mkdir -p output/satellite
+  python scripts/download-satellite-image.py \
+      --geojson "$GEOJSON_PATH" \
+      --output "$SATELLITE_PATH" \
+      --zoom 14
+else
+  set_output_paths
+fi
 
-echo "=== Step 6: Generate Map ==="
-mkdir -p output/map
-MAP_OUT="output/map/${SAFE_NAME}.png"
-python ./scripts/generate-map.py --config "$YAML_OUT" --output "$MAP_OUT"
+# Step 5: Generate Config
+if [[ "$STEP" == "all" || "$STEP" == "config" ]]; then
+  set_output_paths
+  echo "=== Step 5: Generate Config ==="
+  mkdir -p output/config
+  python ./scripts/generate-config.py "$SHP_DIR"/*.zip --output "$CONFIG_PATH" --geojson "$GEOJSON_PATH" --satellite "$SATELLITE_PATH" --dem "$DEM_PATH"
+else
+  set_output_paths
+fi
+
+# Step 6: Generate Map
+if [[ "$STEP" == "all" || "$STEP" == "map" ]]; then
+  set_output_paths
+  echo "=== Step 6: Generate Map ==="
+  set_output_paths
+  mkdir -p output/map
+  python3 scripts/generate-map.py \
+      -g "$GEOJSON_PATH" \
+      "$CONFIG_PATH" \
+      --output "$MAP_PATH"
+fi

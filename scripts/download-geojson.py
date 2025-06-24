@@ -14,14 +14,16 @@ import math
 from geopy.geocoders import Nominatim
 from shapely.geometry import box, mapping
 
+
 def geocode_bbox(place):
     geolocator = Nominatim(user_agent="map-artistry-download")
     loc = geolocator.geocode(place, exactly_one=True)
     if loc is None:
         raise ValueError(f"Could not geocode '{place}'")
     # boundingbox = [south_lat, north_lat, west_lon, east_lon] as strings
-    south, north, west, east = map(float, loc.raw['boundingbox'])
+    south, north, west, east = map(float, loc.raw["boundingbox"])
     return south, north, west, east
+
 
 def buffer_bbox(south, north, west, east, buffer_km):
     """
@@ -39,9 +41,10 @@ def buffer_bbox(south, north, west, east, buffer_km):
     return (
         south - delta_lat,
         north + delta_lat,
-        west  - delta_lon,
-        east  + delta_lon,
+        west - delta_lon,
+        east + delta_lon,
     )
+
 
 def write_geojson(south, north, west, east, output_path, properties=None):
     """
@@ -51,35 +54,32 @@ def write_geojson(south, north, west, east, output_path, properties=None):
     feature = {
         "type": "Feature",
         "geometry": mapping(geom),
-        "properties": properties or {}
+        "properties": properties or {},
     }
-    fc = {
-        "type": "FeatureCollection",
-        "features": [feature]
-    }
+    fc = {"type": "FeatureCollection", "features": [feature]}
 
     with open(output_path, "w") as f:
         json.dump(fc, f, indent=2)
     print(f"Wrote buffered bbox GeoJSON to {output_path}")
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="Download (and buffer) a GeoJSON bbox for a place name or address"
     )
+    parser.add_argument("place", help="City name or full address to geocode")
     parser.add_argument(
-        "place",
-        help="City name or full address to geocode"
-    )
-    parser.add_argument(
-        "-b", "--buffer",
+        "-b",
+        "--buffer",
         type=float,
         default=0.0,
-        help="Buffer in kilometers to expand the bbox (default: 0)"
+        help="Buffer in kilometers to expand the bbox (default: 0)",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         default="bbox.geojson",
-        help="Output GeoJSON filename (default: bbox.geojson)"
+        help="Output GeoJSON filename (default: bbox.geojson)",
     )
     args = parser.parse_args()
 
@@ -90,9 +90,10 @@ def main():
     props = {
         "query": args.place,
         "buffer_km": args.buffer,
-        "bbox": [south, north, west, east]
+        "bbox": [south, north, west, east],
     }
     write_geojson(south, north, west, east, args.output, props)
+
 
 if __name__ == "__main__":
     main()

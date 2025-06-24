@@ -754,7 +754,7 @@ def generate_yaml(
 
     # Insert satellite info if provided
     if satellite:
-        config["satellite"] = {
+        config["map"]["satellite"] = {
             "path": str(satellite),
             "visible": True,
             "opacity": 1.0

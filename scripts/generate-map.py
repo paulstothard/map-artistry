@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import rasterio
 from rasterio.warp import reproject, Resampling
 from rasterio.transform import from_bounds
+from rasterio.plot import show as show_raster
 from matplotlib.colors import LightSource
 from scipy.ndimage import gaussian_filter
 import numpy as np
@@ -46,13 +47,33 @@ def draw_map_from_config(
     mcfg = cfg["map"]
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     # remove default margins so axes fill the canvas
+    fig.patch.set_facecolor("black")
+    ax.set_facecolor("black")
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    # Load clipping mask (used both for layer clipping and extent)
+    mask_gdf = gpd.read_file(geojson_path)
     # Background
     bg = mcfg.get("background", {})
     face_fc = bg.get("fc", "#ffffff")
     fig.patch.set_facecolor(face_fc)
     ax.set_facecolor(face_fc)
     ax.set_axis_off()
+
+    # --- Render satellite image underlay if configured (drawn immediately after background) ---
+    satellite_cfg = cfg.get("map", {}).get("satellite")
+    if satellite_cfg and satellite_cfg.get("visible", True):
+        with rasterio.open(satellite_cfg["path"]) as src:
+            # Use the image data directly without reprojection
+            img_rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
+            img_rgb = np.clip(img_rgb, 0, 255).astype(np.uint8)
+
+            ax.imshow(
+                img_rgb,
+                extent=[src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top],
+                zorder=satellite_cfg.get("zorder", 0),
+                alpha=satellite_cfg.get("opacity", 1.0),
+                aspect="auto",
+            )
 
     # --- Render hillshade underlay if DEM is configured ---
     dem_path = mcfg.get("dem")
@@ -98,25 +119,18 @@ def draw_map_from_config(
             )
             shade = ls.hillshade(dem_smoothed, vert_exag=1, dx=dx, dy=dy)
 
+            zorder = hs_cfg.get("zorder", 0)
+            alpha = hs_cfg.get("alpha", 0.5)
             ax.imshow(
                 shade,
                 cmap=hs_cfg.get("cmap", "gray"),
-                alpha=hs_cfg.get("alpha", 0.5),
+                alpha=alpha,
                 extent=[left, right, bottom, top],
-                zorder=0,
+                zorder=zorder,
                 interpolation="bicubic",
+                aspect="auto",  # keep hillshade aligned under custom axis aspect
             )
 
-    # --- Render satellite image underlay if configured ---
-    satellite_cfg = cfg.get("satellite")
-    if satellite_cfg and satellite_cfg.get("visible", True):
-        import rasterio
-        from rasterio.plot import show as show_raster
-        with rasterio.open(satellite_cfg["path"]) as src:
-            show_raster(src, ax=ax, alpha=satellite_cfg.get("opacity", 1.0))
-
-    # Load clipping mask
-    mask_gdf = gpd.read_file(geojson_path)
 
     # Sort layers by zorder to draw in the right sequence
     layers = sorted(cfg["layers"].items(), key=lambda kv: kv[1]["default"]["zorder"])
@@ -165,6 +179,8 @@ def draw_map_from_config(
 
                 draw_style = layer_cfg["default"].copy()
                 draw_style.update(style)
+                # Get zorder from style, fallback to 2 for polygons, 2 for lines, 2 for points (default)
+                zorder = draw_style.get("zorder", 2)
 
                 # Determine drawing based on recorded geometry type
                 geom = layer_cfg["geometry_type"].lower()
@@ -184,7 +200,7 @@ def draw_map_from_config(
                             ),
                             linewidth=draw_style.get("edge_width", 0.1),
                             alpha=draw_style.get("alpha", 1.0),
-                            zorder=draw_style["zorder"],
+                            zorder=zorder,
                         )
                     else:
                         subset.plot(
@@ -195,7 +211,7 @@ def draw_map_from_config(
                             ),
                             linewidth=draw_style.get("edge_width", 0.1),
                             alpha=draw_style.get("alpha", 1.0),
-                            zorder=draw_style["zorder"],
+                            zorder=zorder,
                         )
                 # Point (Point or MultiPoint)
                 elif geom.startswith("point"):
@@ -205,7 +221,7 @@ def draw_map_from_config(
                         color=draw_style.get("fc"),
                         markersize=draw_style.get("size", 3),
                         alpha=draw_style.get("alpha", 1.0),
-                        zorder=draw_style["zorder"],
+                        zorder=zorder,
                     )
                 # Line (LineString or MultiLineString)
                 else:
@@ -215,13 +231,14 @@ def draw_map_from_config(
                         color=draw_style.get("fc"),
                         linewidth=lw,
                         alpha=draw_style.get("alpha", 1.0),
-                        zorder=draw_style["zorder"],
+                        zorder=zorder,
                     )
 
         # Draw any remaining features with the default style
         rest = gdf.loc[~gdf.index.isin(styled_idx)]
         if not rest.empty:
             dft = layer_cfg["default"]
+            zorder = dft.get("zorder", 2)
             if layer_cfg["geometry_type"].lower().startswith("polygon"):
                 # Note: hatch_color currently not supported; to re-enable when Matplotlib adds support, uncomment the hatch_color argument below.
                 if layer_palette:
@@ -234,7 +251,7 @@ def draw_map_from_config(
                         edgecolor=dft.get("edge_color", dft.get("ec")),
                         linewidth=dft.get("edge_width", 0.1),
                         alpha=dft.get("alpha", 1.0),
-                        zorder=dft["zorder"],
+                        zorder=zorder,
                     )
                 else:
                     rest.plot(
@@ -243,7 +260,7 @@ def draw_map_from_config(
                         edgecolor=dft.get("edge_color", dft.get("ec")),
                         linewidth=dft.get("edge_width", 0.1),
                         alpha=dft.get("alpha", 1.0),
-                        zorder=dft["zorder"],
+                        zorder=zorder,
                     )
             elif "marker" in dft:
                 rest.plot(
@@ -252,7 +269,7 @@ def draw_map_from_config(
                     color=dft.get("fc"),
                     markersize=dft.get("size", 3),
                     alpha=dft.get("alpha", 1.0),
-                    zorder=dft["zorder"],
+                    zorder=zorder,
                 )
             else:
                 # use config-defined linewidth for all remaining lines
@@ -262,7 +279,7 @@ def draw_map_from_config(
                     color=dft.get("fc"),
                     linewidth=lw,
                     alpha=dft.get("alpha", 1.0),
-                    zorder=dft["zorder"],
+                    zorder=zorder,
                 )
 
     # Set map extent and latitude-corrected aspect to fill canvas
