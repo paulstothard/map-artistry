@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-prepare-dem.py
+download-dem.py
 
 Pure-Python DEM acquisition and processing:
  1. Read GeoJSON boundary
@@ -13,7 +13,7 @@ Pure-Python DEM acquisition and processing:
  8. Write final GeoTIFF
 
 Usage:
-  poetry run python scripts/prepare-dem.py \
+  python scripts/download-dem.py \
       -b data/edmonton.map.geojson \
       -o dem/edmonton_dem.tif
 

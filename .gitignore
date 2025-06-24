@@ -13,3 +13,6 @@ output/
 
 # Python virtual environment
 venv/
+
+# Cache files
+cache/

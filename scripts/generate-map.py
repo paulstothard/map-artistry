@@ -44,12 +44,6 @@ def draw_map_from_config(
 
     # Prepare figure and axis
     mcfg = cfg["map"]
-    # Set hatch linewidth rcParam if present in config
-    hatch_lw = mcfg.get("hatch_linewidth", None)
-    if hatch_lw is not None:
-        import matplotlib as mpl
-
-        mpl.rcParams["hatch.linewidth"] = hatch_lw
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     # remove default margins so axes fill the canvas
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
@@ -183,8 +177,6 @@ def draw_map_from_config(
                             linewidth=draw_style.get("edge_width", 0.1),
                             alpha=draw_style.get("alpha", 1.0),
                             zorder=draw_style["zorder"],
-                            hatch=draw_style.get("hatch"),
-                            # hatch_color=draw_style.get("hatch_c"),
                         )
                     else:
                         subset.plot(
@@ -196,8 +188,6 @@ def draw_map_from_config(
                             linewidth=draw_style.get("edge_width", 0.1),
                             alpha=draw_style.get("alpha", 1.0),
                             zorder=draw_style["zorder"],
-                            hatch=draw_style.get("hatch"),
-                            # hatch_color=draw_style.get("hatch_c"),
                         )
                 # Point (Point or MultiPoint)
                 elif geom.startswith("point"):
@@ -237,8 +227,6 @@ def draw_map_from_config(
                         linewidth=dft.get("edge_width", 0.1),
                         alpha=dft.get("alpha", 1.0),
                         zorder=dft["zorder"],
-                        hatch=dft.get("hatch"),
-                        # hatch_color=dft.get("hatch_c"),
                     )
                 else:
                     rest.plot(
@@ -248,8 +236,6 @@ def draw_map_from_config(
                         linewidth=dft.get("edge_width", 0.1),
                         alpha=dft.get("alpha", 1.0),
                         zorder=dft["zorder"],
-                        hatch=dft.get("hatch"),
-                        # hatch_color=dft.get("hatch_c"),
                     )
             elif "marker" in dft:
                 rest.plot(

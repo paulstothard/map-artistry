@@ -24,9 +24,7 @@ DESIGN_SETTINGS = {
         "map": {
             "background": {
                 "fc": "#aa332e",
-                "ec": "#aa332e",
-                "hatch": None,
-                "hatch_c": None,
+                "ec": "#aa332e"
             },
             "scheme": "coral",
             "info": {
@@ -37,8 +35,7 @@ DESIGN_SETTINGS = {
                 "fontsize": 10,
                 "color": "#cccccc",
             },
-            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0},
-            "hatch_linewidth": 0.5,
+            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0}
         },
         "water": {
             "fc": "#ffffff",
@@ -46,8 +43,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -65,8 +60,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0.1,
-            "hatch": "///",
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -84,8 +77,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "ew": 0,
             "zorder": 3,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -105,8 +96,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "ew": 0,
             "zorder": 6,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -133,8 +122,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 7,
             "ew": 0.01,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -152,8 +139,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
-            "hatch": "ooo...",
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -171,8 +156,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 2,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -190,8 +173,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -210,8 +191,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -230,8 +209,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -249,8 +226,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -262,7 +237,7 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "marker": "o",
-            "size": 3,
+            "size": 0.1,
         },
         "pofw": {
             "fc": "#ffdead",
@@ -270,8 +245,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -289,8 +262,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -309,8 +280,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 0,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -328,9 +297,7 @@ DESIGN_SETTINGS = {
         "map": {
             "background": {
                 "fc": "#000000",
-                "ec": "#000000",
-                "hatch": None,
-                "hatch_c": None,
+                "ec": "#000000"
             },
             "scheme": "river_runs_red",
             "info": {
@@ -341,8 +308,7 @@ DESIGN_SETTINGS = {
                 "fontsize": 10,
                 "color": "#cccccc",
             },
-            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0},
-            "hatch_linewidth": 0.5,
+            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0}
         },
         "water": {
             "fc": "#ff6666",
@@ -350,8 +316,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -369,8 +333,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "zorder": 4,
             "ew": 0.1,
-            "hatch": "///",
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -388,8 +350,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "ew": 0,
             "zorder": 3,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -409,8 +369,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.7,
             "ew": 0,
             "zorder": 6,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -437,8 +395,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 7,
             "ew": 0.01,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -456,8 +412,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
-            "hatch": "ooo...",
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -475,8 +429,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 2,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -494,8 +446,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -514,8 +464,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -534,8 +482,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -553,8 +499,6 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -566,7 +510,7 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "marker": "o",
-            "size": 3,
+            "size": 0.1,
         },
         "pofw": {
             "fc": "#ff4500",
@@ -574,8 +518,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -593,8 +535,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 5,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -613,8 +553,6 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 0,
             "ew": 0,
-            "hatch": None,
-            "hatch_c": None,
             "visible": False,
             "geometry_visibility": {
                 "Point": False,
@@ -748,10 +686,6 @@ def generate_yaml(
                         "visible": settings.get("visible", True),
                         "palette": settings.get("palette", []),
                     }
-                    if settings.get("hatch", None) is not None:
-                        default_style["hatch"] = settings["hatch"]
-                    if settings.get("hatch_c", None) is not None:
-                        default_style["hatch_c"] = settings["hatch_c"]
 
                     # Add geometry-dependent defaults
                     if "polygon" in geom_type.lower():
