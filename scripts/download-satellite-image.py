@@ -17,6 +17,7 @@ Output format:
 import argparse
 import geopandas as gpd
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import contextily as ctx
@@ -27,14 +28,30 @@ from rasterio.warp import calculate_default_transform, reproject, Resampling
 import os
 import osmnx as ox
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Download satellite imagery from a place name or GeoJSON polygon.")
+    parser = argparse.ArgumentParser(
+        description="Download satellite imagery from a place name or GeoJSON polygon."
+    )
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--geojson", help="Path to GeoJSON file (must contain a polygon).")
-    group.add_argument("--place", help="Place name to geocode, e.g. 'Downtown Edmonton, AB'")
-    parser.add_argument("--output", default="satellite.tif", help="Output path (default: satellite.tif)")
-    parser.add_argument("--format", choices=["geotiff", "png"], default="geotiff", help="Output format")
-    parser.add_argument("--zoom", type=int, default=14, help="Zoom level for satellite tiles (e.g., 13–17)")
+    group.add_argument(
+        "--geojson", help="Path to GeoJSON file (must contain a polygon)."
+    )
+    group.add_argument(
+        "--place", help="Place name to geocode, e.g. 'Downtown Edmonton, AB'"
+    )
+    parser.add_argument(
+        "--output", default="satellite.tif", help="Output path (default: satellite.tif)"
+    )
+    parser.add_argument(
+        "--format", choices=["geotiff", "png"], default="geotiff", help="Output format"
+    )
+    parser.add_argument(
+        "--zoom",
+        type=int,
+        default=14,
+        help="Zoom level for satellite tiles (e.g., 13–17)",
+    )
     args = parser.parse_args()
 
     # Get polygon from geojson or place
@@ -77,11 +94,11 @@ def main():
     fig.patch.set_facecolor("black")
     ax.set_facecolor("black")
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-    gdf_web.boundary.plot(ax=ax, edgecolor='none')
+    gdf_web.boundary.plot(ax=ax, edgecolor="none")
     ax.set_xlim(bounds[0], bounds[2])
     ax.set_ylim(bounds[1], bounds[3])
     ctx.add_basemap(ax, source=ctx.providers.Esri.WorldImagery, zoom=args.zoom)
-    ax.axis('off')
+    ax.axis("off")
 
     # Convert to image array
     fig.canvas.draw()
@@ -90,6 +107,7 @@ def main():
 
     # Auto-crop border
     from PIL import Image
+
     img_rgb = np.array(Image.fromarray(img).crop(Image.fromarray(img).getbbox()))
 
     height, width, _ = img_rgb.shape
@@ -135,8 +153,10 @@ def main():
         print(f"✓ Saved GeoTIFF to {args.output}")
     else:
         import imageio
+
         imageio.imwrite(args.output, img_rgb)
         print(f"✓ Saved PNG to {args.output}")
+
 
 if __name__ == "__main__":
     main()

@@ -12,9 +12,8 @@ set -euo pipefail
 #   "config"    — Start at config generation
 #   "map"       — Start at map drawing
 
-
 AREA_NAME="$1"
-BUFFER_KM="${2:-2}"  # default buffer if not specified
+BUFFER_KM="${2:-2}" # default buffer if not specified
 STEP=${3:-all}
 SAFE_NAME=$(echo "$AREA_NAME" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9' | cut -c1-20)
 
@@ -65,9 +64,9 @@ if [[ "$STEP" == "all" || "$STEP" == "satellite" ]]; then
   echo "=== Step 4: Download Satellite Image ==="
   mkdir -p output/satellite
   python scripts/download-satellite-image.py \
-      --geojson "$GEOJSON_PATH" \
-      --output "$SATELLITE_PATH" \
-      --zoom 14
+    --geojson "$GEOJSON_PATH" \
+    --output "$SATELLITE_PATH" \
+    --zoom 14
 else
   set_output_paths
 fi
@@ -89,7 +88,7 @@ if [[ "$STEP" == "all" || "$STEP" == "map" ]]; then
   set_output_paths
   mkdir -p output/map
   python3 scripts/generate-map.py \
-      -g "$GEOJSON_PATH" \
-      "$CONFIG_PATH" \
-      --output "$MAP_PATH"
+    -g "$GEOJSON_PATH" \
+    "$CONFIG_PATH" \
+    --output "$MAP_PATH"
 fi

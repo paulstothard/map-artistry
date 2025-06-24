@@ -22,10 +22,7 @@ import sys
 DESIGN_SETTINGS = {
     "coral": {
         "map": {
-            "background": {
-                "fc": "#aa332e",
-                "ec": "#aa332e"
-            },
+            "background": {"fc": "#aa332e", "ec": "#aa332e"},
             "scheme": "coral",
             "info": {
                 "text": "map-artistry",
@@ -35,7 +32,13 @@ DESIGN_SETTINGS = {
                 "fontsize": 10,
                 "color": "#cccccc",
             },
-            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0}
+            "hillshade": {
+                "azimuth": 315,
+                "altitude": 45,
+                "cmap": "bone",
+                "alpha": 0.5,
+                "sigma": 1.0,
+            },
         },
         "water": {
             "fc": "#ffffff",
@@ -295,10 +298,7 @@ DESIGN_SETTINGS = {
     },
     "river_runs_red": {
         "map": {
-            "background": {
-                "fc": "#000000",
-                "ec": "#000000"
-            },
+            "background": {"fc": "#000000", "ec": "#000000"},
             "scheme": "river_runs_red",
             "info": {
                 "text": "map-artistry",
@@ -308,7 +308,13 @@ DESIGN_SETTINGS = {
                 "fontsize": 10,
                 "color": "#cccccc",
             },
-            "hillshade": {"azimuth": 315, "altitude": 45, "cmap": "bone", "alpha": 0.5, "sigma": 1.0}
+            "hillshade": {
+                "azimuth": 315,
+                "altitude": 45,
+                "cmap": "bone",
+                "alpha": 0.5,
+                "sigma": 1.0,
+            },
         },
         "water": {
             "fc": "#ff6666",
@@ -757,7 +763,7 @@ def generate_yaml(
         config["map"]["satellite"] = {
             "path": str(satellite),
             "visible": True,
-            "opacity": 1.0
+            "opacity": 1.0,
         }
 
     # Write YAML

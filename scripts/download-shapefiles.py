@@ -21,17 +21,19 @@ import geopandas as gpd
 import osmnx as ox
 import zipfile
 import warnings
+
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 
 # default tag mappings for OSMnx.geometries_from_polygon
 TAG_MAP = {
-    "highway":   {"highway": True},
-    "building":  {"building": True},
-    "waterway":  {"waterway": True},
-    "landuse":   {"landuse": True},
-    "water":     {"natural": "water"},
+    "highway": {"highway": True},
+    "building": {"building": True},
+    "waterway": {"waterway": True},
+    "landuse": {"landuse": True},
+    "water": {"natural": "water"},
     # you can add more: `"railway": {"railway": True}`, etc.
 }
+
 
 def download_layer(poly, key, tags, outdir):
     print(f"> Downloading layer '{key}' …")
@@ -85,28 +87,27 @@ def download_layer(poly, key, tags, outdir):
     gdf.to_file(path)
     print(f"  ✓ saved {path}")
 
+
 def main():
     p = argparse.ArgumentParser(
         description="Download intersecting shapefiles for a named place or GeoJSON polygon."
     )
     group = p.add_mutually_exclusive_group(required=True)
+    group.add_argument("--place", help="Place name to geocode and fetch polygon for.")
     group.add_argument(
-        "--place",
-        help="Place name to geocode and fetch polygon for."
-    )
-    group.add_argument(
-        "--geojson",
-        help="Path to a GeoJSON file containing polygon(s)."
+        "--geojson", help="Path to a GeoJSON file containing polygon(s)."
     )
     p.add_argument(
-        "-o", "--output-dir",
+        "-o",
+        "--output-dir",
         default="shapefiles",
-        help="Directory to write *.shp files into."
+        help="Directory to write *.shp files into.",
     )
     p.add_argument(
-        "--layers", nargs="+",
-        default=["highway","building","waterway","landuse","water"],
-        help="Which OSM layer keys to fetch (must be in TAG_MAP)."
+        "--layers",
+        nargs="+",
+        default=["highway", "building", "waterway", "landuse", "water"],
+        help="Which OSM layer keys to fetch (must be in TAG_MAP).",
     )
     args = p.parse_args()
 
@@ -160,13 +161,14 @@ def main():
 
     # Create a single archive with all shapefiles
     zip_path = os.path.join(args.output_dir, "shapefiles.zip")
-    with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for fname in os.listdir(args.output_dir):
             fpath = os.path.join(args.output_dir, fname)
             if fname != "shapefiles.zip" and os.path.isfile(fpath):
                 zf.write(fpath, arcname=fname)
                 os.remove(fpath)
     print(f"  ✓ created unified archive {zip_path}")
+
 
 if __name__ == "__main__":
     main()

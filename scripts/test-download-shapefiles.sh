@@ -5,7 +5,7 @@ set -euo pipefail
 OUTDIR="output/shp"
 mkdir -p "${OUTDIR}"
 
-echo '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-113.49,53.54],[-113.49,53.541],[-113.488,53.541],[-113.488,53.54],[-113.49,53.54]]]},"properties":{}}]}' > "${OUTDIR}/tiny.geojson"
+echo '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-113.49,53.54],[-113.49,53.541],[-113.488,53.541],[-113.488,53.54],[-113.49,53.54]]]},"properties":{}}]}' >"${OUTDIR}/tiny.geojson"
 
 # Helper to assert a file exists
 assert_exists() {

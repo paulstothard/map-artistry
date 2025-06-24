@@ -7,15 +7,15 @@ mkdir -p "${OUTDIR}"
 
 echo "=== Test 1: From place ==="
 python3 scripts/download-satellite-image.py \
-    --place "Downtown Edmonton, AB" \
-    --output "${OUTDIR}/place-test.tif" \
-    --zoom 17
+  --place "Downtown Edmonton, AB" \
+  --output "${OUTDIR}/place-test.tif" \
+  --zoom 17
 
 echo "✓ Place-based GeoTIFF downloaded."
 
 echo
 echo "=== Test 2: From GeoJSON ==="
-cat > "${OUTDIR}/test-area.geojson" <<EOF
+cat >"${OUTDIR}/test-area.geojson" <<EOF
 {
   "type": "FeatureCollection",
   "features": [{
@@ -36,10 +36,10 @@ cat > "${OUTDIR}/test-area.geojson" <<EOF
 EOF
 
 python3 scripts/download-satellite-image.py \
-    --geojson "${OUTDIR}/test-area.geojson" \
-    --output "${OUTDIR}/geojson-test.png" \
-    --format png \
-    --zoom 18
+  --geojson "${OUTDIR}/test-area.geojson" \
+  --output "${OUTDIR}/geojson-test.png" \
+  --format png \
+  --zoom 18
 
 echo "✓ GeoJSON-based PNG downloaded."
 

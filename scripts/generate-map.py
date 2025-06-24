@@ -69,7 +69,12 @@ def draw_map_from_config(
 
             ax.imshow(
                 img_rgb,
-                extent=[src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top],
+                extent=[
+                    src.bounds.left,
+                    src.bounds.right,
+                    src.bounds.bottom,
+                    src.bounds.top,
+                ],
                 zorder=satellite_cfg.get("zorder", 0),
                 alpha=satellite_cfg.get("opacity", 1.0),
                 aspect="auto",
@@ -88,7 +93,9 @@ def draw_map_from_config(
             height_px = int(height * dpi)
 
             # build transform for target raster
-            target_transform = from_bounds(left, bottom, right, top, width_px, height_px)
+            target_transform = from_bounds(
+                left, bottom, right, top, width_px, height_px
+            )
 
             # prepare destination array
             dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
@@ -130,7 +137,6 @@ def draw_map_from_config(
                 interpolation="bicubic",
                 aspect="auto",  # keep hillshade aligned under custom axis aspect
             )
-
 
     # Sort layers by zorder to draw in the right sequence
     layers = sorted(cfg["layers"].items(), key=lambda kv: kv[1]["default"]["zorder"])
