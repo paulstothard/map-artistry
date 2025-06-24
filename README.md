@@ -23,6 +23,7 @@ To generate a full map from a place name:
 ```
 
 This will:
+
 1. Download a buffered GeoJSON boundary
 2. Download a digital elevation model (DEM)
 3. Download OpenStreetMap shapefiles
@@ -38,3 +39,4 @@ You can also run individual steps by providing a third argument:
 - `"satellite"` – start at satellite image download
 - `"config"` – start at config generation
 - `"map"` – start at map rendering
+- 
