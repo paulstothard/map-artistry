@@ -107,6 +107,14 @@ def draw_map_from_config(
                 interpolation="bicubic",
             )
 
+    # --- Render satellite image underlay if configured ---
+    satellite_cfg = cfg.get("satellite")
+    if satellite_cfg and satellite_cfg.get("visible", True):
+        import rasterio
+        from rasterio.plot import show as show_raster
+        with rasterio.open(satellite_cfg["path"]) as src:
+            show_raster(src, ax=ax, alpha=satellite_cfg.get("opacity", 1.0))
+
     # Load clipping mask
     mask_gdf = gpd.read_file(geojson_path)
 

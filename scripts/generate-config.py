@@ -617,6 +617,7 @@ def generate_yaml(
     unique_threshold=10,
     scheme_name="coral",
     dem_path=None,
+    satellite=None,
 ):
     if not geojson_path:
         raise ValueError("A geojson_path is required")
@@ -751,6 +752,14 @@ def generate_yaml(
                         "attributes": attrs,
                     }
 
+    # Insert satellite info if provided
+    if satellite:
+        config["satellite"] = {
+            "path": str(satellite),
+            "visible": True,
+            "opacity": 1.0
+        }
+
     # Write YAML
     with open(output_path, "w") as f:
         f.write("\n".join(header))
@@ -792,6 +801,13 @@ if __name__ == "__main__":
         default=None,
         help="Path to a DEM GeoTIFF file (optional)",
     )
+    parser.add_argument(
+        "--satellite",
+        dest="satellite",
+        type=str,
+        default=None,
+        help="Path to a satellite image file (optional)",
+    )
     args = parser.parse_args()
     # Ensure parent folder is in path (if needed)
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -802,4 +818,5 @@ if __name__ == "__main__":
         unique_threshold=args.unique_threshold,
         scheme_name=args.scheme_name,
         dem_path=Path(args.dem_path) if args.dem_path else None,
+        satellite=Path(args.satellite) if args.satellite else None,
     )
