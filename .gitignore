@@ -1,5 +1,5 @@
 # VS Code / Workspace
-mapartistry.code-workspace
+*.code-workspace
 .vscode/
 
 # Data files
