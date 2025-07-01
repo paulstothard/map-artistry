@@ -16,6 +16,31 @@ import sys
 
 # DESIGN_SETTINGS
 DESIGN_SETTINGS = {
+    "satellite": {
+        "map": {
+            "background": {"fc": "#000000", "ec": "#000000"},
+            "scheme": "satellite",
+            "info": {
+                "text": "map-artistry",
+                "show": False,
+                "position": "bottom-right",
+                "font": "DejaVu Sans",
+                "fontsize": 10,
+                "color": "#cccccc",
+            },
+            "hillshade": {
+                "azimuth": 315,
+                "altitude": 45,
+                "cmap": "bone",
+                "alpha": 0.05,
+                "sigma": 1.0,
+            },
+            "satellite": {
+                "visible": True,
+                "opacity": 1.0,
+            },
+        }
+    },
     "coral": {
         "map": {
             "background": {"fc": "#aa332e", "ec": "#aa332e"},
