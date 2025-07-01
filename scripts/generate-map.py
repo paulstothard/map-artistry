@@ -1,11 +1,8 @@
 import yaml
-import zipfile
-import tempfile
 from pathlib import Path
 import math
 
 import argparse
-import sys
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -151,17 +148,8 @@ def draw_map_from_config(
         ):
             continue
 
-        # Extract the shapefile from the ZIP and find it recursively
-        with tempfile.TemporaryDirectory() as tmp:
-            with zipfile.ZipFile(layer_cfg["file"], "r") as z:
-                z.extractall(tmp)
-            matches = list(Path(tmp).rglob(f"{layer_cfg['layer']}.shp"))
-            if not matches:
-                raise FileNotFoundError(
-                    f"Shapefile for layer '{layer_cfg['layer']}' not found in {layer_cfg['file']}"
-                )
-            shp_path = matches[0]
-            gdf = gpd.read_file(shp_path)
+        # Read directly from GeoPackage
+        gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
 
         # Clip to mask
         if not mask_gdf.empty:

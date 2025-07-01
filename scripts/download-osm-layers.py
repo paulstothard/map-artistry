@@ -13,13 +13,10 @@ Usage:
 Dependencies:
     pip install geopandas osmnx shapely fiona
 """
-import sys
-from pathlib import Path
 import os
 import argparse
 import geopandas as gpd
 import osmnx as ox
-import zipfile
 import warnings
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
@@ -97,8 +94,8 @@ def download_layer(poly, key, tags, outdir):
         keep_cols = [col for col in layer_column_map[key] if col in gdf.columns]
         gdf = gdf[keep_cols]
 
-    path = os.path.join(outdir, f"{key}.shp")
-    gdf.to_file(path)
+    path = os.path.join(outdir, f"{key}.gpkg")
+    gdf.to_file(path, driver="GPKG")
     print(f"  ✓ saved {path}")
 
 
@@ -139,19 +136,6 @@ def main():
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Clean the output directory (guarded and safe)
-    output_dir = os.path.abspath(args.output_dir)
-    trusted_base = os.path.abspath("output/shp")
-
-    if os.path.commonpath([output_dir, trusted_base]) != trusted_base:
-        print(f"⚠️ Refusing to clean unexpected directory: {output_dir}")
-        return
-    SHAPE_EXTS = {".shp", ".shx", ".dbf", ".prj", ".cpg", ".zip"}
-    for f in os.listdir(args.output_dir):
-        fpath = os.path.join(args.output_dir, f)
-        if os.path.isfile(fpath) and Path(f).suffix.lower() in SHAPE_EXTS:
-            os.remove(fpath)
-
     # download each requested layer
     for key in args.layers:
         if key not in TAG_MAP:
@@ -165,23 +149,13 @@ def main():
     try:
         ocean = ox.features_from_polygon(poly, sea_tags)
         if not ocean.empty:
-            path = os.path.join(args.output_dir, "ocean.shp")
-            ocean.to_file(path)
+            path = os.path.join(args.output_dir, "ocean.gpkg")
+            ocean.to_file(path, driver="GPKG")
             print(f"  ✓ saved ocean polygons to {path}")
         else:
             print(" - no ocean/sea features found in this area")
     except ox._errors.InsufficientResponseError:
         print(" - no ocean/sea features found in this area (query returned nothing)")
-
-    # Create a single archive with all shapefiles
-    zip_path = os.path.join(args.output_dir, "shapefiles.zip")
-    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        for fname in os.listdir(args.output_dir):
-            fpath = os.path.join(args.output_dir, fname)
-            if fname != "shapefiles.zip" and os.path.isfile(fpath):
-                zf.write(fpath, arcname=fname)
-                os.remove(fpath)
-    print(f"  ✓ created unified archive {zip_path}")
 
 
 if __name__ == "__main__":

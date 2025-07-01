@@ -7,7 +7,7 @@ set -euo pipefail
 # Optional third argument lets you jump to a specific step:
 #   "geojson" — Start at GeoJSON generation (default)
 #   "dem"     — Start at DEM download
-#   "shp"     — Start at shapefile download
+#   "layers"  — Start at vector layer download
 #   "satellite" — Start at satellite image download
 #   "config"  — Start at config generation
 #   "map"     — Start at map drawing
@@ -30,7 +30,7 @@ set_output_paths() {
   GEOJSON_BASENAME="$(echo "$PLACE" | tr '[:upper:]' '[:lower:]' | tr -dc '[:alnum:]')_buf${BUFFER}km"
   GEOJSON_PATH="output/geojson/${GEOJSON_BASENAME}.geojson"
   DEM_PATH="output/dem/${GEOJSON_BASENAME}_dem.tif"
-  SHP_DIR="output/shp/testall"
+  LAYER_DIR="output/layers/testall"
   SATELLITE_PATH="output/satellite/${GEOJSON_BASENAME}.tif"
   CONFIG_PATH="output/config/${GEOJSON_BASENAME}.yaml"
   MAP_PATH="output/map/${GEOJSON_BASENAME}.png"
@@ -56,12 +56,12 @@ else
   set_output_paths
 fi
 
-# Step 3: Download Shapefiles
-if [[ "$STEP" == "all" || "$STEP" == "shp" ]]; then
+# Step 3: Download Vector Layers
+if [[ "$STEP" == "all" || "$STEP" == "layers" ]]; then
   set_output_paths
-  echo "=== Step 3: Download Shapefiles ==="
-  mkdir -p "$SHP_DIR"
-  python ./scripts/download-shapefiles.py --geojson "$GEOJSON_PATH" --output-dir "$SHP_DIR"
+  echo "=== Step 3: Download Vector Layers ==="
+  mkdir -p "$LAYER_DIR"
+  python ./scripts/download-osm-layers.py --geojson "$GEOJSON_PATH" --output-dir "$LAYER_DIR"
 fi
 
 # Step 4: Download Satellite Image
@@ -82,7 +82,7 @@ if [[ "$STEP" == "all" || "$STEP" == "config" ]]; then
   set_output_paths
   echo "=== Step 5: Generate Config ==="
   mkdir -p output/config
-  python ./scripts/generate-config.py "$SHP_DIR"/*.zip --output "$CONFIG_PATH" --geojson "$GEOJSON_PATH" --satellite "$SATELLITE_PATH" --dem "$DEM_PATH"
+  python ./scripts/generate-config.py "$LAYER_DIR"/*.gpkg --output "$CONFIG_PATH" --geojson "$GEOJSON_PATH" --satellite "$SATELLITE_PATH" --dem "$DEM_PATH"
 else
   set_output_paths
 fi

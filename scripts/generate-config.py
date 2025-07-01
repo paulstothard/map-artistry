@@ -1,5 +1,3 @@
-import zipfile
-import tempfile
 from pathlib import Path
 import os
 import yaml
@@ -12,8 +10,6 @@ class NoAliasDumper(yaml.SafeDumper):
 
 
 import geopandas as gpd
-import fiona
-from collections import Counter
 import argparse
 import sys
 
@@ -618,7 +614,7 @@ def preferred_attributes_for_layer(layer_name):
 
 
 def generate_yaml(
-    shp_zips,
+    layer_files,
     geojson_path,
     output_path=Path("config.yaml"),
     unique_threshold=10,
@@ -646,118 +642,108 @@ def generate_yaml(
         "# You can override default styles per feature type by editing the style_rules section\n",
     ]
 
-    for zip_path in shp_zips:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            with zipfile.ZipFile(zip_path, "r") as z:
-                z.extractall(tmpdir)
-            # Find all extracted .shp files (skip directories named *.shp)
-            shp_paths = [
-                p
-                for p in Path(tmpdir).rglob("*")
-                if p.is_file() and p.suffix.lower() == ".shp"
+    for layer_path in layer_files:
+        if not layer_path.exists() or layer_path.suffix.lower() != ".gpkg":
+            print(f"Skipping {layer_path} (not a .gpkg file)")
+            continue
+        layer_name = layer_path.stem
+        gdf = gpd.read_file(layer_path)
+        if mask_gdf is not None:
+            gdf = gpd.clip(gdf, mask_gdf)
+
+        # Determine all geometry types in this layer
+        geom_types = gdf.geom_type.unique().tolist()
+
+        # For each geometry subtype, build a separate config entry
+        for geom_type in geom_types:
+            sub_gdf = gdf[gdf.geom_type == geom_type]
+            suffix = f"__{geom_type}" if len(geom_types) > 1 else ""
+
+            # sample attributes
+            attrs = {}
+            for col in sub_gdf.columns:
+                if col == "geometry":
+                    continue
+                vals = sub_gdf[col].dropna().astype(str).unique().tolist()
+                attrs[col] = (
+                    vals if len(vals) <= unique_threshold else len(vals)
+                )
+
+            # style: get settings from design
+            cat = get_category_key(layer_name)
+            settings = design[cat]
+            default_style = {
+                "fc": settings["fc"],
+                "ec": settings.get("ec", settings["fc"]),
+                "alpha": settings["alpha"],
+                "zorder": settings["zorder"],
+                "visible": settings.get("visible", True),
+                "palette": settings.get("palette", []),
+            }
+
+            # Add geometry-dependent defaults
+            if "polygon" in geom_type.lower():
+                default_style["edge_color"] = settings.get("ec", settings["fc"])
+                default_style["edge_width"] = settings.get("ew", 0)
+            else:
+                # For lines and points: set default line width
+                default_style["linewidth"] = settings.get("default_lw", 1.0)
+
+            # If point geometry, include marker and size defaults
+            if "point" in geom_type.lower():
+                default_style["marker"] = settings.get("marker", "o")
+                default_style["size"] = settings.get("size", 3)
+
+            style_rules = {}
+            for attr in preferred_attributes_for_layer(layer_name):
+                vals = attrs.get(attr)
+                if isinstance(vals, list) and vals:
+                    rules = {}
+                    # For roads: line widths by fclass
+                    if cat == "road" and attr == "fclass" and "lw" in settings:
+                        for v in vals:
+                            if v in settings.get("lw", {}):
+                                rules[v] = {"linewidth": settings["lw"][v]}
+                            else:
+                                rules[v] = {}
+                    # For waterways: line widths by fclass
+                    elif (
+                        cat == "waterway"
+                        and attr == "fclass"
+                        and "lw" in settings
+                    ):
+                        for v in vals:
+                            if v in settings.get("lw", {}):
+                                rules[v] = {"linewidth": settings["lw"][v]}
+                            else:
+                                rules[v] = {}
+                    else:
+                        rules = {v: {} for v in vals}
+                    style_rules[attr] = rules
+            style_order = [
+                a
+                for a in preferred_attributes_for_layer(layer_name)
+                if a in style_rules
             ]
 
-            for shp_path in shp_paths:
-                layer_name = shp_path.stem
+            # visibility logic: per-geometry
+            visible_flag = settings.get("geometry_visibility", {}).get(
+                geom_type, False
+            )
 
-                # Read layer as GeoDataFrame and clip
-                gdf = gpd.read_file(shp_path)
-                if mask_gdf is not None:
-                    gdf = gpd.clip(gdf, mask_gdf)
-
-                # Determine all geometry types in this layer
-                geom_types = gdf.geom_type.unique().tolist()
-
-                # For each geometry subtype, build a separate config entry
-                for geom_type in geom_types:
-                    sub_gdf = gdf[gdf.geom_type == geom_type]
-                    suffix = f"__{geom_type}" if len(geom_types) > 1 else ""
-
-                    # sample attributes
-                    attrs = {}
-                    for col in sub_gdf.columns:
-                        if col == "geometry":
-                            continue
-                        vals = sub_gdf[col].dropna().astype(str).unique().tolist()
-                        attrs[col] = (
-                            vals if len(vals) <= unique_threshold else len(vals)
-                        )
-
-                    # style: get settings from design
-                    cat = get_category_key(layer_name)
-                    settings = design[cat]
-                    default_style = {
-                        "fc": settings["fc"],
-                        "ec": settings.get("ec", settings["fc"]),
-                        "alpha": settings["alpha"],
-                        "zorder": settings["zorder"],
-                        "visible": settings.get("visible", True),
-                        "palette": settings.get("palette", []),
-                    }
-
-                    # Add geometry-dependent defaults
-                    if "polygon" in geom_type.lower():
-                        default_style["edge_color"] = settings.get("ec", settings["fc"])
-                        default_style["edge_width"] = settings.get("ew", 0)
-                    else:
-                        # For lines and points: set default line width
-                        default_style["linewidth"] = settings.get("default_lw", 1.0)
-
-                    # If point geometry, include marker and size defaults
-                    if "point" in geom_type.lower():
-                        default_style["marker"] = settings.get("marker", "o")
-                        default_style["size"] = settings.get("size", 3)
-
-                    style_rules = {}
-                    for attr in preferred_attributes_for_layer(layer_name):
-                        vals = attrs.get(attr)
-                        if isinstance(vals, list) and vals:
-                            rules = {}
-                            # For roads: line widths by fclass
-                            if cat == "road" and attr == "fclass" and "lw" in settings:
-                                for v in vals:
-                                    if v in settings.get("lw", {}):
-                                        rules[v] = {"linewidth": settings["lw"][v]}
-                                    else:
-                                        rules[v] = {}
-                            # For waterways: line widths by fclass
-                            elif (
-                                cat == "waterway"
-                                and attr == "fclass"
-                                and "lw" in settings
-                            ):
-                                for v in vals:
-                                    if v in settings.get("lw", {}):
-                                        rules[v] = {"linewidth": settings["lw"][v]}
-                                    else:
-                                        rules[v] = {}
-                            else:
-                                rules = {v: {} for v in vals}
-                            style_rules[attr] = rules
-                    style_order = [
-                        a
-                        for a in preferred_attributes_for_layer(layer_name)
-                        if a in style_rules
-                    ]
-
-                    # visibility logic: per-geometry
-                    visible_flag = settings.get("geometry_visibility", {}).get(
-                        geom_type, False
-                    )
-
-                    # assemble entry
-                    config["layers"][
-                        f"{os.path.basename(zip_path)}__{layer_name}{suffix}"
-                    ] = {
-                        "file": str(zip_path),
-                        "layer": layer_name,
-                        "geometry_type": geom_type,
-                        "visible": visible_flag,
-                        "default": default_style,
-                        "style_rules": style_rules,
-                        "style_order": style_order,
-                        "attributes": attrs,
-                    }
+            # assemble entry
+            config["layers"][
+                f"{layer_name}{suffix}"
+            ] = {
+                "file": str(layer_path),
+                "layer": layer_name,
+                "geometry_type": geom_type,
+                "visible": visible_flag,
+                "default": default_style,
+                "style_rules": style_rules,
+                "style_order": style_order,
+                "attributes": attrs,
+            }
 
     # Insert satellite info if provided
     if satellite:
@@ -775,9 +761,9 @@ def generate_yaml(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Generate YAML config from zipped shapefiles"
+        description="Generate YAML config from GeoPackage layer files"
     )
-    parser.add_argument("shapefiles", nargs="+", help="Paths to .shp.zip files")
+    parser.add_argument("layer_files", nargs="+", help="Paths to .gpkg files")
     parser.add_argument(
         "-g", "--geojson", type=str, required=True, help="GeoJSON boundary (required)"
     )
@@ -819,7 +805,7 @@ if __name__ == "__main__":
     # Ensure parent folder is in path (if needed)
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     generate_yaml(
-        shp_zips=[Path(p) for p in args.shapefiles],
+        layer_files=[Path(p) for p in args.layer_files],
         geojson_path=Path(args.geojson),
         output_path=Path(args.output),
         unique_threshold=args.unique_threshold,
