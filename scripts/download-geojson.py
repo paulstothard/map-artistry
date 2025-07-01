@@ -2,11 +2,11 @@
 """
 download-geojson.py
 
-Geocode a place name or address, buffer its bounding box by a given distance,
-and output a GeoJSON polygon.
+Geocode a place name or address, apply an optional buffer to its bounding box,
+and write the result as a GeoJSON polygon.
 
 Dependencies:
-    pip install geopy shapely
+    pip install geopy shapely requests
 """
 import argparse
 import json
@@ -16,6 +16,10 @@ from shapely.geometry import box, mapping
 
 
 def geocode_bbox(place):
+    """
+    Use Nominatim to geocode a place name or address and return its bounding box.
+    Returns (south, north, west, east) as floats.
+    """
     geolocator = Nominatim(user_agent="map-artistry-download")
     loc = geolocator.geocode(place, exactly_one=True)
     if loc is None:
@@ -48,7 +52,8 @@ def buffer_bbox(south, north, west, east, buffer_km):
 
 def write_geojson(south, north, west, east, output_path, properties=None):
     """
-    Create a GeoJSON FeatureCollection with one polygon feature.
+    Write a GeoJSON FeatureCollection containing one polygon feature
+    representing the bounding box.
     """
     geom = box(west, south, east, north)
     feature = {

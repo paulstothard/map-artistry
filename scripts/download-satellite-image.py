@@ -2,16 +2,16 @@
 """
 download-satellite-image.py
 
-Download high-resolution satellite imagery (from Esri World Imagery)
-for a polygon defined by a GeoJSON file or a place name.
+Download high-resolution satellite imagery from Esri World Imagery,
+using a polygon from a GeoJSON file or a geocoded place name.
 
 Usage:
     ./download-satellite-image.py --geojson area.geojson
     ./download-satellite-image.py --place "Edmonton, AB" --zoom 18 --format png
 
 Output format:
-    If --format geotiff (default), saves an EPSG:4326 (WGS84) GeoTIFF (reprojected from Web Mercator).
-    If --format png, saves a PNG in WGS84 (reprojected).
+    If --format geotiff (default), saves an EPSG:4326 (WGS84) GeoTIFF (reprojected output from Web Mercator).
+    If --format png, saves a PNG in WGS84 (reprojected output).
 """
 
 import argparse
@@ -56,6 +56,7 @@ def main():
 
     # Get polygon from geojson or place
     if args.place:
+        # Geocode the place name and convert to GeoDataFrame in EPSG:4326
         gdf = ox.geocode_to_gdf(args.place)
         gdf = gdf.to_crs("EPSG:4326")
     else:
@@ -118,7 +119,7 @@ def main():
     img_rgb = np.clip(img_rgb, 0, 255).astype(np.uint8)
 
     if args.format == "geotiff":
-        # Reproject from EPSG:3857 to EPSG:4326
+        # Reproject image from Web Mercator (EPSG:3857) to WGS84 (EPSG:4326)
         dst_crs = "EPSG:4326"
         transform_4326, dst_width, dst_height = calculate_default_transform(
             "EPSG:3857", dst_crs, width, height, *bounds
@@ -154,6 +155,7 @@ def main():
     else:
         import imageio
 
+        # Convert image to uint8 and save as PNG (no reprojection)
         imageio.imwrite(args.output, img_rgb)
         print(f"✓ Saved PNG to {args.output}")
 

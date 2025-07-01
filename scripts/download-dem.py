@@ -4,13 +4,13 @@ download-dem.py
 
 Pure-Python DEM acquisition and processing:
  1. Read GeoJSON boundary
- 2. Determine SRTM 1°×1° tiles needed
- 3. Download .hgt.gz tiles via HTTP
- 4. Decompress, load into MemoryFile
+ 2. Determine required 1°×1° SRTM tiles
+ 3. Download and decompress .hgt.gz tiles
+ 4. Load tiles into rasterio
  5. Mosaic via rasterio.merge
- 6. Reproject to boundary CRS
- 7. Clip to exact polygon
- 8. Write final GeoTIFF
+ 6. Reproject if needed
+ 7. Clip to boundary geometry
+ 8. Write GeoTIFF to disk
 
 Usage:
   python scripts/download-dem.py \
@@ -131,7 +131,7 @@ def main():
                 mosaic = dst_mosaic.read(1)
                 trans = dst_transform
 
-    # If mosaic has a single band (shape (1, H, W)), flatten to 2D
+    # Flatten to 2D if mosaic has a shape like (1, H, W)
     if hasattr(mosaic, "ndim") and mosaic.ndim == 3 and mosaic.shape[0] == 1:
         mosaic = mosaic[0]
 
@@ -153,7 +153,7 @@ def main():
             tmp_ds.write(mosaic, 1)
             clipped, clipped_trans = mask(tmp_ds, shapes, crop=True)
 
-    # Write final GeoTIFF
+    # Write the clipped data (first band only)
     out_meta = {
         "driver": "GTiff",
         "height": clipped.shape[1],
@@ -165,7 +165,6 @@ def main():
     }
     print(f"[ ] Writing output to {args.output}")
     with rasterio.open(args.output, "w", **out_meta) as dst:
-        # clipped has shape (1, height, width); write the first band
         dst.write(clipped[0], 1)
 
     print(f"[✓] DEM written to {args.output}")

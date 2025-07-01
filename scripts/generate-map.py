@@ -25,7 +25,7 @@ def draw_map_from_config(
     fmt: str = "png",
 ):
     """
-    Draws a map based on a YAML config, a GeoJSON mask, and referenced shapefile ZIPs.
+    Draws a map based on a YAML config, a GeoJSON mask, and referenced GeoPackage (.gpkg) layers.
 
     Parameters
     ----------
@@ -82,7 +82,7 @@ def draw_map_from_config(
     hs_cfg = mcfg.get("hillshade", {})
     if dem_path:
         with rasterio.open(dem_path) as dem_ds:
-            # DEM bounds and CRS
+            # Extract DEM bounds and compute target raster shape
             left, bottom, right, top = dem_ds.bounds
 
             # target output pixels based on figure size and dpi
@@ -116,7 +116,7 @@ def draw_map_from_config(
             dx = target_transform.a
             dy = -target_transform.e
 
-            # hillshade
+            # Compute hillshade using LightSource and Gaussian-smoothed DEM
             ls = LightSource(
                 azdeg=hs_cfg.get("azimuth", 315),
                 altdeg=hs_cfg.get("altitude", 45),
@@ -162,7 +162,7 @@ def draw_map_from_config(
         # Keep track of which features we styled
         styled_idx = set()
 
-        # Apply any per-value style rules first
+        # Style matching features based on attribute rules (e.g., road class, type)
         for attr in layer_cfg.get("style_order", []):
             rules = layer_cfg["style_rules"].get(attr, {})
             for val, style in rules.items():
@@ -320,7 +320,9 @@ def draw_map_from_config(
     plt.close(fig)
 
 
-# CLI entrypoint
+# ----------------------------
+# Command-line interface (CLI)
+# ----------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Draw a map from a YAML config and GeoJSON mask"

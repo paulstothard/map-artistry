@@ -32,14 +32,18 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "bone",
-                "alpha": 0.5,
+                "alpha": 0.1,
                 "sigma": 1.0,
+            },
+            "satellite": {
+                "visible": False,
+                "opacity": 1.0,
             },
         },
         "water": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.7,
+            "alpha": 1.0,
             "zorder": 4,
             "ew": 0,
             "visible": True,
@@ -56,7 +60,7 @@ DESIGN_SETTINGS = {
         "ocean": {
             "fc": "#ffffff",
             "ec": "#888888",
-            "alpha": 0.7,
+            "alpha": 0.9,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
@@ -92,7 +96,7 @@ DESIGN_SETTINGS = {
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.7,
+            "alpha": 1.0,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -130,12 +134,12 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#FFC857", "#E9724C", "#C5283D"],
+            "palette": ["#FFFFFF", "#F2F2F2", "#E6E6E6"],
         },
         "natural": {
             "fc": "#b36969",
             "ec": "#913f3f",
-            "alpha": 0.5,
+            "alpha": 0.8,
             "zorder": 1,
             "ew": 0,
             "visible": True,
@@ -308,14 +312,18 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "bone",
-                "alpha": 0.5,
+                "alpha": 0.1,
                 "sigma": 1.0,
+            },
+            "satellite": {
+                "visible": False,
+                "opacity": 1.0,
             },
         },
         "water": {
             "fc": "#ff6666",
             "ec": "#ff6666",
-            "alpha": 0.7,
+            "alpha": 0.9,
             "zorder": 4,
             "ew": 0,
             "visible": True,
@@ -332,7 +340,7 @@ DESIGN_SETTINGS = {
         "ocean": {
             "fc": "#ff6666",
             "ec": "#883333",
-            "alpha": 0.7,
+            "alpha": 0.9,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
@@ -368,7 +376,7 @@ DESIGN_SETTINGS = {
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.7,
+            "alpha": 1.0,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -406,7 +414,7 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#FFC857", "#E9724C", "#C5283D"],
+            "palette": ["#FFFFFF", "#F2F2F2", "#E6E6E6"],
         },
         "natural": {
             "fc": "#354038",
@@ -571,10 +579,12 @@ DESIGN_SETTINGS = {
 }
 
 
+"""
+Determine the styling category key for a given layer name, used to select design parameters.
+"""
+
+
 def get_category_key(layer_name: str) -> str:
-    """
-    Determine the color scheme key for a given layer based on name.
-    """
     lname = layer_name.lower()
     if "rail" in lname:
         return "railway"
@@ -599,25 +609,48 @@ def get_category_key(layer_name: str) -> str:
     return "other"
 
 
+"""
+Return a list of attribute names that are preferred for styling a given layer.
+These attributes will be used to generate style rules in the config.
+For road layers, "highway" is prioritized (the standard OSM tag for road type),
+with "fclass" as a fallback for pre-processed datasets.
+"""
+
+
 def preferred_attributes_for_layer(layer_name):
     lname = layer_name.lower()
-    if "road" in lname:
-        return ["fclass", "maxspeed"]
-    elif "building" in lname:
+
+    # -------- Roads / Highways -------------------------------------------
+    if ("road" in lname) or ("highway" in lname):
+        return ["highway", "fclass", "class", "maxspeed"]
+
+    # -------- Buildings ---------------------------------------------------
+    if "building" in lname:
         return ["fclass", "height"]
-    elif "waterway" in lname:
-        return ["fclass", "width"]
-    elif "natural" in lname:
+
+    # -------- Waterways ---------------------------------------------------
+    if "waterway" in lname:
+        return ["waterway", "fclass", "width"]
+
+    # -------- Natural features -------------------------------------------
+    if "natural" in lname:
         return ["fclass", "code"]
-    else:
-        return ["fclass", "type", "name"]
+
+    # -------- Fallback ----------------------------------------------------
+    return ["fclass", "type", "name"]
+
+
+"""
+Generate a YAML configuration file for map rendering using OSM layers in GeoPackage format.
+For each layer and geometry type, a style entry is created based on the selected design scheme.
+"""
 
 
 def generate_yaml(
     layer_files,
     geojson_path,
     output_path=Path("config.yaml"),
-    unique_threshold=10,
+    unique_threshold=50,
     scheme_name="coral",
     dem_path=None,
     satellite=None,
@@ -626,6 +659,7 @@ def generate_yaml(
         raise ValueError("A geojson_path is required")
     # Load mask if provided
     mask_gdf = gpd.read_file(geojson_path)
+    # Select the design scheme based on the provided scheme name
     design = DESIGN_SETTINGS[scheme_name]
 
     config = {
@@ -633,9 +667,10 @@ def generate_yaml(
         "layers": {},
     }
 
-    # include DEM path if specified
+    # Include DEM path in map section if specified
     config["map"]["dem"] = str(dem_path) if dem_path is not None else None
 
+    # Header comments to be included at the top of the YAML file
     header = [
         "# YAML configuration for map rendering",
         "# zorder controls drawing order: higher values are drawn on top",
@@ -665,9 +700,7 @@ def generate_yaml(
                 if col == "geometry":
                     continue
                 vals = sub_gdf[col].dropna().astype(str).unique().tolist()
-                attrs[col] = (
-                    vals if len(vals) <= unique_threshold else len(vals)
-                )
+                attrs[col] = vals if len(vals) <= unique_threshold else len(vals)
 
             # style: get settings from design
             cat = get_category_key(layer_name)
@@ -699,19 +732,15 @@ def generate_yaml(
                 vals = attrs.get(attr)
                 if isinstance(vals, list) and vals:
                     rules = {}
-                    # For roads: line widths by fclass
-                    if cat == "road" and attr == "fclass" and "lw" in settings:
+                    # For roads: line widths by highway or fclass
+                    if cat == "road" and attr in ("highway", "fclass") and "lw" in settings:
                         for v in vals:
                             if v in settings.get("lw", {}):
                                 rules[v] = {"linewidth": settings["lw"][v]}
                             else:
                                 rules[v] = {}
                     # For waterways: line widths by fclass
-                    elif (
-                        cat == "waterway"
-                        and attr == "fclass"
-                        and "lw" in settings
-                    ):
+                    elif cat == "waterway" and attr in ("waterway", "fclass") and "lw" in settings:
                         for v in vals:
                             if v in settings.get("lw", {}):
                                 rules[v] = {"linewidth": settings["lw"][v]}
@@ -727,14 +756,10 @@ def generate_yaml(
             ]
 
             # visibility logic: per-geometry
-            visible_flag = settings.get("geometry_visibility", {}).get(
-                geom_type, False
-            )
+            visible_flag = settings.get("geometry_visibility", {}).get(geom_type, False)
 
             # assemble entry
-            config["layers"][
-                f"{layer_name}{suffix}"
-            ] = {
+            config["layers"][f"{layer_name}{suffix}"] = {
                 "file": str(layer_path),
                 "layer": layer_name,
                 "geometry_type": geom_type,
@@ -745,13 +770,14 @@ def generate_yaml(
                 "attributes": attrs,
             }
 
-    # Insert satellite info if provided
-    if satellite:
-        config["map"]["satellite"] = {
-            "path": str(satellite),
-            "visible": True,
-            "opacity": 1.0,
-        }
+        # If a satellite file is provided, ensure the map section has
+        # a satellite dict and inject the file path.
+        if satellite is not None:
+            config["map"].setdefault(
+                "satellite",
+                {"visible": True, "opacity": 1.0},
+            )
+            config["map"]["satellite"]["path"] = str(satellite)
 
     # Write YAML
     with open(output_path, "w") as f:
@@ -775,8 +801,8 @@ if __name__ == "__main__":
         "--unique-threshold",
         dest="unique_threshold",
         type=int,
-        default=10,
-        help="Max unique values to list (default: 10)",
+        default=50,
+        help="Max unique values to list (default: 50)",
     )
     parser.add_argument(
         "-s",
@@ -802,8 +828,6 @@ if __name__ == "__main__":
         help="Path to a satellite image file (optional)",
     )
     args = parser.parse_args()
-    # Ensure parent folder is in path (if needed)
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
     generate_yaml(
         layer_files=[Path(p) for p in args.layer_files],
         geojson_path=Path(args.geojson),

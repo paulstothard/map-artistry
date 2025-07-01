@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-download-shapefiles.py
+download-osm-layers.py
 
-Given a place name, download intersecting OSM layers as ESRI Shapefiles.
-Also auto-detects & saves any 'sea' (ocean) polygons in the area.
+Given a place name or GeoJSON, download intersecting OSM layers as GeoPackage (.gpkg) files.
+Also auto-detects and saves any 'sea' (ocean) polygons in the area.
 
 Usage:
-    ./download-shapefiles.py --place "Edmonton, AB" \
-        --output-dir shapefiles \
+    ./download-osm-layers.py --place "Edmonton, AB" \
+        --output-dir layers \
         --layers highway building waterway landuse
 
 Dependencies:
@@ -47,7 +47,14 @@ def download_layer(poly, key, tags, outdir):
 
     # Define geometry filtering rules by layer
     polygon_only_layers = {"building", "landuse", "natural", "water", "ocean"}
-    lines_and_polygons_layers = {"highway", "waterway", "railway", "road", "transport", "traffic"}
+    lines_and_polygons_layers = {
+        "highway",
+        "waterway",
+        "railway",
+        "road",
+        "transport",
+        "traffic",
+    }
     point_and_polygon_layers = {"places", "pois"}  # optional
 
     if key in polygon_only_layers:
@@ -55,11 +62,20 @@ def download_layer(poly, key, tags, outdir):
     elif key in lines_and_polygons_layers:
         allowed_types = ["Polygon", "MultiPolygon", "LineString", "MultiLineString"]
     else:
-        allowed_types = ["Polygon", "MultiPolygon", "LineString", "MultiLineString", "Point", "MultiPoint"]
+        allowed_types = [
+            "Polygon",
+            "MultiPolygon",
+            "LineString",
+            "MultiLineString",
+            "Point",
+            "MultiPoint",
+        ]
 
     bad_geoms = gdf[~gdf.geometry.type.isin(allowed_types)]
     if not bad_geoms.empty:
-        print(f"  ⚠️  {len(bad_geoms)} geometries in '{key}' layer removed due to unsupported type(s)")
+        print(
+            f"  ⚠️  {len(bad_geoms)} geometries in '{key}' layer removed due to unsupported type(s)"
+        )
 
     gdf = gdf[gdf.geometry.type.isin(allowed_types)]
 
@@ -94,6 +110,10 @@ def download_layer(poly, key, tags, outdir):
         keep_cols = [col for col in layer_column_map[key] if col in gdf.columns]
         gdf = gdf[keep_cols]
 
+    # Drop known problematic fields like 'FIXME' if present
+    if "FIXME" in gdf.columns:
+        gdf = gdf.drop(columns="FIXME")
+
     path = os.path.join(outdir, f"{key}.gpkg")
     gdf.to_file(path, driver="GPKG")
     print(f"  ✓ saved {path}")
@@ -101,7 +121,7 @@ def download_layer(poly, key, tags, outdir):
 
 def main():
     p = argparse.ArgumentParser(
-        description="Download intersecting shapefiles for a named place or GeoJSON polygon."
+        description="Download intersecting OSM layers as GeoPackages for a place name or GeoJSON polygon."
     )
     group = p.add_mutually_exclusive_group(required=True)
     group.add_argument("--place", help="Place name to geocode and fetch polygon for.")
@@ -112,7 +132,7 @@ def main():
         "-o",
         "--output-dir",
         default="shapefiles",
-        help="Directory to write *.shp files into.",
+        help="Directory to write .gpkg files into.",
     )
     p.add_argument(
         "--layers",
