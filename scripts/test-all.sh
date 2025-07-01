@@ -5,12 +5,18 @@ set -euo pipefail
 #
 # Example: ./scripts/test-all.sh "Edmonton, Alberta" 2
 # Optional third argument lets you jump to a specific step:
-#   "geojson"   — Start at GeoJSON generation (default)
-#   "dem"       — Start at DEM download
-#   "shapefiles"— Start at shapefile download
+#   "geojson" — Start at GeoJSON generation (default)
+#   "dem"     — Start at DEM download
+#   "shp"     — Start at shapefile download
 #   "satellite" — Start at satellite image download
-#   "config"    — Start at config generation
-#   "map"       — Start at map drawing
+#   "config"  — Start at config generation
+#   "map"     — Start at map drawing
+
+ # Check that at least one argument (area name) is provided
+if [[ $# -lt 1 ]]; then
+  echo "Usage: ./scripts/test-all.sh \"Place Name\" BUFFER_KM [step]"
+  exit 1
+fi
 
 AREA_NAME="$1"
 BUFFER_KM="${2:-2}" # default buffer if not specified

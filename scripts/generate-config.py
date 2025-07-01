@@ -582,10 +582,11 @@ def get_category_key(layer_name: str) -> str:
     lname = layer_name.lower()
     if "rail" in lname:
         return "railway"
+    if "road" in lname or "highway" in lname:
+        return "road"
     for key in [
         "building",
         "landuse",
-        "road",
         "waterway",
         "water",
         "natural",

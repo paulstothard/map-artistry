@@ -48,9 +48,23 @@ def download_layer(poly, key, tags, outdir):
     # Explode multipart geometries
     gdf = gdf.explode(index_parts=True, ignore_index=True)
 
-    # Filter supported geometry types
-    supported_types = ["Polygon", "MultiPolygon"]
-    gdf = gdf[gdf.geometry.type.isin(supported_types)]
+    # Define geometry filtering rules by layer
+    polygon_only_layers = {"building", "landuse", "natural", "water", "ocean"}
+    lines_and_polygons_layers = {"highway", "waterway", "railway", "road", "transport", "traffic"}
+    point_and_polygon_layers = {"places", "pois"}  # optional
+
+    if key in polygon_only_layers:
+        allowed_types = ["Polygon", "MultiPolygon"]
+    elif key in lines_and_polygons_layers:
+        allowed_types = ["Polygon", "MultiPolygon", "LineString", "MultiLineString"]
+    else:
+        allowed_types = ["Polygon", "MultiPolygon", "LineString", "MultiLineString", "Point", "MultiPoint"]
+
+    bad_geoms = gdf[~gdf.geometry.type.isin(allowed_types)]
+    if not bad_geoms.empty:
+        print(f"  ⚠️  {len(bad_geoms)} geometries in '{key}' layer removed due to unsupported type(s)")
+
+    gdf = gdf[gdf.geometry.type.isin(allowed_types)]
 
     # Print feature and memory summary
     print(f"  → {len(gdf)} features in '{key}' layer")
