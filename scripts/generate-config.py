@@ -57,7 +57,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "bone",
-                "alpha": 0.1,
+                "alpha": 0.2,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -115,8 +115,16 @@ DESIGN_SETTINGS = {
                 "MultiPolygon": True,
             },
             "palette": [],
-            "lw": {"stream": 0.2, "river": 1.0, "canal": 0.3, "drain": 0.2},
-            "default_lw": 0.2,
+            "lw": {
+                "river": 1.8,
+                "canal": 0.8,
+                "stream": 0.4,
+                "drain": 0.3,
+                "ditch": 0.2,
+                "moat": 0.2,
+                "rapids": 0.25
+            },
+            "default_lw": 0.3,
         },
         "road": {
             "fc": "#ffffff",
@@ -135,14 +143,18 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "motorway": 0.20,
-                "trunk": 0.18,
-                "primary": 0.16,
-                "secondary": 0.14,
-                "tertiary": 0.12,
-                "residential": 0.10,
+                "motorway": 0.50,
+                "trunk": 0.42,
+                "primary": 0.35,
+                "secondary": 0.28,
+                "tertiary": 0.22,
+                "residential": 0.15,
+                "unclassified": 0.13,
+                "service": 0.10,
+                "living_street": 0.08,
+                "track": 0.06
             },
-            "default_lw": 0.1,
+            "default_lw": 0.15,
         },
         "building": {
             "fc": "#ffffff",
@@ -337,7 +349,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "bone",
-                "alpha": 0.1,
+                "alpha": 0.3,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -395,13 +407,21 @@ DESIGN_SETTINGS = {
                 "MultiPolygon": True,
             },
             "palette": [],
-            "lw": {"stream": 0.2, "river": 1.0, "canal": 0.3, "drain": 0.2},
-            "default_lw": 0.2,
+            "lw": {
+                "river": 1.8,
+                "canal": 0.8,
+                "stream": 0.4,
+                "drain": 0.3,
+                "ditch": 0.2,
+                "moat": 0.2,
+                "rapids": 0.25
+            },
+            "default_lw": 0.3,
         },
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 1.0,
+            "alpha": 0.9,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -415,14 +435,18 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "motorway": 0.20,
-                "trunk": 0.18,
-                "primary": 0.16,
-                "secondary": 0.14,
-                "tertiary": 0.12,
-                "residential": 0.10,
+                "motorway": 0.50,
+                "trunk": 0.42,
+                "primary": 0.35,
+                "secondary": 0.28,
+                "tertiary": 0.22,
+                "residential": 0.15,
+                "unclassified": 0.13,
+                "service": 0.10,
+                "living_street": 0.08,
+                "track": 0.06
             },
-            "default_lw": 0.1,
+            "default_lw": 0.15,
         },
         "building": {
             "fc": "#ffffff",
@@ -729,6 +753,8 @@ def generate_yaml(
 
             # style: get settings from design
             cat = get_category_key(layer_name)
+            if cat not in design:
+                continue  # skip layer if not defined in the design scheme
             settings = design[cat]
             default_style = {
                 "fc": settings["fc"],

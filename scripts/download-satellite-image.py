@@ -52,6 +52,12 @@ def main():
         default=14,
         help="Zoom level for satellite tiles (e.g., 13–17)",
     )
+    parser.add_argument(
+        "--dpi",
+        type=int,
+        default=300,
+        help="DPI for figure rendering (higher = more pixels). Default: 300"
+    )
     args = parser.parse_args()
 
     # Get polygon from geojson or place
@@ -91,7 +97,7 @@ def main():
         fig_w, fig_h = BASE * mercator_aspect, BASE
 
     # Create figure and plot with contextily basemap
-    fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=256)
+    fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=args.dpi)
     fig.patch.set_facecolor("black")
     ax.set_facecolor("black")
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)

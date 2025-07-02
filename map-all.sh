@@ -192,7 +192,8 @@ if should_run_step "satellite"; then
         run python scripts/download-satellite-image.py \
         --geojson "$DIR/area.geojson" \
         --output "$DIR/satellite.tif" \
-        --zoom "$ZOOM"
+        --zoom "$ZOOM" \
+        --dpi "$DPI"
 fi
 
 ##### --- 5. Config YAML ----------------------------------------------------
