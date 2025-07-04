@@ -17,6 +17,7 @@ FORMAT="png" # output image format (png, jpg, or pdf)
 ZOOM=14      # satellite zoom level
 # Which steps to run; comma‑separated list or "all"
 RUN_STEPS="all"
+WITH_OCEAN=false
 
 ##### --- CLI ---------------------------------------------------------------
 usage() {
@@ -41,6 +42,7 @@ Optional flags
                           (geojson,dem,layers,satellite,config,map)
                           (default: all)
   --force                Re-run every step even if outputs exist
+  --with-ocean           Include ocean data (World_Seas_IHO_v3)
   --help                 Show this help text
 EOF
     exit "${1:-0}"
@@ -87,6 +89,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     --force)
         force=true
+        shift
+        ;;
+    --with-ocean)
+        WITH_OCEAN=true
         shift
         ;;
     --help) usage 0 ;;
@@ -183,6 +189,26 @@ if should_run_step "layers"; then
             --output-dir "$DIR/layers"
     else
         skip "$DIR/layers/*.gpkg"
+    fi
+fi
+
+##### --- 2b. Ocean ---------------------------------------------------------
+if $WITH_OCEAN && should_run_step "ocean"; then
+    OCEAN_DIR="data/ocean"
+    mkdir -p "$OCEAN_DIR"
+    OCEAN_SHP="$OCEAN_DIR/World_Seas_IHO_v3.shp"
+    OCEAN_GPKG="$DIR/layers/ocean.gpkg"
+
+    if $force || [[ ! -e "$OCEAN_GPKG" ]]; then
+        if [[ ! -f "$OCEAN_SHP" ]]; then
+            echo "❌ Ocean shapefile not found: $OCEAN_SHP"
+            echo "Please download 'World_Seas_IHO_v3.zip', extract it, and place the files in: $OCEAN_DIR"
+            exit 1
+        fi
+        echo "+ Converting ocean shapefile to GPKG..."
+        ogr2ogr -f GPKG -nlt MULTIPOLYGON -nln ocean "$OCEAN_GPKG" "$OCEAN_SHP"
+    else
+        skip "$OCEAN_GPKG"
     fi
 fi
 

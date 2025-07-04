@@ -377,7 +377,7 @@ DESIGN_SETTINGS = {
         "ocean": {
             "fc": "#ff6666",
             "ec": "#883333",
-            "alpha": 0.9,
+            "alpha": 0.7,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
@@ -810,16 +810,19 @@ def generate_yaml(
             visible_flag = settings.get("geometry_visibility", {}).get(geom_type, False)
 
             # assemble entry
-            config["layers"][f"{layer_name}{suffix}"] = {
+            layer_config = {
                 "file": str(layer_path),
                 "layer": layer_name,
                 "geometry_type": geom_type,
                 "visible": visible_flag,
                 "default": default_style,
-                "style_rules": style_rules,
-                "style_order": style_order,
                 "attributes": attrs,
             }
+            if style_rules:
+                layer_config["style_rules"] = style_rules
+                layer_config["style_order"] = style_order
+
+            config["layers"][f"{layer_name}{suffix}"] = layer_config
 
         # If a satellite file is provided, ensure the map section has
         # a satellite dict and inject the file path.

@@ -163,19 +163,6 @@ def main():
             continue
         download_layer(poly, key, TAG_MAP[key], args.output_dir)
 
-    # now auto-detect any ocean/sea polygons
-    print("> Checking for ocean/sea polygons …")
-    sea_tags = {"natural": "water", "water": "sea"}
-    try:
-        ocean = ox.features_from_polygon(poly, sea_tags)
-        if not ocean.empty:
-            path = os.path.join(args.output_dir, "ocean.gpkg")
-            ocean.to_file(path, driver="GPKG")
-            print(f"  ✓ saved ocean polygons to {path}")
-        else:
-            print(" - no ocean/sea features found in this area")
-    except ox._errors.InsufficientResponseError:
-        print(" - no ocean/sea features found in this area (query returned nothing)")
 
 
 if __name__ == "__main__":

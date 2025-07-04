@@ -151,9 +151,16 @@ def draw_map_from_config(
         # Read directly from GeoPackage
         gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
 
-        # Clip to mask
+        # Clip all layers to the mask if not empty
         if not mask_gdf.empty:
+            # Special optimization for ocean layer: pre-filter by intersection with mask bounds
+            if layer_cfg["layer"] == "ocean":
+                mask_union = mask_gdf.union_all()
+                gdf = gdf[gdf.intersects(mask_union.buffer(0.01))]
             gdf = gpd.clip(gdf, mask_gdf)
+            # After clipping, further optimize for ocean by simplifying geometry
+            if layer_cfg["layer"] == "ocean":
+                gdf = gdf.simplify(tolerance=0.001, preserve_topology=True)
 
         # only keep features matching this entry’s geometry type
         geom_type = layer_cfg["geometry_type"]
