@@ -41,7 +41,7 @@ Optional flags
   -t, --steps LIST        Comma‑sep list of steps to run
                           (geojson,dem,layers,satellite,config,map)
                           (default: all)
-  --force                Re-run every step even if outputs exist
+  --force                Re-run steps even if outputs exist
   --with-ocean           Include ocean data (World_Seas_IHO_v3)
   --help                 Show this help text
 EOF

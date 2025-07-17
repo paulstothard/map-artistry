@@ -1,42 +1,36 @@
 # map-artistry
 
-A Python toolkit for crafting high-resolution, art-style maps from Shapefile and GeoJSON inputs. Configure color schemes, hillshade, and layer styling entirely via YAML, then render to PNG/PDF with precise control over line widths, fills, and typography.
+Artistic topographic map generator using OpenStreetMap, satellite imagery, and digital elevation models. Generates high-resolution, stylized maps via a customizable pipeline.
 
 ## Usage
 
-First create a virtual environment and install the required packages:
+First, create a virtual environment and install the required Python packages:
 
 ```bash
-# edit the path to the desired Python executable as needed
 /usr/local/bin/python3 -m venv venv
 source venv/bin/activate
-venv/bin/python -m pip install -r requirements.txt
-
+pip install -r requirements.txt
 ```
 
-## Generating a Map
-
-To generate a full map from a place name:
+Then generate a map with:
 
 ```bash
-./scripts/test-all.sh "Edmonton, Alberta" 2
+./map-all.sh "PLACE NAME"
 ```
 
-This will:
+Replace `"PLACE NAME"` with your desired location (e.g., `"Edmonton, AB"`). Output will be written to the `output/` directory by default.
 
-1. Download a buffered GeoJSON boundary
-2. Download a digital elevation model (DEM)
-3. Download OpenStreetMap shapefiles
-4. Download high-resolution satellite imagery
-5. Generate a YAML config file
-6. Render the final map to PNG
+### Options
 
-You can also run individual steps by providing a third argument:
+Run `./map-all.sh --help` to see available options for zoom level, image size, design scheme, and more.
 
-- `"geojson"` – start at GeoJSON generation (default)
-- `"dem"` – start at DEM download
-- `"shapefiles"` – start at shapefile download
-- `"satellite"` – start at satellite image download
-- `"config"` – start at config generation
-- `"map"` – start at map rendering
-- 
+To include ocean features (useful for coastal maps), add the `--with-ocean` flag:
+
+```bash
+./map-all.sh "Victoria, BC" output/victoria-coral --with-ocean
+```
+
+This requires downloading the **World Seas (IHO Sea Areas)** shapefile from:
+https://www.marineregions.org/downloads.php
+
+Download `World_Seas_IHO_v3.zip`, extract it, and place all the files (`.shp`, `.dbf`, `.shx`, etc.) into a folder named `data/ocean/` within the project directory.

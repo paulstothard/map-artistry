@@ -164,6 +164,5 @@ def main():
         download_layer(poly, key, TAG_MAP[key], args.output_dir)
 
 
-
 if __name__ == "__main__":
     main()

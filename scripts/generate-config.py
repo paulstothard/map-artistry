@@ -31,7 +31,7 @@ DESIGN_SETTINGS = {
             "hillshade": {
                 "azimuth": 315,
                 "altitude": 45,
-                "cmap": "bone",
+                "cmap": "gist_heat",
                 "alpha": 0.05,
                 "sigma": 1.0,
             },
@@ -39,7 +39,274 @@ DESIGN_SETTINGS = {
                 "visible": True,
                 "opacity": 1.0,
             },
-        }
+        },
+        "water": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 0.01,
+            "zorder": 4,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+        },
+        "ocean": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 0.01,
+            "zorder": 4,
+            "ew": 0.1,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+        },
+        "waterway": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "ew": 0,
+            "zorder": 3,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+            "lw": {
+                "river": 1.8,
+                "canal": 0.8,
+                "stream": 0.4,
+                "drain": 0.3,
+                "ditch": 0.2,
+                "moat": 0.2,
+                "rapids": 0.25,
+            },
+            "default_lw": 0.3,
+        },
+        "road": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "ew": 0,
+            "zorder": 6,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+            "lw": {
+                "motorway": 0.50,
+                "trunk": 0.42,
+                "primary": 0.35,
+                "secondary": 0.28,
+                "tertiary": 0.22,
+                "residential": 0.15,
+                "unclassified": 0.13,
+                "service": 0.10,
+                "living_street": 0.08,
+                "track": 0.06,
+            },
+            "default_lw": 0.15,
+        },
+        "building": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 7,
+            "ew": 0.01,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": ["#ffffff", "#ffffff", "#ffffff"],
+        },
+        "natural": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 1,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+        },
+        "landuse": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 2,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+        },
+        "railway": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 5,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+            "default_lw": 0.12,
+        },
+        "transport": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 5,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+            "default_lw": 0.08,
+        },
+        "places": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 5,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+        },
+        "poi": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 1,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": True,
+                "MultiLineString": True,
+                "Polygon": True,
+                "MultiPolygon": True,
+            },
+            "palette": [],
+            "marker": "o",
+            "size": 0.1,
+        },
+        "pofw": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 5,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+        },
+        "traffic": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 5,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+            "default_lw": 0.15,
+        },
+        "other": {
+            "fc": "#ffffff",
+            "ec": "#ffffff",
+            "alpha": 1.0,
+            "zorder": 0,
+            "ew": 0,
+            "visible": True,
+            "geometry_visibility": {
+                "Point": False,
+                "MultiPoint": False,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
+            },
+            "palette": [],
+            "default_lw": 0.1,
+        },
     },
     "coral": {
         "map": {
@@ -56,8 +323,8 @@ DESIGN_SETTINGS = {
             "hillshade": {
                 "azimuth": 315,
                 "altitude": 45,
-                "cmap": "bone",
-                "alpha": 0.2,
+                "cmap": "gist_heat",
+                "alpha": 0.25,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -122,7 +389,7 @@ DESIGN_SETTINGS = {
                 "drain": 0.3,
                 "ditch": 0.2,
                 "moat": 0.2,
-                "rapids": 0.25
+                "rapids": 0.25,
             },
             "default_lw": 0.3,
         },
@@ -152,7 +419,7 @@ DESIGN_SETTINGS = {
                 "unclassified": 0.13,
                 "service": 0.10,
                 "living_street": 0.08,
-                "track": 0.06
+                "track": 0.06,
             },
             "default_lw": 0.15,
         },
@@ -348,8 +615,8 @@ DESIGN_SETTINGS = {
             "hillshade": {
                 "azimuth": 315,
                 "altitude": 45,
-                "cmap": "bone",
-                "alpha": 0.3,
+                "cmap": "gist_heat",
+                "alpha": 0.35,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -414,7 +681,7 @@ DESIGN_SETTINGS = {
                 "drain": 0.3,
                 "ditch": 0.2,
                 "moat": 0.2,
-                "rapids": 0.25
+                "rapids": 0.25,
             },
             "default_lw": 0.3,
         },
@@ -444,7 +711,7 @@ DESIGN_SETTINGS = {
                 "unclassified": 0.13,
                 "service": 0.10,
                 "living_street": 0.08,
-                "track": 0.06
+                "track": 0.06,
             },
             "default_lw": 0.15,
         },
@@ -779,19 +1046,27 @@ def generate_yaml(
                 default_style["size"] = settings.get("size", 3)
 
             style_rules = {}
-            for attr in preferred_attributes_for_layer(layer_name):
+            for attr in [a for a in preferred_attributes_for_layer(layer_name) if a in attrs]:
                 vals = attrs.get(attr)
                 if isinstance(vals, list) and vals:
                     rules = {}
                     # For roads: line widths by highway or fclass
-                    if cat == "road" and attr in ("highway", "fclass") and "lw" in settings:
+                    if (
+                        cat == "road"
+                        and attr in ("highway", "fclass")
+                        and "lw" in settings
+                    ):
                         for v in vals:
                             if v in settings.get("lw", {}):
                                 rules[v] = {"linewidth": settings["lw"][v]}
                             else:
                                 rules[v] = {}
                     # For waterways: line widths by fclass
-                    elif cat == "waterway" and attr in ("waterway", "fclass") and "lw" in settings:
+                    elif (
+                        cat == "waterway"
+                        and attr in ("waterway", "fclass")
+                        and "lw" in settings
+                    ):
                         for v in vals:
                             if v in settings.get("lw", {}):
                                 rules[v] = {"linewidth": settings["lw"][v]}
@@ -800,11 +1075,7 @@ def generate_yaml(
                     else:
                         rules = {v: {} for v in vals}
                     style_rules[attr] = rules
-            style_order = [
-                a
-                for a in preferred_attributes_for_layer(layer_name)
-                if a in style_rules
-            ]
+            style_order = list(style_rules.keys())
 
             # visibility logic: per-geometry
             visible_flag = settings.get("geometry_visibility", {}).get(geom_type, False)

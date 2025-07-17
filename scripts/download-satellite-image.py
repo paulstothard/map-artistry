@@ -56,7 +56,7 @@ def main():
         "--dpi",
         type=int,
         default=300,
-        help="DPI for figure rendering (higher = more pixels). Default: 300"
+        help="DPI for figure rendering (higher = more pixels). Default: 300",
     )
     args = parser.parse_args()
 

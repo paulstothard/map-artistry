@@ -160,7 +160,7 @@ def draw_map_from_config(
             gdf = gpd.clip(gdf, mask_gdf)
             # After clipping, further optimize for ocean by simplifying geometry
             if layer_cfg["layer"] == "ocean":
-                gdf = gdf.simplify(tolerance=0.001, preserve_topology=True)
+                gdf["geometry"] = gdf.simplify(tolerance=0.001, preserve_topology=True)
 
         # only keep features matching this entry’s geometry type
         geom_type = layer_cfg["geometry_type"]
@@ -171,6 +171,8 @@ def draw_map_from_config(
 
         # Style matching features based on attribute rules (e.g., road class, type)
         for attr in layer_cfg.get("style_order", []):
+            if attr not in gdf.columns:
+                continue
             rules = layer_cfg["style_rules"].get(attr, {})
             for val, style in rules.items():
                 subset = gdf[gdf[attr].astype(str) == str(val)]
