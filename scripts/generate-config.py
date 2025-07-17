@@ -32,7 +32,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "gist_heat",
-                "alpha": 0.05,
+                "alpha": 0,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -43,7 +43,7 @@ DESIGN_SETTINGS = {
         "water": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.01,
+            "alpha": 0,
             "zorder": 4,
             "ew": 0,
             "visible": True,
@@ -60,7 +60,7 @@ DESIGN_SETTINGS = {
         "ocean": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.01,
+            "alpha": 0,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
@@ -77,7 +77,7 @@ DESIGN_SETTINGS = {
         "waterway": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 1.0,
+            "alpha": 0,
             "ew": 0,
             "zorder": 3,
             "visible": True,
@@ -91,7 +91,7 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "river": 1.8,
+                "river": 1.0,
                 "canal": 0.8,
                 "stream": 0.4,
                 "drain": 0.3,
@@ -104,7 +104,7 @@ DESIGN_SETTINGS = {
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 1.0,
+            "alpha": 0.9,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -134,7 +134,7 @@ DESIGN_SETTINGS = {
         "building": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 1.0,
+            "alpha": 0.9,
             "zorder": 7,
             "ew": 0.01,
             "visible": True,
@@ -383,7 +383,7 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "river": 1.8,
+                "river": 1.0,
                 "canal": 0.8,
                 "stream": 0.4,
                 "drain": 0.3,
@@ -396,7 +396,7 @@ DESIGN_SETTINGS = {
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 1.0,
+            "alpha": 0.9,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -616,7 +616,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "gist_heat",
-                "alpha": 0.35,
+                "alpha": 0.15,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -675,7 +675,7 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "river": 1.8,
+                "river": 1.0,
                 "canal": 0.8,
                 "stream": 0.4,
                 "drain": 0.3,
