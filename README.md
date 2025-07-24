@@ -22,7 +22,17 @@ Replace `"PLACE NAME"` with your desired location (e.g., `"Edmonton, AB"`). Outp
 
 ### Options
 
+
 Run `./map-pipeline.sh --help` to see available options for zoom level, image size, design scheme, and more.
+
+### Recommended Zoom Levels
+
+| Zoom | Detail Level                    | Suggested Use                          |
+|------|----------------------------------|----------------------------------------|
+| 5    | Very low (province scale)        | Large areas like Vancouver Island      |
+| 6    | Low (regional scale)             | Entire cities with surroundings        |
+| 7    | Medium (town/neighborhood scale) | City cores or small regions            |
+| 8+   | High (street-level detail)       | Close-up views, custom crops required  |
 
 To include ocean features (useful for coastal maps), add the `--with-ocean` flag:
 

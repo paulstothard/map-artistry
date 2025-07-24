@@ -18,7 +18,7 @@ import sys
 DESIGN_SETTINGS = {
     "satellite": {
         "map": {
-            "background": {"fc": "#000000", "ec": "#000000"},
+            "background": {"fc": "#05050d", "ec": "#05050d"},
             "scheme": "satellite",
             "info": {
                 "text": "ps",
@@ -733,8 +733,8 @@ DESIGN_SETTINGS = {
             "palette": ["#FFFFFF", "#F2F2F2", "#E6E6E6"],
         },
         "natural": {
-            "fc": "#354038",
-            "ec": "#2a302e",
+            "fc": "#1a3c1a",
+            "ec": "#0f2f0f",
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
@@ -908,7 +908,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "gray",
-                "alpha": 0.2,
+                "alpha": 0.1,
                 "sigma": 1.0,
             },
             "satellite": {"visible": False, "opacity": 1.0},
@@ -1019,8 +1019,8 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            # alternating light colors for lit buildings, plus dim/unlit shades
-            "palette": ["#f2e394", "#edd382", "#e6c06b", "#ddddaa", "#ccc97a", "#bba85f", "#555555", "#333333", "#1a1a1a"],
+            # lighter yellow tones for lit buildings, plus darks for unlit
+            "palette": ["#fff7b2", "#fce88e", "#f7db63", "#edd382", "#e6c06b", "#555555", "#333333", "#1a1a1a"],
         },
         "natural": {
             "fc": "#222222",
@@ -1131,7 +1131,7 @@ DESIGN_SETTINGS = {
     },
     "dusk": {
         "map": {
-            "background": {"fc": "#1a1a2e", "ec": "#1a1a2e"},
+            "background": {"fc": "#141424", "ec": "#141424"},
             "scheme": "dusk",
             "info": {
                 "text": "ps",
@@ -1145,7 +1145,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "gray",
-                "alpha": 0.3,
+                "alpha": 0.1,
                 "sigma": 1.0,
             },
             "satellite": {"visible": False, "opacity": 1.0},
@@ -1252,7 +1252,7 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#e94560", "#d53a50", "#c13045", "#a72a3c", "#8f2334"],
+            "palette": ["#e94560"],
         },
         "natural": {
             "fc": "#5a5c6c",
