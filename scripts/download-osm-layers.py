@@ -18,8 +18,14 @@ import argparse
 import geopandas as gpd
 import osmnx as ox
 import warnings
+import time
+import requests
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
+
+ox.settings.use_cache = True
+ox.settings.cache_folder = "cache"
+ox.settings.log_console = True
 
 # default tag mappings for OSMnx.geometries_from_polygon
 TAG_MAP = {
@@ -34,7 +40,22 @@ TAG_MAP = {
 
 def download_layer(poly, key, tags, outdir):
     print(f"> Downloading layer '{key}' …")
-    gdf = ox.features_from_polygon(poly, tags)
+    attempts = 3
+    for attempt in range(attempts):
+        try:
+            gdf = ox.features_from_polygon(poly, tags)
+            break  # success
+        except requests.exceptions.RequestException as e:
+            if attempt < attempts - 1:
+                wait_time = 10 * (attempt + 1)
+                print(
+                    f"  ⚠️ Timeout/error fetching '{key}', retrying in {wait_time}s … ({e})"
+                )
+                time.sleep(wait_time)
+            else:
+                raise RuntimeError(
+                    f"Failed to download '{key}' after {attempts} attempts."
+                ) from e
     # Remove null, invalid, or duplicate geometries
     gdf = gdf[~gdf.geometry.is_empty & gdf.geometry.is_valid]
     gdf = gdf.drop_duplicates(subset="geometry")
@@ -140,6 +161,12 @@ def main():
         default=["highway", "building", "waterway", "landuse", "water"],
         help="Which OSM layer keys to fetch (must be in TAG_MAP).",
     )
+    p.add_argument(
+        "--include-extra",
+        action="store_true",
+        default=False,
+        help="Include optional/extra layers like places, pois, traffic, transport, and railway.",
+    )
     args = p.parse_args()
 
     if args.place:
@@ -156,12 +183,28 @@ def main():
 
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # Layers that require --include-extra to download
+    extra_layers = {"places", "pois", "traffic", "transport", "railway"}
+
     # download each requested layer
     for key in args.layers:
+        print(f"\n🔍 Processing layer: {key}")
         if key not in TAG_MAP:
-            print(f"⚠️  unknown layer '{key}', skipping")
+            print(f"⚠️  Unknown layer '{key}', skipping")
             continue
-        download_layer(poly, key, TAG_MAP[key], args.output_dir)
+        if key in extra_layers and not args.include_extra:
+            print(
+                f"⏭️  Skipping optional layer '{key}' (use --include-extra to include)"
+            )
+            continue
+        start = time.time()
+        print(f"⏳ Downloading '{key}' ...")
+        try:
+            download_layer(poly, key, TAG_MAP[key], args.output_dir)
+            elapsed = time.time() - start
+            print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
+        except Exception as e:
+            print(f"❌ Error while downloading '{key}': {e}")
 
 
 if __name__ == "__main__":
