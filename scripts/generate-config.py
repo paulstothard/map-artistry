@@ -1115,7 +1115,7 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "zorder": 1,
             "ew": 0,
-            "visible": True,
+            "visible": False,
             "geometry_visibility": {
                 "Point": False,
                 "MultiPoint": False,
@@ -1238,8 +1238,8 @@ DESIGN_SETTINGS = {
             "default_lw": 0.15,
         },
         "building": {
-            "fc": "#0f3460",
-            "ec": "#0f3460",
+            "fc": "#e94560",
+            "ec": "#e94560",
             "alpha": 0.9,
             "ew": 0,
             "zorder": 7,
@@ -1294,7 +1294,7 @@ DESIGN_SETTINGS = {
             "alpha": 0.5,
             "ew": 0,
             "zorder": 1,
-            "visible": True,
+            "visible": False,
             "geometry_visibility": {
                 "Point": False,
                 "MultiPoint": False,
