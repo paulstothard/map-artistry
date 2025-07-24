@@ -1019,8 +1019,8 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            # alternating light colors for lit buildings
-            "palette": ["#ffffff", "#ddddaa", "#cccc88"],
+            # alternating light colors for lit buildings, plus dim/unlit shades
+            "palette": ["#ffffff", "#ddddaa", "#cccc88", "#555555", "#333333", "#1a1a1a"],
         },
         "natural": {
             "fc": "#222222",
