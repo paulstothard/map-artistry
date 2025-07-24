@@ -1020,7 +1020,7 @@ DESIGN_SETTINGS = {
                 "MultiPolygon": True,
             },
             # alternating light colors for lit buildings, plus dim/unlit shades
-            "palette": ["#ffffff", "#ddddaa", "#cccc88", "#555555", "#333333", "#1a1a1a"],
+            "palette": ["#f2e394", "#edd382", "#e6c06b", "#ddddaa", "#ccc97a", "#bba85f", "#555555", "#333333", "#1a1a1a"],
         },
         "natural": {
             "fc": "#222222",
@@ -1252,7 +1252,7 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#1a1a2e", "#16213e", "#0f3460"],
+            "palette": ["#e94560", "#d53a50", "#c13045", "#a72a3c", "#8f2334"],
         },
         "natural": {
             "fc": "#5a5c6c",

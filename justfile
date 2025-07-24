@@ -18,19 +18,19 @@ edmonton-night:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-night -b 25 -w 36 -h 24 -d 600 -f png -s night
 
 victoria-coral:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-coral -b 30 -w 24 -h 36 -d 600 -f png -s coral --with-ocean
+    ./map-pipeline.sh "Victoria, BC" output/victoria-coral -b 15 -w 24 -h 36 -d 600 -f png -s coral --with-ocean
 
 victoria-river-runs-red:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -b 30 -w 24 -h 36 -d 600 -f png -s river_runs_red --with-ocean
+    ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -b 15 -w 24 -h 36 -d 600 -f png -s river_runs_red --with-ocean
 
 victoria-satellite:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -b 30 -w 24 -h 36 -d 600 -f png -s satellite -z 16 --with-ocean
+    ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -b 15 -w 24 -h 36 -d 600 -f png -s satellite -z 16 --with-ocean
 
 victoria-dusk:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-dusk -b 30 -w 24 -h 36 -d 600 -f png -s dusk --with-ocean
+    ./map-pipeline.sh "Victoria, BC" output/victoria-dusk -b 15 -w 24 -h 36 -d 600 -f png -s dusk --with-ocean
 
 victoria-night:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-night -b 30 -w 24 -h 36 -d 600 -f png -s night --with-ocean
+    ./map-pipeline.sh "Victoria, BC" output/victoria-night -b 15 -w 24 -h 36 -d 600 -f png -s night --with-ocean
 
 edmonton-coral-config:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-coral -s coral -t config,map -b 25 -w 36 -h 24 -d 600 -f png --force
@@ -48,16 +48,16 @@ edmonton-night-config:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-night -s night -t config,map -b 25 -w 36 -h 24 -d 600 -f png --force
 
 victoria-coral-config:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-coral -s coral -t config,map -b 30 -w 24 -h 36 -d 600 -f png --with-ocean --force
+    ./map-pipeline.sh "Victoria, BC" output/victoria-coral -s coral -t config,map -b 15 -w 24 -h 36 -d 600 -f png --with-ocean --force
 
 victoria-river-runs-red-config:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -s river_runs_red -t config,map -b 30 -w 24 -h 36 -d 600 -f png --with-ocean --force
+    ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -s river_runs_red -t config,map -b 15 -w 24 -h 36 -d 600 -f png --with-ocean --force
 
 victoria-satellite-config:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -s satellite -z 16 -t config,map -b 30 -w 24 -h 36 -d 600 -f png --with-ocean --force
+    ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -s satellite -z 16 -t config,map -b 15 -w 24 -h 36 -d 600 -f png --with-ocean --force
 
 victoria-dusk-config:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-dusk -s dusk -t config,map -b 30 -w 24 -h 36 -d 600 -f png --with-ocean --force
+    ./map-pipeline.sh "Victoria, BC" output/victoria-dusk -s dusk -t config,map -b 15 -w 24 -h 36 -d 600 -f png --with-ocean --force
 
 victoria-night-config:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-night -s night -t config,map -b 30 -w 24 -h 36 -d 600 -f png --with-ocean --force
+    ./map-pipeline.sh "Victoria, BC" output/victoria-night -s night -t config,map -b 15 -w 24 -h 36 -d 600 -f png --with-ocean --force
