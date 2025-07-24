@@ -23,6 +23,7 @@ def draw_map_from_config(
     height: float = 12,
     dpi: int = 300,
     fmt: str = "png",
+    fit_content: bool = False,
 ):
     """
     Draws a map based on a YAML config, a GeoJSON mask, and referenced GeoPackage (.gpkg) layers.
@@ -292,8 +293,30 @@ def draw_map_from_config(
     # adjust aspect so degrees are equal distances
     aspect = 1 / math.cos(math.radians(avg_lat))
     ax.set_aspect(aspect)
-    ax.set_xlim(minx, maxx)
-    ax.set_ylim(miny, maxy)
+    if fit_content:
+        ax.set_xlim(minx, maxx)
+        ax.set_ylim(miny, maxy)
+    else:
+        # crop view to fill requested dimensions, chopping edges as needed
+        target = (width / height) * aspect
+        dx = maxx - minx
+        dy = maxy - miny
+        if dx / dy < target:
+            # narrow map: crop top/bottom
+            new_dy = dx / target
+            center_y = avg_lat
+            y0 = center_y - new_dy / 2
+            y1 = center_y + new_dy / 2
+            ax.set_xlim(minx, maxx)
+            ax.set_ylim(y0, y1)
+        else:
+            # wide map: crop left/right
+            new_dx = dy * target
+            center_x = (minx + maxx) / 2
+            x0 = center_x - new_dx / 2
+            x1 = center_x + new_dx / 2
+            ax.set_xlim(x0, x1)
+            ax.set_ylim(miny, maxy)
 
     # Draw info text if enabled
     info = mcfg.get("info", {})
@@ -323,7 +346,7 @@ def draw_map_from_config(
         dpi=dpi,
         format=fmt,
         facecolor=fig.get_facecolor(),
-        bbox_inches="tight",
+        bbox_inches="tight" if fit_content else None,
         pad_inches=0,
     )
     plt.close(fig)
@@ -372,6 +395,11 @@ if __name__ == "__main__":
         default=None,
         help="Output format (e.g. png, pdf). Defaults to png if not set.",
     )
+    parser.add_argument(
+        "--fit-content",
+        action="store_true",
+        help="Maintain map content fit within requested dimensions without cropping (current behavior)",
+    )
     args = parser.parse_args()
 
     # Determine output format
@@ -391,4 +419,5 @@ if __name__ == "__main__":
         height=args.height,
         dpi=args.dpi,
         fmt=fmt_use,
+        fit_content=args.fit_content
     )

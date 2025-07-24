@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------------------
-# map-all.sh – one-shot driver for the “artistic map” tool-chain
+# map-pipeline.sh – one-shot driver for the “artistic map” tool-chain
 #
 # Runs the artistic‑map pipeline using plain Bash with timestamp/existence checks.
 # ---------------------------------------------------------------------------
@@ -28,18 +28,18 @@ Positional args
   PLACE NAME      e.g. "Edmonton, AB"
   OUT_DIR         Folder to write results (default: output)
   STEPS           Optional: comma‑separated steps list
-                  (geojson,dem,layers,satellite,config,map)
+                  (geojson,dem,layers,ocean,satellite,config,map)
 
 Optional flags
   -b, --buffer KM         Buffer distance around place   (default: $BUFFER_KM)
   -w, --width  INCHES     Output image width in inches   (default: $WIDTH_IN)
   -h, --height INCHES     Output image height in inches  (default: $HEIGHT_IN)
   -d, --dpi    DPI        Output resolution              (default: $DPI)
-  -f, --format png|jpg|pdf    Output image format         (default: $FORMAT)
+  -f, --format png|jpg|pdf    Output image format        (default: $FORMAT)
   -s, --scheme NAME       Colour scheme / design         (default: $DESIGN)
   -z, --zoom   LEVEL      Satellite zoom level           (default: $ZOOM)
   -t, --steps LIST        Comma‑sep list of steps to run
-                          (geojson,dem,layers,satellite,config,map)
+                          (geojson,dem,layers,ocean,satellite,config,map)
                           (default: all)
   --force                Re-run steps even if outputs exist
   --with-ocean           Include ocean data (World_Seas_IHO_v3)
@@ -192,7 +192,7 @@ if should_run_step "layers"; then
     fi
 fi
 
-##### --- 2b. Ocean ---------------------------------------------------------
+##### --- 4. Ocean ---------------------------------------------------------
 if $WITH_OCEAN && should_run_step "ocean"; then
     OCEAN_DIR="data/ocean"
     mkdir -p "$OCEAN_DIR"
@@ -212,7 +212,7 @@ if $WITH_OCEAN && should_run_step "ocean"; then
     fi
 fi
 
-##### --- 4. Satellite ------------------------------------------------------
+##### --- 5. Satellite ------------------------------------------------------
 if should_run_step "satellite"; then
     step "$DIR/satellite.tif" \
         run python scripts/download-satellite-image.py \
@@ -222,7 +222,7 @@ if should_run_step "satellite"; then
         --dpi "$DPI"
 fi
 
-##### --- 5. Config YAML ----------------------------------------------------
+##### --- 6. Config YAML ----------------------------------------------------
 if should_run_step "config"; then
     step "$DIR/config.yaml" \
         run python scripts/generate-config.py "$DIR"/layers/*.gpkg \
@@ -233,7 +233,7 @@ if should_run_step "config"; then
         --scheme "$DESIGN"
 fi
 
-##### --- 6. Final Map ------------------------------------------------------
+##### --- 7. Final Map ------------------------------------------------------
 if should_run_step "map"; then
     step "$DIR/map.$FORMAT" \
         run python scripts/generate-map.py \

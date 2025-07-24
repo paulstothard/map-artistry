@@ -21,7 +21,7 @@ DESIGN_SETTINGS = {
             "background": {"fc": "#000000", "ec": "#000000"},
             "scheme": "satellite",
             "info": {
-                "text": "map-artistry",
+                "text": "ps",
                 "show": False,
                 "position": "bottom-right",
                 "font": "DejaVu Sans",
@@ -41,9 +41,9 @@ DESIGN_SETTINGS = {
             },
         },
         "water": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0,
+            "fc": "#003f5c",
+            "ec": "#003f5c",
+            "alpha": 1.0,
             "zorder": 4,
             "ew": 0,
             "visible": True,
@@ -58,9 +58,9 @@ DESIGN_SETTINGS = {
             "palette": [],
         },
         "ocean": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0,
+            "fc": "#003f5c",
+            "ec": "#003f5c",
+            "alpha": 1.0,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
@@ -75,9 +75,9 @@ DESIGN_SETTINGS = {
             "palette": [],
         },
         "waterway": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0,
+            "fc": "#003f5c",
+            "ec": "#003f5c",
+            "alpha": 1.0,
             "ew": 0,
             "zorder": 3,
             "visible": True,
@@ -136,7 +136,7 @@ DESIGN_SETTINGS = {
             "ec": "#ffffff",
             "alpha": 0.9,
             "zorder": 7,
-            "ew": 0.01,
+            "ew": 0,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -425,10 +425,10 @@ DESIGN_SETTINGS = {
         },
         "building": {
             "fc": "#ffffff",
-            "ec": "#000000",
+            "ec": "#ffffff",
             "alpha": 1.0,
             "zorder": 7,
-            "ew": 0.01,
+            "ew": 0,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
@@ -616,7 +616,7 @@ DESIGN_SETTINGS = {
                 "azimuth": 315,
                 "altitude": 45,
                 "cmap": "gist_heat",
-                "alpha": 0.15,
+                "alpha": 0.25,
                 "sigma": 1.0,
             },
             "satellite": {
@@ -627,7 +627,7 @@ DESIGN_SETTINGS = {
         "water": {
             "fc": "#ff6666",
             "ec": "#ff6666",
-            "alpha": 0.9,
+            "alpha": 1.0,
             "zorder": 4,
             "ew": 0,
             "visible": True,
@@ -717,10 +717,10 @@ DESIGN_SETTINGS = {
         },
         "building": {
             "fc": "#ffffff",
-            "ec": "#000000",
+            "ec": "#ffffff",
             "alpha": 1.0,
             "zorder": 7,
-            "ew": 0.01,
+            "ew": 0,
             "visible": True,
             "geometry_visibility": {
                 "Point": False,
