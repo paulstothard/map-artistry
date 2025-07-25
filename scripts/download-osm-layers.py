@@ -43,7 +43,12 @@ def download_layer(poly, key, tags, outdir):
     attempts = 3
     for attempt in range(attempts):
         try:
-            gdf = ox.features_from_polygon(poly, tags)
+            # use network API for roads, chunked Overpass for others
+            if key == "highway":
+                G = ox.graph_from_polygon(poly, network_type="drive")
+                gdf = ox.graph_to_gdfs(G, nodes=False)
+            else:
+                gdf = ox.features_from_polygon(poly, tags)
             break  # success
         except requests.exceptions.RequestException as e:
             if attempt < attempts - 1:
@@ -56,53 +61,9 @@ def download_layer(poly, key, tags, outdir):
                 raise RuntimeError(
                     f"Failed to download '{key}' after {attempts} attempts."
                 ) from e
-    # Remove null, invalid, or duplicate geometries
-    gdf = gdf[~gdf.geometry.is_empty & gdf.geometry.is_valid]
-    gdf = gdf.drop_duplicates(subset="geometry")
 
-    # Clip to input polygon to limit extraneous geometry
-    gdf = gpd.clip(gdf, poly)
-
-    # Explode multipart geometries
-    gdf = gdf.explode(index_parts=True, ignore_index=True)
-
-    # Define geometry filtering rules by layer
-    polygon_only_layers = {"building", "landuse", "natural", "water", "ocean"}
-    lines_and_polygons_layers = {
-        "highway",
-        "waterway",
-        "railway",
-        "road",
-        "transport",
-        "traffic",
-    }
-    point_and_polygon_layers = {"places", "pois"}  # optional
-
-    if key in polygon_only_layers:
-        allowed_types = ["Polygon", "MultiPolygon"]
-    elif key in lines_and_polygons_layers:
-        allowed_types = ["Polygon", "MultiPolygon", "LineString", "MultiLineString"]
-    else:
-        allowed_types = [
-            "Polygon",
-            "MultiPolygon",
-            "LineString",
-            "MultiLineString",
-            "Point",
-            "MultiPoint",
-        ]
-
-    bad_geoms = gdf[~gdf.geometry.type.isin(allowed_types)]
-    if not bad_geoms.empty:
-        print(
-            f"  ⚠️  {len(bad_geoms)} geometries in '{key}' layer removed due to unsupported type(s)"
-        )
-
-    gdf = gdf[gdf.geometry.type.isin(allowed_types)]
-
-    # Print feature and memory summary
+    # Print feature summary
     print(f"  → {len(gdf)} features in '{key}' layer")
-    print(f"  → estimated memory: {gdf.memory_usage(deep=True).sum() / 1e6:.2f} MB")
 
     if "geometry" not in gdf or gdf.geometry.isnull().all():
         print(f"  – no valid geometry column for {key}")

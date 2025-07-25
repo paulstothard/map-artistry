@@ -438,7 +438,7 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#FFFFFF", "#F2F2F2", "#E6E6E6"],
+            "palette": [],
         },
         "natural": {
             "fc": "#b36969",
@@ -675,8 +675,8 @@ DESIGN_SETTINGS = {
             },
             "palette": [],
             "lw": {
-                "river": 1.0,
-                "canal": 0.8,
+                "river": 0.8,
+                "canal": 0.7,
                 "stream": 0.4,
                 "drain": 0.3,
                 "ditch": 0.2,
@@ -688,7 +688,7 @@ DESIGN_SETTINGS = {
         "road": {
             "fc": "#ffffff",
             "ec": "#ffffff",
-            "alpha": 0.9,
+            "alpha": 1.0,
             "ew": 0,
             "zorder": 6,
             "visible": True,
@@ -730,7 +730,7 @@ DESIGN_SETTINGS = {
                 "Polygon": True,
                 "MultiPolygon": True,
             },
-            "palette": ["#FFFFFF", "#F2F2F2", "#E6E6E6"],
+            "palette": [],
         },
         "natural": {
             "fc": "#1a3c1a",
@@ -1020,7 +1020,7 @@ DESIGN_SETTINGS = {
                 "MultiPolygon": True,
             },
             # lighter yellow tones for lit buildings, plus darks for unlit
-            "palette": ["#fff7b2", "#fce88e", "#f7db63", "#edd382", "#e6c06b", "#555555", "#333333", "#1a1a1a"],
+            "palette": ["#555555", "#444444", "#333333", "#333333", "#333333", "#333333", "#222222", "#111111", "#fff7b2", "#fce88e", "#f7db63"],
         },
         "natural": {
             "fc": "#222222",

@@ -2,7 +2,7 @@
 EDMONTON_W := "36"
 EDMONTON_H := "24"
 EDMONTON_B := "30"
-EDMONTON_DPI := "1200"
+EDMONTON_DPI := "300"
 EDMONTON_FMT := "png"
 
 EDMONTON_Z := "5"
@@ -11,13 +11,13 @@ EDMONTON_Z_SAT := "14"
 VICTORIA_W := "24"
 VICTORIA_H := "36"
 VICTORIA_B := "200"
-VICTORIA_DPI := "1200"
+VICTORIA_DPI := "300"
 VICTORIA_FMT := "png"
 
 VICTORIA_Z := "5"
 VICTORIA_Z_SAT := "8"
 
-all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-dusk edmonton-night victoria-coral copy-victoria-shared victoria-river-runs-red victoria-dusk victoria-night
+all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-dusk edmonton-night victoria-coral copy-victoria-shared victoria-river-runs-red victoria-dusk victoria-night edmonton-satellite victoria-satellite
 
 edmonton-coral:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-coral -s coral -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
@@ -62,3 +62,6 @@ victoria-night:
 
 victoria-satellite:
     ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -s satellite -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z_SAT}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
+
+clean-output:
+    find output -type f \( -name "map.*" -o -name "config.yaml" \) -delete
