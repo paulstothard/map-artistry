@@ -206,6 +206,13 @@ if $WITH_OCEAN && should_run_step "ocean"; then
             exit 1
         fi
         echo "+ Converting ocean shapefile to GPKG..."
+        # --- ogr2ogr note (macOS & Linux) ---
+        # Note: The ogr2ogr tool (part of the GDAL suite) is required for converting ocean shapefiles.
+        # On Ubuntu/Debian, install it with:
+        #   sudo apt install gdal-bin
+        # On macOS (with Homebrew), use:
+        #   brew install gdal
+        # Ensure it is accessible from your terminal (ogr2ogr --version).
         ogr2ogr -f GPKG -nlt MULTIPOLYGON -nln ocean "$OCEAN_GPKG" "$OCEAN_SHP"
     else
         skip "$OCEAN_GPKG"
