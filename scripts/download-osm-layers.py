@@ -26,6 +26,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 ox.settings.use_cache = True
 ox.settings.cache_folder = "cache"
 ox.settings.log_console = True
+ox.settings.overpass_settings = {"max_query_area_size": 2500000}
 
 # default tag mappings for OSMnx.geometries_from_polygon
 TAG_MAP = {
