@@ -26,7 +26,6 @@ warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 ox.settings.use_cache = True
 ox.settings.cache_folder = "cache"
 ox.settings.log_console = True
-ox.settings.overpass_settings = {"max_query_area_size": 2500000}
 
 # default tag mappings for OSMnx.geometries_from_polygon
 TAG_MAP = {
@@ -35,8 +34,28 @@ TAG_MAP = {
     "waterway": {"waterway": True},
     "landuse": {"landuse": True},
     "water": {"natural": "water"},
-    # you can add more: `"railway": {"railway": True}`, etc.
+    "natural": {
+        "natural": [
+            "wood",
+            "wetland",
+            "scrub",
+            "heath",
+            "beach",
+            "cliff",
+            "peak",
+            "ridge",
+            "valley",
+            "glacier",
+            "rock",
+        ]
+    },
+    "pois": {"amenity": True},
+    "places": {"place": True},
+    "railway": {"railway": True},
+    "traffic": {"traffic_calming": True},
+    "transport": {"route": True},
 }
+
 
 
 def download_layer(poly, key, tags, outdir):
@@ -46,7 +65,7 @@ def download_layer(poly, key, tags, outdir):
         try:
             # use network API for roads, chunked Overpass for others
             if key == "highway":
-                G = ox.graph_from_polygon(poly, network_type="drive")
+                G = ox.graph_from_polygon(poly, network_type="all")
                 gdf = ox.graph_to_gdfs(G, nodes=False)
             else:
                 gdf = ox.features_from_polygon(poly, tags)
@@ -120,14 +139,8 @@ def main():
     p.add_argument(
         "--layers",
         nargs="+",
-        default=["highway", "building", "waterway", "landuse", "water"],
+        default=["highway", "building", "waterway", "landuse", "water", "pois", "natural"],
         help="Which OSM layer keys to fetch (must be in TAG_MAP).",
-    )
-    p.add_argument(
-        "--include-extra",
-        action="store_true",
-        default=False,
-        help="Include optional/extra layers like places, pois, traffic, transport, and railway.",
     )
     args = p.parse_args()
 
@@ -145,19 +158,11 @@ def main():
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Layers that require --include-extra to download
-    extra_layers = {"places", "pois", "traffic", "transport", "railway"}
-
     # download each requested layer
     for key in args.layers:
         print(f"\n🔍 Processing layer: {key}")
         if key not in TAG_MAP:
             print(f"⚠️  Unknown layer '{key}', skipping")
-            continue
-        if key in extra_layers and not args.include_extra:
-            print(
-                f"⏭️  Skipping optional layer '{key}' (use --include-extra to include)"
-            )
             continue
         start = time.time()
         print(f"⏳ Downloading '{key}' ...")

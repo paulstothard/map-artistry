@@ -49,7 +49,11 @@ def draw_map_from_config(
     ax.set_facecolor("black")
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
     # Load clipping mask (used both for layer clipping and extent)
-    mask_gdf = gpd.read_file(geojson_path)
+    try:
+        mask_gdf = gpd.read_file(geojson_path)
+    except (FileNotFoundError, Exception) as e:
+        print(f"Error: Could not read mask file '{geojson_path}': {e}")
+        return
     # Background
     bg = mcfg.get("background", {})
     face_fc = bg.get("fc", "#ffffff")
@@ -60,81 +64,87 @@ def draw_map_from_config(
     # --- Render satellite image underlay if configured (drawn immediately after background) ---
     satellite_cfg = cfg.get("map", {}).get("satellite")
     if satellite_cfg and satellite_cfg.get("visible", True):
-        with rasterio.open(satellite_cfg["path"]) as src:
-            # Use the image data directly without reprojection
-            img_rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
-            img_rgb = np.clip(img_rgb, 0, 255).astype(np.uint8)
+        try:
+            with rasterio.open(satellite_cfg["path"]) as src:
+                # Use the image data directly without reprojection
+                img_rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
+                img_rgb = np.clip(img_rgb, 0, 255).astype(np.uint8)
 
-            ax.imshow(
-                img_rgb,
-                extent=[
-                    src.bounds.left,
-                    src.bounds.right,
-                    src.bounds.bottom,
-                    src.bounds.top,
-                ],
-                zorder=satellite_cfg.get("zorder", 0),
-                alpha=satellite_cfg.get("opacity", 1.0),
-                aspect="auto",
-            )
+                ax.imshow(
+                    img_rgb,
+                    extent=[
+                        src.bounds.left,
+                        src.bounds.right,
+                        src.bounds.bottom,
+                        src.bounds.top,
+                    ],
+                    zorder=satellite_cfg.get("zorder", 0),
+                    alpha=satellite_cfg.get("opacity", 1.0),
+                    aspect="auto",
+                )
+        except (FileNotFoundError, rasterio.errors.RasterioIOError) as e:
+            print(f"Warning: Could not read satellite image '{satellite_cfg['path']}': {e}")
 
     # --- Render hillshade underlay if DEM is configured ---
     dem_path = mcfg.get("dem")
     hs_cfg = mcfg.get("hillshade", {})
     if dem_path:
-        with rasterio.open(dem_path) as dem_ds:
-            # Extract DEM bounds and compute target raster shape
-            left, bottom, right, top = dem_ds.bounds
+        try:
+            with rasterio.open(dem_path) as dem_ds:
+                # Extract DEM bounds and compute target raster shape
+                left, bottom, right, top = dem_ds.bounds
 
-            # target output pixels based on figure size and dpi
-            width_px = int(width * dpi)
-            height_px = int(height * dpi)
+                # target output pixels based on figure size and dpi
+                width_px = int(width * dpi)
+                height_px = int(height * dpi)
 
-            # build transform for target raster
-            target_transform = from_bounds(
-                left, bottom, right, top, width_px, height_px
-            )
+                # build transform for target raster
+                target_transform = from_bounds(
+                    left, bottom, right, top, width_px, height_px
+                )
 
-            # prepare destination array
-            dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
+                # prepare destination array
+                dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
 
-            # reproject/resample DEM into target grid
-            reproject(
-                source=rasterio.band(dem_ds, 1),
-                destination=dem_resampled,
-                src_transform=dem_ds.transform,
-                src_crs=dem_ds.crs,
-                dst_transform=target_transform,
-                dst_crs=dem_ds.crs,
-                resampling=Resampling.bilinear,
-            )
+                # reproject/resample DEM into target grid
+                reproject(
+                    source=rasterio.band(dem_ds, 1),
+                    destination=dem_resampled,
+                    src_transform=dem_ds.transform,
+                    src_crs=dem_ds.crs,
+                    dst_transform=target_transform,
+                    dst_crs=dem_ds.crs,
+                    resampling=Resampling.bilinear,
+                )
 
-            # Gaussian smoothing: sigma configurable
-            sigma = hs_cfg.get("sigma", 1.0)
-            dem_smoothed = gaussian_filter(dem_resampled, sigma=sigma)
+                # Gaussian smoothing: sigma configurable
+                sigma = hs_cfg.get("sigma", 1.0)
+                dem_smoothed = gaussian_filter(dem_resampled, sigma=sigma)
 
-            # compute pixel sizes in map units
-            dx = target_transform.a
-            dy = -target_transform.e
+                # compute pixel sizes in map units
+                dx = target_transform.a
+                dy = -target_transform.e
 
-            # Compute hillshade using LightSource and Gaussian-smoothed DEM
-            ls = LightSource(
-                azdeg=hs_cfg.get("azimuth", 315),
-                altdeg=hs_cfg.get("altitude", 45),
-            )
-            shade = ls.hillshade(dem_smoothed, vert_exag=1, dx=dx, dy=dy)
+                # Compute hillshade using LightSource and Gaussian-smoothed DEM
+                ls = LightSource(
+                    azdeg=hs_cfg.get("azimuth", 315),
+                    altdeg=hs_cfg.get("altitude", 45),
+                )
+                shade = ls.hillshade(dem_smoothed, vert_exag=1, dx=dx, dy=dy)
 
-            zorder = hs_cfg.get("zorder", 0)
-            alpha = hs_cfg.get("alpha", 0.5)
-            ax.imshow(
-                shade,
-                cmap=hs_cfg.get("cmap", "gray"),
-                alpha=alpha,
-                extent=[left, right, bottom, top],
-                zorder=zorder,
-                interpolation="bicubic",
-                aspect="auto",  # keep hillshade aligned under custom axis aspect
-            )
+                zorder = hs_cfg.get("zorder", 0)
+                alpha = hs_cfg.get("alpha", 0.5)
+                ax.imshow(
+                    shade,
+                    cmap=hs_cfg.get("cmap", "gray"),
+                    alpha=alpha,
+                    extent=[left, right, bottom, top],
+                    zorder=zorder,
+                    interpolation="bicubic",
+                    aspect="auto",  # keep hillshade aligned under custom axis aspect
+                )
+        except (FileNotFoundError, rasterio.errors.RasterioIOError) as e:
+            print(f"Warning: Could not read DEM file '{dem_path}': {e}")
 
     # Sort layers by zorder to draw in the right sequence
     layers = sorted(cfg["layers"].items(), key=lambda kv: kv[1]["default"]["zorder"])
@@ -149,8 +159,12 @@ def draw_map_from_config(
         ):
             continue
 
-        # Read directly from GeoPackage
-        gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
+        try:
+            # Read directly from GeoPackage
+            gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
+        except (FileNotFoundError, Exception) as e:
+            print(f"Warning: Could not read layer '{layer_key}' from '{layer_cfg['file']}': {e}")
+            continue
 
         # Clip all layers to the mask if not empty
         if not mask_gdf.empty:
