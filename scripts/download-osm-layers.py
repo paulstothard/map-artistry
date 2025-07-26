@@ -63,12 +63,8 @@ def download_layer(poly, key, tags, outdir):
     attempts = 3
     for attempt in range(attempts):
         try:
-            # use network API for roads, chunked Overpass for others
-            if key == "highway":
-                G = ox.graph_from_polygon(poly, network_type="all")
-                gdf = ox.graph_to_gdfs(G, nodes=False)
-            else:
-                gdf = ox.features_from_polygon(poly, tags)
+            # Use features_from_polygon for all layers to preserve original OSM tags
+            gdf = ox.features_from_polygon(poly, tags)
             break  # success
         except requests.exceptions.RequestException as e:
             if attempt < attempts - 1:
