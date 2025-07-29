@@ -352,7 +352,7 @@ DESIGN_SETTINGS = {
         "ocean": {
             "fc": "#ffffff",
             "ec": "#888888",
-            "alpha": 0.9,
+            "alpha": 1.0,
             "zorder": 4,
             "ew": 0.1,
             "visible": True,
