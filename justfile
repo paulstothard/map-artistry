@@ -6,7 +6,7 @@ EDMONTON_DPI := "600"
 EDMONTON_FMT := "pdf"
 
 EDMONTON_Z := "5"
-EDMONTON_Z_SAT := "16"
+EDMONTON_Z_SAT := "17"
 
 VICTORIA_W := "24"
 VICTORIA_H := "24"
@@ -25,8 +25,7 @@ edmonton-coral:
 copy-edmonton-shared:
     mkdir -p output/edmonton-river-runs-red output/edmonton-satellite
     rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='layers/' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-satellite/
-    rsync -av --include='water*.gpkg' --include='*/' --exclude='*' output/edmonton-coral/layers/ output/edmonton-satellite/layers/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-satellite/
 
 edmonton-river-runs-red:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-river-runs-red -s river_runs_red -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
@@ -40,8 +39,7 @@ victoria-coral:
 copy-victoria-shared:
     mkdir -p output/victoria-river-runs-red output/victoria-satellite
     rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-river-runs-red/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='layers/' --exclude='.DS_Store' output/victoria-coral/ output/victoria-satellite/
-    rsync -av --include='water*.gpkg' --include='*/' --exclude='*' output/victoria-coral/layers/ output/victoria-satellite/layers/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/victoria-coral/ output/victoria-satellite/
 
 victoria-river-runs-red:
     ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -s river_runs_red -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean

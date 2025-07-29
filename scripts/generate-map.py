@@ -83,7 +83,9 @@ def draw_map_from_config(
                     aspect="auto",
                 )
         except (FileNotFoundError, rasterio.errors.RasterioIOError) as e:
-            print(f"Warning: Could not read satellite image '{satellite_cfg['path']}': {e}")
+            print(
+                f"Warning: Could not read satellite image '{satellite_cfg['path']}': {e}"
+            )
 
     # --- Render hillshade underlay if DEM is configured ---
     dem_path = mcfg.get("dem")
@@ -163,7 +165,9 @@ def draw_map_from_config(
             # Read directly from GeoPackage
             gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
         except (FileNotFoundError, Exception) as e:
-            print(f"Warning: Could not read layer '{layer_key}' from '{layer_cfg['file']}': {e}")
+            print(
+                f"Warning: Could not read layer '{layer_key}' from '{layer_cfg['file']}': {e}"
+            )
             continue
 
         # Clip all layers to the mask if not empty
@@ -352,6 +356,7 @@ def draw_map_from_config(
             font=info.get("font", "DejaVu Sans"),
             fontsize=info.get("fontsize", 10),
             color=info.get("color", "#000000"),
+            zorder=100,
         )
 
     # always save to file
@@ -433,5 +438,5 @@ if __name__ == "__main__":
         height=args.height,
         dpi=args.dpi,
         fmt=fmt_use,
-        fit_content=args.fit_content
+        fit_content=args.fit_content,
     )
