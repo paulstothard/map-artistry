@@ -17,18 +17,21 @@ VICTORIA_FMT := "pdf"
 VICTORIA_Z := "5"
 VICTORIA_Z_SAT := "16"
 
-all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red victoria-coral copy-victoria-shared victoria-river-runs-red edmonton-satellite victoria-satellite
+all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow victoria-coral copy-victoria-shared victoria-river-runs-red edmonton-satellite victoria-satellite
 
 edmonton-coral:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-coral -s coral -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
 
 copy-edmonton-shared:
-    mkdir -p output/edmonton-river-runs-red output/edmonton-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/
+    mkdir -p output/edmonton-river-runs-red output/edmonton-blue-yellow output/edmonton-satellite
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/ output/edmonton-blue-yellow/
     rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-satellite/
 
 edmonton-river-runs-red:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-river-runs-red -s river_runs_red -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
+
+edmonton-blue-yellow:
+    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-blue-yellow -s blue-yellow -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
 
 edmonton-satellite:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-satellite -s satellite -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z_SAT}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
