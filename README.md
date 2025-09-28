@@ -22,7 +22,6 @@ Replace `"PLACE NAME"` with your desired location (e.g., `"Edmonton, AB"`). Outp
 
 ### Options
 
-
 Run `./map-pipeline.sh --help` to see available options for zoom level, image size, design scheme, and more.
 
 ### Recommended Zoom Levels
