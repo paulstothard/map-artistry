@@ -7,7 +7,8 @@
 #   - river_runs_red: Black background with red water features
 #   - blue-yellow: Blue background with yellow water features
 #   - natural: Natural earth tones with green/brown terrain
-#   - moon: Lunar grayscale with no water (shows seafloor topology)
+#   - lava: Volcanic lava with red water
+#   - frozen: Frozen landscape with ice and snow (blues and whites)
 #   - satellite: Satellite imagery with terrain overlay
 #
 # Usage:
@@ -33,7 +34,7 @@ EDMONTON_DPI := "600"
 EDMONTON_FMT := "png"
 
 EDMONTON_Z := "5"
-EDMONTON_Z_SAT := "17"
+EDMONTON_Z_SAT := "14"
 
 # Map dimensions and settings for Victoria
 VICTORIA_W := "24"
@@ -43,7 +44,7 @@ VICTORIA_DPI := "600"
 VICTORIA_FMT := "png"
 
 VICTORIA_Z := "5"
-VICTORIA_Z_SAT := "16"
+VICTORIA_Z_SAT := "14"
 
 # ============================================================================
 # Default Recipe - Build All Maps
@@ -59,7 +60,7 @@ VICTORIA_Z_SAT := "16"
 #   5. Copy shared Victoria data
 #   6. Victoria river_runs_red, natural, moon, satellite (use shared data)
 
-all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow edmonton-natural edmonton-moon victoria-coral copy-victoria-shared victoria-river-runs-red victoria-natural victoria-moon edmonton-satellite victoria-satellite
+all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow edmonton-natural edmonton-lava edmonton-frozen victoria-coral copy-victoria-shared victoria-river-runs-red victoria-natural victoria-lava victoria-frozen edmonton-satellite victoria-satellite
 
 # ============================================================================
 # Edmonton Maps
@@ -75,8 +76,12 @@ edmonton-coral:
 # Copies: DEM, OSM layers, boundary data (excludes config.yaml, map.*, satellite.tif)
 # This avoids re-downloading the same base data for each color scheme
 copy-edmonton-shared:
-    mkdir -p output/edmonton-river-runs-red output/edmonton-blue-yellow output/edmonton-natural output/edmonton-moon output/edmonton-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/ output/edmonton-blue-yellow/ output/edmonton-natural/ output/edmonton-moon/
+    mkdir -p output/edmonton-river-runs-red output/edmonton-blue-yellow output/edmonton-natural output/edmonton-lava output/edmonton-frozen output/edmonton-satellite
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-blue-yellow/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-natural/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-lava/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-frozen/
     rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-satellite/
 
 # Generate Edmonton map with river_runs_red color scheme (black bg, red water)
@@ -94,10 +99,15 @@ edmonton-blue-yellow:
 edmonton-natural:
     ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-natural -s natural -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
 
-# Generate Edmonton map with moon color scheme (lunar grayscale, no water)
+# Generate Edmonton map with lava color scheme (volcanic lava, red water)
 # Uses shared data from edmonton-coral, only generates new config and map
-edmonton-moon:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-moon -s moon -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
+edmonton-lava:
+    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-lava -s lava -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
+
+# Generate Edmonton map with frozen color scheme (ice and snow)
+# Uses shared data from edmonton-coral, only generates new config and map
+edmonton-frozen:
+    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-frozen -s frozen -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
 
 # Generate Edmonton map with satellite imagery
 # Uses higher zoom level for satellite detail
@@ -119,8 +129,11 @@ victoria-coral:
 # Copies: DEM, OSM layers, ocean data, boundary data
 # Excludes: config.yaml, map.*, satellite.tif
 copy-victoria-shared:
-    mkdir -p output/victoria-river-runs-red output/victoria-natural output/victoria-moon output/victoria-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-river-runs-red/ output/victoria-natural/ output/victoria-moon/
+    mkdir -p output/victoria-river-runs-red output/victoria-natural output/victoria-lava output/victoria-frozen output/victoria-satellite
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-river-runs-red/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-natural/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-lava/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-frozen/
     rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/victoria-coral/ output/victoria-satellite/
 
 # Generate Victoria map with river_runs_red color scheme
@@ -133,10 +146,15 @@ victoria-river-runs-red:
 victoria-natural:
     ./map-pipeline.sh "Victoria, BC" output/victoria-natural -s natural -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
 
-# Generate Victoria map with moon color scheme (lunar grayscale, no water)
+# Generate Victoria map with lava color scheme (volcanic lava, red water)
 # Uses shared data from victoria-coral, shows seafloor topology
-victoria-moon:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-moon -s moon -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
+victoria-lava:
+    ./map-pipeline.sh "Victoria, BC" output/victoria-lava -s lava -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
+
+# Generate Victoria map with frozen color scheme (ice and snow)
+# Uses shared data from victoria-coral, shows frozen seas
+victoria-frozen:
+    ./map-pipeline.sh "Victoria, BC" output/victoria-frozen -s frozen -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
 
 # Generate Victoria map with satellite imagery
 # Uses higher zoom level for satellite detail
