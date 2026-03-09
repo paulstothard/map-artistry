@@ -1539,8 +1539,8 @@ DESIGN_SETTINGS = {
                 "zorder": 0,
             },
             "water_hillshade": {
-                "blur_sigma": 6.0,
-                "contrast": 0.30,
+                "blur_sigma": 1.5,
+                "contrast": 0.50,
                 "bias": 0.00,
             },
             "craters": [
@@ -1574,7 +1574,7 @@ DESIGN_SETTINGS = {
                     "y": 0.78,
                     "radius_km": 1.5,
                     "rim_height_ratio": 0.08,
-                    "lava_level_m": 60,
+                    "lava_level_m": 80,
                     "label": "D",
                 },
                 {
@@ -1599,7 +1599,7 @@ DESIGN_SETTINGS = {
                     "y": 0.35,
                     "radius_km": 0.8,
                     "rim_height_ratio": 0.09,
-                    "lava_level_m": None,
+                    "lava_level_m": 45,
                     "label": "2",
                 },
                 {
@@ -1615,7 +1615,7 @@ DESIGN_SETTINGS = {
                     "y": 0.45,
                     "radius_km": 1.0,
                     "rim_height_ratio": 0.10,
-                    "lava_level_m": None,
+                    "lava_level_m": 60,
                     "label": "4",
                 },
                 {

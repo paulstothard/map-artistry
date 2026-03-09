@@ -52,7 +52,7 @@ def create_synthetic_dem(size=1000, base_elevation=500.0, noise_scale=5.0):
 def simple_hillshade(dem, azimuth=315, altitude=45):
     """Create a simple hillshade from DEM."""
     ls = LightSource(azdeg=azimuth, altdeg=altitude)
-    hillshade = ls.hillshade(dem, vert_exag=1.5, dx=30, dy=30)
+    hillshade = ls.hillshade(dem, vert_exag=3.0, dx=30, dy=30)
     return hillshade
 
 
@@ -63,27 +63,32 @@ def render_crater_interactive(
     pixel_size_y,
     initial_radius=3.0,
     initial_depth=None,
-    initial_lava=150.0,
-    initial_rim=0.12,
+    initial_lava=0.0,
+    initial_rim=0.15,
+    initial_flat_floor=0.35,
+    initial_bowl_exp=1.0,
 ):
     """Interactive crater renderer with sliders for real-time adjustment."""
 
     # Auto-calculate depth from radius if not provided
     if initial_depth is None:
-        initial_depth = initial_radius * 1000 * 0.2  # 20% of radius in meters
+        initial_depth = initial_radius * 1000 * 0.8  # 80% of radius in meters
 
     # Ensure initial lava doesn't exceed depth
     initial_lava = min(initial_lava, initial_depth)
 
-    fig = plt.figure(figsize=(16, 9))
+    fig = plt.figure(figsize=(16, 10))
 
     # Create axis for hillshade+lava display
-    ax_main = plt.subplot2grid((10, 2), (0, 0), colspan=2, rowspan=8)
+    ax_main = plt.subplot2grid((12, 2), (0, 0), colspan=2, rowspan=8)
 
-    # Create axes for sliders
-    ax_radius = plt.subplot2grid((10, 2), (8, 0), colspan=2)
-    ax_depth = plt.subplot2grid((10, 2), (9, 0), colspan=1)
-    ax_lava = plt.subplot2grid((10, 2), (9, 1), colspan=1)
+    # Create axes for sliders (6 sliders total)
+    ax_radius = plt.subplot2grid((12, 2), (8, 0), colspan=2)
+    ax_depth = plt.subplot2grid((12, 2), (9, 0), colspan=1)
+    ax_lava = plt.subplot2grid((12, 2), (9, 1), colspan=1)
+    ax_rim = plt.subplot2grid((12, 2), (10, 0), colspan=1)
+    ax_flat_floor = plt.subplot2grid((12, 2), (10, 1), colspan=1)
+    ax_bowl_exp = plt.subplot2grid((12, 2), (11, 0), colspan=2)
 
     # Initial crater parameters
     crater_params = {
@@ -91,6 +96,8 @@ def render_crater_interactive(
         "depth": initial_depth,
         "lava": initial_lava,
         "rim": initial_rim,
+        "flat_floor": initial_flat_floor,
+        "bowl_exp": initial_bowl_exp,
     }
 
     # Store plot elements
@@ -107,15 +114,17 @@ def render_crater_interactive(
         py = (north - lat) / (north - south) * dem_height
         return px, py
 
-    def apply_and_render(radius, depth, lava, rim):
+    def apply_and_render(radius, depth, lava, rim, flat_floor, bowl_exp):
         """Apply crater with given parameters and render."""
         crater_config = {
             "x": 0.5,
             "y": 0.5,
             "radius_km": radius,
-            "depth_m": depth,
+            "depth_m": None,  # Use auto-calculation from generate-map.py
             "rim_height_ratio": rim,
             "lava_level_m": lava,
+            "flat_floor_ratio": flat_floor,
+            "bowl_exponent": bowl_exp,
             "remove_overlapping_water": False,
         }
 
@@ -159,8 +168,8 @@ def render_crater_interactive(
                 plot_state["poly_patch"] = poly_patch
 
         ax_main.set_title(
-            f"Crater: {radius:.1f}km × {depth:.0f}m deep, {lava:.0f}m lava fill, {rim:.2f} rim",
-            fontsize=12,
+            f"Crater: {radius:.1f}km × {depth:.0f}m deep | Lava: {lava:.0f}m | Rim: {rim:.2f} | Floor: {flat_floor:.2f} | Bowl exp: {bowl_exp:.1f}",
+            fontsize=11,
             fontweight="bold",
         )
         ax_main.axis("off")
@@ -174,12 +183,24 @@ def render_crater_interactive(
         ax_depth, "Depth (m)", 50, 2500, valinit=initial_depth, valstep=10
     )
     lava_slider = Slider(ax_lava, "Lava (m)", 0, 2500, valinit=initial_lava, valstep=10)
+    rim_slider = Slider(
+        ax_rim, "Rim Height", 0.0, 0.30, valinit=initial_rim, valstep=0.01
+    )
+    flat_floor_slider = Slider(
+        ax_flat_floor, "Flat Floor", 0.0, 0.80, valinit=initial_flat_floor, valstep=0.01
+    )
+    bowl_exp_slider = Slider(
+        ax_bowl_exp, "Bowl Exponent", 1.0, 5.0, valinit=initial_bowl_exp, valstep=0.1
+    )
 
     # Update function when sliders change
     def update(val):
         radius = radius_slider.val
         depth = depth_slider.val
         lava = min(lava_slider.val, depth)  # Lava can't exceed depth
+        rim = rim_slider.val
+        flat_floor = flat_floor_slider.val
+        bowl_exp = bowl_exp_slider.val
 
         # Update lava slider range if depth changed
         if depth != crater_params["depth"]:
@@ -189,15 +210,21 @@ def render_crater_interactive(
         crater_params["radius"] = radius
         crater_params["depth"] = depth
         crater_params["lava"] = lava
+        crater_params["rim"] = rim
+        crater_params["flat_floor"] = flat_floor
+        crater_params["bowl_exp"] = bowl_exp
 
-        apply_and_render(radius, depth, lava, crater_params["rim"])
+        apply_and_render(radius, depth, lava, rim, flat_floor, bowl_exp)
 
     radius_slider.on_changed(update)
     depth_slider.on_changed(update)
     lava_slider.on_changed(update)
+    rim_slider.on_changed(update)
+    flat_floor_slider.on_changed(update)
+    bowl_exp_slider.on_changed(update)
 
     # Initial render
-    apply_and_render(initial_radius, initial_depth, initial_lava, initial_rim)
+    apply_and_render(initial_radius, initial_depth, initial_lava, initial_rim, initial_flat_floor, initial_bowl_exp)
 
     plt.tight_layout()
     plt.show()
@@ -267,19 +294,31 @@ def main():
         "--depth",
         type=float,
         default=None,
-        help="Crater depth in meters (default: auto-scaled to 20%% of radius)",
+        help="Crater depth in meters (default: auto-scaled to 80%% of radius)",
     )
     parser.add_argument(
         "--lava",
         type=float,
-        default=150.0,
-        help="Lava level in meters (0=empty, depth=full) (default: 150)",
+        default=0.0,
+        help="Lava level in meters (0=empty, depth=full) (default: 0)",
     )
     parser.add_argument(
         "--rim-height",
         type=float,
-        default=0.12,
-        help="Rim height ratio (default: 0.12)",
+        default=0.15,
+        help="Rim height ratio (default: 0.15)",
+    )
+    parser.add_argument(
+        "--flat-floor",
+        type=float,
+        default=0.35,
+        help="Flat floor ratio (0.0-0.65, default: 0.35)",
+    )
+    parser.add_argument(
+        "--bowl-exp",
+        type=float,
+        default=1.0,
+        help="Bowl exponent (1.0-5.0, 1.0=linear, 2.0=parabolic, default: 1.0)",
     )
     parser.add_argument(
         "--seed", type=int, default=None, help="Random seed for reproducibility"
@@ -363,6 +402,8 @@ def main():
             initial_depth=args.depth,
             initial_lava=args.lava,
             initial_rim=args.rim_height,
+            initial_flat_floor=args.flat_floor,
+            initial_bowl_exp=args.bowl_exp,
         )
     else:
         # Static mode
