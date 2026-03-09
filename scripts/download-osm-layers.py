@@ -57,7 +57,6 @@ TAG_MAP = {
 }
 
 
-
 def download_layer(poly, key, tags, outdir):
     print(f"> Downloading layer '{key}' …")
     attempts = 3
@@ -135,7 +134,15 @@ def main():
     p.add_argument(
         "--layers",
         nargs="+",
-        default=["highway", "building", "waterway", "landuse", "water", "pois", "natural"],
+        default=[
+            "highway",
+            "building",
+            "waterway",
+            "landuse",
+            "water",
+            "pois",
+            "natural",
+        ],
         help="Which OSM layer keys to fetch (must be in TAG_MAP).",
     )
     args = p.parse_args()

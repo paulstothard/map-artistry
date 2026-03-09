@@ -31,29 +31,29 @@ resolutions=(14400 7200 3840)
 # Parse options
 while [[ "$1" == -* ]]; do
   case "$1" in
-  -r)
-    shift
-    dpi="$1"
-    ;;
-  -h | --help)
-    echo "Usage: $0 [options] path/to/map.pdf"
-    echo ""
-    echo "Converts a map PDF into multiple PNGs at different resolutions."
-    echo "Output files are saved in the same folder as the input PDF."
-    echo ""
-    echo "Options:"
-    echo "  -r <dpi>        Set rasterization DPI (default: 600)"
-    echo "  -h, --help      Show this help message"
-    echo ""
-    echo "Example:"
-    echo "  $0 -r 300 map.pdf"
-    echo ""
-    exit 0
-    ;;
-  *)
-    echo "❌ Unknown option: $1"
-    exit 1
-    ;;
+    -r)
+      shift
+      dpi="$1"
+      ;;
+    -h | --help)
+      echo "Usage: $0 [options] path/to/map.pdf"
+      echo ""
+      echo "Converts a map PDF into multiple PNGs at different resolutions."
+      echo "Output files are saved in the same folder as the input PDF."
+      echo ""
+      echo "Options:"
+      echo "  -r <dpi>        Set rasterization DPI (default: 600)"
+      echo "  -h, --help      Show this help message"
+      echo ""
+      echo "Example:"
+      echo "  $0 -r 300 map.pdf"
+      echo ""
+      exit 0
+      ;;
+    *)
+      echo "❌ Unknown option: $1"
+      exit 1
+      ;;
   esac
   shift
 done

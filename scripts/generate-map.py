@@ -81,25 +81,30 @@ def _normalize_dem_for_colormap(
     return normed
 
 
-def _blend_multiply(base_rgb: np.ndarray, shade: np.ndarray, strength: float) -> np.ndarray:
+def _blend_multiply(
+    base_rgb: np.ndarray, shade: np.ndarray, strength: float
+) -> np.ndarray:
     shade_rgb = np.repeat(shade[..., np.newaxis], 3, axis=2)
     multiplied = base_rgb * shade_rgb
     return np.clip(base_rgb * (1.0 - strength) + multiplied * strength, 0.0, 1.0)
 
 
-def _blend_soft_light(base_rgb: np.ndarray, shade: np.ndarray, strength: float) -> np.ndarray:
+def _blend_soft_light(
+    base_rgb: np.ndarray, shade: np.ndarray, strength: float
+) -> np.ndarray:
     shade_rgb = np.repeat(shade[..., np.newaxis], 3, axis=2)
     soft = np.where(
         shade_rgb <= 0.5,
         base_rgb - (1.0 - 2.0 * shade_rgb) * base_rgb * (1.0 - base_rgb),
         base_rgb
-        + (2.0 * shade_rgb - 1.0)
-        * (np.sqrt(np.clip(base_rgb, 0.0, 1.0)) - base_rgb),
+        + (2.0 * shade_rgb - 1.0) * (np.sqrt(np.clip(base_rgb, 0.0, 1.0)) - base_rgb),
     )
     return np.clip(base_rgb * (1.0 - strength) + soft * strength, 0.0, 1.0)
 
 
-def _make_hypsometric_colormap(colors: list[str] | None = None) -> LinearSegmentedColormap:
+def _make_hypsometric_colormap(
+    colors: list[str] | None = None,
+) -> LinearSegmentedColormap:
     default_colors = [
         "#132B43",
         "#255D83",
@@ -114,7 +119,6 @@ def _make_hypsometric_colormap(colors: list[str] | None = None) -> LinearSegment
     return LinearSegmentedColormap.from_list(
         "map_artistry_hypsometric", colors or default_colors
     )
-
 
 
 def _modulate_rgb(rgb: np.ndarray, variation: np.ndarray) -> np.ndarray:
@@ -151,7 +155,9 @@ def _render_hillshade_textured_polygon_fill(
     debug: bool = False,
 ) -> bool:
     hs_cfg = style.get("hillshade_texture", {})
-    print(f"[HILLSHADE-DEBUG] {debug_label}: hillshade_texture visible={hs_cfg.get('visible', False)}, gdf.empty={gdf.empty}, water_tone is None={water_tone is None}")
+    print(
+        f"[HILLSHADE-DEBUG] {debug_label}: hillshade_texture visible={hs_cfg.get('visible', False)}, gdf.empty={gdf.empty}, water_tone is None={water_tone is None}"
+    )
     if not hs_cfg.get("visible", False) or gdf.empty or water_tone is None:
         return False
 
@@ -271,14 +277,14 @@ def _apply_craters_to_dem(
 ) -> tuple[np.ndarray, list[dict]]:
     """
     Apply impact craters to a DEM array.
-    
+
     Args:
         dem: DEM elevation array (height, width)
         craters: List of crater dicts with keys: x, y (relative 0-1), radius_km, depth_m, rim_height_ratio, lava_level_m
         bounds: (left, bottom, right, top) in map units
         pixel_size_x: Pixel size in x direction (map units)
         pixel_size_y: Pixel size in y direction (map units, typically negative)
-    
+
     Returns:
         Tuple of (modified DEM, list of crater metadata dicts)
         Each metadata dict contains:
@@ -288,15 +294,15 @@ def _apply_craters_to_dem(
     """
     if not craters:
         return dem, []
-    
+
     left, bottom, right, top = bounds
     map_width = right - left
     map_height = top - bottom
     height_px, width_px = dem.shape
-    
+
     dem_cratered = dem.copy()
     crater_metadata = []
-    
+
     for crater_cfg in craters:
         # Parse crater parameters
         rel_x = float(crater_cfg.get("x", 0.5))
@@ -305,262 +311,487 @@ def _apply_craters_to_dem(
         depth_m = crater_cfg.get("depth_m")
         rim_height_ratio = float(crater_cfg.get("rim_height_ratio", 0.15))
         lava_level_m = crater_cfg.get("lava_level_m")
-        
-        # Auto-calculate depth if not provided
+
+        # Auto-calculate depth if not provided - scale with radius for consistent appearance
         if depth_m is None:
-            depth_m = radius_km * 100
-        
+            # Depth-to-diameter ratio of ~0.1 is typical for impact craters
+            depth_m = radius_km * 1000 * 0.2  # 20% of radius (10% of diameter)
+        else:
+            # If depth is provided, still apply a minimum scaling to avoid unrealistic tiny depths on large craters
+            # or overly steep small craters
+            min_depth = radius_km * 1000 * 0.1  # At least 10% of radius
+            max_depth = radius_km * 1000 * 0.35  # At most 35% of radius
+            depth_m = np.clip(depth_m, min_depth, max_depth)
+
         # Convert relative position to map coordinates
         crater_x = left + rel_x * map_width
         crater_y = bottom + rel_y * map_height
-        
+
         # Convert to pixel coordinates
         crater_px_x = int((crater_x - left) / pixel_size_x)
         crater_px_y = int((top - crater_y) / abs(pixel_size_y))
-        
+
         # Convert radius from km to pixels
         # pixel_size_x and pixel_size_y are in degrees, need to convert km to degrees
         # at the crater's latitude for accurate calculation
         crater_lat = crater_y
         meters_per_degree_lat = 111320.0
         meters_per_degree_lon = 111320.0 * np.cos(np.radians(crater_lat))
-        
+
         radius_deg_x = (radius_km * 1000.0) / meters_per_degree_lon
         radius_deg_y = (radius_km * 1000.0) / meters_per_degree_lat
-        
+
         radius_px_x = abs(radius_deg_x / pixel_size_x)
         radius_px_y = abs(radius_deg_y / pixel_size_y)
-        
+
         # Get baseline elevation
         if 0 <= crater_px_y < height_px and 0 <= crater_px_x < width_px:
             baseline_elev = dem_cratered[crater_px_y, crater_px_x]
         else:
             baseline_elev = np.nanmedian(dem_cratered)
-        
-        # Create coordinate grids
-        y_coords, x_coords = np.ogrid[:height_px, :width_px]
-        
+
+        # MEMORY OPTIMIZATION: Calculate bounding box for this crater
+        # Only process the affected region (crater + ejecta zone + secondary craters + blend)
+        # Buffer needs to cover: outer_radius (1.3x) + blend (0.25 of 1.3 = 0.325x) + margin = ~1.75x
+        buffer_px = int(max(radius_px_x, radius_px_y) * 1.8)
+        y_min = max(0, crater_px_y - buffer_px)
+        y_max = min(height_px, crater_px_y + buffer_px)
+        x_min = max(0, crater_px_x - buffer_px)
+        x_max = min(width_px, crater_px_x + buffer_px)
+
+        # Extract DEM sub-array for this crater region (MUCH smaller than full DEM!)
+        dem_region = dem_cratered[y_min:y_max, x_min:x_max].copy()
+        region_height = y_max - y_min
+        region_width = x_max - x_min
+
+        # Create coordinate grids for sub-array only
+        y_coords, x_coords = np.ogrid[y_min:y_max, x_min:x_max]
+
         # Calculate angle from center for jagged rim
         dx = (x_coords - crater_px_x).astype(float)
         dy = (y_coords - crater_px_y).astype(float)
         angle = np.arctan2(dy, dx)
-        
+
         # Store lat/lon for polygon generation
         crater_lon = crater_x
         crater_lat = crater_y
-        
+
         # Create random generator with deterministic seed
         rng = np.random.default_rng(hash(str(crater_cfg)) % 2**32)
-        
+
         # Add jagged variation to rim (natural-looking irregularity)
         np.random.seed(hash(str(crater_cfg)) % 2**32)  # Deterministic noise
-        
+
         # Create a base irregularity map that varies around the rim
         # Some sections more eroded/irregular than others
         base_irregularity = np.zeros_like(angle)
         num_sectors = rng.integers(4, 8)
         for i in range(num_sectors):
             sector_angle = rng.uniform(0, 2 * np.pi)
-            sector_width = rng.uniform(np.pi/3, np.pi)
+            sector_width = rng.uniform(np.pi / 3, np.pi)
             sector_strength = rng.uniform(0.5, 1.5)
             angular_dist = np.abs((angle - sector_angle + np.pi) % (2 * np.pi) - np.pi)
-            base_irregularity += sector_strength * np.exp(-(angular_dist / sector_width)**2)
+            base_irregularity += sector_strength * np.exp(
+                -((angular_dist / sector_width) ** 2)
+            )
         base_irregularity = base_irregularity / base_irregularity.max()
-        
-        # Main rim variation with mixed feature sizes
-        n_rim_features = 48
-        rim_variation = np.zeros_like(angle)
-        for i in range(n_rim_features):
-            phase = np.random.uniform(0, 2*np.pi)
-            # Variable amplitude - some features larger than others
-            amplitude = np.random.uniform(0.02, 0.12)
-            frequency = i if i > 0 else 1
-            rim_variation += amplitude * np.sin(frequency * angle + phase)
-        
-        # Add secondary variation
-        for i in range(12):
-            phase = np.random.uniform(0, 2*np.pi)
-            amplitude = np.random.uniform(0.01, 0.05)
-            frequency = 20 + i * 5
-            rim_variation += amplitude * np.sin(frequency * angle + phase)
-        
-        # Modulate rim variation by base irregularity (more variation in some areas)
-        rim_variation = rim_variation * (0.3 + 0.7 * base_irregularity)
-        
+
+        # SEPARATE: Large-scale + medium-scale shape variation (for crater outline/silhouette)
+        # Low frequencies (1-8) for smooth large-scale shape
+        low_freq_shape = np.zeros_like(angle)
+        for i in range(1, 9):
+            phase = np.random.uniform(0, 2 * np.pi)
+            amplitude = np.random.uniform(0.03, 0.08)
+            low_freq_shape += amplitude * np.sin(i * angle + phase)
+
+        # Medium frequencies (8-16) for natural irregularity, lightly smoothed to avoid zipper
+        medium_freq_shape = np.zeros_like(angle)
+        for i in range(8, 17):
+            phase = np.random.uniform(0, 2 * np.pi)
+            amplitude = np.random.uniform(0.04, 0.08)  # Stronger medium frequencies
+            medium_freq_shape += amplitude * np.sin(i * angle + phase)
+        # Light smoothing of medium frequencies to prevent saw-tooth while keeping geological irregularity
+        medium_freq_shape = gaussian_filter(
+            medium_freq_shape, sigma=1.2
+        )  # Less smoothing
+
+        # Combine low and medium frequencies for boundary shape
+        shape_variation = low_freq_shape + medium_freq_shape
+        shape_variation = shape_variation * (0.3 + 0.7 * base_irregularity)
+
+        # Create separate outer boundary variation (stronger, more irregular)
+        outer_boundary_variation = np.zeros_like(angle)
+        for i in range(6, 18):  # Overlapping range for different character
+            phase = np.random.uniform(0, 2 * np.pi)
+            amplitude = np.random.uniform(0.05, 0.12)
+            outer_boundary_variation += amplitude * np.sin(i * angle + phase)
+        outer_boundary_variation = gaussian_filter(outer_boundary_variation, sigma=1.0)
+        outer_boundary_variation = outer_boundary_variation * (
+            0.3 + 0.7 * base_irregularity
+        )
+
+        # SEPARATE: High-frequency rim texture (for elevation detail, NOT outline)
+        rim_texture = np.zeros_like(angle)
+        for i in range(20, 48):  # Higher frequencies for surface detail only
+            phase = np.random.uniform(0, 2 * np.pi)
+            amplitude = np.random.uniform(0.01, 0.04)
+            rim_texture += amplitude * np.sin(i * angle + phase)
+        rim_texture = rim_texture * (0.3 + 0.7 * base_irregularity)
+
         # Distance from crater center with aspect ratio correction
-        dist_px = np.sqrt((dx / radius_px_x)**2 + (dy / radius_px_y)**2) * radius_px_x
-        
-        # Apply rim variation with moderate multiplier
-        varied_radius_px = radius_px_x * (1 + rim_variation * 0.10)
-        
+        dist_px = (
+            np.sqrt((dx / radius_px_x) ** 2 + (dy / radius_px_y) ** 2) * radius_px_x
+        )
+
+        # Use shape variation (low + medium freq) for crater boundary
+        varied_radius_px = radius_px_x * (1 + shape_variation * 0.10)
+
         # Pre-generate ejecta ray pattern to match rim variation
         # This ensures smooth transition from rim to ejecta
         # Asymmetric impact: rays concentrated in certain sectors
         ejecta_variation = np.zeros_like(angle)
         num_ejecta_rays = rng.integers(3, 8)  # Fewer rays overall
-        
+
         # Simulate impact angle - ejecta concentrated in certain direction
         impact_angle = rng.uniform(0, 2 * np.pi)
-        impact_cone_width = rng.uniform(np.pi * 0.6, np.pi * 1.2)  # Sector where most ejecta goes
-        
+        impact_cone_width = rng.uniform(
+            np.pi * 0.6, np.pi * 1.2
+        )  # Sector where most ejecta goes
+
         ejecta_ray_angles = []  # Store for later use
         for i in range(num_ejecta_rays):
             # Cluster rays in the impact cone (opposite to impact direction)
             # Some random deviation for variety
             if rng.random() < 0.7:  # 70% of rays in main ejecta cone
-                ray_angle = impact_angle + rng.uniform(-impact_cone_width/2, impact_cone_width/2)
+                ray_angle = impact_angle + rng.uniform(
+                    -impact_cone_width / 2, impact_cone_width / 2
+                )
             else:  # 30% scattered elsewhere
                 ray_angle = rng.uniform(0, 2 * np.pi)
-            
-            ray_width = rng.uniform(np.pi/10, np.pi/3)  # Variable width
+
+            ray_width = rng.uniform(np.pi / 10, np.pi / 3)  # Variable width
             # Much more variable strength - some very strong, some barely visible
-            ray_strength = rng.uniform(0.0, 1.0)**2.5  # More contrast
+            ray_strength = rng.uniform(0.0, 1.0) ** 2.5  # More contrast
             angular_dist = np.abs((angle - ray_angle + np.pi) % (2 * np.pi) - np.pi)
-            ejecta_variation += ray_strength * np.exp(-(angular_dist / ray_width)**2)
+            ejecta_variation += ray_strength * np.exp(
+                -((angular_dist / ray_width) ** 2)
+            )
             ejecta_ray_angles.append((ray_angle, ray_width, ray_strength))
-        
-        # Blend rim variation with ejecta rays for smooth transition
-        # Near rim: mostly rim variation, far from rim: mostly ejecta rays
-        combined_variation = rim_variation + ejecta_variation * 0.3  # Ejecta rays extend rim irregularity
+
+        # Blend SMOOTHED shape variation with ejecta rays for outer boundary
+        # Outer ejecta should be more lobate, less jagged
+        combined_variation = shape_variation * 0.5 + ejecta_variation * 0.3
         varied_radius_px = radius_px_x * (1 + combined_variation * 0.10)
-        
+
         # Crater profile zones - add slight variation to avoid perfect circles
         # Floor and bowl get subtle variation for more natural boundaries
-        floor_variation = rim_variation * 0.3  # Subtle variation carried to floor
+        floor_variation = shape_variation * 0.3  # Use smooth shape, not texture
         flat_floor_radius = 0.35 * radius_px_x * (1 + floor_variation * 0.05)
         bowl_radius = 0.82 * radius_px_x * (1 + floor_variation * 0.08)
         inner_radius = varied_radius_px * 0.90  # Inner edge of rim
         rim_radius = varied_radius_px
         outer_radius = varied_radius_px * 1.3
-        
-        # Initialize crater profile with original terrain (prevents corruption)
-        crater_profile = dem_cratered.copy()
-        
-        # Flat floor (full depth, will be filled with lava later if specified)
-        floor_mask = dist_px <= flat_floor_radius
-        floor_elevation = baseline_elev - depth_m
-        crater_profile[floor_mask] = floor_elevation
-        
-        # Bowl transition (gentle curve from flat floor to rim)
-        bowl_mask = (dist_px > flat_floor_radius) & (dist_px <= bowl_radius)
-        bowl_progress = (dist_px[bowl_mask] - flat_floor_radius[bowl_mask]) / (bowl_radius[bowl_mask] - flat_floor_radius[bowl_mask] + 1e-6)
-        bowl_depth = depth_m * (1 - bowl_progress**1.5)  # Gentler curve
-        crater_profile[bowl_mask] = baseline_elev - bowl_depth
-        
-        # Inner wall (steeper slope to rim)
-        wall_mask = (dist_px > bowl_radius) & (dist_px <= inner_radius)
-        wall_progress = (dist_px[wall_mask] - bowl_radius[wall_mask]) / (inner_radius[wall_mask] - bowl_radius[wall_mask] + 1e-6)
-        wall_elevation = (baseline_elev - depth_m * (1 - bowl_progress.max())) * (1 - wall_progress) + baseline_elev * wall_progress
-        crater_profile[wall_mask] = wall_elevation
-        
-        # Rim (raised edge with variation - additive to existing terrain)
-        rim_mask = (dist_px > inner_radius) & (dist_px <= rim_radius)
-        rim_progress = (dist_px[rim_mask] - inner_radius[rim_mask]) / (rim_radius[rim_mask] - inner_radius[rim_mask] + 1e-6)
+
+        # Initialize crater as additive delta field (change from baseline)
+        # Build as ONE continuous radial profile - no separate zone formulas
+        crater_delta = np.zeros_like(dem_region)
+
+        # Create continuous elevation profile across all radial zones
+        # Elevation and slope must match at every boundary (no steps or kinks)
         rim_height = depth_m * rim_height_ratio
-        # Add rim height to original terrain to preserve local variation
-        crater_profile[rim_mask] = dem_cratered[rim_mask] + rim_height * (1 - rim_progress**2)
-        
-        # Ejecta/blend zone with irregular outer boundary and radial streaking
-        # Use the pre-generated ejecta rays for consistency with rim
-        # Outer radius extends from the varied rim smoothly
-        outer_radius = varied_radius_px * (1.1 + np.clip(ejecta_variation, 0, 1.0) * 0.25)
-        
-        blend_mask = (dist_px > rim_radius) & (dist_px <= outer_radius)
-        blend_progress = (dist_px[blend_mask] - rim_radius[blend_mask]) / (outer_radius[blend_mask] - rim_radius[blend_mask] + 1e-6)
-        
-        # Rougher, less uniform falloff with radial streaking
-        # Base falloff
-        smooth_falloff = 1 - blend_progress**1.5
-        
-        # Add radial streak modulation (ejecta density varies)
-        # Use same asymmetric pattern as the rays - cluster in impact direction
+
+        # For each pixel, compute its continuous elevation based on radial distance
+        # Profile segments blend smoothly at boundaries
+
+        # Zone 1: Flat floor (r <= flat_floor_radius)
+        floor_mask = dist_px <= flat_floor_radius
+        crater_delta[floor_mask] = -depth_m
+
+        # Zone 2: Bowl transition (flat_floor_radius < r <= bowl_radius)
+        # Rises smoothly from -depth_m to near zero
+        bowl_mask = (dist_px > flat_floor_radius) & (dist_px <= bowl_radius)
+        if bowl_mask.any():
+            bowl_u = (dist_px[bowl_mask] - flat_floor_radius[bowl_mask]) / (
+                bowl_radius[bowl_mask] - flat_floor_radius[bowl_mask] + 1e-6
+            )
+            # Smooth curve: starts at -depth_m, ends approaching 0
+            # Use polynomial that ensures zero slope at start (flat floor) and smooth transition at end
+            crater_delta[bowl_mask] = -depth_m * (1 - bowl_u) ** 1.5
+
+        # Zone 3: Inner wall (bowl_radius < r <= inner_radius)
+        # Continues from bowl end (at ~0) and stays near baseline
+        wall_mask = (dist_px > bowl_radius) & (dist_px <= inner_radius)
+        if wall_mask.any():
+            wall_u = (dist_px[wall_mask] - bowl_radius[wall_mask]) / (
+                inner_radius[wall_mask] - bowl_radius[wall_mask] + 1e-6
+            )
+            # At bowl_radius (u=0): bowl ends at 0, so wall must start at 0
+            # Wall stays near zero (slight dip allowed for terrace effect)
+            # Use smooth curve: 0 at u=0, small dip in middle, back to ~0 at u=1
+            crater_delta[wall_mask] = -depth_m * 0.01 * wall_u * (1 - wall_u)
+
+        # Zone 4: Rim (inner_radius < r <= rim_radius)
+        # Rises smoothly from baseline to rim_height peak
+        rim_mask = (dist_px > inner_radius) & (dist_px <= rim_radius)
+        if rim_mask.any():
+            rim_u = (dist_px[rim_mask] - inner_radius[rim_mask]) / (
+                rim_radius[rim_mask] - inner_radius[rim_mask] + 1e-6
+            )
+            # At inner_radius: wall ends at ~0, rim should start at ~0 and rise
+            # Smooth rise to peak then slight decline
+            rim_profile = rim_height * (1 - (1 - rim_u) ** 2) * (1 - rim_u**3 * 0.3)
+            crater_delta[rim_mask] = rim_profile * (1 + rim_texture[rim_mask] * 0.15)
+
+        # Ejecta deposition zone - continuous field, not bounded by outer_radius
+        # Use outer_radius only as a scaling reference for the depositional extent
+        # Calculate reference distance for ejecta extent (but don't use as hard boundary)
+        outer_shape = outer_boundary_variation * 0.7 + ejecta_variation * 0.3
+        ejecta_reference_radius = radius_px_x * 1.3 * (1.0 + outer_shape * 0.18)
+
+        # Create continuous ejecta deposition field from rim outward
+        # No hard mask - smooth continuous falloff over wide zone
+        ejecta_zone = dist_px > rim_radius
+
+        # Calculate normalized radial position from rim outward
+        # CRITICAL: max extent must be well within bounding box (1.8x) to avoid edge artifacts
+        # Set to 1.6x to ensure smooth falloff to zero before box boundary
+        max_ejecta_extent = radius_px_x * 1.6
+        normalized_ejecta_dist = (dist_px - rim_radius) / (
+            max_ejecta_extent - rim_radius + 1e-6
+        )
+        normalized_ejecta_dist = np.clip(
+            normalized_ejecta_dist, 0, 1.5
+        )  # Allow overshoot for smooth tail
+
+        # Smooth continuous falloff (no sharp edges)
+        # Power law with high exponent ensures it reaches nearly zero before max_ejecta_extent
+        base_ejecta_falloff = np.maximum(0, 1.0 - normalized_ejecta_dist**2.5)
+
+        # Add radial streak modulation (ejecta rays as continuous soft fields)
+        # Model as smooth angular deposits with wandering centerlines and gradual tapering
         radial_streaks = np.zeros_like(dist_px)
-        num_streaks = rng.integers(3, 7)  # Fewer, more prominent streaks
+        num_streaks = rng.integers(6, 12)  # More ejecta rays
+
+        # Normalized radial position in ejecta zone (0 at rim, 1 at max extent)
+        ejecta_u = np.clip(
+            (dist_px - rim_radius) / (max_ejecta_extent - rim_radius + 1e-6), 0, 1.2
+        )
+
         for i in range(num_streaks):
-            # Cluster streaks in impact cone like rays
+            # Base ray centerline angle
             if rng.random() < 0.7:
-                ray_angle = impact_angle + rng.uniform(-impact_cone_width/2, impact_cone_width/2)
+                ray_center_angle = impact_angle + rng.uniform(
+                    -impact_cone_width / 2, impact_cone_width / 2
+                )
             else:
-                ray_angle = rng.uniform(0, 2 * np.pi)
-            
-            base_ray_width = rng.uniform(np.pi/6, np.pi/3)
-            streak_strength = rng.uniform(0.0, 1.0)**2.0
-            angular_dist = np.abs((angle - ray_angle + np.pi) % (2 * np.pi) - np.pi)
-            
-            # Add irregular, fingered edges to the ray instead of smooth Gaussian
-            # Create angular variation that changes with radial distance
-            radial_normalized = dist_px / (varied_radius_px.mean() if hasattr(varied_radius_px, 'mean') else varied_radius_px)
-            
-            # Multiple frequency components for irregular edge
-            angular_perturbation = np.zeros_like(angular_dist)
-            for freq in [3, 7, 11]:  # Different frequencies create fingering
-                phase = rng.uniform(0, 2 * np.pi)
-                angular_perturbation += 0.3 * np.sin(radial_normalized * freq * np.pi + phase) * base_ray_width
-            
-            # Modulate ray width with radial distance (narrower far from crater)
-            ray_width = base_ray_width * (1.2 - 0.7 * radial_normalized)
-            
-            # Apply perturbation to create irregular edges
-            perturbed_angular_dist = angular_dist + angular_perturbation
-            
-            # Sharp cutoff with some noise instead of smooth Gaussian
-            edge_noise = rng.uniform(0.7, 1.0, angular_dist.shape)
-            ray_mask = (np.abs(perturbed_angular_dist) < ray_width * edge_noise)
-            
-            # Internal variation - not uniform density
-            internal_variation = 0.5 + 0.5 * np.sin(radial_normalized * 6 * np.pi + rng.uniform(0, 2*np.pi))
-            
-            # Combine into final streak pattern
-            ray_profile = np.zeros_like(angular_dist)
-            ray_profile[ray_mask] = streak_strength * internal_variation[ray_mask] * (1.0 - (np.abs(perturbed_angular_dist[ray_mask]) / (ray_width[ray_mask] + 1e-6))**0.5)
-            
-            radial_streaks += ray_profile
+                ray_center_angle = rng.uniform(0, 2 * np.pi)
+
+            # Ray centerline wanders smoothly as function of ejecta_u
+            # Low-frequency sinusoidal wander (not jagged)
+            wander_freq = rng.uniform(1.5, 3.5)
+            wander_amplitude_rad = rng.uniform(0.08, 0.18)  # Radians
+            wander_phase = rng.uniform(0, 2 * np.pi)
+            ray_centerline_angle = ray_center_angle + wander_amplitude_rad * np.sin(
+                wander_freq * np.pi * ejecta_u + wander_phase
+            )
+
+            # Ray width as smooth function of ejecta_u
+            # Broader near rim, narrowing toward distal edge
+            base_width_rad = rng.uniform(0.12, 0.25)  # Radians (~7-14 degrees)
+            width_taper = 1.3 - 0.8 * ejecta_u  # Narrows from 1.3× to 0.5× base width
+            ray_width_u = base_width_rad * width_taper
+
+            # Angular offset from wandering centerline
+            # Wrapped angle difference (handles 0/2π wraparound)
+            angular_offset = np.abs(
+                (angle - ray_centerline_angle + np.pi) % (2 * np.pi) - np.pi
+            )
+
+            # Lateral falloff: soft Gaussian from centerline
+            lateral_falloff = np.exp(-((angular_offset / (ray_width_u + 1e-6)) ** 2))
+
+            # Radial strength envelope: strongest in inner-to-mid ejecta, fading toward distal
+            # Peak around ejecta_u ~ 0.3-0.5, declining toward both rim and far edge
+            radial_peak = rng.uniform(0.3, 0.5)
+            radial_width = rng.uniform(0.4, 0.6)
+            radial_envelope = np.exp(-(((ejecta_u - radial_peak) / radial_width) ** 2))
+            # Also apply overall decay toward far field
+            radial_envelope *= 1.0 - 0.6 * ejecta_u
+
+            # Patchiness: longitudinal modulation creates streaks/clumps along ray
+            # Multiple frequency components for natural variation
+            patchiness = np.ones_like(ejecta_u)
+            for pulse_freq in [2, 3, 5]:
+                pulse_phase = rng.uniform(0, 2 * np.pi)
+                pulse_amp = rng.uniform(0.15, 0.35)
+                patchiness += pulse_amp * np.sin(
+                    pulse_freq * np.pi * ejecta_u + pulse_phase
+                )
+            patchiness = np.clip(patchiness / patchiness.max(), 0.3, 1.0)
+
+            # Overall ray strength
+            streak_strength = (
+                rng.uniform(0.0, 1.0) ** 1.5
+            )  # Less aggressive falloff for more visible rays
+
+            # Combine all components into continuous ray field
+            ray_intensity = (
+                streak_strength * lateral_falloff * radial_envelope * patchiness
+            )
+
+            # Add to accumulated streaks (sum, not max)
+            radial_streaks += ray_intensity
+
         radial_streaks = np.clip(radial_streaks, 0, 1)
-        
+
         # Ejecta concentrated along rays, thin between them
-        # Much more dramatic variation - areas without rays have minimal ejecta
-        smooth_falloff = smooth_falloff * (0.15 + 0.85 * radial_streaks[blend_mask])
-        
+        # Modulate base falloff by ray density for natural variation
+        ejecta_deposition = base_ejecta_falloff * (0.1 + 0.9 * radial_streaks)
+
         # Add small irregular bumps/mounds in ejecta field - concentrated in rays
-        ejecta_texture = np.random.normal(0, rim_height * 0.15, crater_profile.shape)
+        ejecta_texture = np.random.normal(0, rim_height * 0.4, crater_delta.shape)
         ejecta_texture = gaussian_filter(ejecta_texture, sigma=3.0)
-        
-        crater_profile[blend_mask] = baseline_elev + ejecta_texture[blend_mask] * smooth_falloff
-        
-        # Add secondary cratering in ejecta field (small impact craters from ejected material)
-        num_secondary = rng.integers(12, 25)  # Increased from 6-15 for more visible secondaries
+
+        # Zone 5: Ejecta blanket (r > rim_radius)
+        # Must start smoothly from rim outer edge and taper continuously
+        ejecta_active = ejecta_zone & (base_ejecta_falloff > 0.01)
+        if ejecta_active.any():
+            # At rim_radius, rim ends at approximately 0.7 * rim_height
+            # Ejecta base elevation continues smoothly from that level
+            rim_outer_elevation = rim_height * 0.7
+            base_ejecta_elevation = (
+                rim_outer_elevation * base_ejecta_falloff[ejecta_active]
+            )
+
+            # Rays add depositional variation ON TOP of base (not multiplicative)
+            # This preserves continuity while creating ray streaks
+            ray_deposit_height = (
+                rim_height
+                * 0.3
+                * radial_streaks[ejecta_active]
+                * base_ejecta_falloff[ejecta_active]
+            )
+
+            crater_delta[ejecta_active] = (
+                base_ejecta_elevation
+                + ray_deposit_height
+                + ejecta_texture[ejecta_active] * 0.2
+            )
+
+        # Add secondary cratering as distinct terrain features AFTER base ejecta
+        # Generate stochastic ejecta density field based on rays (not radial distance)
+        # Density field independent of distance rings - only angular/ray modulation
+        ejecta_density = np.zeros_like(dist_px)
+        for ray_angle, ray_width, ray_strength in ejecta_ray_angles:
+            angular_dist = np.abs((angle - ray_angle + np.pi) % (2 * np.pi) - np.pi)
+            # Angular factor only - no preferred radius
+            angular_factor = np.exp(-((angular_dist / (ray_width * 1.8)) ** 2))
+            ejecta_density += ray_strength * angular_factor
+
+        # Add base background density (some secondaries everywhere in ejecta)
+        ejecta_density += 0.2
+        ejecta_density = np.clip(ejecta_density, 0, 1)
+
+        # Create dedicated secondary field
+        secondary_field = np.zeros_like(crater_delta)
+        num_secondary = rng.integers(20, 35)  # More secondaries spread broadly
+
         for i in range(num_secondary):
-            # Random position in ejecta field
-            sec_angle = rng.uniform(0, 2 * np.pi)
-            sec_distance = rng.uniform(rim_radius.mean() * 1.05, outer_radius.mean() * 0.95)
-            sec_radius = rng.uniform(radius_px_x * 0.04, radius_px_x * 0.12)  # Larger
-            sec_depth = rim_height * rng.uniform(0.5, 1.5)  # Deeper, more visible
-            
+            # Sample position stochastically: very wide range, biased by ejecta density only
+            # Try multiple positions, pick one with high density
+            best_distance = None
+            best_angle = None
+            best_density = 0
+            for attempt in range(5):
+                trial_angle = rng.uniform(0, 2 * np.pi)
+                # Very wide range: from just outside bowl to well into surrounding terrain
+                # No preferred distance - uniform sampling in broad range
+                trial_distance = rng.uniform(radius_px_x * 0.85, radius_px_x * 1.6)
+
+                # Sample density at this location
+                trial_dx = trial_distance * np.cos(trial_angle)
+                trial_dy = trial_distance * np.sin(trial_angle)
+                trial_idx_x = int(dx.shape[1] // 2 + trial_dx)
+                trial_idx_y = int(dx.shape[0] // 2 + trial_dy)
+                if (
+                    0 <= trial_idx_y < ejecta_density.shape[0]
+                    and 0 <= trial_idx_x < ejecta_density.shape[1]
+                ):
+                    trial_density = ejecta_density[trial_idx_y, trial_idx_x]
+                    # Weight by density and a gentle distance factor (not peaked)
+                    distance_weight = np.exp(
+                        -((trial_distance / (radius_px_x * 2.0)) ** 2)
+                    )  # Very broad
+                    weighted_density = trial_density * (0.3 + 0.7 * distance_weight)
+                    if weighted_density > best_density:
+                        best_density = weighted_density
+                        best_distance = trial_distance
+                        best_angle = trial_angle
+
+            if best_distance is None:
+                continue
+
+            # Size and depth vary with distance (farther = smaller, shallower)
+            # But not concentrated - gradual declining trend
+            distance_factor = np.exp(-((best_distance / (radius_px_x * 1.8)) ** 1.2))
+            distance_factor = np.clip(distance_factor, 0.15, 1.0)
+
+            sec_radius = (
+                rng.uniform(radius_px_x * 0.03, radius_px_x * 0.075) * distance_factor
+            )
+            sec_depth = depth_m * rng.uniform(0.06, 0.16) * distance_factor
+            sec_rim_height = sec_depth * 0.15
+
             # Calculate distance from secondary crater center
-            sec_dx = dx - sec_distance * np.cos(sec_angle)
-            sec_dy = dy - sec_distance * np.sin(sec_angle)
+            sec_dx = dx - best_distance * np.cos(best_angle)
+            sec_dy = dy - best_distance * np.sin(best_angle)
             sec_dist = np.sqrt(sec_dx**2 + sec_dy**2)
-            
-            # Only affect pixels in ejecta field near this secondary crater
-            sec_mask = (sec_dist < sec_radius) & blend_mask
-            if sec_mask.any():
-                sec_progress = sec_dist[sec_mask] / sec_radius
+
+            # Bowl depression
+            sec_bowl_mask = sec_dist < sec_radius
+            if sec_bowl_mask.any():
+                sec_progress = sec_dist[sec_bowl_mask] / sec_radius
                 sec_profile = -sec_depth * (1 - sec_progress**2)
-                crater_profile[sec_mask] += sec_profile
-        
+                secondary_field[sec_bowl_mask] = np.minimum(
+                    secondary_field[sec_bowl_mask], sec_profile
+                )
+
+            # Small rim
+            sec_rim_mask = (sec_dist >= sec_radius) & (sec_dist < sec_radius * 1.2)
+            if sec_rim_mask.any():
+                rim_progress = (sec_dist[sec_rim_mask] - sec_radius) / (
+                    sec_radius * 0.2
+                )
+                rim_profile = sec_rim_height * (1 - rim_progress**2)
+                secondary_field[sec_rim_mask] = np.maximum(
+                    secondary_field[sec_rim_mask], rim_profile
+                )
+
+        # Apply secondaries with continuous density-based modulation (not hard mask or radial peak)
+        # Use ejecta deposition falloff to modulate strength (natural tapering with ejecta)
+        # But no separate radial preference - just follow the ejecta deposition
+        secondary_strength = ejecta_density * base_ejecta_falloff * 0.7
+        crater_delta += secondary_field * secondary_strength
+
         # Add concentric ripples/terraces (like slumping in crater walls)
         # Random parameters per crater for variation
         num_ripples = rng.integers(1, 4)  # Just 1-3 major terraces
-        ripple_amplitude = rng.uniform(0.08, 0.15) * depth_m  # Stronger, more visible
-        
+        ripple_amplitude = rng.uniform(0.12, 0.22) * depth_m  # More prominent ripples
+
         # Apply ripples mainly to bowl and wall areas (not flat floor)
-        flat_floor_mean = flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else flat_floor_radius
+        flat_floor_mean = (
+            flat_floor_radius.mean()
+            if hasattr(flat_floor_radius, "mean")
+            else flat_floor_radius
+        )
         ripple_mask = dist_px > flat_floor_mean * 0.8
-        
+
         if ripple_mask.any() and num_ripples > 0:
             # Normalized radial distance for ripple calculation
-            ripple_dist = (dist_px[ripple_mask] - flat_floor_mean) / (radius_px_x - flat_floor_mean + 1e-6)
-            
+            ripple_dist = (dist_px[ripple_mask] - flat_floor_mean) / (
+                radius_px_x - flat_floor_mean + 1e-6
+            )
+
             # Create irregularly-spaced ripples by placing them at random positions
             ripple_sum = np.zeros_like(ripple_dist)
             for i in range(num_ripples):
@@ -570,55 +801,63 @@ def _apply_craters_to_dem(
                 ripple_width = rng.uniform(0.08, 0.2)
                 # Random strength variation per ripple
                 ripple_strength = rng.uniform(0.6, 1.0)
-                
+
                 # Create a localized bump/terrace
-                ripple_contribution = ripple_strength * np.exp(-((ripple_dist - ripple_center) / ripple_width)**2)
+                ripple_contribution = ripple_strength * np.exp(
+                    -(((ripple_dist - ripple_center) / ripple_width) ** 2)
+                )
                 ripple_sum += ripple_contribution
-            
-            # Apply ripples
-            crater_profile[ripple_mask] += ripple_amplitude * ripple_sum
-        
+
+            # Apply ripples as delta
+            crater_delta[ripple_mask] += ripple_amplitude * ripple_sum
+
         # Add multi-scale surface texture variation (scarred, rough terrain)
         # Large-scale scarring (Impact features, major cracks) - stronger
-        large_texture = np.random.normal(0, depth_m * 0.18, crater_profile.shape)
+        large_texture = np.random.normal(0, depth_m * 0.18, crater_delta.shape)
         large_texture = gaussian_filter(large_texture, sigma=12.0)
-        
+
         # Medium-scale roughness (Secondary impacts, erosion) - stronger
-        medium_texture = np.random.normal(0, depth_m * 0.10, crater_profile.shape)
+        medium_texture = np.random.normal(0, depth_m * 0.10, crater_delta.shape)
         medium_texture = gaussian_filter(medium_texture, sigma=5.0)
-        
+
         # Fine-scale detail (Surface irregularities) - more visible
-        fine_texture = np.random.normal(0, depth_m * 0.04, crater_profile.shape)
+        fine_texture = np.random.normal(0, depth_m * 0.04, crater_delta.shape)
         fine_texture = gaussian_filter(fine_texture, sigma=1.5)
-        
+
         # Combine textures with distance-based weighting
         combined_texture = large_texture + medium_texture + fine_texture
-        
+
         # Apply texture to entire crater (including floor for rough lava base)
         crater_interior_mask = dist_px <= rim_radius
-        crater_profile[crater_interior_mask] += combined_texture[crater_interior_mask]
-        
+        crater_delta[crater_interior_mask] += combined_texture[crater_interior_mask]
+
         # Add wall slump scars (collapsed material on crater walls)
         num_slumps = rng.integers(2, 5)
         wall_and_bowl_mask = (dist_px > flat_floor_mean * 0.6) & (dist_px <= rim_radius)
-        
+
         for i in range(num_slumps):
             slump_angle = rng.uniform(0, 2 * np.pi)
-            slump_width = rng.uniform(np.pi/8, np.pi/4)
+            slump_width = rng.uniform(np.pi / 8, np.pi / 4)
             slump_depth = rng.uniform(0.03, 0.08) * depth_m
-            
+
             angular_dist = np.abs((angle - slump_angle + np.pi) % (2 * np.pi) - np.pi)
             slump_mask = (angular_dist < slump_width) & wall_and_bowl_mask
-            
+
             if slump_mask.any():
                 # Radial distance for falloff
-                radial_progress = (dist_px[slump_mask] - flat_floor_mean) / (radius_px_x - flat_floor_mean + 1e-6)
+                radial_progress = (dist_px[slump_mask] - flat_floor_mean) / (
+                    radius_px_x - flat_floor_mean + 1e-6
+                )
                 # Angular falloff
-                angular_falloff = 1.0 - (angular_dist[slump_mask] / slump_width)**2
+                angular_falloff = 1.0 - (angular_dist[slump_mask] / slump_width) ** 2
                 # Create slump depression with some texture
-                slump_pattern = -slump_depth * angular_falloff * (0.8 + 0.2 * np.sin(radial_progress * 8 * np.pi))
-                crater_profile[slump_mask] += slump_pattern
-        
+                slump_pattern = (
+                    -slump_depth
+                    * angular_falloff
+                    * (0.8 + 0.2 * np.sin(radial_progress * 8 * np.pi))
+                )
+                crater_delta[slump_mask] += slump_pattern
+
         # Add scattered small pockmarks across crater surface
         num_pockmarks = rng.integers(15, 30)
         for i in range(num_pockmarks):
@@ -626,83 +865,73 @@ def _apply_craters_to_dem(
             pock_distance = rng.uniform(0.2, 1.0) * radius_px_x
             pock_x = pock_distance * np.cos(pock_angle)
             pock_y = pock_distance * np.sin(pock_angle)
-            
+
             pock_radius = rng.uniform(0.015, 0.04) * radius_px_x
             pock_depth = rng.uniform(0.01, 0.03) * depth_m
-            
-            pock_dist = np.sqrt((dx - pock_x)**2 + (dy - pock_y)**2)
+
+            pock_dist = np.sqrt((dx - pock_x) ** 2 + (dy - pock_y) ** 2)
             pock_mask = (pock_dist < pock_radius * 1.5) & crater_interior_mask
-            
+
             if pock_mask.any():
-                pock_profile = -pock_depth * np.exp(-(pock_dist[pock_mask] / pock_radius)**2.5)
-                crater_profile[pock_mask] += pock_profile
-        
-        # Add radial cracks/scars as V-shaped gouges that can intersect
-        num_cracks = rng.integers(8, 16)
-        crack_accumulator = np.zeros_like(crater_profile)
-        
-        for i in range(num_cracks):
-            crack_angle = rng.uniform(0, 2 * np.pi)
-            base_crack_width = rng.uniform(0.015, 0.06) * radius_px_x
-            max_crack_depth = rng.uniform(0.3, 0.8) * depth_m * 0.15
-            
-            # Calculate angular difference
-            angular_diff = np.abs((angle - crack_angle + np.pi) % (2 * np.pi) - np.pi)
-            
-            # Get mean radii for calculations (handle both scalar and array cases)
-            flat_floor_mean = flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else flat_floor_radius
-            varied_mean = varied_radius_px.mean() if hasattr(varied_radius_px, 'mean') else varied_radius_px
-            
-            # Add wandering/irregularity to crack path (not perfectly straight)
-            wander_frequency = rng.uniform(0.15, 0.35)
-            wander_amplitude = rng.uniform(0.01, 0.04) * radius_px_x
-            radial_position = np.clip((dist_px - flat_floor_mean * 0.5) / (varied_mean * 1.15 - flat_floor_mean * 0.5 + 1e-6), 0, 1)
-            wander_offset = wander_amplitude * np.sin(radial_position * wander_frequency * np.pi * 8)
-            angular_diff = np.abs(angular_diff - wander_offset / dist_px.clip(1))
-            
-            # Variable width: narrower at ends, wider in middle
-            width_variation = 1.0 - radial_position**2
-            crack_width = base_crack_width * (0.4 + 0.6 * width_variation)
-            
-            # Crack mask extends into ejecta zone
-            crack_mask = (angular_diff < crack_width / dist_px.clip(1)) & (dist_px > flat_floor_mean * 0.5) & (dist_px <= varied_mean * 1.15)
-            
-            if not crack_mask.any():
+                pock_profile = -pock_depth * np.exp(
+                    -((pock_dist[pock_mask] / pock_radius) ** 2.5)
+                )
+                crater_delta[pock_mask] += pock_profile
+
+        # Add radial scrape marks on inner wall (simple radial lines from impact)
+        # Subtle texture that looks like material scraped radially during formation
+        num_scrapes = rng.integers(80, 140)  # More scrapes for denser texture
+
+        # Get radii for wall zone
+        bowl_mean = bowl_radius.mean() if hasattr(bowl_radius, "mean") else bowl_radius
+        inner_mean = (
+            inner_radius.mean() if hasattr(inner_radius, "mean") else inner_radius
+        )
+        rim_mean = rim_radius.mean() if hasattr(rim_radius, "mean") else rim_radius
+
+        for i in range(num_scrapes):
+            scrape_angle = rng.uniform(0, 2 * np.pi)
+            scrape_width = rng.uniform(
+                0.005, 0.015
+            )  # Very narrow angular width (radians)
+            scrape_depth = rng.uniform(0.02, 0.06) * depth_m  # Shallow grooves
+
+            # Angular distance from scrape centerline
+            angular_diff = np.abs((angle - scrape_angle + np.pi) % (2 * np.pi) - np.pi)
+
+            # Scrape extends along wall (bowl edge to upper wall)
+            scrape_start = bowl_mean * 1.1
+            scrape_end = rim_mean * 0.95
+            scrape_mask = (
+                (angular_diff < scrape_width)
+                & (dist_px >= scrape_start)
+                & (dist_px <= scrape_end)
+            )
+
+            if not scrape_mask.any():
                 continue
-            
-            # V-shaped profile instead of Gaussian (sharper, more gouge-like)
-            normalized_width = angular_diff[crack_mask] / (crack_width[crack_mask] / dist_px[crack_mask].clip(1))
-            v_profile = np.maximum(0, 1.0 - normalized_width)  # Linear V-shape
-            
-            # Depth variation: deeper near crater rim, shallower toward ends
-            depth_variation = 1.0 - (radial_position[crack_mask] ** 1.5) * 0.6
-            
-            # Fade cracks as they extend beyond rim
-            crack_falloff = np.ones(crack_mask.sum())
-            dist_masked = dist_px[crack_mask]
-            rim_masked = rim_radius[crack_mask] if isinstance(rim_radius, np.ndarray) else rim_radius
-            varied_masked = varied_radius_px[crack_mask] if isinstance(varied_radius_px, np.ndarray) else varied_radius_px
-            
-            beyond_rim_sub = dist_masked > rim_masked
-            if beyond_rim_sub.any():
-                crack_falloff[beyond_rim_sub] = np.clip(1.0 - ((dist_masked[beyond_rim_sub] - rim_masked[beyond_rim_sub]) / (varied_masked[beyond_rim_sub] * 0.15)), 0, 1)
-            
-            # Calculate final crack depth with all variations
-            crack_depth_array = max_crack_depth * v_profile * depth_variation * crack_falloff
-            
-            # Accumulate cracks (take maximum where they overlap for realistic intersections)
-            crack_accumulator[crack_mask] = np.maximum(crack_accumulator[crack_mask], crack_depth_array)
-        
-        # Apply accumulated cracks to crater profile
-        crater_profile -= crack_accumulator
-        
+
+            # Simple linear lateral profile (narrow line)
+            lateral_u = angular_diff[scrape_mask] / (scrape_width + 1e-6)
+            lateral_profile = np.maximum(0, 1.0 - lateral_u)
+
+            # Depth varies along length (some variation)
+            radial_u = (dist_px[scrape_mask] - scrape_start) / (
+                scrape_end - scrape_start + 1e-6
+            )
+            depth_variation = 0.7 + 0.3 * np.sin(radial_u * np.pi * rng.uniform(2, 5))
+
+            # Apply scrape
+            scrape_profile = -scrape_depth * lateral_profile * depth_variation
+            crater_delta[scrape_mask] += scrape_profile
+
         # Add extra rim surface irregularities (bumps and scars)
         rim_surface_mask = (dist_px > inner_radius) & (dist_px <= rim_radius)
         if rim_surface_mask.any():
-            rim_bumps = np.random.normal(0, rim_height * 0.25, crater_profile.shape)
+            rim_bumps = np.random.normal(0, rim_height * 0.25, crater_delta.shape)
             rim_bumps = gaussian_filter(rim_bumps, sigma=1.5)
-            crater_profile[rim_surface_mask] += rim_bumps[rim_surface_mask]
-        
+            crater_delta[rim_surface_mask] += rim_bumps[rim_surface_mask]
+
         # Apply lava fill if specified
         if lava_level_m is not None:
             # Find the absolute minimum elevation in the DEM for reference
@@ -713,97 +942,141 @@ def _apply_craters_to_dem(
             base_lava_surface = baseline_elev - lava_depth_from_baseline
             # Clamp to at least the minimum to ensure bright coloring
             base_lava_surface = min(base_lava_surface, min_elev + depth_m * 0.1)
-            
+
             # Flat lava surface (like a calm lake) - hillshade comes from floor texture underneath
             lava_surface = base_lava_surface
-            
+
             # DON'T modify the DEM - keep the textured floor for hillshade sampling
             # The lava_surface value is only used for polygon generation and color mapping
             # The water polygon will sample the textured crater floor underneath for hillshade
-        
-        # Apply crater: replace terrain within crater zone, blend at edges
-        impact_mask = dist_px <= rim_radius
-        dem_cratered[impact_mask] = crater_profile[impact_mask]
-        
-        # Blend zone
-        dem_cratered[blend_mask] = (
-            smooth_falloff * crater_profile[blend_mask] +
-            (1 - smooth_falloff) * dem_cratered[blend_mask]
-        )
-        
+
+        # Apply crater to DEM using smooth influence mask (single additive application)
+        # This eliminates seams from mixed assignment styles
+        # Crater interior (bowl, walls, rim) applied fully
+        crater_interior = dist_px <= rim_radius
+
+        # Beyond rim: smooth continuous falloff using base_ejecta_falloff
+        # Create unified influence mask across entire crater region
+        influence_mask = np.ones_like(dist_px)
+
+        # Interior gets full influence
+        influence_mask[crater_interior] = 1.0
+
+        # Ejecta zone gets smooth falloff
+        ejecta_influence_zone = (dist_px > rim_radius) & (base_ejecta_falloff > 0.01)
+        if ejecta_influence_zone.any():
+            influence_mask[ejecta_influence_zone] = base_ejecta_falloff[
+                ejecta_influence_zone
+            ]
+
+        # Outside ejecta zone gets zero influence
+        far_field = dist_px > rim_radius
+        if far_field.any():
+            influence_mask[far_field] = np.where(
+                base_ejecta_falloff[far_field] > 0.01,
+                base_ejecta_falloff[far_field],
+                0.0,
+            )
+
+        # Single additive application - no mixed assignment styles
+        dem_region += crater_delta * influence_mask
+
+        # Insert processed region back into full DEM
+        dem_cratered[y_min:y_max, x_min:x_max] = dem_region
+
         # Generate polygon metadata for water layer modification
         # Disruption zone: circular polygon at outer radius (where impact disrupts existing water)
-        disruption_radius_deg_x = (radius_km * 1000 * 1.3) / (111320 * np.cos(np.radians(crater_lat)))
+        disruption_radius_deg_x = (radius_km * 1000 * 1.3) / (
+            111320 * np.cos(np.radians(crater_lat))
+        )
         disruption_radius_deg_y = (radius_km * 1000 * 1.3) / 111320
-        
+
         # Create circular disruption zone
         num_points = 64
         disruption_angles = np.linspace(0, 2 * np.pi, num_points, endpoint=False)
         disruption_x = crater_lon + disruption_radius_deg_x * np.cos(disruption_angles)
         disruption_y = crater_lat + disruption_radius_deg_y * np.sin(disruption_angles)
         disruption_polygon = Polygon(zip(disruption_x, disruption_y))
-        
+
         # Create lava lake polygon if lava is present
         lava_polygon = None
         if lava_level_m is not None and lava_level_m > 0:
             # Calculate lava surface elevation
             lava_depth_from_baseline = depth_m - lava_level_m
             lava_lake_surface = baseline_elev - lava_depth_from_baseline
-            
+
             # Estimate lava extent based on fill level
             # lava_level_m = 0 means filled to rim (depth_m filled)
             # lava_level_m = depth_m means empty (0 filled)
             # Calculate fill percentage
             fill_percentage = lava_level_m / depth_m
-            
+
             # Lava radius varies from flat_floor (empty) to bowl_radius (full)
             # Use mean values since these now have angular variation
-            flat_floor_mean = flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else flat_floor_radius
-            bowl_mean = bowl_radius.mean() if hasattr(bowl_radius, 'mean') else bowl_radius
-            lava_radius_px_base = flat_floor_mean + fill_percentage * (bowl_mean - flat_floor_mean)
-            
+            flat_floor_mean = (
+                flat_floor_radius.mean()
+                if hasattr(flat_floor_radius, "mean")
+                else flat_floor_radius
+            )
+            bowl_mean = (
+                bowl_radius.mean() if hasattr(bowl_radius, "mean") else bowl_radius
+            )
+            lava_radius_px_base = flat_floor_mean + fill_percentage * (
+                bowl_mean - flat_floor_mean
+            )
+
             # Convert to geographic coordinates
-            lava_radius_m = lava_radius_px_base * abs(pixel_size_x) * meters_per_degree_lon
+            lava_radius_m = (
+                lava_radius_px_base * abs(pixel_size_x) * meters_per_degree_lon
+            )
             lava_radius_deg_lon = lava_radius_m / meters_per_degree_lon
             lava_radius_deg_lat = lava_radius_m / meters_per_degree_lat
-            
+
             num_edge_points = 120
-            lava_edge_angles = np.linspace(0, 2 * np.pi, num_edge_points, endpoint=False)
+            lava_edge_angles = np.linspace(
+                0, 2 * np.pi, num_edge_points, endpoint=False
+            )
             lava_edge_x = []
             lava_edge_y = []
-            
+
             # Generate irregular edge based on lava radius and angular variation
             for angle in lava_edge_angles:
                 # Add angular irregularity (8-12 lobes plus some randomness)
                 angular_var = 0.0
                 num_lobes = 8
-                angular_var += 0.12 * np.sin(angle * num_lobes + rng.uniform(0, 2 * np.pi))
+                angular_var += 0.12 * np.sin(
+                    angle * num_lobes + rng.uniform(0, 2 * np.pi)
+                )
                 angular_var += 0.06 * np.sin(angle * 3 + rng.uniform(0, 2 * np.pi))
                 angular_var += 0.03 * rng.uniform(-1, 1)
-                
+
                 # Apply variation to radius (±15% variation)
                 varied_radius_lon = lava_radius_deg_lon * (1.0 + angular_var * 0.15)
                 varied_radius_lat = lava_radius_deg_lat * (1.0 + angular_var * 0.15)
-                
+
                 # Convert to geographic coordinates
                 edge_x = crater_lon + varied_radius_lon * np.cos(angle)
                 edge_y = crater_lat + varied_radius_lat * np.sin(angle)
-                
+
                 lava_edge_x.append(edge_x)
                 lava_edge_y.append(edge_y)
-            
+
             if len(lava_edge_x) > 3:
                 lava_polygon = Polygon(zip(lava_edge_x, lava_edge_y))
-        
+
         # Store metadata for this crater
-        crater_metadata.append({
-            'disruption_zone': disruption_polygon,
-            'lava_polygon': lava_polygon,
-            'center': Point(crater_lon, crater_lat),
-            'remove_overlapping_water': crater_cfg.get('remove_overlapping_water', True),
-            'label': crater_cfg.get('label'),
-        })
-    
+        crater_metadata.append(
+            {
+                "disruption_zone": disruption_polygon,
+                "lava_polygon": lava_polygon,
+                "center": Point(crater_lon, crater_lat),
+                "remove_overlapping_water": crater_cfg.get(
+                    "remove_overlapping_water", True
+                ),
+                "label": crater_cfg.get("label"),
+            }
+        )
+
     return dem_cratered, crater_metadata
 
 
@@ -1027,7 +1300,9 @@ def draw_map_from_config(
 
                 water_tone = np.full_like(shade, 0.5, dtype=np.float32)
                 valid_blur = blurred_weight > 1e-6
-                water_tone[valid_blur] = blurred_shade[valid_blur] / blurred_weight[valid_blur]
+                water_tone[valid_blur] = (
+                    blurred_shade[valid_blur] / blurred_weight[valid_blur]
+                )
 
                 water_tone = 0.5 + (water_tone - 0.5) * contrast
                 water_tone = np.clip(water_tone + bias, 0.0, 1.0).astype(np.float32)
@@ -1056,9 +1331,13 @@ def draw_map_from_config(
                     blend_mode = terrain_cfg.get("blend_mode", "soft_light")
                     shade_strength = terrain_cfg.get("shade_strength", 0.6)
                     if blend_mode == "multiply":
-                        terrain_img = _blend_multiply(terrain_rgb, shade, shade_strength)
+                        terrain_img = _blend_multiply(
+                            terrain_rgb, shade, shade_strength
+                        )
                     else:
-                        terrain_img = _blend_soft_light(terrain_rgb, shade, shade_strength)
+                        terrain_img = _blend_soft_light(
+                            terrain_rgb, shade, shade_strength
+                        )
 
                     ax.imshow(
                         terrain_img,
@@ -1113,34 +1392,46 @@ def draw_map_from_config(
             # After clipping, further optimize for ocean by simplifying geometry
             if layer_cfg["layer"] == "ocean":
                 gdf["geometry"] = gdf.simplify(tolerance=0.001, preserve_topology=True)
-        
+
         # Apply crater modifications to water layers
         if crater_metadata and layer_cfg["layer"] in ["water", "ocean", "waterway"]:
             # Remove existing water features that overlap with crater disruption zones
             for crater_meta in crater_metadata:
-                if crater_meta.get('remove_overlapping_water', True):
-                    disruption_zone = crater_meta['disruption_zone']
+                if crater_meta.get("remove_overlapping_water", True):
+                    disruption_zone = crater_meta["disruption_zone"]
                     # Filter out features that intersect the disruption zone
                     if not gdf.empty:
                         gdf = gdf[~gdf.intersects(disruption_zone)]
-            
+
             # Add lava lake polygons to water/ocean layers (not waterways)
-            if layer_cfg["layer"] in ["water", "ocean"] and layer_cfg["geometry_type"] == "Polygon":
+            if (
+                layer_cfg["layer"] in ["water", "ocean"]
+                and layer_cfg["geometry_type"] == "Polygon"
+            ):
                 lava_features = []
                 for crater_meta in crater_metadata:
-                    if crater_meta['lava_polygon'] is not None:
-                        lava_features.append({
-                            'geometry': crater_meta['lava_polygon']
-                        })
-                
+                    if crater_meta["lava_polygon"] is not None:
+                        lava_features.append({"geometry": crater_meta["lava_polygon"]})
+
                 if lava_features:
                     # Create GeoDataFrame for lava lakes with same CRS as water layer
-                    lava_gdf = gpd.GeoDataFrame(lava_features, crs=gdf.crs if not gdf.empty else 'EPSG:4326')
-                    print(f"[CRATER-DEBUG] Adding {len(lava_features)} lava lakes to {layer_cfg['layer']} layer")
-                    print(f"[CRATER-DEBUG] Lava CRS: {lava_gdf.crs}, Water CRS: {gdf.crs if not gdf.empty else 'empty'}")
+                    lava_gdf = gpd.GeoDataFrame(
+                        lava_features, crs=gdf.crs if not gdf.empty else "EPSG:4326"
+                    )
+                    print(
+                        f"[CRATER-DEBUG] Adding {len(lava_features)} lava lakes to {layer_cfg['layer']} layer"
+                    )
+                    print(
+                        f"[CRATER-DEBUG] Lava CRS: {lava_gdf.crs}, Water CRS: {gdf.crs if not gdf.empty else 'empty'}"
+                    )
                     # Concatenate with existing water features
-                    gdf = gpd.GeoDataFrame(pd.concat([gdf, lava_gdf], ignore_index=True), crs=gdf.crs if not gdf.empty else lava_gdf.crs)
-                    print(f"[CRATER-DEBUG] After adding lava, {layer_cfg['layer']} has {len(gdf)} total features")
+                    gdf = gpd.GeoDataFrame(
+                        pd.concat([gdf, lava_gdf], ignore_index=True),
+                        crs=gdf.crs if not gdf.empty else lava_gdf.crs,
+                    )
+                    print(
+                        f"[CRATER-DEBUG] After adding lava, {layer_cfg['layer']} has {len(gdf)} total features"
+                    )
 
         # only keep features matching this entry’s geometry type
         geom_type = layer_cfg["geometry_type"]
@@ -1248,7 +1539,9 @@ def draw_map_from_config(
         # Draw any remaining features with the default style
         rest = gdf.loc[~gdf.index.isin(styled_idx)]
         if not rest.empty:
-            print(f"[RENDER-DEBUG] Layer {layer_key} rendering {len(rest)} unstyled features (including lava lakes)")
+            print(
+                f"[RENDER-DEBUG] Layer {layer_key} rendering {len(rest)} unstyled features (including lava lakes)"
+            )
             dft = layer_cfg["default"]
             zorder = dft.get("zorder", 2)
             geom_type_lower = layer_cfg["geometry_type"].lower()
@@ -1381,21 +1674,27 @@ def draw_map_from_config(
     # Draw crater labels if present
     if crater_metadata:
         for crater_meta in crater_metadata:
-            label = crater_meta.get('label')
+            label = crater_meta.get("label")
             if label:
-                center = crater_meta['center']
+                center = crater_meta["center"]
                 # Draw text with white fill and black outline for high visibility
                 ax.text(
                     center.x,
                     center.y,
                     str(label),
-                    ha='center',
-                    va='center',
+                    ha="center",
+                    va="center",
                     fontsize=14,
-                    fontweight='bold',
-                    color='white',
+                    fontweight="bold",
+                    color="white",
                     zorder=101,
-                    bbox=dict(boxstyle='circle,pad=0.3', facecolor='black', edgecolor='white', linewidth=2, alpha=0.8)
+                    bbox=dict(
+                        boxstyle="circle,pad=0.3",
+                        facecolor="black",
+                        edgecolor="white",
+                        linewidth=2,
+                        alpha=0.8,
+                    ),
                 )
 
     # always save to file
