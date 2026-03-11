@@ -280,7 +280,9 @@ def _apply_craters_to_dem(
         depth_ratio = crater_cfg.get("depth_ratio")
         rim_height_ratio = crater_cfg.get("rim_height_ratio")
         if rim_height_ratio is None:
-            rim_height_ratio = np.random.uniform(0.12, 0.25)  # Higher and more variable rims
+            rim_height_ratio = np.random.uniform(
+                0.12, 0.25
+            )  # Higher and more variable rims
         else:
             rim_height_ratio = float(rim_height_ratio)
         lava_level_m = crater_cfg.get("lava_level_m")
@@ -427,10 +429,12 @@ def _apply_craters_to_dem(
         dist_px = (
             np.sqrt((dx / radius_px_x) ** 2 + (dy / radius_px_y) ** 2) * radius_px_x
         )
-        
+
         # Apply shape distortion to the distance field itself to make crater irregular
         # This creates an elliptical/irregular crater shape (not just irregular rim)
-        distortion_strength = rng.uniform(0.05, 0.10)  # 5-10% distortion for subtle irregularity
+        distortion_strength = rng.uniform(
+            0.05, 0.10
+        )  # 5-10% distortion for subtle irregularity
         dist_px_distorted = dist_px * (1 - shape_variation * distortion_strength)
 
         # Use shape variation (low + medium freq) for crater boundary
@@ -476,7 +480,9 @@ def _apply_craters_to_dem(
         # Crater profile zones - add slight variation to avoid perfect circles
         # Floor and bowl get subtle variation for more natural boundaries
         floor_variation = shape_variation * 0.3  # Use smooth shape, not texture
-        flat_floor_radius = flat_floor_ratio * radius_px_x * (1 + floor_variation * 0.05)
+        flat_floor_radius = (
+            flat_floor_ratio * radius_px_x * (1 + floor_variation * 0.05)
+        )
         bowl_radius = 0.82 * radius_px_x * (1 + floor_variation * 0.08)
         inner_radius = varied_radius_px * 0.90  # Inner edge of rim
         rim_radius = varied_radius_px
@@ -504,80 +510,100 @@ def _apply_craters_to_dem(
             noise_scale = depth_m * 0.008  # Very subtle variation
             floor_noise = np.random.normal(0, noise_scale, size=crater_delta.shape)
             crater_delta[floor_mask] += floor_noise[floor_mask]
-            
+
             # Add small floor craters (simulating later impacts)
             num_floor_craters = rng.integers(8, 18)  # Variable number
             for _ in range(num_floor_craters):
                 # Random position within floor
                 floor_angle = rng.uniform(0, 2 * np.pi)
-                floor_dist = rng.uniform(0, 0.85 * flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else 0.85 * flat_floor_radius)
-                
+                floor_dist = rng.uniform(
+                    0,
+                    (
+                        0.85 * flat_floor_radius.mean()
+                        if hasattr(flat_floor_radius, "mean")
+                        else 0.85 * flat_floor_radius
+                    ),
+                )
+
                 fc_x = floor_dist * np.cos(floor_angle)
                 fc_y = floor_dist * np.sin(floor_angle)
-                
+
                 # Small crater size (0.5% to 3% of main crater)
                 fc_radius = rng.uniform(radius_px_x * 0.005, radius_px_x * 0.03)
                 fc_depth = depth_m * rng.uniform(0.02, 0.08)
-                
+
                 # Distance from this small crater center (using dx/dy arrays relative to main crater)
-                fc_dist = np.sqrt((dx - fc_x)**2 + (dy - fc_y)**2)
-                
+                fc_dist = np.sqrt((dx - fc_x) ** 2 + (dy - fc_y) ** 2)
+
                 # Simple bowl shape for small craters
                 fc_mask = fc_dist <= fc_radius
                 if fc_mask.any():
                     fc_u = fc_dist[fc_mask] / fc_radius
                     # Simple parabolic bowl
                     crater_delta[fc_mask] -= fc_depth * (1 - fc_u**2)
-            
+
             # Add rock piles (mound-like debris piles)
             num_rock_piles = rng.integers(3, 8)  # Just a few notable ones
             for _ in range(num_rock_piles):
                 # Random position on floor
                 pile_angle = rng.uniform(0, 2 * np.pi)
-                pile_dist = rng.uniform(0, 0.75 * flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else 0.75 * flat_floor_radius)
-                
+                pile_dist = rng.uniform(
+                    0,
+                    (
+                        0.75 * flat_floor_radius.mean()
+                        if hasattr(flat_floor_radius, "mean")
+                        else 0.75 * flat_floor_radius
+                    ),
+                )
+
                 pile_x = pile_dist * np.cos(pile_angle)
                 pile_y = pile_dist * np.sin(pile_angle)
-                
+
                 # Larger rock pile size (1.5% to 6% of main crater radius)
                 pile_radius = rng.uniform(radius_px_x * 0.015, radius_px_x * 0.06)
                 # More prominent heights (4% to 12% of crater depth)
                 pile_height = depth_m * rng.uniform(0.04, 0.12)
-                
+
                 # Distance from pile center
-                pile_dist_field = np.sqrt((dx - pile_x)**2 + (dy - pile_y)**2)
-                
+                pile_dist_field = np.sqrt((dx - pile_x) ** 2 + (dy - pile_y) ** 2)
+
                 # Cone/mound shape for rock piles (more visible than gaussian)
                 pile_mask = pile_dist_field <= pile_radius
                 if pile_mask.any():
                     # Conical mound profile - more pronounced than gaussian
                     pile_u = pile_dist_field[pile_mask] / pile_radius
-                    pile_profile = (1 - pile_u**1.5)  # Steep mound shape
+                    pile_profile = 1 - pile_u**1.5  # Steep mound shape
                     crater_delta[pile_mask] += pile_height * pile_profile
 
         # Zone 2: Bowl transition (flat_floor_radius < r <= bowl_radius)
         # Rises smoothly from -depth_m to near zero
-        bowl_mask = (dist_px_distorted > flat_floor_radius) & (dist_px_distorted <= bowl_radius)
-        
+        bowl_mask = (dist_px_distorted > flat_floor_radius) & (
+            dist_px_distorted <= bowl_radius
+        )
+
         # Add scree (talus) streaks down the bowl and wall areas
         # Create scree field over entire region first
         scree_field = np.zeros_like(crater_delta)
         num_scree = np.random.randint(20, 40)
-        
+
         for _ in range(num_scree):
             scree_angle = np.random.uniform(0, 2 * np.pi)
-            scree_width = np.random.uniform(0.015, 0.045)  # Radians - widened for better visibility
-            scree_depth = depth_m * np.random.uniform(0.050, 0.110)  # Deeper scree lines
-            
+            scree_width = np.random.uniform(
+                0.015, 0.045
+            )  # Radians - widened for better visibility
+            scree_depth = depth_m * np.random.uniform(
+                0.050, 0.110
+            )  # Deeper scree lines
+
             # Angular distance from scree centerline
             angular_dist = np.abs((angle - scree_angle + np.pi) % (2 * np.pi) - np.pi)
-            
+
             # Gaussian falloff in angular direction
             angular_strength = np.exp(-((angular_dist / scree_width) ** 2))
-            
+
             # Apply to scree field
             scree_field += angular_strength * scree_depth
-        
+
         if bowl_mask.any():
             bowl_u = (dist_px_distorted[bowl_mask] - flat_floor_radius[bowl_mask]) / (
                 bowl_radius[bowl_mask] - flat_floor_radius[bowl_mask] + 1e-6
@@ -585,15 +611,19 @@ def _apply_craters_to_dem(
             # Bowl curve controlled by exponent: 2.0=parabolic, higher=steeper walls
             # (1 - u)^exponent creates the bowl shape
             crater_delta[bowl_mask] = -depth_m * (1 - bowl_u) ** bowl_exponent
-            
+
             # Apply scree to bowl, modulated by radial position
             # Stronger near top of bowl (steeper slopes), fades toward floor
-            scree_modulation = bowl_u ** 0.7  # Gentler falloff so scree is visible even at bottom
+            scree_modulation = (
+                bowl_u**0.7
+            )  # Gentler falloff so scree is visible even at bottom
             crater_delta[bowl_mask] -= scree_field[bowl_mask] * scree_modulation
 
         # Zone 3: Inner wall (bowl_radius < r <= inner_radius)
         # Continues from bowl end (at ~0) and stays near baseline
-        wall_mask = (dist_px_distorted > bowl_radius) & (dist_px_distorted <= inner_radius)
+        wall_mask = (dist_px_distorted > bowl_radius) & (
+            dist_px_distorted <= inner_radius
+        )
         if wall_mask.any():
             wall_u = (dist_px_distorted[wall_mask] - bowl_radius[wall_mask]) / (
                 inner_radius[wall_mask] - bowl_radius[wall_mask] + 1e-6
@@ -602,15 +632,19 @@ def _apply_craters_to_dem(
             # Wall stays near zero (slight dip allowed for terrace effect)
             # Use smooth curve: 0 at u=0, small dip in middle, back to ~0 at u=1
             crater_delta[wall_mask] = -depth_m * 0.01 * wall_u * (1 - wall_u)
-            
+
             # Apply scree to inner wall too - maximum at bottom, fades toward rim
-            scree_modulation = (1 - wall_u) ** 0.5  # Strongest at bowl edge, fades toward rim
+            scree_modulation = (
+                1 - wall_u
+            ) ** 0.5  # Strongest at bowl edge, fades toward rim
             crater_delta[wall_mask] -= scree_field[wall_mask] * scree_modulation * 0.8
 
         # Zone 4: Rim (inner_radius < r <= rim_radius)
         # Rises smoothly from baseline to rim_height peak, then back down to baseline
         # This ensures smooth transition to flat ejecta zone
-        rim_mask = (dist_px_distorted > inner_radius) & (dist_px_distorted <= rim_radius)
+        rim_mask = (dist_px_distorted > inner_radius) & (
+            dist_px_distorted <= rim_radius
+        )
         if rim_mask.any():
             rim_u = (dist_px_distorted[rim_mask] - inner_radius[rim_mask]) / (
                 rim_radius[rim_mask] - inner_radius[rim_mask] + 1e-6
@@ -729,7 +763,9 @@ def _apply_craters_to_dem(
         ejecta_deposition = base_ejecta_falloff * (0.1 + 0.9 * radial_streaks)
 
         # Add small irregular bumps/mounds in ejecta field - concentrated in rays
-        ejecta_texture = np.random.normal(0, rim_height * 0.75, crater_delta.shape)  # Increased amplitude
+        ejecta_texture = np.random.normal(
+            0, rim_height * 0.75, crater_delta.shape
+        )  # Increased amplitude
         ejecta_texture = gaussian_filter(ejecta_texture, sigma=3.0)
 
         # Zone 5: Ejecta blanket (r > rim_radius)
@@ -809,10 +845,15 @@ def _apply_craters_to_dem(
             # Larger secondary craters - range from 3% to 12% of main crater radius
             # Use anisotropic radii to match main crater aspect ratio
             sec_radius_x = (
-                rng.uniform(radius_px_x * 0.04, radius_px_x * 0.14) * distance_factor  # Slightly larger
+                rng.uniform(radius_px_x * 0.04, radius_px_x * 0.14)
+                * distance_factor  # Slightly larger
             )
-            sec_radius_y = sec_radius_x * (radius_px_y / radius_px_x)  # Match aspect ratio
-            sec_depth = depth_m * rng.uniform(0.14, 0.32) * distance_factor  # Increased relief
+            sec_radius_y = sec_radius_x * (
+                radius_px_y / radius_px_x
+            )  # Match aspect ratio
+            sec_depth = (
+                depth_m * rng.uniform(0.14, 0.32) * distance_factor
+            )  # Increased relief
             sec_rim_height = sec_depth * 0.22  # More pronounced rims
 
             # Check for overlap with existing secondaries
@@ -824,20 +865,22 @@ def _apply_craters_to_dem(
                 this_y = best_distance * np.sin(best_angle)
                 placed_x = placed_dist * np.cos(placed_angle)
                 placed_y = placed_dist * np.sin(placed_angle)
-                
+
                 # Distance between centers
-                center_dist = np.sqrt((this_x - placed_x)**2 + (this_y - placed_y)**2)
-                
+                center_dist = np.sqrt(
+                    (this_x - placed_x) ** 2 + (this_y - placed_y) ** 2
+                )
+
                 # Check if they overlap (with small buffer to ensure separation)
                 min_separation = (sec_radius_x + placed_radius) * 1.2  # 20% buffer
                 if center_dist < min_separation:
                     overlaps = True
                     break
-            
+
             # Skip this secondary if it overlaps
             if overlaps:
                 continue
-            
+
             # Record this secondary as placed
             placed_secondaries.append((best_distance, best_angle, sec_radius_x))
 
@@ -845,7 +888,10 @@ def _apply_craters_to_dem(
             sec_dx = dx - best_distance * np.cos(best_angle)
             sec_dy = dy - best_distance * np.sin(best_angle)
             # Normalized distance (corrects for latitude/longitude distortion)
-            sec_dist = np.sqrt((sec_dx / sec_radius_x) ** 2 + (sec_dy / sec_radius_y) ** 2) * sec_radius_x
+            sec_dist = (
+                np.sqrt((sec_dx / sec_radius_x) ** 2 + (sec_dy / sec_radius_y) ** 2)
+                * sec_radius_x
+            )
 
             # Bowl depression
             sec_bowl_mask = sec_dist < sec_radius_x
@@ -876,7 +922,9 @@ def _apply_craters_to_dem(
         # Add concentric ripples/terraces (like slumping in crater walls)
         # Random parameters per crater for variation
         num_ripples = rng.integers(1, 3)  # Just 1-2 subtle terraces
-        ripple_amplitude = rng.uniform(0.08, 0.14) * depth_m  # Increased amplitude for better visibility
+        ripple_amplitude = (
+            rng.uniform(0.08, 0.14) * depth_m
+        )  # Increased amplitude for better visibility
 
         # Apply ripples mainly to bowl and wall areas (not flat floor)
         flat_floor_mean = (
@@ -933,7 +981,9 @@ def _apply_craters_to_dem(
 
         # Add wall slump scars (collapsed material on crater walls)
         num_slumps = rng.integers(2, 5)
-        wall_and_bowl_mask = (dist_px_distorted > flat_floor_mean * 0.6) & (dist_px_distorted <= rim_radius)
+        wall_and_bowl_mask = (dist_px_distorted > flat_floor_mean * 0.6) & (
+            dist_px_distorted <= rim_radius
+        )
 
         for i in range(num_slumps):
             slump_angle = rng.uniform(0, 2 * np.pi)
@@ -966,7 +1016,9 @@ def _apply_craters_to_dem(
             pock_x = pock_distance * np.cos(pock_angle)
             pock_y = pock_distance * np.sin(pock_angle)
 
-            pock_radius = rng.uniform(0.020, 0.055) * radius_px_x  # Larger for visibility
+            pock_radius = (
+                rng.uniform(0.020, 0.055) * radius_px_x
+            )  # Larger for visibility
             pock_depth = rng.uniform(0.025, 0.065) * depth_m  # Increased amplitude
 
             pock_dist = np.sqrt((dx - pock_x) ** 2 + (dy - pock_y) ** 2)
@@ -994,7 +1046,9 @@ def _apply_craters_to_dem(
             scrape_width = rng.uniform(
                 0.010, 0.025
             )  # Widened for better visibility (radians)
-            scrape_depth = rng.uniform(0.045, 0.110) * depth_m  # Increased amplitude for visibility
+            scrape_depth = (
+                rng.uniform(0.045, 0.110) * depth_m
+            )  # Increased amplitude for visibility
 
             # Angular distance from scrape centerline
             angular_diff = np.abs((angle - scrape_angle + np.pi) % (2 * np.pi) - np.pi)
@@ -1026,9 +1080,13 @@ def _apply_craters_to_dem(
             crater_delta[scrape_mask] += scrape_profile
 
         # Add extra rim surface irregularities (bumps and scars)
-        rim_surface_mask = (dist_px_distorted > inner_radius) & (dist_px_distorted <= rim_radius)
+        rim_surface_mask = (dist_px_distorted > inner_radius) & (
+            dist_px_distorted <= rim_radius
+        )
         if rim_surface_mask.any():
-            rim_bumps = np.random.normal(0, rim_height * 0.50, crater_delta.shape)  # Increased amplitude
+            rim_bumps = np.random.normal(
+                0, rim_height * 0.50, crater_delta.shape
+            )  # Increased amplitude
             rim_bumps = gaussian_filter(rim_bumps, sigma=1.5)
             crater_delta[rim_surface_mask] += rim_bumps[rim_surface_mask]
 
@@ -1183,30 +1241,30 @@ def _apply_craters_to_dem(
 def _render_procedural_lava(fig, ax, crater_metadata, bounds, map_config=None):
     """
     Render crater lava pools as procedural molten surfaces.
-    
+
     Creates fiery textured surfaces with heat fields, cooling edges,
     fracture networks, and irregular temperature variation.
     """
     if not crater_metadata:
         return
-    
+
     # Use original DEM bounds (not cropped axis limits) for coordinate transformation
     # This ensures lava polygons render at the correct positions
     minx, miny, maxx, maxy = bounds
-    
+
     # Resolution for rasterization (higher = more detail)
     render_width = 2048
     # Account for aspect ratio in height calculation
     data_width = maxx - minx
     data_height = maxy - miny
     render_height = int(render_width * (data_height / data_width))
-    
+
     # Transform from data coordinates to pixel coordinates
     def lonlat_to_pixel(lon, lat):
         px = (lon - minx) / (maxx - minx) * render_width
         py = (1 - (lat - miny) / (maxy - miny)) * render_height
         return px, py
-    
+
     # Lava color palette: dark brown-red → deep red → red-orange → bright orange → limited yellow
     lava_colors = [
         (0.00, (0.12, 0.05, 0.03)),  # Very dark brown-red (solidified crust)
@@ -1219,98 +1277,119 @@ def _render_procedural_lava(fig, ax, crater_metadata, bounds, map_config=None):
         (0.96, (1.00, 0.75, 0.30)),  # Yellow-orange (limited)
         (1.00, (1.00, 0.90, 0.60)),  # Yellow-white (very hot, minimal)
     ]
-    
+
     # Process each lava pool
     for crater_meta in crater_metadata:
         lava_poly = crater_meta.get("lava_polygon")
         if lava_poly is None or lava_poly.is_empty:
             continue
-        
+
         # Get polygon bounds
         poly_minx, poly_miny, poly_maxx, poly_maxy = lava_poly.bounds
-        
+
         # Skip if outside view (using actual axis limits which may be cropped)
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
-        if poly_maxx < xlim[0] or poly_minx > xlim[1] or poly_maxy < ylim[0] or poly_miny > ylim[1]:
+        if (
+            poly_maxx < xlim[0]
+            or poly_minx > xlim[1]
+            or poly_maxy < ylim[0]
+            or poly_miny > ylim[1]
+        ):
             continue
-        
+
         # Convert polygon to pixel coordinates
         coords = np.array(lava_poly.exterior.coords)
         pixel_coords = np.array([lonlat_to_pixel(lon, lat) for lon, lat in coords])
-        
+
         # Create mask for this lava pool
         from PIL import Image, ImageDraw
-        mask_img = Image.new('L', (render_width, render_height), 0)
+
+        mask_img = Image.new("L", (render_width, render_height), 0)
         draw = ImageDraw.Draw(mask_img)
         draw.polygon([tuple(p) for p in pixel_coords], fill=255)
         mask = np.array(mask_img) > 128
-        
+
         if not mask.any():
             continue
-        
+
         # Get bounding box in pixel space
         ys, xs = np.where(mask)
         if len(xs) == 0:
             continue
-        
+
         x0, x1 = xs.min(), xs.max() + 1
         y0, y1 = ys.min(), ys.max() + 1
         local_mask = mask[y0:y1, x0:x1]
         h, w = local_mask.shape
-        
+
         # Generate heat field
         # 1. Broad low-frequency base (overall temperature variation)
-        heat_base = np.random.normal(0.65, 0.15, (h//4, w//4))  # Slightly hotter base
+        heat_base = np.random.normal(
+            0.65, 0.15, (h // 4, w // 4)
+        )  # Slightly hotter base
         heat_base = gaussian_filter(heat_base, sigma=2.0)
         from scipy.ndimage import zoom
-        heat_base = zoom(heat_base, (h / heat_base.shape[0], w / heat_base.shape[1]), order=1)
+
+        heat_base = zoom(
+            heat_base, (h / heat_base.shape[0], w / heat_base.shape[1]), order=1
+        )
         heat_base = np.clip(heat_base, 0, 1)
-        
+
         # 2. Medium-frequency mottled texture
-        heat_medium = np.random.normal(0, 0.12, (h//2, w//2))
+        heat_medium = np.random.normal(0, 0.12, (h // 2, w // 2))
         heat_medium = gaussian_filter(heat_medium, sigma=1.0)
-        heat_medium = zoom(heat_medium, (h / heat_medium.shape[0], w / heat_medium.shape[1]), order=1)
-        
+        heat_medium = zoom(
+            heat_medium, (h / heat_medium.shape[0], w / heat_medium.shape[1]), order=1
+        )
+
         # 3. Fine texture for detail
         heat_fine = np.random.normal(0, 0.06, (h, w))
         heat_fine = gaussian_filter(heat_fine, sigma=0.5)
-        
+
         # Combine heat components
         heat = heat_base + heat_medium + heat_fine
         heat = np.clip(heat, 0, 1)
-        
+
         # 4. Edge cooling - margins are darker/solidified
         from scipy.ndimage import distance_transform_edt
+
         dist = distance_transform_edt(local_mask)
         max_dist = dist.max()
         if max_dist > 0:
-            edge_factor = np.clip(dist / (max_dist * 0.25), 0, 1)  # Less edge cooling (25% vs 30%)
-            edge_factor = edge_factor ** 0.7  # Nonlinear falloff
+            edge_factor = np.clip(
+                dist / (max_dist * 0.25), 0, 1
+            )  # Less edge cooling (25% vs 30%)
+            edge_factor = edge_factor**0.7  # Nonlinear falloff
             heat = heat * (0.25 + 0.75 * edge_factor)  # Less severe cooling
-        
+
         # 5. Organic crust/fracture patterns using multi-scale noise
         # Create natural-looking cooled patches and cracks without geometric lines
-        
+
         # Crust pattern - broad cooled regions
-        crust_noise = np.random.normal(0, 0.2, (max(1, h//3), max(1, w//3)))
+        crust_noise = np.random.normal(0, 0.2, (max(1, h // 3), max(1, w // 3)))
         crust_noise = gaussian_filter(crust_noise, sigma=1.5)
         from scipy.ndimage import zoom
-        crust_noise = zoom(crust_noise, (h / crust_noise.shape[0], w / crust_noise.shape[1]), order=1)
+
+        crust_noise = zoom(
+            crust_noise, (h / crust_noise.shape[0], w / crust_noise.shape[1]), order=1
+        )
         crust_noise = np.clip(crust_noise, -0.3, 0.3)
-        
+
         # Fine cracks - high-frequency detail for fracture network
         crack_noise = np.random.normal(0, 0.15, (h, w))
         crack_noise = gaussian_filter(crack_noise, sigma=0.3)
-        
+
         # Combine: broader crust cooling + fine cracks
         crust_modulation = crust_noise + crack_noise * 0.5
-        
+
         # Apply crust effect: some areas cooler (dark), some hotter along cracks
         # Threshold to create distinct hot/cool regions without hard edges
-        crust_modulation = gaussian_filter(crust_modulation, sigma=1.0)  # Smooth transitions
+        crust_modulation = gaussian_filter(
+            crust_modulation, sigma=1.0
+        )  # Smooth transitions
         heat += crust_modulation
-        
+
         # Add localized bright hot streaks for visual interest
         num_hot_streaks = np.random.randint(3, 7)
         for _ in range(num_hot_streaks):
@@ -1318,30 +1397,35 @@ def _render_procedural_lava(fig, ax, crater_metadata, bounds, map_config=None):
             streak_y = np.random.uniform(0, h)
             streak_radius = np.random.uniform(min(h, w) * 0.08, min(h, w) * 0.18)
             streak_intensity = np.random.uniform(0.15, 0.30)
-            
+
             yy_local, xx_local = np.ogrid[:h, :w]
-            dist_to_streak = np.sqrt((xx_local - streak_x)**2 + (yy_local - streak_y)**2)
-            hot_streak = streak_intensity * np.exp(-((dist_to_streak / streak_radius) ** 2))
+            dist_to_streak = np.sqrt(
+                (xx_local - streak_x) ** 2 + (yy_local - streak_y) ** 2
+            )
+            hot_streak = streak_intensity * np.exp(
+                -((dist_to_streak / streak_radius) ** 2)
+            )
             heat += hot_streak
-        
+
         # 6. Optional swirl/flow distortion for fluidity
         if np.random.random() < 0.7:  # 70% chance of flow
             flow_angle = np.random.uniform(0, 2 * np.pi)
-            yy, xx = np.meshgrid(np.arange(h), np.arange(w), indexing='ij')
+            yy, xx = np.meshgrid(np.arange(h), np.arange(w), indexing="ij")
             # Create flow field
             flow_x = np.sin(yy / (h / 6) + flow_angle) * 2.0
             flow_y = np.cos(xx / (w / 6) + flow_angle) * 2.0
-            
+
             # Warp heat field slightly
             from scipy.ndimage import map_coordinates
+
             coords_y = np.clip(yy + flow_y, 0, h - 1)
             coords_x = np.clip(xx + flow_x, 0, w - 1)
             heat_warped = map_coordinates(heat, [coords_y, coords_x], order=1)
             heat = heat * 0.6 + heat_warped * 0.4
-        
+
         # Clip and normalize heat
         heat = np.clip(heat, 0, 1)
-        
+
         # Apply unsharp masking for detail enhancement (same as hillshade)
         if map_config:
             hillshade_cfg = map_config.get("hillshade", {})
@@ -1351,21 +1435,29 @@ def _render_procedural_lava(fig, ax, crater_metadata, bounds, map_config=None):
                 heat_blurred = gaussian_filter(heat, sigma=unsharp_radius)
                 heat = heat + unsharp_amount * (heat - heat_blurred)
                 heat = np.clip(heat, 0, 1)
-        
+
         # Convert heat to RGB using lava palette
-        lava_r = np.interp(heat.ravel(), [c[0] for c in lava_colors], [c[1][0] for c in lava_colors]).reshape(h, w)
-        lava_g = np.interp(heat.ravel(), [c[0] for c in lava_colors], [c[1][1] for c in lava_colors]).reshape(h, w)
-        lava_b = np.interp(heat.ravel(), [c[0] for c in lava_colors], [c[1][2] for c in lava_colors]).reshape(h, w)
-        
+        lava_r = np.interp(
+            heat.ravel(), [c[0] for c in lava_colors], [c[1][0] for c in lava_colors]
+        ).reshape(h, w)
+        lava_g = np.interp(
+            heat.ravel(), [c[0] for c in lava_colors], [c[1][1] for c in lava_colors]
+        ).reshape(h, w)
+        lava_b = np.interp(
+            heat.ravel(), [c[0] for c in lava_colors], [c[1][2] for c in lava_colors]
+        ).reshape(h, w)
+
         # Emissive brightening in hotter zones (moderate boost)
-        emissive = np.clip((heat - 0.75) / 0.20, 0, 1) * 0.20  # Starts at 75% heat, 20% boost
+        emissive = (
+            np.clip((heat - 0.75) / 0.20, 0, 1) * 0.20
+        )  # Starts at 75% heat, 20% boost
         lava_r = np.clip(lava_r + emissive, 0, 1)
         lava_g = np.clip(lava_g + emissive, 0, 1)
         lava_b = np.clip(lava_b + emissive, 0, 1)
-        
+
         # Stack into RGBA
         lava_rgba = np.dstack([lava_r, lava_g, lava_b, local_mask.astype(float)])
-        
+
         # Convert back to data coordinates using original DEM bounds
         extent = [
             minx + (x0 / render_width) * (maxx - minx),
@@ -1373,9 +1465,16 @@ def _render_procedural_lava(fig, ax, crater_metadata, bounds, map_config=None):
             miny + ((render_height - y1) / render_height) * (maxy - miny),
             miny + ((render_height - y0) / render_height) * (maxy - miny),
         ]
-        
+
         # Overlay lava on axes - use aspect="auto" to respect map extent like DEM/hillshade layers
-        ax.imshow(lava_rgba, extent=extent, origin='upper', zorder=150, interpolation='bilinear', aspect='auto')
+        ax.imshow(
+            lava_rgba,
+            extent=extent,
+            origin="upper",
+            zorder=150,
+            interpolation="bilinear",
+            aspect="auto",
+        )
 
 
 def _compute_multidirectional_hillshade(
@@ -1937,7 +2036,9 @@ def draw_map_from_config(
 
     # Render procedural lava pools (after all vector layers, before labels)
     if crater_metadata:
-        _render_procedural_lava(fig, ax, crater_metadata, (minx, miny, maxx, maxy), map_config=mcfg)
+        _render_procedural_lava(
+            fig, ax, crater_metadata, (minx, miny, maxx, maxy), map_config=mcfg
+        )
 
     # Draw info text if enabled
     info = mcfg.get("info", {})

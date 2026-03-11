@@ -138,7 +138,7 @@ def render_crater_interactive(
         dem_min = dem_with_crater.min()
         dem_max = dem_with_crater.max()
         actual_depth = dem_max - dem_min
-        
+
         # Generate hillshade
         hillshade = simple_hillshade(dem_with_crater)
 
@@ -230,7 +230,14 @@ def render_crater_interactive(
     bowl_exp_slider.on_changed(update)
 
     # Initial render
-    apply_and_render(initial_radius, initial_depth, initial_lava, initial_rim, initial_flat_floor, initial_bowl_exp)
+    apply_and_render(
+        initial_radius,
+        initial_depth,
+        initial_lava,
+        initial_rim,
+        initial_flat_floor,
+        initial_bowl_exp,
+    )
 
     plt.tight_layout()
     plt.show()
