@@ -12,9 +12,15 @@
   - Square (1:1)
   - Standard ratios (4:3, 16:9, etc.)
   - Custom dimensions
+- **Canvas rotation**: Rotate the bounding rectangle to any angle
+  - Slider or numeric input for rotation angle (0-360°)
+  - Real-time preview of rotated bounds
+  - Use case: Align angled geographic features (e.g., Vancouver Island) with canvas edges to
+    maximize coverage
+  - Shows rotated rectangle overlay on basemap
 - Visual rectangle/polygon drawing tool
 - Real-time preview of bounds
-- Export to GeoJSON mask file
+- Export to GeoJSON mask file (rotated polygon coordinates)
 
 ### Technical Implementation
 
@@ -25,6 +31,14 @@
   - ipyleaflet in Jupyter notebook
 - **Basemap source**: OpenStreetMap tiles via contextily or custom WMS
 - **Output**: Write coordinates to GeoJSON feature collection
+- **Rotation handling:**
+  - Define rectangle in local coordinates (width × height)
+  - Apply rotation matrix around center point
+  - Convert rotated corners to lat/lon polygon
+  - Store rotation angle as metadata in YAML config for map generation
+  - Map renderer uses rotation angle to:
+    - Rotate vector layers (Shapely affine transforms)
+    - Rotate final raster output (PIL/Pillow)
 - **Bonus**: Load existing GeoJSON to edit
 
 ### Workflow
@@ -33,9 +47,11 @@
 2. Navigate to area of interest
 3. Select aspect ratio or custom dimensions
 4. Draw/adjust rectangle or polygon
-5. Preview coverage
-6. Save to `data/geojson/my-map.geojson`
-7. Use with existing YAML configs
+5. **Rotate canvas** to optimize feature alignment (e.g., angle Vancouver Island to maximize canvas
+   usage)
+6. Preview coverage
+7. Save to `data/geojson/my-map.geojson` and optionally to YAML config with rotation angle
+8. Use with existing YAML configs - rotation applied during map generation
 
 ---
 
