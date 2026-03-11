@@ -34,7 +34,7 @@ EDMONTON_DPI := "600"
 EDMONTON_FMT := "png"
 
 EDMONTON_Z := "5"
-EDMONTON_Z_SAT := "14"
+EDMONTON_Z_SAT := "10"
 
 # Map dimensions and settings for Victoria
 VICTORIA_W := "24"
@@ -44,7 +44,7 @@ VICTORIA_DPI := "600"
 VICTORIA_FMT := "png"
 
 VICTORIA_Z := "5"
-VICTORIA_Z_SAT := "14"
+VICTORIA_Z_SAT := "10"
 
 # ============================================================================
 # Default Recipe - Build All Maps
