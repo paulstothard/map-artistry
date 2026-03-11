@@ -120,7 +120,7 @@ def render_crater_interactive(
             "x": 0.5,
             "y": 0.5,
             "radius_km": radius,
-            "depth_m": None,  # Use auto-calculation from generate-map.py
+            "depth_m": depth,  # Use slider value
             "rim_height_ratio": rim,
             "lava_level_m": lava,
             "flat_floor_ratio": flat_floor,
@@ -134,6 +134,11 @@ def render_crater_interactive(
             dem_copy, [crater_config], bounds_tuple, pixel_size_x, pixel_size_y
         )
 
+        # Calculate actual depth achieved in DEM
+        dem_min = dem_with_crater.min()
+        dem_max = dem_with_crater.max()
+        actual_depth = dem_max - dem_min
+        
         # Generate hillshade
         hillshade = simple_hillshade(dem_with_crater)
 
@@ -168,8 +173,9 @@ def render_crater_interactive(
                 plot_state["poly_patch"] = poly_patch
 
         ax_main.set_title(
-            f"Crater: {radius:.1f}km × {depth:.0f}m deep | Lava: {lava:.0f}m | Rim: {rim:.2f} | Floor: {flat_floor:.2f} | Bowl exp: {bowl_exp:.1f}",
-            fontsize=11,
+            f"Crater: {radius:.1f}km × {depth:.0f}m deep (actual depth in DEM: {actual_depth:.0f}m, min: {dem_min:.0f}m, max: {dem_max:.0f}m)\n"
+            f"Lava: {lava:.0f}m | Rim: {rim:.2f} | Floor: {flat_floor:.2f} | Bowl exp: {bowl_exp:.1f}",
+            fontsize=10,
             fontweight="bold",
         )
         ax_main.axis("off")
@@ -180,9 +186,9 @@ def render_crater_interactive(
         ax_radius, "Radius (km)", 0.5, 10.0, valinit=initial_radius, valstep=0.1
     )
     depth_slider = Slider(
-        ax_depth, "Depth (m)", 50, 2500, valinit=initial_depth, valstep=10
+        ax_depth, "Depth (m)", 50, 8000, valinit=initial_depth, valstep=10
     )
-    lava_slider = Slider(ax_lava, "Lava (m)", 0, 2500, valinit=initial_lava, valstep=10)
+    lava_slider = Slider(ax_lava, "Lava (m)", 0, 8000, valinit=initial_lava, valstep=10)
     rim_slider = Slider(
         ax_rim, "Rim Height", 0.0, 0.30, valinit=initial_rim, valstep=0.01
     )

@@ -151,13 +151,8 @@ def _render_hillshade_textured_polygon_fill(
     raster_top: float,
     water_tone: np.ndarray | None,
     water_valid: np.ndarray | None,
-    debug_label: str | None = None,
-    debug: bool = False,
 ) -> bool:
     hs_cfg = style.get("hillshade_texture", {})
-    print(
-        f"[HILLSHADE-DEBUG] {debug_label}: hillshade_texture visible={hs_cfg.get('visible', False)}, gdf.empty={gdf.empty}, water_tone is None={water_tone is None}"
-    )
     if not hs_cfg.get("visible", False) or gdf.empty or water_tone is None:
         return False
 
@@ -222,35 +217,6 @@ def _render_hillshade_textured_polygon_fill(
         valid_float = sampled_valid.astype(np.float32)
         variation = variation * np.clip(valid_float, 0.15, 1.0)
 
-    if debug:
-        mask_bool = mask.astype(bool)
-        tone_vals = sampled_tone[mask_bool]
-        tone_min = float(np.min(tone_vals)) if tone_vals.size else float("nan")
-        tone_max = float(np.max(tone_vals)) if tone_vals.size else float("nan")
-        tone_std = float(np.std(tone_vals)) if tone_vals.size else float("nan")
-        if sampled_valid is not None:
-            valid_mask = mask_bool & sampled_valid.astype(bool)
-            valid_fraction = (
-                float(np.count_nonzero(valid_mask)) / float(np.count_nonzero(mask_bool))
-                if np.count_nonzero(mask_bool)
-                else float("nan")
-            )
-            valid_vals = sampled_tone[valid_mask]
-            valid_std = float(np.std(valid_vals)) if valid_vals.size else float("nan")
-        else:
-            valid_fraction = float("nan")
-            valid_std = float("nan")
-        print(
-            "[water-hillshade-debug]"
-            f" layer={debug_label!r}"
-            f" bounds=({xmin:.6f}, {ymin:.6f}, {xmax:.6f}, {ymax:.6f})"
-            f" tone_min={tone_min:.4f}"
-            f" tone_max={tone_max:.4f}"
-            f" tone_std={tone_std:.6f}"
-            f" valid_fraction={valid_fraction:.4f}"
-            f" valid_std={valid_std:.6f}"
-        )
-
     base_rgb = np.array(to_rgb(style.get("fc", "#000000")), dtype=np.float32)
     textured_rgb = _modulate_rgb(base_rgb, variation)
 
@@ -280,7 +246,9 @@ def _apply_craters_to_dem(
 
     Args:
         dem: DEM elevation array (height, width)
-        craters: List of crater dicts with keys: x, y (relative 0-1), radius_km, depth_m, rim_height_ratio, lava_level_m
+        craters: List of crater dicts with keys:
+            Required: x, y (relative 0-1), radius_km
+            Optional: depth_m, depth_ratio, rim_height_ratio, flat_floor_ratio, bowl_exponent, lava_level_m
         bounds: (left, bottom, right, top) in map units
         pixel_size_x: Pixel size in x direction (map units)
         pixel_size_y: Pixel size in y direction (map units, typically negative)
@@ -309,21 +277,36 @@ def _apply_craters_to_dem(
         rel_y = float(crater_cfg.get("y", 0.5))
         radius_km = float(crater_cfg.get("radius_km", 5.0))
         depth_m = crater_cfg.get("depth_m")
-        rim_height_ratio = float(crater_cfg.get("rim_height_ratio", 0.15))
+        depth_ratio = crater_cfg.get("depth_ratio")
+        rim_height_ratio = crater_cfg.get("rim_height_ratio")
+        if rim_height_ratio is None:
+            rim_height_ratio = 0.15
+        else:
+            rim_height_ratio = float(rim_height_ratio)
         lava_level_m = crater_cfg.get("lava_level_m")
-        flat_floor_ratio = float(crater_cfg.get("flat_floor_ratio", np.random.uniform(0.06, 0.65)))
-        bowl_exponent = float(crater_cfg.get("bowl_exponent", 1.0))
+        flat_floor_ratio = crater_cfg.get("flat_floor_ratio")
+        if flat_floor_ratio is None:
+            flat_floor_ratio = np.random.uniform(0.06, 0.65)
+        else:
+            flat_floor_ratio = float(flat_floor_ratio)
+        bowl_exponent = crater_cfg.get("bowl_exponent")
+        if bowl_exponent is None:
+            bowl_exponent = 1.0
+        else:
+            bowl_exponent = float(bowl_exponent)
 
-        # Auto-calculate depth if not provided - scale with radius for consistent appearance
-        if depth_m is None:
+        # Calculate depth with priority: depth_m > depth_ratio > auto-calculate
+        if depth_m is not None:
+            # If depth is provided directly, apply only minimum scaling to avoid unrealistically shallow craters
+            min_depth = radius_km * 1000 * 0.2  # At least 20% of radius
+            depth_m = max(depth_m, min_depth)
+        elif depth_ratio is not None:
+            # Use depth_ratio if provided (ratio of radius)
+            depth_m = radius_km * 1000 * float(depth_ratio)
+        else:
+            # Auto-calculate depth if not provided - scale with radius for consistent appearance
             # Very deep craters for dramatic appearance
             depth_m = radius_km * 1000 * 0.8  # 80% of radius for deeper craters
-        else:
-            # If depth is provided, still apply a minimum scaling to avoid unrealistic tiny depths on large craters
-            # or overly steep small craters
-            min_depth = radius_km * 1000 * 0.2  # At least 20% of radius
-            max_depth = radius_km * 1000 * 0.7  # At most 70% of radius
-            depth_m = np.clip(depth_m, min_depth, max_depth)
 
         # Convert relative position to map coordinates
         crater_x = left + rel_x * map_width
@@ -508,6 +491,63 @@ def _apply_craters_to_dem(
         # Zone 1: Flat floor (r <= flat_floor_radius)
         floor_mask = dist_px <= flat_floor_radius
         crater_delta[floor_mask] = -depth_m
+
+        # Add debris to flat floor (small craters + noise for realism)
+        if floor_mask.any():
+            # Add subtle noise/roughness to simulate debris and rough texture
+            noise_scale = depth_m * 0.008  # Very subtle variation
+            floor_noise = np.random.normal(0, noise_scale, size=crater_delta.shape)
+            crater_delta[floor_mask] += floor_noise[floor_mask]
+            
+            # Add small floor craters (simulating later impacts)
+            num_floor_craters = rng.integers(8, 18)  # Variable number
+            for _ in range(num_floor_craters):
+                # Random position within floor
+                floor_angle = rng.uniform(0, 2 * np.pi)
+                floor_dist = rng.uniform(0, 0.85 * flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else 0.85 * flat_floor_radius)
+                
+                fc_x = floor_dist * np.cos(floor_angle)
+                fc_y = floor_dist * np.sin(floor_angle)
+                
+                # Small crater size (0.5% to 3% of main crater)
+                fc_radius = rng.uniform(radius_px_x * 0.005, radius_px_x * 0.03)
+                fc_depth = depth_m * rng.uniform(0.02, 0.08)
+                
+                # Distance from this small crater center (using dx/dy arrays relative to main crater)
+                fc_dist = np.sqrt((dx - fc_x)**2 + (dy - fc_y)**2)
+                
+                # Simple bowl shape for small craters
+                fc_mask = fc_dist <= fc_radius
+                if fc_mask.any():
+                    fc_u = fc_dist[fc_mask] / fc_radius
+                    # Simple parabolic bowl
+                    crater_delta[fc_mask] -= fc_depth * (1 - fc_u**2)
+            
+            # Add rock piles (mound-like debris piles)
+            num_rock_piles = rng.integers(3, 8)  # Just a few notable ones
+            for _ in range(num_rock_piles):
+                # Random position on floor
+                pile_angle = rng.uniform(0, 2 * np.pi)
+                pile_dist = rng.uniform(0, 0.75 * flat_floor_radius.mean() if hasattr(flat_floor_radius, 'mean') else 0.75 * flat_floor_radius)
+                
+                pile_x = pile_dist * np.cos(pile_angle)
+                pile_y = pile_dist * np.sin(pile_angle)
+                
+                # Larger rock pile size (1.5% to 6% of main crater radius)
+                pile_radius = rng.uniform(radius_px_x * 0.015, radius_px_x * 0.06)
+                # More prominent heights (4% to 12% of crater depth)
+                pile_height = depth_m * rng.uniform(0.04, 0.12)
+                
+                # Distance from pile center
+                pile_dist_field = np.sqrt((dx - pile_x)**2 + (dy - pile_y)**2)
+                
+                # Cone/mound shape for rock piles (more visible than gaussian)
+                pile_mask = pile_dist_field <= pile_radius
+                if pile_mask.any():
+                    # Conical mound profile - more pronounced than gaussian
+                    pile_u = pile_dist_field[pile_mask] / pile_radius
+                    pile_profile = (1 - pile_u**1.5)  # Steep mound shape
+                    crater_delta[pile_mask] += pile_height * pile_profile
 
         # Zone 2: Bowl transition (flat_floor_radius < r <= bowl_radius)
         # Rises smoothly from -depth_m to near zero
@@ -707,6 +747,13 @@ def _apply_craters_to_dem(
         secondary_field = np.zeros_like(crater_delta)
         num_secondary = rng.integers(20, 35)  # More secondaries spread broadly
 
+        # Calculate crater offset within sub-array (important for edge cases)
+        crater_offset_x = crater_px_x - x_min
+        crater_offset_y = crater_px_y - y_min
+
+        # Track placed secondaries to prevent overlaps
+        placed_secondaries = []  # List of (distance, angle, radius_x) tuples
+
         for i in range(num_secondary):
             # Sample position stochastically: very wide range, biased by ejecta density only
             # Try multiple positions, pick one with high density
@@ -722,8 +769,9 @@ def _apply_craters_to_dem(
                 # Sample density at this location
                 trial_dx = trial_distance * np.cos(trial_angle)
                 trial_dy = trial_distance * np.sin(trial_angle)
-                trial_idx_x = int(dx.shape[1] // 2 + trial_dx)
-                trial_idx_y = int(dx.shape[0] // 2 + trial_dy)
+                # Use actual crater position in sub-array, not assumed center
+                trial_idx_x = int(crater_offset_x + trial_dx)
+                trial_idx_y = int(crater_offset_y + trial_dy)
                 if (
                     0 <= trial_idx_y < ejecta_density.shape[0]
                     and 0 <= trial_idx_x < ejecta_density.shape[1]
@@ -755,6 +803,32 @@ def _apply_craters_to_dem(
             sec_radius_y = sec_radius_x * (radius_px_y / radius_px_x)  # Match aspect ratio
             sec_depth = depth_m * rng.uniform(0.14, 0.32) * distance_factor  # Increased relief
             sec_rim_height = sec_depth * 0.22  # More pronounced rims
+
+            # Check for overlap with existing secondaries
+            overlaps = False
+            for placed_dist, placed_angle, placed_radius in placed_secondaries:
+                # Calculate distance between this secondary and the placed one
+                # Convert polar to cartesian for both
+                this_x = best_distance * np.cos(best_angle)
+                this_y = best_distance * np.sin(best_angle)
+                placed_x = placed_dist * np.cos(placed_angle)
+                placed_y = placed_dist * np.sin(placed_angle)
+                
+                # Distance between centers
+                center_dist = np.sqrt((this_x - placed_x)**2 + (this_y - placed_y)**2)
+                
+                # Check if they overlap (with small buffer to ensure separation)
+                min_separation = (sec_radius_x + placed_radius) * 1.2  # 20% buffer
+                if center_dist < min_separation:
+                    overlaps = True
+                    break
+            
+            # Skip this secondary if it overlaps
+            if overlaps:
+                continue
+            
+            # Record this secondary as placed
+            placed_secondaries.append((best_distance, best_angle, sec_radius_x))
 
             # Calculate distance from secondary crater center using anisotropic scaling
             sec_dx = dx - best_distance * np.cos(best_angle)
@@ -1337,7 +1411,6 @@ def draw_map_from_config(
 
     # Prepare figure and axis
     mcfg = cfg["map"]
-    debug_water_hillshade = bool(mcfg.get("debug_water_hillshade", False))
     crater_metadata = []  # Initialize for crater modifications to water layers
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     # remove default margins so axes fill the canvas
@@ -1517,6 +1590,9 @@ def draw_map_from_config(
                     elev_percentiles = terrain_cfg.get("percentiles", [2, 98])
                     stretch = terrain_cfg.get("stretch", "linear")
                     stretch_exponent = terrain_cfg.get("stretch_exponent", 1.0)
+                    # Use dem_resampled (original terrain) for colors if you want craters to show
+                    # only in shading/relief. Use dem_smoothed (cratered terrain) if you want
+                    # crater depths to affect both shading AND hypsometric colors.
                     terrain_norm = _normalize_dem_for_colormap(
                         dem_resampled,
                         finite_mask=finite,
@@ -1624,19 +1700,10 @@ def draw_map_from_config(
                     lava_gdf = gpd.GeoDataFrame(
                         lava_features, crs=gdf.crs if not gdf.empty else "EPSG:4326"
                     )
-                    print(
-                        f"[CRATER-DEBUG] Adding {len(lava_features)} lava lakes to {layer_cfg['layer']} layer"
-                    )
-                    print(
-                        f"[CRATER-DEBUG] Lava CRS: {lava_gdf.crs}, Water CRS: {gdf.crs if not gdf.empty else 'empty'}"
-                    )
                     # Concatenate with existing water features
                     gdf = gpd.GeoDataFrame(
                         pd.concat([gdf, lava_gdf], ignore_index=True),
                         crs=gdf.crs if not gdf.empty else lava_gdf.crs,
-                    )
-                    print(
-                        f"[CRATER-DEBUG] After adding lava, {layer_cfg['layer']} has {len(gdf)} total features"
                     )
 
         # only keep features matching this entry’s geometry type
@@ -1680,8 +1747,6 @@ def draw_map_from_config(
                             raster_top=top,
                             water_tone=water_tone,
                             water_valid=water_valid,
-                            debug_label=layer_key,
-                            debug=debug_water_hillshade,
                         )
 
                     if textured:
@@ -1745,9 +1810,6 @@ def draw_map_from_config(
         # Draw any remaining features with the default style
         rest = gdf.loc[~gdf.index.isin(styled_idx)]
         if not rest.empty:
-            print(
-                f"[RENDER-DEBUG] Layer {layer_key} rendering {len(rest)} unstyled features (including lava lakes)"
-            )
             dft = layer_cfg["default"]
             zorder = dft.get("zorder", 2)
             geom_type_lower = layer_cfg["geometry_type"].lower()
@@ -1766,8 +1828,6 @@ def draw_map_from_config(
                         raster_top=top,
                         water_tone=water_tone,
                         water_valid=water_valid,
-                        debug_label=layer_key,
-                        debug=debug_water_hillshade,
                     )
 
                 if textured:
