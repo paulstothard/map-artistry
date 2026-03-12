@@ -358,6 +358,258 @@ designing strip layout, users need rapid feedback on:
 
 ---
 
+## Selective Layer Downloading (Layer-Aware Data Acquisition)
+
+**Goal**: Only download geospatial data for layers that will actually be rendered, reducing bandwidth, storage, and processing overhead.
+
+### Problem
+
+Current pipeline downloads all available feature types (buildings, roads, waterways, landuse, etc.) regardless of whether they appear in the map configuration. For large geographic areas or minimal "natural terrain" maps, this results in:
+
+- Unnecessary download time for unused data
+- Wasted disk space in cache
+- Slower processing of irrelevant features
+- Practical limit on map size due to data volume
+
+### Solution
+
+**Parse YAML configuration before downloading** to determine which OSM feature types are needed.
+
+#### Examples of Selective Downloads
+
+**Natural terrain map** (terrain + water only):
+```yaml
+layers:
+  terrain: true
+  water: true
+  buildings: false
+  roads: false
+  labels: false
+```
+→ Download only: DEM data, natural water features (rivers, lakes)  
+→ Skip: buildings, roads, landuse polygons, place names
+
+**Minimalist urban map** (roads + water):
+```yaml
+layers:
+  water: true
+  roads: true
+  buildings: false
+```
+→ Download: water features, road networks  
+→ Skip: building footprints, rail, landuse
+
+**Full detailed map**:
+```yaml
+layers:
+  terrain: true
+  water: true
+  buildings: true
+  roads: true
+  labels: true
+```
+→ Download everything (current behavior)
+
+### Implementation Strategy
+
+1. **Config parser**: Read YAML and identify enabled layer types
+2. **Feature mapping**: Map layer names to required OSM feature classes
+   - `buildings` → `buildings` tag
+   - `roads` → `highway` tag
+   - `water` → `natural=water`, `waterway=*`
+   - `landuse` → `landuse=*`, `natural=*`
+3. **Targeted Overpass queries**: Modify OSM download to request only needed features
+4. **Conditional DEM download**: Skip DEM if `terrain: false` (rare but possible)
+5. **Cache organization**: Store different feature types separately for reuse
+
+### Benefits
+
+- **Larger maps possible**: Without building/road data, can process much bigger areas
+- **Faster iteration**: Natural terrain maps render quickly without parsing urban features
+- **Reduced bandwidth**: Important for remote/mobile workflows or API rate limits
+- **Smaller cache**: Disk space savings for frequently updated areas
+- **Energy efficiency**: Less data transfer and processing
+
+### Technical Considerations
+
+- Maintain backward compatibility (default to downloading all if not specified)
+- Handle dependencies (e.g., labels might need roads/buildings for placement)
+- Cache invalidation when config changes to include new layers
+- Clear messaging when cached data lacks newly enabled layers
+- Consider "download profiles": `minimal`, `natural`, `urban`, `full`
+
+### Example Size Reduction
+
+**100km² urban area** (estimated):
+- Full download: ~200MB (buildings, roads, landuse, water, amenities)
+- Natural only: ~5MB (DEM + water features)
+- **Savings**: 97.5% reduction
+
+This could enable rendering an entire province/state at natural terrain level without hitting data limits.
+
+---
+
+## Tiled Rendering for Large Maps
+
+**Goal**: Break large map areas into smaller tiles, render each independently, then seamlessly stitch them together into a final high-resolution output.
+
+### Problem
+
+Rendering very large geographic areas at high resolution can exceed:
+- Available system memory (RAM)
+- Image processing limits (PIL/Pillow max image dimensions)
+- Practical rendering time for single-pass operations
+- GPU memory for terrain processing
+
+### Solution
+
+**Divide-and-conquer approach**: Split the GeoJSON boundary into a grid of overlapping tiles, render each tile separately, then merge into final composite image.
+
+### Workflow
+
+1. **Tile Grid Generation**
+   - Parse input GeoJSON boundary
+   - Calculate optimal tile size based on target DPI and memory limits
+   - Create overlapping tile boundaries (e.g., 10% overlap for seamless blending)
+   - Generate sub-GeoJSON files for each tile
+
+2. **Parallel Rendering**
+   - Render each tile using existing `generate-map.py` pipeline
+   - All tiles use identical style configuration
+   - Process tiles in parallel (multi-core) or sequentially
+   - Save individual tile images
+
+3. **Seamless Stitching**
+   - Blend overlapping regions to avoid visible seams
+   - Handle edge cases (partial tiles at boundaries)
+   - Optional: feather/gradient blend in overlap zones
+   - Crop to exact final boundary
+   - Output single high-resolution composite image
+
+### Configuration Example
+
+```yaml
+tiled_rendering:
+  enabled: true
+  tile_size_pixels: 8000  # Max dimension per tile
+  overlap_percent: 10     # Overlap for seamless blending
+  parallel: true          # Render tiles in parallel
+  max_workers: 4          # Number of parallel processes
+  
+  # Optional: manual grid specification
+  # grid: {rows: 3, cols: 4}
+```
+
+Or command-line:
+```bash
+python scripts/generate-map-tiled.py \
+  --boundary data/large-region.geojson \
+  --config maps/large-map.yaml \
+  --tile-size 8000 \
+  --overlap 10 \
+  --parallel 4 \
+  --output output/large-composite.tif
+```
+
+### Benefits
+
+- **Memory efficiency**: Each tile uses manageable memory regardless of total map size
+- **Parallelization**: Leverage multi-core CPUs to render tiles simultaneously
+- **Fault tolerance**: If one tile fails, re-render only that tile
+- **Resume capability**: Cache completed tiles, resume from failures
+- **Extreme resolution**: No practical limit on final output size
+- **Preview tiles**: Render low-res tiles first to verify layout before full render
+
+### Technical Considerations
+
+#### Overlap Handling
+- **Why overlap?** Prevents visible seams from edge artifacts, filter effects, hillshading
+- **Blend methods**: 
+  - Linear gradient in overlap zone
+  - Alpha feathering
+  - Distance-weighted averaging
+- **Minimum overlap**: Depends on filter sizes (unsharp mask, crater effects)
+
+#### Data Continuity
+- **DEM**: Download slightly beyond tile bounds to ensure hillshading continuity
+- **Vector features**: Roads/rivers crossing tile boundaries need consistent rendering
+- **Labels**: Avoid duplicate labels in overlap zones
+- **Craters**: Handle craters that span tile boundaries
+  - Option 1: Assign to one tile based on center point
+  - Option 2: Render partial craters in each tile (may cause seam issues)
+
+#### Elevation Normalization (Critical!)
+**Problem**: If each tile normalizes DEM colors independently, elevation-to-color mapping will be inconsistent across tiles. A 2000m peak might appear dark brown in one tile but light tan in another if that tile contains a 3000m peak.
+
+**Solution**: Global elevation range must be calculated before rendering any tiles.
+
+**Implementation:**
+1. **Pre-processing pass**: Download/sample DEM for entire region
+2. **Calculate global min/max elevation** across all tiles
+3. **Pass as parameters** to each tile renderer:
+   ```yaml
+   # Injected into each tile's render config
+   terrain:
+     elevation_range:
+       min: 650  # meters - global minimum
+       max: 3450 # meters - global maximum
+     normalization: "global"  # or "local" for independent tiles
+   ```
+4. **Consistent color mapping**: All tiles use same elevation→color transfer function
+5. **Hillshading consistency**: Use same light angle and intensity parameters
+
+**Alternative approaches:**
+- **Percentile-based**: Use 2nd-98th percentile instead of absolute min/max (handles outliers)
+- **Adaptive zones**: For very large areas with distinct regions (mountains + plains), allow multiple elevation zones
+- **Manual override**: Let user specify elevation range in config for full control
+
+**Performance consideration**: Global DEM scan adds upfront cost but essential for visual consistency. Can use downsampled DEM for this first pass to speed it up.
+
+#### Tile Size Optimization
+- **Too small**: More tiles, longer total time, more seams to blend
+- **Too large**: Defeats memory savings purpose
+- **Optimal**: Match typical safe memory limit (~4-8GB for PIL), around 8000-12000px per tile
+
+#### Parallel Processing
+- I/O contention: Limit workers to avoid disk thrashing
+- Memory monitoring: Don't launch more workers than available RAM
+- Progress tracking: Show overall % complete across all tiles
+
+### Implementation Components
+
+1. **Tile grid calculator**: `scripts/calculate-tile-grid.py`
+   - Input: GeoJSON boundary, target tile size
+   - Output: Grid of tile boundaries (GeoJSON collection)
+
+2. **Tiled renderer**: `scripts/generate-map-tiled.py`
+   - Orchestrates tile generation
+   - Manages parallel workers
+   - Tracks progress
+
+3. **Image stitcher**: `scripts/stitch-tiles.py`
+   - Loads rendered tile images
+   - Blends overlaps
+   - Outputs final composite
+   - Supports TIFF, PNG with optional compression
+
+4. **Preview mode**: Low-res tiles for quick layout verification
+
+### Example Use Cases
+
+- **Province/state-scale natural terrain maps**: Render entire Alberta at 300 DPI
+- **Multi-city urban maps**: Show several cities with surrounding terrain
+- **Poster-size prints**: 48" × 96" at 600 DPI = 28800 × 57600 pixels
+- **Mural projects**: Wall-sized maps for public spaces
+- **Stitched panoramas**: Extra-wide aspect ratios (10:1 or wider)
+
+### Cache Strategy
+
+- Tile images cached separately: `cache/tiles/{map_name}/tile_{row}_{col}.tif`
+- Invalidation: Re-render only tiles affected by config/data changes
+- Smart detection: Check if style config changed (re-render all) vs. data update (re-render affected tiles)
+
+---
+
 ## Crater Improvements (Completed)
 
 - ✅ Increased crater ripple strength
