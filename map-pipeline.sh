@@ -15,6 +15,7 @@ HEIGHT_IN=12
 DPI=300
 FORMAT="png" # output image format (png, jpg, or pdf)
 ZOOM=14      # satellite zoom level
+ASPECT_RATIO=1.0  # bbox aspect ratio (width:height), 1.0 = square
 # Which steps to run; comma‑separated list or "all"
 RUN_STEPS="all"
 WITH_OCEAN=false
@@ -38,6 +39,7 @@ Optional flags
   -f, --format png|jpg|pdf    Output image format        (default: $FORMAT)
   -s, --scheme NAME       Colour scheme / design         (default: $DESIGN)
   -z, --zoom   LEVEL      Satellite zoom level           (default: $ZOOM)
+  -a, --aspect-ratio RATIO    Bbox width:height ratio    (default: $ASPECT_RATIO)
   -t, --steps LIST        Comma‑sep list of steps to run
                           (geojson,dem,layers,ocean,satellite,config,map)
                           (default: all)
@@ -81,6 +83,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -z | --zoom)
       ZOOM="$2"
+      shift 2
+      ;;
+    -a | --aspect-ratio)
+      ASPECT_RATIO="$2"
       shift 2
       ;;
     -t | --steps)
@@ -169,6 +175,7 @@ if should_run_step "geojson"; then
   step "$DIR/area.geojson" \
     run python scripts/download-geojson.py "$PLACE" \
     --buffer "$BUFFER_KM" \
+    --aspect-ratio "$ASPECT_RATIO" \
     --output "$DIR/area.geojson"
 fi
 

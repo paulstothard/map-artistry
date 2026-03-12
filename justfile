@@ -46,6 +46,17 @@ VICTORIA_FMT := "png"
 VICTORIA_Z := "5"
 VICTORIA_Z_SAT := "10"
 
+# Map dimensions and settings for Vancouver Island
+VANCOUVER_ISLAND_W := "24"
+VANCOUVER_ISLAND_H := "24"
+VANCOUVER_ISLAND_B := "50"
+VANCOUVER_ISLAND_DPI := "600"
+VANCOUVER_ISLAND_FMT := "png"
+VANCOUVER_ISLAND_ASPECT := "1.0"  # 1:1 aspect ratio (square)
+
+VANCOUVER_ISLAND_Z := "5"
+VANCOUVER_ISLAND_Z_SAT := "10"
+
 # ============================================================================
 # Default Recipe - Build All Maps
 # ============================================================================
@@ -60,7 +71,7 @@ VICTORIA_Z_SAT := "10"
 #   5. Copy shared Victoria data
 #   6. Victoria river_runs_red, natural, moon, satellite (use shared data)
 
-all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow edmonton-natural edmonton-lava edmonton-frozen victoria-coral copy-victoria-shared victoria-river-runs-red victoria-natural victoria-lava victoria-frozen edmonton-satellite victoria-satellite
+all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow edmonton-natural edmonton-lava edmonton-frozen victoria-coral copy-victoria-shared victoria-river-runs-red victoria-natural victoria-lava victoria-frozen edmonton-satellite victoria-satellite vancouver-island-coral copy-vancouver-island-shared vancouver-island-river-runs-red vancouver-island-blue-yellow vancouver-island-natural vancouver-island-lava vancouver-island-frozen vancouver-island-satellite
 
 # ============================================================================
 # Edmonton Maps
@@ -160,6 +171,59 @@ victoria-frozen:
 # Uses higher zoom level for satellite detail
 victoria-satellite:
     ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -s satellite -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z_SAT}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
+
+# ============================================================================
+# Vancouver Island Maps
+# ============================================================================
+
+# Generate Vancouver Island map with coral color scheme
+# Downloads: boundary GeoJSON (vancouver-island with 50km buffer), DEM, OSM layers, satellite imagery, ocean data
+# Output: output/vancouver-island-coral/map.png
+# Note: Uses --with-ocean flag for coastal areas, square 1:1 aspect ratio
+vancouver-island-coral:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-coral -s coral -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Copy shared base data from coral to other Vancouver Island variants
+# Copies: DEM, OSM layers, ocean data, boundary data
+# Excludes: config.yaml, map.*, satellite.tif
+copy-vancouver-island-shared:
+    mkdir -p output/vancouver-island-river-runs-red output/vancouver-island-blue-yellow output/vancouver-island-natural output/vancouver-island-lava output/vancouver-island-frozen output/vancouver-island-satellite
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-river-runs-red/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-blue-yellow/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-natural/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-lava/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-frozen/
+    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-satellite/
+
+# Generate Vancouver Island map with river_runs_red color scheme
+# Uses shared data from vancouver-island-coral
+vancouver-island-river-runs-red:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-river-runs-red -s river_runs_red -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Generate Vancouver Island map with blue-yellow color scheme
+# Uses shared data from vancouver-island-coral
+vancouver-island-blue-yellow:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-blue-yellow -s blue-yellow -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Generate Vancouver Island map with natural color scheme (earth tones)
+# Uses shared data from vancouver-island-coral
+vancouver-island-natural:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-natural -s natural -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Generate Vancouver Island map with lava color scheme (volcanic lava, red water)
+# Uses shared data from vancouver-island-coral, shows seafloor topology
+vancouver-island-lava:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-lava -s lava -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Generate Vancouver Island map with frozen color scheme (ice and snow)
+# Uses shared data from vancouver-island-coral, shows frozen seas
+vancouver-island-frozen:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-frozen -s frozen -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+
+# Generate Vancouver Island map with satellite imagery
+# Uses higher zoom level for satellite detail
+vancouver-island-satellite:
+    ./map-pipeline.sh "vancouver-island" output/vancouver-island-satellite -s satellite -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z_SAT}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
 
 # ============================================================================
 # Utility Recipes
