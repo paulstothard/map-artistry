@@ -1546,10 +1546,10 @@ DESIGN_SETTINGS = {
             "craters": [
                 {
                     "x": 0.53,
-                    "y": 0.62,
-                    "radius_km": 3.0,
+                    "y": 0.66,
+                    "radius_km": 4.0,
                     "depth_ratio": 0.4,
-                    "rim_height_ratio": 0.12,
+                    "rim_height_ratio": 0.14,
                     "flat_floor_ratio": 0.5,
                     "bowl_exponent": 1.0,
                     "lava_level_m": None,
@@ -1570,8 +1570,8 @@ DESIGN_SETTINGS = {
                 {
                     "x": 0.18,
                     "y": 0.85,
-                    "radius_km": 1.5,
-                    "depth_ratio": 0.3,
+                    "radius_km": 3.0,
+                    "depth_ratio": 0.5,
                     "rim_height_ratio": 0.08,
                     "flat_floor_ratio": 0.3,
                     "bowl_exponent": 1.0,
