@@ -298,6 +298,66 @@ designing strip layout, users need rapid feedback on:
 
 ---
 
+## Higher Resolution DEM Sources
+
+**Goal**: Support higher-resolution elevation data for close-up/detailed maps while keeping 30m SRTM for general use.
+
+### Current Status
+
+- Using SRTM data (~30m resolution) from `elevation-tiles-prod`
+- Works well for most maps at standard scales
+- Insufficient detail for close-up regions or small-area maps
+
+### Higher Resolution Options
+
+#### 1. Copernicus DEM GLO-30
+- **Resolution**: 30m (better quality than SRTM)
+- **Coverage**: Global
+- **Source**: https://portal.opentopography.org/
+- **Notes**: More accurate than SRTM, especially in vegetated areas and high latitudes
+
+#### 2. CDEM (Canadian Digital Elevation Model)
+- **Resolution**: 20m or better
+- **Coverage**: Canada (ideal for Edmonton and other Canadian locations)
+- **Source**: https://open.canada.ca/data/en/dataset/7f245e4d-76c2-4caa-951a-45d1d2051333
+- **Notes**: Best option for Canadian maps
+
+#### 3. USGS 3DEP
+- **Resolution**: 10m (some areas 1/3 arc-second or ~3m)
+- **Coverage**: United States
+- **Source**: OpenTopography API or `elevation` Python library
+- **Notes**: Excellent for US locations
+
+#### 4. OpenTopography API
+- **Resolution**: Varies by dataset (can be 1m or better for some areas with LiDAR)
+- **Coverage**: Selected regions with very high-resolution data
+- **Source**: https://portal.opentopography.org/ (requires free API key)
+- **Notes**: Best quality for supported regions
+
+### Implementation Plan
+
+- Add optional `dem_source` parameter to YAML config and download script
+- Default to SRTM for backward compatibility
+- Support multiple sources:
+  - `srtm` (current default, ~30m)
+  - `copernicus` (30m, better quality)
+  - `cdem` (20m, Canada)
+  - `3dep` (10m, USA)
+  - `opentopography` (variable, requires API key)
+- Auto-select best available source based on location
+- Cache handling for different resolutions
+
+### Technical Considerations
+
+- Different download URLs and authentication methods
+- Varying file formats (HGT, GeoTIFF, etc.)
+- API rate limits and quota management
+- Larger file sizes for high-resolution data
+- Processing time increases with resolution
+- Consider downsampling option for preview renders
+
+---
+
 ## Crater Improvements (Completed)
 
 - ✅ Increased crater ripple strength
