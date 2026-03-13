@@ -2,27 +2,20 @@
 """
 download-dem.py
 
-Pure-Python DEM acquisition and processing with automatic fallback:
+Pure-Python DEM acquisition and processing:
  1. Read GeoJSON boundary
- 2. Determine required 1°×1° tiles
- 3. Try high-res sources (Copernicus), fall back to SRTM
- 4. Download and decompress tiles
- 5. Load tiles into rasterio
- 6. Mosaic via rasterio.merge
- 7. Reproject if needed
- 8. Clip to boundary geometry
- 9. Write GeoTIFF to disk
+ 2. Determine required 1°×1° SRTM tiles
+ 3. Download and decompress .hgt.gz tiles
+ 4. Load tiles into rasterio
+ 5. Mosaic via rasterio.merge
+ 6. Reproject if needed
+ 7. Clip to boundary geometry
+ 8. Write GeoTIFF to disk
 
 Usage:
   python scripts/download-dem.py \
       -b data/edmonton.map.geojson \
       -o dem/edmonton_dem.tif
-  
-  # Use specific source only:
-  python scripts/download-dem.py \
-      -b data/edmonton.map.geojson \
-      -o dem/edmonton_dem.tif \
-      --sources srtm
 
 Requirements:
   requests, geopandas, rasterio
@@ -32,7 +25,6 @@ import gzip
 import math
 import tempfile
 from pathlib import Path
-from typing import Optional, List
 
 import requests
 import geopandas as gpd
@@ -47,7 +39,7 @@ import numpy as np
 
 
 def get_tile_prefixes(minx, miny, maxx, maxy):
-    # Tiles are named NxxWyyy etc, covering integer degree squares
+    # SRTM tiles are named NxxWyyy etc, covering integer degree squares
     lats = range(math.floor(miny), math.ceil(maxy))
     lons = range(math.floor(minx), math.ceil(maxx))
     prefixes = []
@@ -61,95 +53,6 @@ def get_tile_prefixes(minx, miny, maxx, maxy):
     return prefixes
 
 
-def download_copernicus_tile(lat_s: str, lon_s: str, tmpdir: Path) -> Optional[rasterio.DatasetReader]:
-    """
-    Try to download a tile from Copernicus DEM GLO-30 (30m resolution, better quality than SRTM).
-    Returns an open rasterio dataset or None if failed.
-    """
-    # Extract numeric values
-    lat_num = int(lat_s[1:])
-    lon_num = int(lon_s[1:])
-    if lat_s[0] == 'S':
-        lat_num = -lat_num
-    if lon_s[0] == 'W':
-        lon_num = -lon_num
-    
-    # Copernicus naming: Copernicus_DSM_COG_10_N53_00_W114_00_DEM.tif
-    lat_cop = f"{'N' if lat_num >= 0 else 'S'}{abs(lat_num):02d}_00"
-    lon_cop = f"{'E' if lon_num >= 0 else 'W'}{abs(lon_num):03d}_00"
-    
-    # Copernicus GLO-30 public URL (via AWS)
-    url = f"https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_{lat_cop}_{lon_cop}_DEM/Copernicus_DSM_COG_10_{lat_cop}_{lon_cop}_DEM.tif"
-    
-    try:
-        print(f"    Trying Copernicus DEM: {lat_s}{lon_s}")
-        r = requests.get(url, timeout=30, stream=True)
-        r.raise_for_status()
-        
-        tile_path = tmpdir / f"{lat_s}{lon_s}_copernicus.tif"
-        with open(tile_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
-        
-        src = rasterio.open(tile_path)
-        print(f"    ✓ Copernicus: {lat_s}{lon_s}")
-        return src
-    except Exception as e:
-        print(f"    ✗ Copernicus unavailable: {lat_s}{lon_s}")
-        return None
-
-
-def download_srtm_tile(lat_s: str, lon_s: str, tmpdir: Path) -> Optional[rasterio.DatasetReader]:
-    """
-    Download a tile from SRTM via AWS S3 (30m resolution, fallback source).
-    Returns an open rasterio dataset or None if failed.
-    """
-    url = f"https://s3.amazonaws.com/elevation-tiles-prod/skadi/{lat_s}/{lat_s}{lon_s}.hgt.gz"
-    try:
-        print(f"    Trying SRTM: {lat_s}{lon_s}")
-        r = requests.get(url, timeout=30)
-        r.raise_for_status()
-        data = gzip.decompress(r.content)
-        tile_path = tmpdir / f"{lat_s}{lon_s}.hgt"
-        tile_path.write_bytes(data)
-        src = rasterio.open(tile_path)
-        print(f"    ✓ SRTM: {lat_s}{lon_s}")
-        return src
-    except Exception as e:
-        print(f"    ✗ SRTM unavailable: {lat_s}{lon_s}")
-        return None
-
-
-def download_tile_with_fallback(
-    lat_s: str, 
-    lon_s: str, 
-    tmpdir: Path, 
-    sources: List[str]
-) -> Optional[rasterio.DatasetReader]:
-    """
-    Try downloading a tile from multiple sources in order.
-    Returns the first successful download or None if all fail.
-    
-    Args:
-        lat_s: Latitude string (e.g., 'N53')
-        lon_s: Longitude string (e.g., 'W114')
-        tmpdir: Temporary directory for downloads
-        sources: List of source names to try in order ('copernicus', 'srtm')
-    """
-    for source in sources:
-        if source == 'copernicus':
-            result = download_copernicus_tile(lat_s, lon_s, tmpdir)
-        elif source == 'srtm':
-            result = download_srtm_tile(lat_s, lon_s, tmpdir)
-        else:
-            continue
-        
-        if result is not None:
-            return result
-    
-    return None
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Pure-Python DEM prep for a GeoJSON boundary."
@@ -160,16 +63,7 @@ def main():
     parser.add_argument(
         "-o", "--output", type=Path, required=True, help="Output clipped DEM GeoTIFF"
     )
-    parser.add_argument(
-        "--sources",
-        type=str,
-        default="copernicus,srtm",
-        help="Comma-separated list of DEM sources to try in order (default: copernicus,srtm)"
-    )
     args = parser.parse_args()
-    
-    # Parse sources list
-    source_list = [s.strip() for s in args.sources.split(',')]
 
     # Load boundary
     gdf = gpd.read_file(args.boundary)
@@ -183,18 +77,23 @@ def main():
     )
     prefixes = get_tile_prefixes(minx, miny, maxx, maxy)
 
-    print(f"[ ] Downloading and opening {len(prefixes)} tiles (sources: {', '.join(source_list)})...")
+    print(f"[ ] Downloading and opening {len(prefixes)} tiles...")
     srcs = []
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir_path = Path(tmpdir)
         for lat_s, lon_s in prefixes:
-            src = download_tile_with_fallback(lat_s, lon_s, tmpdir_path, source_list)
-            if src:
+            url = f"https://s3.amazonaws.com/elevation-tiles-prod/skadi/{lat_s}/{lat_s}{lon_s}.hgt.gz"
+            try:
+                r = requests.get(url)
+                r.raise_for_status()
+                data = gzip.decompress(r.content)
+                tile_path = Path(tmpdir) / f"{lat_s}{lon_s}.hgt"
+                tile_path.write_bytes(data)
+                src = rasterio.open(tile_path)
                 srcs.append(src)
-            else:
-                print(f"    Warning: All sources failed for tile {lat_s}{lon_s}")
+            except Exception as e:
+                print(f"    Warning: failed to load tile {lat_s}{lon_s}: {e}")
         if not srcs:
-            raise RuntimeError("No DEM tiles could be loaded from any source.")
+            raise RuntimeError("No DEM tiles could be loaded.")
 
         print(f"[ ] Mosaicking tiles...")
         mosaic, trans = merge(srcs)
