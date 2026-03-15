@@ -14,6 +14,9 @@
 
 python := "python"
 
+# Suppress GDAL warnings about bbox fields
+export CPL_LOG := "/dev/null"
+
 # Available color schemes (add new schemes here)
 
 schemes := "coral river_runs_red blue-yellow natural lava frozen satellite"

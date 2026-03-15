@@ -1,10 +1,7 @@
 from pathlib import Path
 import os
 import yaml
-import warnings
 
-# Suppress GDAL warnings about unsupported bbox field type
-warnings.filterwarnings("ignore", message=".*unsupported OGR type.*")
 
 # Disable YAML anchors (no aliases)
 class NoAliasDumper(yaml.SafeDumper):
