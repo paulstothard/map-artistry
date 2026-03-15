@@ -4,8 +4,8 @@
 #
 # Usage:
 #   just build "Edmonton, AB" coral
-#   just build "Vancouver Island, BC" natural 36 24
-#   just build "Alberta" natural
+#   just build --width 36 --height 24 "Vancouver Island, BC" natural
+#   just build --buffer-km 20 "Victoria, BC" natural
 #
 # Most settings (buffer, zoom, DEM source, layer source) are calculated automatically.
 # If ocean boundary source data is installed, the build also derives a local ocean
@@ -16,20 +16,18 @@
 
 python := if path_exists("venv/bin/python") == "true" { "venv/bin/python" } else { "python3" }
 
-# Default values
-
-default_width := "24"
-default_height := "24"
-default_dpi := "600"
-default_format := "png"
-
 # ============================================================================
 # Main Commands
 # ============================================================================
 
 # Build a map for any region with automatic settings
-build region scheme width=default_width height=default_height dpi=default_dpi format=default_format buffer="":
-    @just _build-map "{{ region }}" "{{ scheme }}" {{ width }} {{ height }} {{ dpi }} {{ format }} "{{ buffer }}"
+[arg("height", long="height", help="Map height in inches")]
+[arg("width", long="width", help="Map width in inches")]
+[arg("buffer_km", long="buffer-km", help="Optional buffer override in kilometers")]
+[arg("format", long="format", help="Output format: png, pdf, svg")]
+[arg("dpi", long="dpi", help="Resolution in DPI")]
+build region scheme width="24" height="24" dpi="600" format="png" buffer_km="":
+    @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}"
 
 # List available color schemes
 schemes:
@@ -40,21 +38,20 @@ help:
     @echo "Map Artistry - Dynamic Map Generation"
     @echo ""
     @echo "Usage:"
-    @echo "  just build REGION SCHEME [WIDTH] [HEIGHT] [DPI] [FORMAT] [BUFFER_KM]"
+    @echo "  just build [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km 20] REGION SCHEME"
     @echo ""
     @echo "Examples:"
     @echo '  just build "Edmonton, AB" coral'
-    @echo '  just build "Vancouver Island, BC" natural'
-    @echo '  just build "Alberta" natural 36 24'
-    @echo '  just build "Canada" lava 36 24 600 png'
-    @echo '  just build "Victoria, BC" natural 24 24 600 png 20'
+    @echo '  just build --width 36 --height 24 "Vancouver Island, BC" natural'
+    @echo '  just build --width 36 --height 24 --dpi 600 "Canada" lava'
+    @echo '  just build --buffer-km 20 "Victoria, BC" natural'
     @echo ""
     @echo "Parameters:"
-    @echo "  WIDTH      Map width in inches (default: 24)"
-    @echo "  HEIGHT     Map height in inches (default: 24)"
-    @echo "  DPI        Resolution in DPI (default: 600)"
-    @echo "  FORMAT     Output format: png, pdf, svg (default: png)"
-    @echo "  BUFFER_KM  Optional buffer override in kilometers"
+    @echo "  --width      Map width in inches (default: 24)"
+    @echo "  --height     Map height in inches (default: 24)"
+    @echo "  --dpi        Resolution in DPI (default: 600)"
+    @echo "  --format     Output format: png, pdf, svg (default: png)"
+    @echo "  --buffer-km  Optional buffer override in kilometers"
     @echo ""
     @echo "Other commands:"
     @echo "  just schemes  - List available color schemes"

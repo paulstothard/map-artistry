@@ -1976,13 +1976,20 @@ if __name__ == "__main__":
 
     # Handle --list-schemes
     if args.list_schemes:
-        print("\n📋 Available Color Schemes:\n")
-        for scheme_name in sorted(DESIGN_SETTINGS.keys()):
-            scheme = DESIGN_SETTINGS[scheme_name]
-            # Try to extract a description from the scheme
-            bg_color = scheme.get("map", {}).get("background", {}).get("fc", "N/A")
-            print(f"  • {scheme_name:20} (background: {bg_color})")
-        print()
+        if sys.stdout.isatty():
+            print("\n📋 Available Color Schemes:\n")
+            for scheme_name in sorted(DESIGN_SETTINGS.keys()):
+                bg_color = (
+                    DESIGN_SETTINGS[scheme_name]
+                    .get("map", {})
+                    .get("background", {})
+                    .get("fc", "N/A")
+                )
+                print(f"  • {scheme_name:20} (background: {bg_color})")
+            print()
+        else:
+            for scheme_name in sorted(DESIGN_SETTINGS.keys()):
+                print(scheme_name)
         sys.exit(0)
 
     # Validate required args (if not listing schemes)

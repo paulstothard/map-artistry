@@ -12,7 +12,7 @@ REGIONS=(
 [ -d "venv" ] && source venv/bin/activate
 
 # Get schemes dynamically
-SCHEMES=$(just schemes 2>/dev/null | grep -oP '(?<=• )\S+')
+SCHEMES=$(just schemes 2>/dev/null)
 
 echo "This script will generate all color schemes for each of the following regions:"
 for r in "${REGIONS[@]}"; do echo "  • $r"; done
@@ -36,7 +36,7 @@ echo ""
 for region in "${REGIONS[@]}"; do
   for scheme in $SCHEMES; do
     echo "▶ $region — $scheme"
-    just build "$region" "$scheme" width=24 height=24 dpi=600
+    just build --width 24 --height 24 --dpi 600 "$region" "$scheme"
   done
 done
 

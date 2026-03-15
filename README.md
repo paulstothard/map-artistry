@@ -5,7 +5,8 @@ models. Generates high-resolution, stylized maps via a customizable pipeline.
 
 ## Dependencies
 
-- [just](https://github.com/casey/just) — command runner (`brew install just` on macOS)
+- [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on
+  macOS)
 - Python 3
 
 ## Setup
@@ -21,13 +22,13 @@ pip install -r requirements.txt
 ```bash
 just build "Edmonton, AB" coral
 just build "Vancouver Island, BC" natural
-just build "Iceland" river_runs_red 36 24
-just build "Victoria, BC" natural 24 24 600 png 20   # with explicit buffer
+just build --width 36 --height 24 "Iceland" river_runs_red
+just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
 just schemes                                          # list available color schemes
 ```
 
 All settings (buffer size, DEM source, satellite zoom, layer source) are calculated automatically
-based on region size. Pass an explicit `BUFFER_KM` as the last argument to override.
+based on region size. Use `--buffer-km` to override the automatic buffer.
 
 ## Color Schemes
 
