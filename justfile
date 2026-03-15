@@ -53,7 +53,7 @@ victoria_dem_source := "srtm"
 
 # Vancouver Island
 
-vancouver_island_place := "vancouver-island"
+vancouver_island_place := "Vancouver Island, BC"
 vancouver_island_buffer := "70"
 vancouver_island_width := "24"
 vancouver_island_height := "24"
