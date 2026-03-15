@@ -1,258 +1,296 @@
 # ============================================================================
 # Map Artistry - Justfile
 # ============================================================================
-# Automated build recipes for generating artistic maps of cities using
-# the map-pipeline.sh workflow. Supports multiple color schemes:
-#   - coral: Warm coral/red background with white water features
-#   - river_runs_red: Black background with red water features
-#   - blue-yellow: Blue background with yellow water features
-#   - natural: Natural earth tones with green/brown terrain
-#   - lava: Volcanic lava with red water
-#   - frozen: Frozen landscape with ice and snow (blues and whites)
-#   - satellite: Satellite imagery with terrain overlay
+# Generate artistic topographic maps with multiple color schemes
 #
 # Usage:
-#   just                    # Build all maps for both cities
-#   just edmonton-coral     # Build single map variant
-#   just clean              # Remove all output
-#   just publish            # Copy final maps to publish/ folder
-# ============================================================================
-
-# Map dimensions and settings for Edmonton
-# -w, --width: Output map width in inches
-# -h, --height: Output map height in inches
-# -b, --buffer: Buffer distance around city center in kilometers
-# -d, --dpi: Output resolution (dots per inch)
-# -f, --format: Output file format (png, jpg, or pdf)
-# -z, --zoom: Zoom level for terrain data (lower = broader area)
-# -z (satellite): Higher zoom for satellite imagery (higher = more detail)
-
-EDMONTON_W := "24"
-EDMONTON_H := "24"
-EDMONTON_B := "5"
-EDMONTON_DPI := "600"
-EDMONTON_FMT := "png"
-
-EDMONTON_Z := "5"
-EDMONTON_Z_SAT := "10"
-
-# Map dimensions and settings for Victoria
-VICTORIA_W := "24"
-VICTORIA_H := "24"
-VICTORIA_B := "55"
-VICTORIA_DPI := "600"
-VICTORIA_FMT := "png"
-
-VICTORIA_Z := "5"
-VICTORIA_Z_SAT := "10"
-
-# Map dimensions and settings for Vancouver Island
-VANCOUVER_ISLAND_W := "24"
-VANCOUVER_ISLAND_H := "24"
-VANCOUVER_ISLAND_B := "50"
-VANCOUVER_ISLAND_DPI := "600"
-VANCOUVER_ISLAND_FMT := "png"
-VANCOUVER_ISLAND_ASPECT := "1.0"  # 1:1 aspect ratio (square)
-
-VANCOUVER_ISLAND_Z := "5"
-VANCOUVER_ISLAND_Z_SAT := "10"
-
-# ============================================================================
-# Default Recipe - Build All Maps
-# ============================================================================
-# Generates all map variants for both Edmonton and Victoria.
-# Builds in dependency order to reuse shared data (DEM, OSM layers).
+#   just build edmonton coral     # Build specific map
+#   just edmonton                 # Build all Edmonton schemes
+#   just locations                # List available locations
+#   just schemes                  # List available schemes
+#   just all                      # Build everything
 #
-# Build order:
-#   1. Edmonton coral (downloads all base data)
-#   2. Copy shared Edmonton data to other variant folders
-#   3. Edmonton river_runs_red, blue-yellow, natural, moon, satellite (use shared data)
-#   4. Victoria coral (downloads all base data)
-#   5. Copy shared Victoria data
-#   6. Victoria river_runs_red, natural, moon, satellite (use shared data)
-
-all: edmonton-coral copy-edmonton-shared edmonton-river-runs-red edmonton-blue-yellow edmonton-natural edmonton-lava edmonton-frozen victoria-coral copy-victoria-shared victoria-river-runs-red victoria-natural victoria-lava victoria-frozen edmonton-satellite victoria-satellite vancouver-island-coral copy-vancouver-island-shared vancouver-island-river-runs-red vancouver-island-blue-yellow vancouver-island-natural vancouver-island-lava vancouver-island-frozen vancouver-island-satellite
-
-# ============================================================================
-# Edmonton Maps
 # ============================================================================
 
-# Generate Edmonton map with coral color scheme
-# Downloads: boundary GeoJSON, DEM, OSM layers, satellite imagery
-# Output: output/edmonton-coral/map.pdf
-edmonton-coral:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-coral -s coral -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
+python := "python"
 
-# Copy shared base data from coral to other Edmonton variants
-# Copies: DEM, OSM layers, boundary data (excludes config.yaml, map.*, satellite.tif)
-# This avoids re-downloading the same base data for each color scheme
-copy-edmonton-shared:
-    mkdir -p output/edmonton-river-runs-red output/edmonton-blue-yellow output/edmonton-natural output/edmonton-lava output/edmonton-frozen output/edmonton-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-river-runs-red/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-blue-yellow/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-natural/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-lava/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-frozen/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/edmonton-coral/ output/edmonton-satellite/
+# Available color schemes (add new schemes here)
 
-# Generate Edmonton map with river_runs_red color scheme (black bg, red water)
-# Uses shared data from edmonton-coral, only generates new config and map
-edmonton-river-runs-red:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-river-runs-red -s river_runs_red -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
-
-# Generate Edmonton map with blue-yellow color scheme
-# Uses shared data from edmonton-coral, only generates new config and map
-edmonton-blue-yellow:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-blue-yellow -s blue-yellow -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
-
-# Generate Edmonton map with natural color scheme (earth tones)
-# Uses shared data from edmonton-coral, only generates new config and map
-edmonton-natural:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-natural -s natural -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
-
-# Generate Edmonton map with lava color scheme (volcanic lava, red water)
-# Uses shared data from edmonton-coral, only generates new config and map
-edmonton-lava:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-lava -s lava -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
-
-# Generate Edmonton map with frozen color scheme (ice and snow)
-# Uses shared data from edmonton-coral, only generates new config and map
-edmonton-frozen:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-frozen -s frozen -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
-
-# Generate Edmonton map with satellite imagery
-# Uses higher zoom level for satellite detail
-edmonton-satellite:
-    ./map-pipeline.sh "Edmonton, Alberta" output/edmonton-satellite -s satellite -b {{EDMONTON_B}} -w {{EDMONTON_W}} -h {{EDMONTON_H}} -z {{EDMONTON_Z_SAT}} -d {{EDMONTON_DPI}} -f {{EDMONTON_FMT}}
+schemes := "coral river_runs_red blue-yellow natural lava frozen satellite"
 
 # ============================================================================
-# Victoria Maps
+# Location Configurations
 # ============================================================================
-
-# Generate Victoria map with coral color scheme
-# Downloads: boundary GeoJSON, DEM, OSM layers, satellite imagery, ocean data
-# Output: output/victoria-coral/map.pdf
-# Note: Uses --with-ocean flag for coastal areas
-victoria-coral:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-coral -s coral -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
-# Copy shared base data from coral to other Victoria variants
-# Copies: DEM, OSM layers, ocean data, boundary data
-# Excludes: config.yaml, map.*, satellite.tif
-copy-victoria-shared:
-    mkdir -p output/victoria-river-runs-red output/victoria-natural output/victoria-lava output/victoria-frozen output/victoria-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-river-runs-red/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-natural/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-lava/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/victoria-coral/ output/victoria-frozen/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/victoria-coral/ output/victoria-satellite/
-
-# Generate Victoria map with river_runs_red color scheme
-# Uses shared data from victoria-coral
-victoria-river-runs-red:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-river-runs-red -s river_runs_red -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
-# Generate Victoria map with natural color scheme (earth tones)
-# Uses shared data from victoria-coral
-victoria-natural:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-natural -s natural -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
-# Generate Victoria map with lava color scheme (volcanic lava, red water)
-# Uses shared data from victoria-coral, shows seafloor topology
-victoria-lava:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-lava -s lava -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
-# Generate Victoria map with frozen color scheme (ice and snow)
-# Uses shared data from victoria-coral, shows frozen seas
-victoria-frozen:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-frozen -s frozen -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
-# Generate Victoria map with satellite imagery
-# Uses higher zoom level for satellite detail
-victoria-satellite:
-    ./map-pipeline.sh "Victoria, BC" output/victoria-satellite -s satellite -b {{VICTORIA_B}} -w {{VICTORIA_W}} -h {{VICTORIA_H}} -z {{VICTORIA_Z_SAT}} -d {{VICTORIA_DPI}} -f {{VICTORIA_FMT}} --with-ocean
-
+# To add a new location:
+# 1. Add variables below following the pattern
+# 2. Add a convenience recipe at the bottom
 # ============================================================================
-# Vancouver Island Maps
-# ============================================================================
+# Edmonton
 
-# Generate Vancouver Island map with coral color scheme
-# Downloads: boundary GeoJSON (vancouver-island with 50km buffer), DEM, OSM layers, satellite imagery, ocean data
-# Output: output/vancouver-island-coral/map.png
-# Note: Uses --with-ocean flag for coastal areas, square 1:1 aspect ratio
-vancouver-island-coral:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-coral -s coral -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+edmonton_place := "Edmonton, Alberta"
+edmonton_buffer := "5"
+edmonton_width := "24"
+edmonton_height := "24"
+edmonton_dpi := "600"
+edmonton_format := "png"
+edmonton_aspect := "1.0"
+edmonton_zoom_sat := "10"
+edmonton_ocean := ""
+edmonton_dem_source := "copernicus"
 
-# Copy shared base data from coral to other Vancouver Island variants
-# Copies: DEM, OSM layers, ocean data, boundary data
-# Excludes: config.yaml, map.*, satellite.tif
-copy-vancouver-island-shared:
-    mkdir -p output/vancouver-island-river-runs-red output/vancouver-island-blue-yellow output/vancouver-island-natural output/vancouver-island-lava output/vancouver-island-frozen output/vancouver-island-satellite
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-river-runs-red/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-blue-yellow/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-natural/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-lava/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-frozen/
-    rsync -av --exclude='config.yaml' --exclude='map.*' --exclude='satellite.tif' --exclude='.DS_Store' output/vancouver-island-coral/ output/vancouver-island-satellite/
+# Victoria
 
-# Generate Vancouver Island map with river_runs_red color scheme
-# Uses shared data from vancouver-island-coral
-vancouver-island-river-runs-red:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-river-runs-red -s river_runs_red -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+victoria_place := "Victoria, BC"
+victoria_buffer := "55"
+victoria_width := "24"
+victoria_height := "24"
+victoria_dpi := "600"
+victoria_format := "png"
+victoria_aspect := "1.0"
+victoria_zoom_sat := "10"
+victoria_ocean := "--with-ocean"
+victoria_dem_source := "srtm"
 
-# Generate Vancouver Island map with blue-yellow color scheme
-# Uses shared data from vancouver-island-coral
-vancouver-island-blue-yellow:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-blue-yellow -s blue-yellow -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+# Vancouver Island
 
-# Generate Vancouver Island map with natural color scheme (earth tones)
-# Uses shared data from vancouver-island-coral
-vancouver-island-natural:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-natural -s natural -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
-
-# Generate Vancouver Island map with lava color scheme (volcanic lava, red water)
-# Uses shared data from vancouver-island-coral, shows seafloor topology
-vancouver-island-lava:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-lava -s lava -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
-
-# Generate Vancouver Island map with frozen color scheme (ice and snow)
-# Uses shared data from vancouver-island-coral, shows frozen seas
-vancouver-island-frozen:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-frozen -s frozen -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
-
-# Generate Vancouver Island map with satellite imagery
-# Uses higher zoom level for satellite detail
-vancouver-island-satellite:
-    ./map-pipeline.sh "vancouver-island" output/vancouver-island-satellite -s satellite -b {{VANCOUVER_ISLAND_B}} -w {{VANCOUVER_ISLAND_W}} -h {{VANCOUVER_ISLAND_H}} -z {{VANCOUVER_ISLAND_Z_SAT}} -d {{VANCOUVER_ISLAND_DPI}} -f {{VANCOUVER_ISLAND_FMT}} -a {{VANCOUVER_ISLAND_ASPECT}} --with-ocean
+vancouver_island_place := "vancouver-island"
+vancouver_island_buffer := "70"
+vancouver_island_width := "24"
+vancouver_island_height := "24"
+vancouver_island_dpi := "600"
+vancouver_island_format := "png"
+vancouver_island_aspect := "1.0"
+vancouver_island_zoom_sat := "10"
+vancouver_island_ocean := "--with-ocean"
+vancouver_island_dem_source := "srtm"
 
 # ============================================================================
-# Utility Recipes
+# Main Commands
 # ============================================================================
 
-# Publish all generated maps to publish/ folder
-# Finds all map.* files in output/ subdirectories and copies them
-# to publish/ with folder name as prefix (e.g., edmonton-coral.pdf)
+# List available locations
+locations:
+    @echo "Available locations:"
+    @echo "  edmonton          - Edmonton, Alberta"
+    @echo "  victoria          - Victoria, BC"
+    @echo "  vancouver-island  - Vancouver Island, BC"
+
+# List available color schemes
+schemes:
+    @echo "Available color schemes:"
+    @echo "  coral           - Warm coral/red background with white water"
+    @echo "  river_runs_red  - Black background with red water features"
+    @echo "  blue-yellow     - Blue background with yellow water features"
+    @echo "  natural         - Natural earth tones with green/brown terrain"
+    @echo "  lava            - Volcanic lava with red water"
+    @echo "  frozen          - Frozen landscape with ice and snow"
+    @echo "  satellite       - Satellite imagery with terrain overlay"
+
+# Build all locations and schemes
+all:
+    @just edmonton
+    @just victoria
+    @just vancouver-island
+
+# ============================================================================
+# Convenience Aliases (one per location)
+# ============================================================================
+
+# Build all Edmonton maps
+edmonton scheme="all":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ scheme }}" = "all" ]; then
+        for s in {{ schemes }}; do
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Building edmonton - $s"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            just _build-single edmonton "{{ edmonton_place }}" {{ edmonton_buffer }} {{ edmonton_width }} {{ edmonton_height }} {{ edmonton_dpi }} {{ edmonton_format }} {{ edmonton_aspect }} {{ edmonton_zoom_sat }} "{{ edmonton_ocean }}" {{ edmonton_dem_source }} "$s"
+        done
+    else
+        just _build-single edmonton "{{ edmonton_place }}" {{ edmonton_buffer }} {{ edmonton_width }} {{ edmonton_height }} {{ edmonton_dpi }} {{ edmonton_format }} {{ edmonton_aspect }} {{ edmonton_zoom_sat }} "{{ edmonton_ocean }}" {{ edmonton_dem_source }} "{{ scheme }}"
+    fi
+
+# Build all Victoria maps
+victoria scheme="all":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ scheme }}" = "all" ]; then
+        for s in {{ schemes }}; do
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Building victoria - $s"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            just _build-single victoria "{{ victoria_place }}" {{ victoria_buffer }} {{ victoria_width }} {{ victoria_height }} {{ victoria_dpi }} {{ victoria_format }} {{ victoria_aspect }} {{ victoria_zoom_sat }} "{{ victoria_ocean }}" {{ victoria_dem_source }} "$s"
+        done
+    else
+        just _build-single victoria "{{ victoria_place }}" {{ victoria_buffer }} {{ victoria_width }} {{ victoria_height }} {{ victoria_dpi }} {{ victoria_format }} {{ victoria_aspect }} {{ victoria_zoom_sat }} "{{ victoria_ocean }}" {{ victoria_dem_source }} "{{ scheme }}"
+    fi
+
+# Build all Vancouver Island maps
+vancouver-island scheme="all":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ scheme }}" = "all" ]; then
+        for s in {{ schemes }}; do
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Building vancouver-island - $s"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            just _build-single vancouver-island "{{ vancouver_island_place }}" {{ vancouver_island_buffer }} {{ vancouver_island_width }} {{ vancouver_island_height }} {{ vancouver_island_dpi }} {{ vancouver_island_format }} {{ vancouver_island_aspect }} {{ vancouver_island_zoom_sat }} "{{ vancouver_island_ocean }}" {{ vancouver_island_dem_source }} "$s"
+        done
+    else
+        just _build-single vancouver-island "{{ vancouver_island_place }}" {{ vancouver_island_buffer }} {{ vancouver_island_width }} {{ vancouver_island_height }} {{ vancouver_island_dpi }} {{ vancouver_island_format }} {{ vancouver_island_aspect }} {{ vancouver_island_zoom_sat }} "{{ vancouver_island_ocean }}" {{ vancouver_island_dem_source }} "{{ scheme }}"
+    fi
+
+# ============================================================================
+# Internal Build Pipeline
+# ============================================================================
+
+# Build a single map
+_build-single location place buffer width height dpi format aspect zoom_sat ocean dem_source scheme:
+    @just _download-data {{ location }} "{{ place }}" {{ buffer }} {{ aspect }} {{ zoom_sat }} {{ dpi }} "{{ ocean }}" {{ dem_source }}
+    @just _generate-config {{ location }} {{ scheme }} "output/{{ location }}-{{ scheme }}"
+    @just _apply-overlay "output/{{ location }}-{{ scheme }}" {{ location }} {{ scheme }}
+    @just _generate-map {{ location }} "output/{{ location }}-{{ scheme }}" {{ width }} {{ height }} {{ dpi }} {{ format }}
+
+# Download all shared data for a location
+_download-data location place buffer aspect zoom_sat dpi ocean dem_source:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    DATA_DIR="downloads/regions/{{ location }}"
+    mkdir -p "$DATA_DIR/layers"
+
+    echo "📦 Preparing data for {{ location }}..."
+
+    # 1. Boundary GeoJSON
+    if [ ! -f "$DATA_DIR/area.geojson" ]; then
+        echo "📍 Downloading boundary for {{ place }}..."
+        {{ python }} scripts/download-geojson.py "{{ place }}" \
+            --buffer {{ buffer }} \
+            --aspect-ratio {{ aspect }} \
+            --output "$DATA_DIR/area.geojson"
+    else
+        echo "✓ Boundary exists"
+    fi
+
+    # 2. DEM (Digital Elevation Model)
+    if [ ! -f "$DATA_DIR/dem.tif" ]; then
+        echo "⛰️  Downloading DEM ({{ dem_source }})..."
+        {{ python }} scripts/download-dem.py \
+            --boundary "$DATA_DIR/area.geojson" \
+            --output "$DATA_DIR/dem.tif" \
+            --source {{ dem_source }}
+    else
+        echo "✓ DEM exists"
+    fi
+
+    # 3. OSM Layers
+    if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
+        echo "🗺️  Downloading OSM layers..."
+        {{ python }} scripts/download-osm-layers.py \
+            --geojson "$DATA_DIR/area.geojson" \
+            --output-dir "$DATA_DIR/layers"
+    else
+        echo "✓ OSM layers exist"
+    fi
+
+    # 4. Satellite imagery
+    if [ ! -f "$DATA_DIR/satellite.tif" ]; then
+        echo "🛰️  Downloading satellite imagery (zoom {{ zoom_sat }})..."
+        {{ python }} scripts/download-satellite-image.py \
+            --geojson "$DATA_DIR/area.geojson" \
+            --output "$DATA_DIR/satellite.tif" \
+            --zoom {{ zoom_sat }} \
+            --dpi {{ dpi }}
+    else
+        echo "✓ Satellite imagery exists"
+    fi
+
+    # 5. Ocean data
+    if [ "{{ ocean }}" = "--with-ocean" ] && [ ! -f "$DATA_DIR/layers/ocean.gpkg" ]; then
+        OCEAN_SHP="downloads/ocean-boundaries/World_Seas_IHO_v3.shp"
+        if [ -f "$OCEAN_SHP" ]; then
+            echo "🌊 Converting ocean data..."
+            ogr2ogr -f GPKG -nlt MULTIPOLYGON -nln ocean \
+                "$DATA_DIR/layers/ocean.gpkg" "$OCEAN_SHP"
+        else
+            echo "⚠️  Warning: Ocean shapefile not found at $OCEAN_SHP"
+            echo "   Download from https://www.marineregions.org/downloads.php"
+        fi
+    fi
+
+    echo "✅ Data ready: $DATA_DIR"
+
+# Generate config
+_generate-config location scheme output_dir:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p {{ output_dir }}
+
+    DATA_DIR="downloads/regions/{{ location }}"
+    echo "⚙️  Generating {{ scheme }} config..."
+
+    # Include satellite if available
+    SAT_FLAG=""
+    if [ -f "$DATA_DIR/satellite.tif" ]; then
+        SAT_FLAG="--satellite $DATA_DIR/satellite.tif"
+    fi
+
+    {{ python }} scripts/generate-config.py "$DATA_DIR/layers"/*.gpkg \
+        --output {{ output_dir }}/config-base.yaml \
+        --geojson "$DATA_DIR/area.geojson" \
+        --dem "$DATA_DIR/dem.tif" \
+        --scheme {{ scheme }} \
+        $SAT_FLAG
+
+# Apply config overlay
+_apply-overlay output_dir location scheme:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    OVERLAY="configs/{{ location }}-{{ scheme }}-overlay.yaml"
+
+    if [ -f "$OVERLAY" ]; then
+        echo "🔧 Applying overlay: $OVERLAY"
+        {{ python }} scripts/merge-config.py \
+            {{ output_dir }}/config-base.yaml \
+            "$OVERLAY" \
+            {{ output_dir }}/config.yaml
+    else
+        cp {{ output_dir }}/config-base.yaml {{ output_dir }}/config.yaml
+    fi
+
+# Generate map
+_generate-map location output_dir width height dpi format:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "🎨 Rendering map..."
+    {{ python }} scripts/generate-map.py \
+        -g "downloads/regions/{{ location }}/area.geojson" \
+        {{ output_dir }}/config.yaml \
+        --output {{ output_dir }}/map.{{ format }} \
+        --width {{ width }} \
+        --height {{ height }} \
+        --dpi {{ dpi }} \
+        --format {{ format }}
+    echo "✅ Complete: {{ output_dir }}/map.{{ format }}"
+
+# ============================================================================
+# Utilities
+# ============================================================================
+
+# Publish maps to publish/ folder
 publish:
+    #!/usr/bin/env bash
+    set -euo pipefail
     mkdir -p publish
-    find output -name "map.*" -type f | while read -r mapfile; do \
-        folder=$(basename $(dirname "$mapfile")); \
-        extension="${mapfile##*.}"; \
-        cp "$mapfile" "publish/${folder}.${extension}"; \
+    find output -name "map.*" -type f | while read -r mapfile; do
+        folder=$(basename $(dirname "$mapfile"))
+        extension="${mapfile##*.}"
+        cp "$mapfile" "publish/${folder}.${extension}"
     done
-    @echo "Published maps to publish/ folder"
+    echo "✅ Published to publish/"
 
-# Remove all output directories and generated files
-# WARNING: This deletes all generated maps and downloaded data
-clean:
-    rm -rf output
-
-# Remove only the final map images (map.*) from all output directories
-# Keeps downloaded data (DEM, OSM layers, configs) for faster rebuilds
-clean-maps:
-    find output -type f \( -name "map.*" \) -delete
-
-# Remove final maps and config files
-# Keeps downloaded base data (DEM, OSM layers, satellite imagery)
-# Use this to regenerate maps with different color schemes
-clean-maps-and-configs:
-    find output -type f \( -name "map.*" -o -name "config.yaml" \) -delete
+# List all recipes
+help:
+    @just --list

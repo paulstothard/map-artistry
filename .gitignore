@@ -2,8 +2,8 @@
 *.code-workspace
 .vscode/
 
-# Data files
-data/
+# Downloaded data (DEMs, satellite imagery, OSM layers)
+downloads/
 
 # Output files
 output/

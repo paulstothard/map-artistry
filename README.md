@@ -13,19 +13,82 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Then generate a map with:
+Then generate a map using [just](https://github.com/casey/just) (a command runner):
 
 ```bash
-./map-pipeline.sh "PLACE NAME"
+just edmonton coral          # Generate Edmonton map with coral scheme
+just victoria natural        # Generate Victoria map with natural colors
+just edmonton all            # Generate all color schemes for Edmonton
+just all                     # Generate all maps for all locations
+just schemes                 # List available color schemes
 ```
 
-Replace `"PLACE NAME"` with your desired location (e.g., `"Edmonton, AB"`). Output will be written
-to the `output/` directory by default.
+### Available Color Schemes
+
+- `coral` - Warm coral/red background with white water features
+- `river_runs_red` - Black background with red water features
+- `blue-yellow` - Blue background with yellow water features
+- `natural` - Natural earth tones with green/brown terrain
+- `lava` - Volcanic lava with red water
+- `frozen` - Frozen landscape with ice and snow
+- `satellite` - Satellite imagery with terrain overlay
+
+### Customizing Maps with Config Overlays
+
+To tweak a map's appearance, create a config overlay file in the `configs/` directory:
+
+```bash
+# Generate base map first
+just victoria coral
+
+# Create an overlay file (examples provided in configs/)
+cp configs/victoria-coral-overlay.yaml.example configs/victoria-coral-overlay.yaml
+
+# Edit the overlay with your tweaks
+vi configs/victoria-coral-overlay.yaml
+
+# Rebuild - overlay is automatically applied!
+just victoria coral
+```
+
+See [configs/README.md](configs/README.md) for detailed documentation on config overlays.
+
+### Available Commands
+
+Run `just --list` to see all available recipes:
+
+```bash
+just --list
+```
+
+### Project Structure
+
+```
+downloads/               # All downloaded/cached data
+  regions/              # Region-specific data (auto-downloaded)
+    edmonton/
+      area.geojson      # Boundary polygon
+      dem.tif           # Digital elevation model
+      satellite.tif     # Satellite imagery
+      layers/*.gpkg     # OSM layers (roads, water, etc.)
+    victoria/
+    vancouver-island/
+  ocean-boundaries/     # IHO World Seas reference data (manual download)
+
+output/                 # Generated maps and configs
+  edmonton-coral/
+    config-base.yaml    # Base color scheme config
+    config.yaml         # Final merged config
+    map.png             # Rendered map
+
+configs/                # Optional config overlays for tweaking
+cache/                  # OSM query cache (auto-generated)
+```
 
 ### Options
 
-Run `./map-pipeline.sh --help` to see available options for zoom level, image size, design scheme,
-and more.
+Each location has its own settings defined in the justfile (buffer distance, dimensions, DPI, etc.).
+To modify these, edit the variables at the top of the justfile.
 
 ### Recommended Zoom Levels
 
@@ -36,17 +99,14 @@ and more.
 | 7    | Medium (town/neighborhood scale) | City cores or small regions           |
 | 8+   | High (street-level detail)       | Close-up views, custom crops required |
 
-To include ocean features (useful for coastal maps), add the `--with-ocean` flag:
+### Ocean Data (for Coastal Maps)
 
-```bash
-./map-pipeline.sh "Victoria, BC" output/victoria-coral --with-ocean
-```
-
-This requires downloading the **World Seas (IHO Sea Areas)** shapefile from
+Victoria and Vancouver Island maps automatically include ocean features. This requires downloading
+the **World Seas (IHO Sea Areas)** shapefile from
 [https://www.marineregions.org/downloads.php](https://www.marineregions.org/downloads.php).
 
 Download `World_Seas_IHO_v3.zip`, extract it, and place all the files (`.shp`, `.dbf`, `.shx`, etc.)
-into a folder named `data/ocean/` within the project directory.
+into a folder named `downloads/ocean-boundaries/` within the project directory.
 
 > **Note:** The `ogr2ogr` tool (part of the GDAL suite) is required for converting ocean shapefiles.
 > On Ubuntu/Debian, install it with:

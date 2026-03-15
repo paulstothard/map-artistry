@@ -54,35 +54,35 @@ def adjust_bbox_aspect_ratio(south, north, west, east, aspect_ratio):
     """
     Adjust bounding box to match desired aspect ratio (width:height).
     Expands from center point to maintain aspect_ratio while keeping all original area.
-    
+
     Args:
         south, north, west, east: Bounding box coordinates
         aspect_ratio: Desired width:height ratio (e.g., 2.0 for twice as wide as tall)
-    
+
     Returns:
         Adjusted (south, north, west, east) tuple
     """
     if aspect_ratio <= 0:
         raise ValueError("Aspect ratio must be positive")
-    
+
     # Calculate center point
     center_lat = (south + north) / 2.0
     center_lon = (west + east) / 2.0
-    
+
     # Current dimensions in degrees
     height_deg = north - south
     width_deg = east - west
-    
+
     # Approximate conversion to kilometers for aspect ratio calculation
     km_per_deg_lat = 111.32
     km_per_deg_lon = km_per_deg_lat * math.cos(math.radians(center_lat))
-    
+
     height_km = height_deg * km_per_deg_lat
     width_km = width_deg * km_per_deg_lon
-    
+
     # Current aspect ratio
     current_aspect = width_km / height_km if height_km > 0 else 1.0
-    
+
     # Adjust to match desired aspect ratio (expand the smaller dimension)
     if current_aspect < aspect_ratio:
         # Need to widen
@@ -92,16 +92,16 @@ def adjust_bbox_aspect_ratio(south, north, west, east, aspect_ratio):
         # Need to make taller
         height_km = width_km / aspect_ratio
         height_deg = height_km / km_per_deg_lat
-    
+
     # Recalculate bounds from center
     half_height = height_deg / 2.0
     half_width = width_deg / 2.0
-    
+
     return (
         center_lat - half_height,  # south
         center_lat + half_height,  # north
-        center_lon - half_width,   # west
-        center_lon + half_width,   # east
+        center_lon - half_width,  # west
+        center_lon + half_width,  # east
     )
 
 
@@ -153,7 +153,7 @@ def main():
     south, north, west, east = geocode_bbox(args.place)
     if args.buffer:
         south, north, west, east = buffer_bbox(south, north, west, east, args.buffer)
-    
+
     # Adjust aspect ratio if not 1.0 (square)
     if args.aspect_ratio != 1.0:
         south, north, west, east = adjust_bbox_aspect_ratio(
