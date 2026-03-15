@@ -498,14 +498,14 @@ DESIGN_SETTINGS = {
             "alpha": 1.0,
             "zorder": 1,
             "ew": 0,
-            "visible": True,
+            "visible": False,
             "geometry_visibility": {
                 "Point": False,
                 "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
+                "LineString": False,
+                "MultiLineString": False,
+                "Polygon": False,
+                "MultiPolygon": False,
             },
             "palette": [],
         },
@@ -970,196 +970,6 @@ DESIGN_SETTINGS = {
             "default_lw": 0.1,
         },
     },
-    "blue-yellow": {
-        "map": {
-            "background": {"fc": "#0033CC", "ec": "#0033CC"},
-            "scheme": "blue-yellow",
-            "info": {
-                "text": "-ps-",
-                "show": True,
-                "position": "bottom-right",
-                "font": "DejaVu Sans",
-                "fontsize": 16,
-                "color": "#000000",
-            },
-            "hillshade": {
-                "azimuth": 315,
-                "altitude": 45,
-                "azimuths": [315, 45, 270, 90],
-                "weights": [1.2, 1.0, 0.8, 0.8],
-                "multidirectional": True,
-                "vert_exag": 1.0,
-                "cmap": "bone",
-                "alpha": 0,
-                "sigma": 1.0,
-                "interpolation": "bicubic",
-                "zorder": 0,
-            },
-            "terrain": {
-                "visible": False,
-                "alpha": 1.0,
-                "zorder": 0,
-                "percentiles": [2, 98],
-                "blend_mode": "soft_light",
-                "shade_strength": 0.6,
-                "interpolation": "bicubic",
-                "colors": [
-                    "#001a66",
-                    "#0033CC",
-                    "#0066ff",
-                    "#00b3b3",
-                    "#00cc66",
-                    "#66cc33",
-                    "#cccc00",
-                    "#FFEB3B",
-                    "#fff9c4",
-                ],
-            },
-            "satellite": {
-                "visible": False,
-                "opacity": 1.0,
-            },
-        },
-        "water": {
-            "fc": "#FFEB3B",
-            "ec": "#FFEB3B",
-            "alpha": 1.0,
-            "zorder": 4,
-            "ew": 0,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-        },
-        "ocean": {
-            "fc": "#FFEB3B",
-            "ec": "#FFEB3B",
-            "alpha": 1.0,
-            "zorder": 4,
-            "ew": 0.1,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-        },
-        "waterway": {
-            "fc": "#FFEB3B",
-            "ec": "#FFEB3B",
-            "alpha": 1.0,
-            "ew": 0,
-            "zorder": 3,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-            "lw": {
-                "river": 1.0,
-                "canal": 0.8,
-                "stream": 0.4,
-                "drain": 0.3,
-                "ditch": 0.2,
-                "moat": 0.2,
-                "rapids": 0.25,
-            },
-            "default_lw": 0.3,
-        },
-        "road": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 1,
-            "ew": 0,
-            "zorder": 6,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-            "lw": {
-                "motorway": 0.60,
-                "trunk": 0.52,
-                "primary": 0.45,
-                "secondary": 0.38,
-                "tertiary": 0.32,
-                "residential": 0.30,
-                "unclassified": 0.15,
-                "service": 0.15,
-                "living_street": 0.10,
-                "track": 0.10,
-            },
-            "default_lw": 0.15,
-        },
-        "building": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 1.0,
-            "zorder": 7,
-            "ew": 0,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-        },
-        # All others default to invisible
-        **{
-            k: {
-                "fc": "#ffffff",
-                "ec": "#ffffff",
-                "alpha": 1.0,
-                "zorder": 1,
-                "ew": 0,
-                "visible": False,
-                "geometry_visibility": {
-                    "Point": False,
-                    "MultiPoint": False,
-                    "LineString": False,
-                    "MultiLineString": False,
-                    "Polygon": False,
-                    "MultiPolygon": False,
-                },
-                "palette": [],
-            }
-            for k in [
-                "natural",
-                "landuse",
-                "railway",
-                "transport",
-                "places",
-                "poi",
-                "pofw",
-                "traffic",
-                "other",
-            ]
-        },
-    },
     "natural": {
         "map": {
             "background": {"fc": "#dfe7d6", "ec": "#dfe7d6"},
@@ -1543,107 +1353,6 @@ DESIGN_SETTINGS = {
                 "contrast": 0.50,
                 "bias": 0.00,
             },
-            "craters": [
-                {
-                    "x": 0.53,
-                    "y": 0.66,
-                    "radius_km": 4.0,
-                    "depth_ratio": 0.4,
-                    "rim_height_ratio": 0.14,
-                    "flat_floor_ratio": 0.5,
-                    "bowl_exponent": 1.0,
-                    "lava_level_m": None,
-                    "remove_overlapping_water": True,
-                    # "label": "A",
-                },
-                {
-                    "x": 0.75,
-                    "y": 0.22,
-                    "radius_km": 7.5,
-                    "depth_ratio": 0.15,
-                    "rim_height_ratio": 0.15,
-                    "flat_floor_ratio": 0.7,
-                    "bowl_exponent": 1.0,
-                    "lava_level_m": None,
-                    # "label": "C",
-                },
-                {
-                    "x": 0.18,
-                    "y": 0.85,
-                    "radius_km": 3.0,
-                    "depth_ratio": 0.5,
-                    "rim_height_ratio": 0.08,
-                    "flat_floor_ratio": 0.3,
-                    "bowl_exponent": 1.0,
-                    "lava_level_m": 25,
-                    # "label": "D",
-                },
-                # Small craters for realism (no lava)
-                {
-                    "x": 0.42,
-                    "y": 0.15,
-                    "radius_km": 0.6,
-                    "rim_height_ratio": 0.08,
-                    "lava_level_m": None,
-                    # "label": "1",
-                },
-                {
-                    "x": 0.62,
-                    "y": 0.72,
-                    "radius_km": 0.5,
-                    "rim_height_ratio": 0.08,
-                    "lava_level_m": None,
-                    # "label": "5",
-                },
-                {
-                    "x": 0.08,
-                    "y": 0.45,
-                    "radius_km": 0.7,
-                    "rim_height_ratio": 0.09,
-                    "lava_level_m": None,
-                    # "label": "6",
-                },
-                {
-                    "x": 0.88,
-                    "y": 0.12,
-                    "radius_km": 0.55,
-                    "rim_height_ratio": 0.08,
-                    "lava_level_m": None,
-                    # "label": "8",
-                },
-                {
-                    "x": 0.28,
-                    "y": 0.48,
-                    "radius_km": 0.65,
-                    "rim_height_ratio": 0.09,
-                    "lava_level_m": None,
-                    # "label": "9",
-                },
-                {
-                    "x": 0.68,
-                    "y": 0.88,
-                    "radius_km": 0.45,
-                    "rim_height_ratio": 0.07,
-                    "lava_level_m": None,
-                    # "label": "10",
-                },
-                {
-                    "x": 0.92,
-                    "y": 0.68,
-                    "radius_km": 0.75,
-                    "rim_height_ratio": 0.09,
-                    "lava_level_m": None,
-                    # "label": "11",
-                },
-                {
-                    "x": 0.12,
-                    "y": 0.92,
-                    "radius_km": 0.5,
-                    "rim_height_ratio": 0.08,
-                    "lava_level_m": None,
-                    # "label": "12",
-                },
-            ],
             "terrain": {
                 "visible": True,
                 "alpha": 1.0,
@@ -1961,356 +1670,6 @@ DESIGN_SETTINGS = {
             "default_lw": 0.1,
         },
     },
-    "frozen": {
-        "map": {
-            "background": {"fc": "#e8f2f8", "ec": "#e8f2f8"},
-            "scheme": "frozen",
-            "debug_water_hillshade": False,
-            "info": {
-                "text": "ps",
-                "show": True,
-                "position": "bottom-right",
-                "font": "Gill Sans",
-                "fontsize": 8,
-                "color": "#5a7a8f",
-            },
-            "hillshade": {
-                "azimuth": 315,
-                "altitude": 45,
-                "azimuths": [315, 45, 270, 90],
-                "weights": [1.3, 1.0, 0.8, 0.8],
-                "multidirectional": True,
-                "vert_exag": 2.0,
-                "cmap": "gray",
-                "alpha": 0,
-                "sigma": 0.0,
-                "unsharp_radius": 2.0,
-                "unsharp_amount": 1.2,
-                "interpolation": "bicubic",
-                "zorder": 0,
-            },
-            "water_hillshade": {
-                "blur_sigma": 6.0,
-                "contrast": 0.25,
-                "bias": 0.00,
-            },
-            "terrain": {
-                "visible": True,
-                "alpha": 1.0,
-                "zorder": 0,
-                "percentiles": [1, 99.7],
-                "stretch": "gamma",
-                "stretch_exponent": 0.85,
-                "blend_mode": "soft_light",
-                "shade_strength": 0.7,
-                "interpolation": "bicubic",
-                "colors": [
-                    "#7ba8c7",
-                    "#8fb8d4",
-                    "#a3c7e0",
-                    "#b7d6ed",
-                    "#cbe5f9",
-                    "#dfeeff",
-                    "#e8f4ff",
-                    "#f0f8ff",
-                    "#f5faff",
-                    "#f8fbff",
-                    "#fbfdff",
-                    "#fdffff",
-                    "#ffffff",
-                ],
-            },
-            "satellite": {
-                "visible": False,
-                "opacity": 1.0,
-            },
-        },
-        "water": {
-            "fc": "#d5ebf7",
-            "ec": "#d5ebf7",
-            "alpha": 1.0,
-            "zorder": 4,
-            "ew": 0,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-            "hillshade_texture": {
-                "visible": True,
-                "strength": 0.15,
-                "blur_sigma": 10.0,
-                "contrast": 0.25,
-                "bias": 0.00,
-                "interpolation": "bilinear",
-                "max_texture_dim": 1024,
-            },
-        },
-        "ocean": {
-            "fc": "#c8e3f2",
-            "ec": "#c8e3f2",
-            "alpha": 1.0,
-            "zorder": 4,
-            "ew": 0,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-            "hillshade_texture": {
-                "visible": True,
-                "strength": 0.12,
-                "blur_sigma": 10.0,
-                "contrast": 0.20,
-                "bias": 0.00,
-                "interpolation": "bilinear",
-                "max_texture_dim": 1024,
-            },
-        },
-        "waterway": {
-            "fc": "#d5ebf7",
-            "ec": "#d5ebf7",
-            "alpha": 1.0,
-            "ew": 0,
-            "zorder": 3,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-            "lw": {
-                "river": 0.8,
-                "canal": 0.0,
-                "stream": 0.3,
-                "drain": 0.0,
-                "ditch": 0.0,
-                "moat": 0.0,
-                "rapids": 0.0,
-            },
-            "default_lw": 0.3,
-        },
-        "road": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "ew": 0,
-            "zorder": 6,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "lw": {
-                "motorway": 0.60,
-                "trunk": 0.52,
-                "primary": 0.45,
-                "secondary": 0.38,
-                "tertiary": 0.32,
-                "residential": 0.30,
-                "unclassified": 0.15,
-                "service": 0.15,
-                "living_street": 0.10,
-                "track": 0.10,
-            },
-            "default_lw": 0.15,
-        },
-        "building": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 7,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-        },
-        "natural": {
-            "fc": "#555555",
-            "ec": "#555555",
-            "alpha": 0.0,
-            "zorder": 1,
-            "ew": 0,
-            "visible": True,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": True,
-                "MultiLineString": True,
-                "Polygon": True,
-                "MultiPolygon": True,
-            },
-            "palette": [],
-        },
-        "landuse": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 2,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-        },
-        "railway": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 5,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "default_lw": 0.12,
-        },
-        "transport": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 5,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "default_lw": 0.08,
-        },
-        "places": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 5,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-        },
-        "poi": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 1,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "marker": "o",
-            "size": 0.1,
-        },
-        "pofw": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 5,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-        },
-        "traffic": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 5,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "default_lw": 0.15,
-        },
-        "other": {
-            "fc": "#ffffff",
-            "ec": "#ffffff",
-            "alpha": 0.0,
-            "zorder": 0,
-            "ew": 0,
-            "visible": False,
-            "geometry_visibility": {
-                "Point": False,
-                "MultiPoint": False,
-                "LineString": False,
-                "MultiLineString": False,
-                "Polygon": False,
-                "MultiPolygon": False,
-            },
-            "palette": [],
-            "default_lw": 0.1,
-        },
-    },
 }
 
 
@@ -2393,7 +1752,7 @@ def generate_yaml(
     if not geojson_path:
         raise ValueError("A geojson_path is required")
     # Load mask if provided
-    mask_gdf = gpd.read_file(geojson_path)
+    mask_gdf = gpd.read_file(geojson_path, engine="pyogrio", use_arrow=True)
     # Select the design scheme based on the provided scheme name
     design = DESIGN_SETTINGS[scheme_name]
 
@@ -2448,7 +1807,7 @@ def generate_yaml(
             print(f"Skipping {layer_path} (not a .gpkg file)")
             continue
         layer_name = layer_path.stem
-        gdf = gpd.read_file(layer_path)
+        gdf = gpd.read_file(layer_path, engine="pyogrio", use_arrow=True)
         if mask_gdf is not None:
             gdf = gpd.clip(gdf, mask_gdf)
 
@@ -2574,10 +1933,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Generate YAML config from GeoPackage layer files"
     )
-    parser.add_argument("layer_files", nargs="+", help="Paths to .gpkg files")
-    parser.add_argument(
-        "-g", "--geojson", type=str, required=True, help="GeoJSON boundary (required)"
-    )
+    parser.add_argument("layer_files", nargs="*", help="Paths to .gpkg files")
+    parser.add_argument("-g", "--geojson", type=str, help="GeoJSON boundary file")
     parser.add_argument(
         "-o", "--output", type=str, default="config.yaml", help="YAML output path"
     )
@@ -2593,7 +1950,7 @@ if __name__ == "__main__":
         "-s",
         "--scheme",
         dest="scheme_name",
-        choices=list(DESIGN_SETTINGS.keys()),
+        type=str,
         default="coral",
         help="Color scheme to use (default: coral)",
     )
@@ -2612,7 +1969,39 @@ if __name__ == "__main__":
         default=None,
         help="Path to a satellite image file (optional)",
     )
+    parser.add_argument(
+        "--list-schemes",
+        action="store_true",
+        help="List all available color schemes and exit",
+    )
     args = parser.parse_args()
+
+    # Handle --list-schemes
+    if args.list_schemes:
+        print("\n📋 Available Color Schemes:\n")
+        for scheme_name in sorted(DESIGN_SETTINGS.keys()):
+            scheme = DESIGN_SETTINGS[scheme_name]
+            # Try to extract a description from the scheme
+            bg_color = scheme.get("map", {}).get("background", {}).get("fc", "N/A")
+            print(f"  • {scheme_name:20} (background: {bg_color})")
+        print()
+        sys.exit(0)
+
+    # Validate required args (if not listing schemes)
+    if not args.layer_files or not args.geojson:
+        parser.error(
+            "layer_files and --geojson are required (unless using --list-schemes)"
+        )
+
+    # Validate scheme name
+    if args.scheme_name not in DESIGN_SETTINGS:
+        available_schemes = ", ".join(sorted(DESIGN_SETTINGS.keys()))
+        print(
+            f"\n❌ Error: Unknown color scheme '{args.scheme_name}'\n", file=sys.stderr
+        )
+        print(f"📋 Available schemes: {available_schemes}\n", file=sys.stderr)
+        print(f"   Use --list-schemes to see more details\n", file=sys.stderr)
+        sys.exit(1)
     generate_yaml(
         layer_files=[Path(p) for p in args.layer_files],
         geojson_path=Path(args.geojson),

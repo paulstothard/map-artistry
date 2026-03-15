@@ -154,11 +154,10 @@ def main():
     if args.buffer:
         south, north, west, east = buffer_bbox(south, north, west, east, args.buffer)
 
-    # Adjust aspect ratio if not 1.0 (square)
-    if args.aspect_ratio != 1.0:
-        south, north, west, east = adjust_bbox_aspect_ratio(
-            south, north, west, east, args.aspect_ratio
-        )
+    # Adjust aspect ratio
+    south, north, west, east = adjust_bbox_aspect_ratio(
+        south, north, west, east, args.aspect_ratio
+    )
 
     props = {
         "query": args.place,

@@ -66,7 +66,7 @@ def main():
         gdf = ox.geocode_to_gdf(args.place)
         gdf = gdf.to_crs("EPSG:4326")
     else:
-        gdf = gpd.read_file(args.geojson)
+        gdf = gpd.read_file(args.geojson, engine="pyogrio", use_arrow=True)
         if gdf.crs != "EPSG:4326":
             gdf = gdf.to_crs("EPSG:4326")
 

@@ -63,7 +63,7 @@ just --list
 
 ### Project Structure
 
-```
+```text
 downloads/               # All downloaded/cached data
   regions/              # Region-specific data (auto-downloaded)
     edmonton/
@@ -108,20 +108,7 @@ the **World Seas (IHO Sea Areas)** shapefile from
 Download `World_Seas_IHO_v3.zip`, extract it, and place all the files (`.shp`, `.dbf`, `.shx`, etc.)
 into a folder named `downloads/ocean-boundaries/` within the project directory.
 
-> **Note:** The `ogr2ogr` tool (part of the GDAL suite) is required for converting ocean shapefiles.
-> On Ubuntu/Debian, install it with:
->
-> ```bash
-> sudo apt install gdal-bin
-> ```
->
-> On macOS (with Homebrew), use:
->
-> ```bash
-> brew install gdal
-> ```
->
-> Ensure it is accessible from your terminal (`ogr2ogr --version`).
+The build pipeline will attempt to derive a region-specific `ocean.gpkg` layer from that source data for each region and will skip cleanly when no ocean overlaps the map area.
 
 ### Cache
 

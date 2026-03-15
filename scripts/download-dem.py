@@ -21,6 +21,9 @@ Usage:
 DEM Sources:
   - srtm: SRTM 1-arc-second (~30m) from AWS elevation-tiles
   - copernicus: Copernicus DEM GLO-30 (30m) from AWS
+    - cop90: Copernicus Global DSM 90m via OpenTopography for country-scale
+    - gmted2010: Legacy alias that maps to cop90
+  - etopo1: ETOPO1 1 arc-minute (~2km) for continent-scale
 
 Requirements:
   requests, geopandas, rasterio
@@ -77,6 +80,92 @@ def get_copernicus_tile_names(minx, miny, maxx, maxy):
     return tiles
 
 
+def download_opentopography_globaldem(demtype, minx, miny, maxx, maxy, tmpdir, output_name):
+    """Download a Global DEM subset via OpenTopography API."""
+    print(f"    Requesting {demtype} via OpenTopography API...")
+
+    url = "https://portal.opentopography.org/API/globaldem"
+    params = {
+        "demtype": demtype,
+        "south": miny,
+        "north": maxy,
+        "west": minx,
+        "east": maxx,
+        "outputFormat": "GTiff",
+        "API_Key": "demoapikeyot2022",  # Demo key - users should get their own
+    }
+
+    response = requests.get(url, params=params, stream=True)
+    
+    if response.status_code != 200:
+        error_msg = f"OpenTopography API error: {response.status_code}"
+        try:
+            error_msg += f" - {response.text[:200]}"
+        except:
+            pass
+        raise RuntimeError(
+            error_msg
+            + "\n    Note: Check the dataset name, request bounds, and API key. The demo key is rate limited."
+        )
+    
+    response.raise_for_status()
+
+    tile_path = Path(tmpdir) / output_name
+    with open(tile_path, "wb") as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+
+    return rasterio.open(tile_path)
+
+
+def download_cop90(minx, miny, maxx, maxy, tmpdir):
+    """Download Copernicus Global DSM 90m via OpenTopography API."""
+    return download_opentopography_globaldem(
+        "COP90", minx, miny, maxx, maxy, tmpdir, "cop90.tif"
+    )
+
+
+def download_gmted2010(minx, miny, maxx, maxy, tmpdir):
+    """Backward-compatible alias for the retired GMTED2010 source."""
+    print("    GMTED2010 is no longer available in OpenTopography; using COP90 instead...")
+    return download_cop90(minx, miny, maxx, maxy, tmpdir)
+
+
+def download_etopo1(minx, miny, maxx, maxy, tmpdir):
+    """Download ETOPO 2022 (successor to ETOPO1) as Cloud Optimized GeoTIFF subset."""
+    print("    Requesting ETOPO 2022 global relief data...")
+
+    # ETOPO 2022 60-arc-second ice-surface GeoTIFF from NOAA.
+    # The older THREDDS fileServer path now returns 404; use the direct data path.
+    url = "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif"
+
+    # For COG, we can use rasterio's virtual warping to read just our bbox
+    # Open with rasterio's VRT capabilities
+    print("    Opening ETOPO 2022 COG (this may take a moment)...")
+    with rasterio.open(url) as src:
+        # Read window for our bbox
+        window = src.window(minx, miny, maxx, maxy)
+        data = src.read(1, window=window)
+        transform = src.window_transform(window)
+
+        # Write to temp file
+        tile_path = Path(tmpdir) / "etopo2022.tif"
+        with rasterio.open(
+            tile_path,
+            "w",
+            driver="GTiff",
+            height=data.shape[0],
+            width=data.shape[1],
+            count=1,
+            dtype=data.dtype,
+            crs=src.crs,
+            transform=transform,
+        ) as dst:
+            dst.write(data, 1)
+
+        return rasterio.open(tile_path)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Pure-Python DEM prep for a GeoJSON boundary."
@@ -91,13 +180,13 @@ def main():
         "--source",
         type=str,
         default="srtm",
-        choices=["srtm", "copernicus"],
-        help="DEM source: srtm (default) or copernicus",
+        choices=["srtm", "copernicus", "cop90", "gmted2010", "etopo1"],
+        help="DEM source: srtm (default), copernicus, cop90, etopo1, or gmted2010 (legacy alias)",
     )
     args = parser.parse_args()
 
     # Load boundary
-    gdf = gpd.read_file(args.boundary)
+    gdf = gpd.read_file(args.boundary, engine="pyogrio", use_arrow=True)
     orig_crs = gdf.crs or "EPSG:4326"
     # Make a 4326 copy for tile logic
     gdf4326 = gdf.to_crs(epsg=4326)
@@ -107,21 +196,38 @@ def main():
         f"[ ] Determining tiles for bounds: {minx:.4f},{miny:.4f} — {maxx:.4f},{maxy:.4f}"
     )
 
-    if args.source == "copernicus":
+    if args.source == "cop90":
+        print(f"[ ] Using Copernicus Global DSM 90m via OpenTopography")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            src = download_cop90(minx, miny, maxx, maxy, tmpdir)
+            srcs = [src]
+            mosaic, trans = merge(srcs)
+            src_crs = srcs[0].crs
+    elif args.source == "gmted2010":
+        print(f"[ ] GMTED2010 retired upstream; using COP90 via OpenTopography")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            src = download_gmted2010(minx, miny, maxx, maxy, tmpdir)
+            srcs = [src]
+            mosaic, trans = merge(srcs)
+            src_crs = srcs[0].crs
+    elif args.source == "etopo1":
+        print(f"[ ] Using ETOPO 2022 (~2km resolution)")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            src = download_etopo1(minx, miny, maxx, maxy, tmpdir)
+            srcs = [src]
+            mosaic, trans = merge(srcs)
+            src_crs = srcs[0].crs
+    elif args.source == "copernicus":
         print(f"[ ] Using Copernicus DEM GLO-30 (30m resolution)")
         tiles = get_copernicus_tile_names(minx, miny, maxx, maxy)
         print(f"[ ] Downloading and opening {len(tiles)} tiles...")
         srcs = []
         with tempfile.TemporaryDirectory() as tmpdir:
             for tile_name, lat, lon in tiles:
-                # Copernicus tiles are organized by latitude bands
-                ns = "N" if lat >= 0 else "S"
-                ew = "E" if lon >= 0 else "W"
-                lat_str = f"{ns}{abs(lat):02d}_00"
-                lon_str = f"{ew}{abs(lon):03d}_00"
-
-                # AWS S3 path structure
-                url = f"https://copernicus-dem-30m.s3.amazonaws.com/{tile_name}"
+                # AWS S3 path structure: tiles are in directories named after the tile
+                # e.g., .../Copernicus_DSM_COG_10_N50_00_W115_00_DEM/Copernicus_DSM_COG_10_N50_00_W115_00_DEM.tif
+                tile_base = tile_name.replace(".tif", "")
+                url = f"https://copernicus-dem-30m.s3.amazonaws.com/{tile_base}/{tile_name}"
                 try:
                     print(f"    Downloading {tile_name}...")
                     r = requests.get(url, stream=True)

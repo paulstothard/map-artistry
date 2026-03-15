@@ -16,8 +16,6 @@ import numpy as np
 from shapely.geometry import Polygon, Point
 import pandas as pd
 
-from crater_effects import _apply_craters_to_dem, _render_procedural_lava
-
 
 def _normalize_array(arr: np.ndarray) -> np.ndarray:
     arr = np.asarray(arr, dtype=np.float32)
@@ -262,6 +260,78 @@ def _compute_multidirectional_hillshade(
     return _normalize_array(combined)
 
 
+def _rasterize_polygon_layer_mask(
+    layers_cfg: dict,
+    mask_gdf: gpd.GeoDataFrame,
+    target_transform,
+    width_px: int,
+    height_px: int,
+    layer_names: str | list[str] | tuple[str, ...] | set[str],
+) -> np.ndarray | None:
+    """Rasterize polygon features from one or more named layers into the DEM target grid."""
+    if isinstance(layer_names, str):
+        layer_names = {layer_names}
+    else:
+        layer_names = set(layer_names)
+
+    geoms = []
+    seen_sources = set()
+    mask_union = None if mask_gdf.empty else mask_gdf.union_all()
+
+    for layer_cfg in layers_cfg.values():
+        if layer_cfg.get("layer") not in layer_names:
+            continue
+
+        source_key = (layer_cfg.get("file"), layer_cfg.get("layer"))
+        if source_key in seen_sources:
+            continue
+        seen_sources.add(source_key)
+
+        try:
+            gdf = gpd.read_file(
+                layer_cfg["file"],
+                layer=layer_cfg["layer"],
+                engine="pyogrio",
+                use_arrow=True,
+            )
+        except (FileNotFoundError, Exception):
+            continue
+
+        if gdf.empty:
+            continue
+        if mask_gdf.crs is not None and gdf.crs != mask_gdf.crs:
+            gdf = gdf.to_crs(mask_gdf.crs)
+
+        gdf = gdf[gdf.geometry.notnull()]
+        gdf = gdf[~gdf.is_empty]
+        gdf = gdf[gdf.geom_type.isin(["Polygon", "MultiPolygon"])]
+        if gdf.empty:
+            continue
+
+        if mask_union is not None:
+            gdf = gdf[gdf.intersects(mask_union)]
+            if gdf.empty:
+                continue
+            gdf = gpd.clip(gdf, mask_gdf)
+            gdf = gdf[gdf.geometry.notnull()]
+            gdf = gdf[~gdf.is_empty]
+            if gdf.empty:
+                continue
+
+        geoms.extend([geom for geom in gdf.geometry if geom is not None and not geom.is_empty])
+
+    if not geoms:
+        return None
+
+    return rasterize(
+        [(geom, 1) for geom in geoms],
+        out_shape=(height_px, width_px),
+        transform=target_transform,
+        fill=0,
+        dtype="uint8",
+    ).astype(bool)
+
+
 def draw_map_from_config(
     config_path: Path,
     geojson_path: Path,
@@ -290,7 +360,6 @@ def draw_map_from_config(
 
     # Prepare figure and axis
     mcfg = cfg["map"]
-    crater_metadata = []  # Initialize for crater modifications to water layers
     fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
     # remove default margins so axes fill the canvas
     fig.patch.set_facecolor("black")
@@ -302,7 +371,7 @@ def draw_map_from_config(
     water_valid = None
     # Load clipping mask (used both for layer clipping and extent)
     try:
-        mask_gdf = gpd.read_file(geojson_path)
+        mask_gdf = gpd.read_file(geojson_path, engine="pyogrio", use_arrow=True)
     except (FileNotFoundError, Exception) as e:
         print(f"Error: Could not read mask file '{geojson_path}': {e}")
         return
@@ -358,6 +427,15 @@ def draw_map_from_config(
                     left, bottom, right, top, width_px, height_px
                 )
 
+                water_exclusion_mask = _rasterize_polygon_layer_mask(
+                    cfg.get("layers", {}),
+                    mask_gdf,
+                    target_transform,
+                    width_px,
+                    height_px,
+                    layer_names={"ocean", "water"},
+                )
+
                 # prepare destination array
                 dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
 
@@ -386,17 +464,6 @@ def draw_map_from_config(
                 # fill invalid cells so filters and hillshade do not propagate NaNs
                 fill_value = float(np.nanmedian(dem_resampled[finite]))
                 dem_filled = np.where(finite, dem_resampled, fill_value)
-
-                # Apply craters if configured
-                craters_cfg = mcfg.get("craters", [])
-                if craters_cfg:
-                    dem_filled, crater_metadata = _apply_craters_to_dem(
-                        dem=dem_filled,
-                        craters=craters_cfg,
-                        bounds=(left, bottom, right, top),
-                        pixel_size_x=target_transform.a,
-                        pixel_size_y=target_transform.e,
-                    )
 
                 # Optional Gaussian smoothing (sigma=0 means no blur)
                 sigma = hs_cfg.get("sigma", 0.0)
@@ -469,12 +536,19 @@ def draw_map_from_config(
                     elev_percentiles = terrain_cfg.get("percentiles", [2, 98])
                     stretch = terrain_cfg.get("stretch", "linear")
                     stretch_exponent = terrain_cfg.get("stretch_exponent", 1.0)
-                    # Use dem_resampled (original terrain) for colors if you want craters to show
-                    # only in shading/relief. Use dem_smoothed (cratered terrain) if you want
-                    # crater depths to affect both shading AND hypsometric colors.
+                    terrain_scale_mask = finite.copy()
+                    if water_exclusion_mask is not None:
+                        terrain_scale_mask &= ~water_exclusion_mask
+                    else:
+                        terrain_scale_mask &= dem_resampled > 0
+
+                    if not terrain_scale_mask.any():
+                        terrain_scale_mask = finite
+
+                    # Use dem_resampled for terrain coloring
                     terrain_norm = _normalize_dem_for_colormap(
                         dem_resampled,
-                        finite_mask=finite,
+                        finite_mask=terrain_scale_mask,
                         percentiles=elev_percentiles,
                         stretch=stretch,
                         exponent=stretch_exponent,
@@ -485,6 +559,8 @@ def draw_map_from_config(
 
                     invalid_rgb = np.array(plt.matplotlib.colors.to_rgb(face_fc))
                     terrain_rgb[~finite] = invalid_rgb
+                    if water_exclusion_mask is not None:
+                        terrain_rgb[water_exclusion_mask] = invalid_rgb
 
                     blend_mode = terrain_cfg.get("blend_mode", "soft_light")
                     shade_strength = terrain_cfg.get("shade_strength", 0.6)
@@ -533,7 +609,12 @@ def draw_map_from_config(
 
         try:
             # Read directly from GeoPackage
-            gdf = gpd.read_file(layer_cfg["file"], layer=layer_cfg["layer"])
+            gdf = gpd.read_file(
+                layer_cfg["file"],
+                layer=layer_cfg["layer"],
+                engine="pyogrio",
+                use_arrow=True,
+            )
         except (FileNotFoundError, Exception) as e:
             print(
                 f"Warning: Could not read layer '{layer_key}' from '{layer_cfg['file']}': {e}"
@@ -550,40 +631,6 @@ def draw_map_from_config(
             # After clipping, further optimize for ocean by simplifying geometry
             if layer_cfg["layer"] == "ocean":
                 gdf["geometry"] = gdf.simplify(tolerance=0.001, preserve_topology=True)
-
-        # Apply crater modifications to water layers
-        if crater_metadata and layer_cfg["layer"] in ["water", "ocean", "waterway"]:
-            # Remove existing water features that overlap with crater disruption zones
-            for crater_meta in crater_metadata:
-                if crater_meta.get("remove_overlapping_water", True):
-                    disruption_zone = crater_meta["disruption_zone"]
-                    # Filter out features that intersect the disruption zone
-                    if not gdf.empty:
-                        gdf = gdf[~gdf.intersects(disruption_zone)]
-
-            # Add lava lake polygons to water/ocean layers (not waterways)
-            # NOTE: Lava is now rendered procedurally via _render_procedural_lava()
-            # Disabled this section to prevent double-rendering
-            if (
-                False  # DISABLED
-                and layer_cfg["layer"] in ["water", "ocean"]
-                and layer_cfg["geometry_type"] == "Polygon"
-            ):
-                lava_features = []
-                for crater_meta in crater_metadata:
-                    if crater_meta["lava_polygon"] is not None:
-                        lava_features.append({"geometry": crater_meta["lava_polygon"]})
-
-                if lava_features:
-                    # Create GeoDataFrame for lava lakes with same CRS as water layer
-                    lava_gdf = gpd.GeoDataFrame(
-                        lava_features, crs=gdf.crs if not gdf.empty else "EPSG:4326"
-                    )
-                    # Concatenate with existing water features
-                    gdf = gpd.GeoDataFrame(
-                        pd.concat([gdf, lava_gdf], ignore_index=True),
-                        crs=gdf.crs if not gdf.empty else lava_gdf.crs,
-                    )
 
         # only keep features matching this entry’s geometry type
         geom_type = layer_cfg["geometry_type"]
@@ -793,12 +840,6 @@ def draw_map_from_config(
             ax.set_xlim(x0, x1)
             ax.set_ylim(miny, maxy)
 
-    # Render procedural lava pools (after all vector layers, before labels)
-    if crater_metadata:
-        _render_procedural_lava(
-            fig, ax, crater_metadata, (minx, miny, maxx, maxy), map_config=mcfg
-        )
-
     # Draw info text if enabled
     info = mcfg.get("info", {})
     if info.get("show", False) and info.get("text"):
@@ -821,32 +862,6 @@ def draw_map_from_config(
             color=info.get("color", "#000000"),
             zorder=100,
         )
-
-    # Draw crater labels if present
-    if crater_metadata:
-        for crater_meta in crater_metadata:
-            label = crater_meta.get("label")
-            if label:
-                center = crater_meta["center"]
-                # Draw text with white fill and black outline for high visibility
-                ax.text(
-                    center.x,
-                    center.y,
-                    str(label),
-                    ha="center",
-                    va="center",
-                    fontsize=14,
-                    fontweight="bold",
-                    color="white",
-                    zorder=200,
-                    bbox=dict(
-                        boxstyle="circle,pad=0.3",
-                        facecolor="black",
-                        edgecolor="white",
-                        linewidth=2,
-                        alpha=0.8,
-                    ),
-                )
 
     # always save to file
     fig.savefig(

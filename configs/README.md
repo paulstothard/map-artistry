@@ -2,7 +2,8 @@
 
 ## Overview
 
-Overlay files let you customize specific maps without editing the auto-generated configs. They are merged with the base configuration during the build process.
+Overlay files let you customize specific maps without editing the auto-generated configs. They are
+merged with the base configuration during the build process.
 
 ## Naming Convention
 
@@ -37,6 +38,7 @@ just edmonton coral
 ```
 
 The `create-overlay` command will:
+
 - ✅ Copy `config-base.yaml` from output as a starting template
 - ✅ Never overwrite existing overlays
 - ❌ Fail if the base config doesn't exist yet (run the map first)
@@ -46,10 +48,12 @@ The `create-overlay` command will:
 When you run a map build:
 
 1. **Base config generated**: `output/{location}-{scheme}/config-base.yaml`
+
    - Auto-generated from your data and color scheme
    - Recreated on every build
 
 2. **Overlay applied** (if exists): `configs/{location}-{scheme}-overlay.yaml`
+
    - Your custom modifications
    - Merged into the base config
 
@@ -59,7 +63,8 @@ When you run a map build:
 
 ## What to Include in Overlays
 
-You only need to include the specific values you want to change. The overlay is merged recursively, so you can override individual properties without repeating the entire config.
+You only need to include the specific values you want to change. The overlay is merged recursively,
+so you can override individual properties without repeating the entire config.
 
 **Example overlay** (`edmonton-coral-overlay.yaml`):
 

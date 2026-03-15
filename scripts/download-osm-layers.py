@@ -5,10 +5,15 @@ download-osm-layers.py
 Given a place name or GeoJSON, download intersecting OSM layers as GeoPackage (.gpkg) files.
 Also auto-detects and saves any 'sea' (ocean) polygons in the area.
 
+Sources:
+    - osm (default): OpenStreetMap via Overpass API (detailed, city/region scale)
+    - natural-earth: Natural Earth Data (simplified, country/continent scale)
+
 Usage:
     ./download-osm-layers.py --place "Edmonton, AB" \
         --output-dir layers \
-        --layers highway building waterway landuse
+        --layers highway building waterway landuse \
+        --source osm
 
 Dependencies:
     pip install geopandas osmnx shapely fiona
@@ -20,12 +25,17 @@ import osmnx as ox
 import warnings
 import time
 import requests
+from pathlib import Path
+from zipfile import ZipFile
+from io import BytesIO
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 
 ox.settings.use_cache = True
 ox.settings.cache_folder = "cache"
 ox.settings.log_console = True
+
+NATURAL_EARTH_CDN_BASE = "https://naciscdn.org/naturalearth/10m"
 
 # default tag mappings for OSMnx.geometries_from_polygon
 TAG_MAP = {
@@ -55,6 +65,130 @@ TAG_MAP = {
     "traffic": {"traffic_calming": True},
     "transport": {"route": True},
 }
+
+
+# Natural Earth dataset URLs (10m scale for good detail at country scale)
+NATURAL_EARTH_DATASETS = {
+    "highway": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/cultural/ne_10m_roads.zip",
+        "layer": "ne_10m_roads",
+        "rename": "road",
+    },
+    "road": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/cultural/ne_10m_roads.zip",
+        "layer": "ne_10m_roads",
+        "rename": "road",
+    },
+    "waterway": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/physical/ne_10m_rivers_lake_centerlines.zip",
+        "layer": "ne_10m_rivers_lake_centerlines",
+        "rename": "waterway",
+    },
+    "water": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/physical/ne_10m_lakes.zip",
+        "layer": "ne_10m_lakes",
+        "rename": "water",
+    },
+    "landuse": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/cultural/ne_10m_urban_areas.zip",
+        "layer": "ne_10m_urban_areas",
+        "rename": "landuse",
+    },
+    "natural": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/physical/ne_10m_geography_regions_polys.zip",
+        "layer": "ne_10m_geography_regions_polys",
+        "rename": "natural",
+    },
+    "places": {
+        "url": f"{NATURAL_EARTH_CDN_BASE}/cultural/ne_10m_populated_places.zip",
+        "layer": "ne_10m_populated_places",
+        "rename": "places",
+    },
+}
+
+
+def download_and_cache_natural_earth(dataset_info, cache_dir="downloads/natural-earth"):
+    """Download and cache Natural Earth dataset."""
+    os.makedirs(cache_dir, exist_ok=True)
+
+    layer_name = dataset_info["layer"]
+    cache_path = Path(cache_dir) / f"{layer_name}.gpkg"
+
+    # Return cached version if exists
+    if cache_path.exists():
+        print(f"    Using cached Natural Earth data: {cache_path}")
+        return gpd.read_file(cache_path, engine="pyogrio", use_arrow=True)
+
+    # Download and extract
+    print(f"    Downloading Natural Earth data from {dataset_info['url'][:50]}...")
+    response = requests.get(dataset_info["url"], timeout=60)
+    response.raise_for_status()
+
+    # Extract shapefile from zip
+    with ZipFile(BytesIO(response.content)) as zf:
+        # Find the .shp file
+        shp_files = [f for f in zf.namelist() if f.endswith(".shp")]
+        if not shp_files:
+            raise ValueError(f"No shapefile found in {dataset_info['url']}")
+
+        # Extract all files to temp location
+        temp_dir = Path(cache_dir) / "temp"
+        os.makedirs(temp_dir, exist_ok=True)
+        zf.extractall(temp_dir)
+
+        # Read shapefile
+        shp_path = temp_dir / shp_files[0]
+        gdf = gpd.read_file(shp_path, engine="pyogrio", use_arrow=True)
+
+        # Cache as GeoPackage for faster future access
+        gdf.to_file(cache_path, driver="GPKG")
+
+        # Clean up temp files
+        import shutil
+
+        shutil.rmtree(temp_dir)
+
+        print(f"    ✓ Cached Natural Earth data to {cache_path}")
+        return gdf
+
+
+def download_natural_earth_layer(poly, key, outdir):
+    """Download and clip Natural Earth layer to polygon boundary."""
+    print(f"> Downloading Natural Earth layer '{key}' …")
+
+    if key not in NATURAL_EARTH_DATASETS:
+        print(f"  ⚠️  Natural Earth does not provide '{key}' layer, skipping")
+        return
+
+    dataset_info = NATURAL_EARTH_DATASETS[key]
+
+    try:
+        # Download/load Natural Earth data
+        gdf = download_and_cache_natural_earth(dataset_info)
+
+        # Ensure same CRS
+        if gdf.crs != "EPSG:4326":
+            gdf = gdf.to_crs("EPSG:4326")
+
+        # Clip to boundary
+        print(f"    Clipping to boundary...")
+        boundary_gdf = gpd.GeoDataFrame([{"geometry": poly}], crs="EPSG:4326")
+        clipped = gpd.clip(gdf, boundary_gdf)
+
+        if clipped.empty:
+            print(f"  – no features in '{key}' within boundary")
+            return
+
+        print(f"  → {len(clipped)} features in '{key}' layer")
+
+        # Save with output name
+        output_name = dataset_info["rename"]
+        path = os.path.join(outdir, f"{output_name}.gpkg")
+        clipped.to_file(path, driver="GPKG")
+        print(f"  ✓ saved {path}")
+
+    except Exception as e:
+        print(f"  ⚠️  Error downloading Natural Earth '{key}': {e}")
 
 
 def download_layer(poly, key, tags, outdir):
@@ -145,12 +279,19 @@ def main():
         ],
         help="Which OSM layer keys to fetch (must be in TAG_MAP).",
     )
+    p.add_argument(
+        "--source",
+        type=str,
+        default="osm",
+        choices=["osm", "natural-earth"],
+        help="Data source: osm (detailed, default) or natural-earth (simplified for large areas)",
+    )
     args = p.parse_args()
 
     if args.place:
         poly = ox.geocode_to_gdf(args.place).geometry.union_all()
     else:
-        gdf = gpd.read_file(args.geojson)
+        gdf = gpd.read_file(args.geojson, engine="pyogrio", use_arrow=True)
         if gdf.crs != "EPSG:4326":
             gdf = gdf.to_crs("EPSG:4326")
         gdf = gdf[gdf.geometry.type.isin(["Polygon", "MultiPolygon"])]
@@ -164,17 +305,32 @@ def main():
     # download each requested layer
     for key in args.layers:
         print(f"\n🔍 Processing layer: {key}")
-        if key not in TAG_MAP:
-            print(f"⚠️  Unknown layer '{key}', skipping")
-            continue
-        start = time.time()
-        print(f"⏳ Downloading '{key}' ...")
-        try:
-            download_layer(poly, key, TAG_MAP[key], args.output_dir)
-            elapsed = time.time() - start
-            print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
-        except Exception as e:
-            print(f"❌ Error while downloading '{key}': {e}")
+
+        if args.source == "natural-earth":
+            # Natural Earth data source
+            if key not in NATURAL_EARTH_DATASETS:
+                print(f"⚠️  Natural Earth does not provide '{key}', skipping")
+                continue
+            start = time.time()
+            try:
+                download_natural_earth_layer(poly, key, args.output_dir)
+                elapsed = time.time() - start
+                print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
+            except Exception as e:
+                print(f"❌ Error while downloading '{key}': {e}")
+        else:
+            # OSM data source
+            if key not in TAG_MAP:
+                print(f"⚠️  Unknown layer '{key}', skipping")
+                continue
+            start = time.time()
+            print(f"⏳ Downloading '{key}' from OSM...")
+            try:
+                download_layer(poly, key, TAG_MAP[key], args.output_dir)
+                elapsed = time.time() - start
+                print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
+            except Exception as e:
+                print(f"❌ Error while downloading '{key}': {e}")
 
 
 if __name__ == "__main__":

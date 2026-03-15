@@ -1,0 +1,4825 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#aa332e'
+    fc: '#aa332e'
+  hillshade:
+    alpha: 0.25
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gist_heat
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 1.0
+    vert_exag: 1.0
+    weights:
+    - 1.2
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#000000'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: true
+    text: ps
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/edmonton-ab/satellite.tif
+  scheme: coral
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#4A2511'
+    - '#6B3410'
+    - '#8B4513'
+    - '#aa332e'
+    - '#d45d5a'
+    - '#e89894'
+    - '#f4c4c2'
+    - '#fae8e6'
+    - '#fef5f4'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.6
+    visible: false
+    zorder: 0
+  dem: downloads/regions/edmonton-ab/dem.tif
+layers:
+  building__Point:
+    file: downloads/regions/edmonton-ab/layers/building.gpkg
+    layer: building
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 332
+      building:
+      - 'yes'
+      - house
+      - church
+      - school
+      - apartments
+      - construction
+      - 'no'
+      - office
+      - garage
+      - retail
+  building__Polygon:
+    file: downloads/regions/edmonton-ab/layers/building.gpkg
+    layer: building
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 442383
+      building: 91
+  building__MultiPolygon:
+    file: downloads/regions/edmonton-ab/layers/building.gpkg
+    layer: building
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id: 74
+      building:
+      - 'yes'
+      - school
+      - commercial
+      - retail
+      - storage_tank
+      - house
+      - apartments
+      - yes;retail
+      - semidetached_house
+      - hotel;yes
+      - greenhouse
+      - hospital
+      - university
+  building__LineString:
+    file: downloads/regions/edmonton-ab/layers/building.gpkg
+    layer: building
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id:
+      - '325060231'
+      building:
+      - 'yes'
+  highway__LineString:
+    file: downloads/regions/edmonton-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 149060
+      crossing:
+      - uncontrolled
+      - unmarked
+      - traffic_signals
+      - zebra
+      - marked
+      - pedestrian_signals
+      - controlled
+      - '22'
+      - CY
+      - flasher
+      - no_road_markings_or_traffic_signals22
+      - only_road_markings
+      - informal
+      crossing:markings:
+      - zebra
+      - lines
+      - 'no'
+      - 'yes'
+      - ladder:skewed
+      - ladder
+      - lines:paired
+      - surface
+      highway:
+      - unclassified
+      - motorway
+      - motorway_link
+      - tertiary
+      - residential
+      - service
+      - footway
+      - track
+      - primary
+      - path
+      - secondary
+      - cycleway
+      - living_street
+      - construction
+      - secondary_link
+      - primary_link
+      - tertiary_link
+      - corridor
+      - steps
+      - proposed
+      - raceway
+      - future
+      - road
+      - bridleway
+      - trunk
+      - trunk_link
+      - busway
+      - pedestrian
+      - platform
+      - bus_stop
+      kerb:
+      - lowered
+      - 'yes'
+      - flush
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      noref:
+      - 'yes'
+      ref:
+      - '2'
+      - 2A
+      - '39'
+      - Range Road 253
+      - '19'
+      - '216'
+      - '795'
+      - '60'
+      - '778'
+      - '622'
+      - '627'
+      - '779'
+      - '628'
+      - '4'
+      - '14'
+      - 16A
+      - '16'
+      - '44'
+      - '28'
+      - '1'
+      - '633'
+      - '21'
+      - '617'
+      - '623'
+      - '625'
+      - '630'
+      - '629'
+      - '824'
+      - '21061'
+      - '814'
+      - Township Road 502
+      - '830'
+      - '15'
+      - '37'
+      - 28A
+      - '643'
+      - '825'
+      - '45'
+      - '38'
+      - '803'
+      - '642'
+      - '3'
+      - 44;642
+      source: 186
+      traffic_signals: []
+      direction:
+      - anticlockwise
+      - backward
+      ref:left: []
+      ref:right: []
+      source:ref: []
+      stop:
+      - all
+      traffic_signals:direction: []
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      addr:city:
+      - EDMONTON
+      - Spruce Grove
+      - Edmonton
+      addr:housenumber:
+      - '18520'
+      - '137'
+      - '2123'
+      addr:street:
+      - 100 AVE NW
+      - Stony Plain Rd
+      - Greenbury Close
+      - 86 Street SW
+      note:
+      - There is a usually semi-permanent bollard preventing access.
+      - Access to passengers subject to secondary screening
+      - Public access
+      - unused and overgrown
+      - https://www.edmonton.ca/sites/default/files/public-files/CN_Major_Detour_23_Ave_111_Street.pdf?cb=1748563418
+      - no longer there?
+      - new 142nd MUP bridge, target opening 2025
+      - Closed due to erosion damage
+      - Detour
+      - check if i still exist?
+      - stairs need to be corrected
+      - Boardwalk
+      - Remove? verify path still exists.
+      - No dismount signage
+      - Open
+      - construction to begin summer 2025
+      - School bus access only during school hours
+      - UofA
+      - cycle track closed for LRT construction
+      - cycle lane temporarily closed
+      - Tagged dual carriageway and expressway until freeway conversion complete
+      - LRT crossing powered, not open yet
+      - No entry onto 124th
+      - temporary alignment
+      - is this oneway road?
+      - Reclaimed road
+      - Grazing lease; registry says no contact required for access.
+      - Couldn't find south end
+      - Beaver dam
+      - Unsure if Westernmost portion of this path still exists, as it appears to
+        have been removed due to building construction in updated Esri imagery.
+      - Necessary evil for routing
+      - Road restricted to emergency vehicles only
+      - permenent oneway effective April 2018
+      - Riased Protected Cycleway
+      - foot=no because no sidewalk; avoid routing along road
+      - Move "Gar..." name to cycle path if mapping separately.
+      - No sign here (yet) but inferred from layout and nearby to south.
+      - Trail Closed
+      - Trail Closed, Broken ground
+      - gutter
+      - closed due to erosion
+      - bike ramps
+      - needs proper adjustment when sat imagery is avail
+      - Inaccessible-to-vehicle-traffic road
+      - no crossing
+      turning_circle: []
+      button_operated:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound:
+      - 'yes'
+      - walk
+      - 'no'
+      bench:
+      - 'yes'
+      bus:
+      - designated
+      - 'yes'
+      - 'no'
+      name: 7506
+      network:
+      - Miquelon Lake Skiing
+      - Cooking Lake-Blackfoot Nordic Zone 1
+      - Cooking Lake-Blackfoot Nordic Zone 4
+      - Cooking Lake-Blackfoot Nordic Zone 2
+      - EdmontonGoldstick
+      - lcn
+      - Strathcona Wilderness Skiing
+      - EdmontonGoldBar
+      network:wikidata: []
+      operator:
+      - EMBA
+      - Alberta Transportation
+      - Strathcona County Transportation Engineering and Operations
+      - AltaLink
+      public_transport:
+      - platform
+      route_ref: []
+      shelter:
+      - 'no'
+      traffic_signals:vibration:
+      - 'no'
+      traffic_sign: []
+      flashing_lights:
+      - button
+      - 'no'
+      fut_ref:
+      - '216'
+      bin: []
+      wheelchair:
+      - 'yes'
+      - 'no'
+      - limited
+      lit:
+      - 'no'
+      - 'yes'
+      - 24/7
+      - Potlatch 0.10b
+      departures_board: []
+      network:wikipedia: []
+      description:
+      - foot path with bench seating areas. Ducks and Geese frequent the area in summer
+      - inaccessible during pipeline construction
+      - Parking Lot
+      - temporary during 102 Ave closure
+      - 150X to Government Centre
+      - detour due to construction work
+      - University access road
+      - Closed after serious bank erosion
+      - Roper Business Center Parking
+      - former trolley bus turn-around loop
+      - temporary
+      - Connector to Railtown paths
+      - BLK 19 Lane
+      - City buses only
+      local_ref: []
+      ref:signed: []
+      surface:
+      - gravel
+      - asphalt
+      - compacted
+      - paved
+      - concrete
+      - unpaved
+      - wood
+      - grass
+      - bricks
+      - dirt
+      - ground
+      - paving_stones
+      - brick
+      - metal
+      - cement
+      - fine_gravel
+      - wooden steps
+      - boardwalk
+      - pebblestone
+      - concrete:plates
+      - artificial_turf
+      - Shale
+      - cobblestone
+      - earth
+      - mud
+      - metal_grid
+      - paved; unpaved
+      - paved;unpaved
+      - shale
+      - concrete:lanes
+      - asl_turf
+      - rock
+      - rubber
+      - chipseal
+      - acrylic
+      barrier: []
+      crossing_ref: []
+      bicycle:
+      - designated
+      - 'yes'
+      - 'no'
+      - dismount
+      - permissive
+      - private
+      - destination
+      - unknown
+      segregated:
+      - 'no'
+      - 'yes'
+      construction:
+      - residential
+      - unclassified
+      - 'yes'
+      - cycleway
+      - tertiary
+      - service
+      - path
+      - motorway_link
+      - secondary
+      - motorway
+      - footway
+      - primary_link
+      - living_street
+      - steps
+      - driveway
+      - secondary_link
+      - minor
+      - highway
+      lamp_type: []
+      lamp_mount: []
+      tower:type: []
+      check_date:
+      - '2024-10-06'
+      - '2025-09-21'
+      - '2025-10-17'
+      - '2024-08-19'
+      - '2025-08-27'
+      - '2025-06-30'
+      - '2025-04-29'
+      - '2024-04-09'
+      - '2025-10-11'
+      - '2025-06-24'
+      - '2025-06-13'
+      - '2026-03-07'
+      - '2025-05-14'
+      - '2024-01-20'
+      - '2025-09-26'
+      - '2023-08-13'
+      - '2023-11-18'
+      - '2025-10-29'
+      - '2025-11-09'
+      - '2013-07-30'
+      - '2025-03-21'
+      - '2025-04-15'
+      - '2019-09-18'
+      - '2020-07-18'
+      - '2025-08-05'
+      addr:province:
+      - AB
+      internet_access: []
+      operator:wikidata: []
+      website:
+      - http://www.transportation.alberta.ca/Content/docType353/production/DisplayBoardsMar25-10.pdf
+      - https://www.edmonton.ca/documents/RoadsTraffic/WalterdaleBridge_Roads-Path-Landscaping_02072013.pdf
+      - https://www.edmonton.ca/transportation/cycle_walking/sidewalks-cyclists-can-ride-on.aspx
+      support: []
+      traffic_calming:
+      - table
+      - 'no'
+      - 'yes'
+      - island
+      wikipedia:
+      - en:Terwillegar Park Footbridge
+      - en:Fort Edmonton Footbridge
+      - en:Alberta Highway 814
+      - en:Low Level Bridge (Edmonton)
+      - en:CFB Edmonton
+      power: []
+      height: []
+      line_attachment: []
+      material:
+      - concrete
+      traffic_signals:countdown:
+      - 'yes'
+      access:
+      - private
+      - 'no'
+      - unknown
+      - permissive
+      - destination
+      - 'yes'
+      - passengers
+      - customers
+      - permit
+      - designated
+      maxspeed:
+      - '80'
+      - '50'
+      - '110'
+      - '100'
+      - '70'
+      - '40'
+      - '20'
+      - '10'
+      - '30'
+      - '60'
+      - '15'
+      - '90'
+      - '25'
+      fixme:
+      - position estimated, might be missing some bus routes
+      - Need to survey area around landstone park (not clear form Yahoo! image.
+      - Duplicate road? Need to check for physical median.
+      - Needs gps tracks to confirm exact positioning, also missing visibility, surface,
+        smoothness
+      - position estimated
+      - North end was not traced
+      - This is probably far away from correct route, or it could be just a path but
+        even then more Northern route seems more valid based on bing?
+      - name
+      - survey
+      - North-south portion goes under the bridge; East-West portion goes over the
+        bridge.
+      - no left turn at 118 Ave.
+      - check lanes
+      - Unknown if motor vehicles designated
+      - Which way does "West" continue?
+      - Through Building ?
+      - Road is closed to all traffic
+      - 'Potlatch does not support indvidual flights of stairs: 86,34,9,0,-2'
+      - check ref
+      - connects to alley.
+      camera:direction: []
+      camera:type: []
+      man_made: []
+      surveillance:type: []
+      camera:mount: []
+      surveillance: []
+      surveillance:zone: []
+      noname:
+      - 'yes'
+      check_date:crossing: []
+      fut_ref:left: []
+      fut_ref:right: []
+      alt_name: 148
+      bicycle_parking: []
+      toilets:wheelchair: []
+      source:date: []
+      covered:
+      - 'no'
+      - 'yes'
+      - building_passage
+      - concrete
+      - colonnade
+      - passage_building
+      addr:floor: []
+      level:
+      - '1'
+      - '0'
+      - '-1'
+      - 0;-1
+      - -1;-2
+      - '-2'
+      signed: []
+      check_date:shelter: []
+      light:lit: []
+      opening_hours: []
+      light:method: []
+      output: []
+      supervised: []
+      colour:
+      - blue
+      - pride
+      - orange
+      abandoned:
+      - 'yes'
+      light:colour: []
+      light:count: []
+      light:tilt: []
+      tower:construction: []
+      temporary:
+      - 'yes'
+      rout_ref: []
+      platforms: []
+      start_date:
+      - '2021-05-03'
+      - '2025-03-01'
+      - '2024-01-20'
+      - 11-18-2023
+      - '2023-11-18'
+      - '2017-09-29'
+      - '2026'
+      addr:postcode: []
+      designation:
+      - national_tertiary_road
+      unsigned_ref:
+      - '2'
+      - '100'
+      end_date: []
+      old_ref:
+      - '788'
+      - '14'
+      - '814'
+      - '623'
+      - '15'
+      - '636'
+      - '28'
+      - '794'
+      operator:wikipedia: []
+      noexit: []
+      horse:
+      - unknown
+      - 'no'
+      - 'yes'
+      - designated
+      - permissive
+      - private
+      - dismount
+      highway_1:
+      - construction
+      - living_street
+      - footpath
+      ref:ruian:addr: []
+      speed_camera: []
+      foot:
+      - designated
+      - 'yes'
+      - 'no'
+      - private
+      - permissive
+      - destination
+      - use_sidepath
+      light:power: []
+      crossing:light: []
+      old_name:
+      - South Service Road
+      - Service Road
+      - 1st Avenue
+      - Corporate Road
+      - 7th Avenue
+      - Airside Service Road
+      - 6th Avenue
+      - 2nd Avenue
+      - 4th Avenue
+      - North Service Road
+      - Range Road 252
+      - 8th Avenue
+      - 9th Avenue
+      - Halicz-Glidenhurst Road
+      - Range Road 263A
+      - Township Road 525A
+      - Campsite Road
+      - Range Road 264
+      - Township Road 530B
+      - Township Road 530
+      - Township Road 530A
+      - Ellis Drive
+      - Range Road 262A
+      - Walker Crescent
+      - Township Road 531A
+      - 26230 Township Road 531A
+      - Hayes Cresent
+      - Namayo Avenue
+      - Grandin Road
+      - Wallace Drive
+      - Oliver Avenue
+      - St. Albert Street
+      - Fabre Avenue
+      - Walter Street
+      - Jasper Avenue NW
+      - Alberta Avenue
+      - 50 Street NW
+      location:transition: []
+      not:network:wikidata: []
+      hazard:
+      - school_zone
+      - turn
+      - children
+      - curves
+      - roadworks
+      - curve
+      - animal_crossing
+      - congestion;curve
+      - ice
+      - curve;ice
+      - animal_crossing;curve
+      maxspeed:conditional:
+      - 30 @ (Mo-Fr 07:30-16:30; PH off)
+      - 30 @ (07:30-21:00)
+      - 30 @ (7:30-21:00)
+      - 30 @ (07:00-21:00)
+      - 30 @ (Mo-Fr 07:00-09:00,11:00-13:30;14:00-16:30; PH off)
+      - 30 @ (Mo-Fr 07:00-09:00,11:00-13:30; 14:00-16:30; PH off)
+      - 30 @ (sunrise-sunset)
+      - 30 @ (Mo-Su 07:00-21:00)
+      - 30 @ (Mo-Su 07:30-21:00)
+      - 30 @ 07:30-21:00
+      - 30 @ Mo-Fr 07:00-21:00
+      - 30 @ 07:00-21:00
+      - 30 @ (Mo-Fr 08:30-16:30)
+      - 30 @ (Mo-Fr 08:00-16:30; PH off)
+      - 30 @ (Mo-Fr 08:30-16:30; PH off)
+      - 30 @ (Mo-Fr 07:00-16:00; PH off)
+      - 30 @ (Mo-Su 07:30-16:30; PH off)
+      - 30 @ (Mo-Fr 07:30-16:30; PH off; SH off)
+      - 30 @ (Mo-Fr 07:30-16:30, PH off)
+      - 30 @ flashing
+      railway: []
+      utility: []
+      hgv:
+      - 'no'
+      - designated
+      - 'yes'
+      - destination
+      lanes:
+      - '2'
+      - '3'
+      - '1'
+      - '4'
+      - '5'
+      - '6'
+      - '7'
+      - '8'
+      - '24'
+      oneway:
+      - 'no'
+      - 'yes'
+      sidewalk:
+      - 'no'
+      - right
+      - both
+      - separate
+      - left
+      - none
+      - 'yes'
+      lanes:backward:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      lanes:forward:
+      - '3'
+      - '2'
+      - '1'
+      - '4'
+      cycleway:
+      - crossing
+      - shared_lane
+      - 'no'
+      - track
+      - lane
+      - 'yes'
+      - opposite_lane
+      - separate
+      - share_busway
+      - shared
+      - opposite
+      destination: 234
+      destination:street: 207
+      junction:ref: 77
+      cycleway:both:
+      - 'no'
+      - shared_lane
+      - shoulder
+      - track
+      - separate
+      - lane
+      parking:left:
+      - lane
+      - 'no'
+      - street_side
+      parking:left:orientation:
+      - parallel
+      - perpendicular
+      - diagonal
+      parking:right:
+      - lane
+      - 'no'
+      - street_side
+      - land
+      - 'yes'
+      sidewalk:both:
+      - separate
+      - 'yes'
+      source:name:
+      - survey
+      - Canvec
+      - Edmonton Airports Authority
+      - "GeoBase\xAE"
+      - Geobase
+      - NRCan-CanVec-7.0
+      - extrapolated
+      - sign
+      - Survey
+      - Strathcona County Transportation & Agriculture Services
+      - local_knowlwedge
+      - Local knowlege
+      - Cancec
+      - local_knowledge
+      destination:ref: 72
+      maxspeed:advisory:
+      - '60'
+      - '50'
+      - '40'
+      - '55'
+      - '30'
+      - '5'
+      - '80'
+      - '70'
+      - '35'
+      - '25'
+      - '45'
+      turn:lanes: 273
+      destination:symbol:
+      - airport
+      - camp_site;golf_court
+      - hospital
+      maxheight:
+      - '5'
+      - '5.2'
+      - '5.3'
+      - '3.8'
+      - '4'
+      - '5.5'
+      - '5.7'
+      - '5.8'
+      - '5.6'
+      - '6.1'
+      - '6.0'
+      - '5.9'
+      - '2'
+      - '3.4'
+      - '6'
+      - 10'6"
+      - '5.4'
+      - '4.9'
+      - '7.5'
+      - '6.6'
+      - '5.1'
+      - '6.2'
+      - '4.8'
+      - 7'6"
+      - default
+      - '4.4'
+      - '4.42'
+      - '6.4'
+      - '6.8'
+      - '6.5'
+      - '9.0'
+      - '6.3'
+      - '4.5'
+      - '5.0'
+      - '3.2'
+      - 3.2 m
+      - 4.9 m
+      - 3.2m
+      - '4.3'
+      - '4.6'
+      - '6.9'
+      - '4.2'
+      hgv:conditional:
+      - yes @ (Mo-Sa 07:00-22:00)
+      - yes @ (Mo-Sa 07:00-18:00)
+      parking:both:
+      - shoulder
+      - 'no'
+      - lane
+      - street_side
+      - 'yes'
+      lane_markings:
+      - 'no'
+      - 'yes'
+      source:maxspeed:
+      - sign
+      - CA-AB:rural
+      - CA_AB:rural
+      - survey
+      - CA-AB:urban
+      - Edmonton Speed Zones Bylaw
+      - sign;Edmonton Speed Zones Bylaw
+      - sign; Edmonton Speed Zones Bylaw
+      - CA-AB:urban;sign
+      - Spruce Grove Traffic Bylaw, 2024
+      - Edmonton Speed Limit Bylaw
+      - local_knowledge
+      cycleway:left:oneway:
+      - '-1'
+      - 'no'
+      oneway:bicycle:
+      - 'yes'
+      - 'no'
+      lanes:both_ways:
+      - '1'
+      turn:lanes:both_ways:
+      - left
+      - through
+      width: 141
+      dual_carriageway:
+      - 'yes'
+      - 'no'
+      expressway:
+      - 'yes'
+      cutting:
+      - 'yes'
+      - 'no'
+      hazmat:
+      - designated
+      - 'no'
+      - 'yes'
+      bridge:
+      - 'yes'
+      - viaduct
+      - boardwalk
+      - covered
+      - trestle
+      - pedestrian
+      layer:
+      - '1'
+      - '-1'
+      - '0'
+      - '2'
+      - '-2'
+      maxweight:signed:
+      - 'no'
+      sidewalk:left:
+      - 'no'
+      - 'yes'
+      - separate
+      sidewalk:right:
+      - separate
+      - 'yes'
+      - 'no'
+      attribution:
+      - "GeoBase\xAE"
+      - GeoBase?
+      - "GeoBase \xAE"
+      geobase:acquisitionTechnique: 55
+      opening_date:
+      - '2025-08-15'
+      - '2016-10-21'
+      - '2011-06-18'
+      - '2028'
+      - '2025'
+      - '2013-07-31'
+      - '2025-08-05'
+      cycleway:left:
+      - shared_lane
+      - 'no'
+      - lane
+      - share_busway
+      - track
+      - opposite_lane
+      - separate
+      - opposite_track
+      cycleway:right:
+      - shared_lane
+      - lane
+      - separate
+      - shoulder
+      - share_busway
+      - track
+      - 'no'
+      service:
+      - alley
+      - parking_aisle
+      - emergency_access
+      - driveway
+      - drive-through
+      - slipway
+      - access
+      - access_road_/_parking_lot_Fox_Run
+      - pipestem
+      parking:both:orientation:
+      - perpendicular
+      - parallel
+      - diagonal
+      created_by:
+      - Potlatch 0.9c
+      - Potlatch 0.10b
+      - Potlatch 0.10
+      - Potlatch 0.10c
+      - Potlatch 0.10f
+      maxspeed:type:
+      - sign
+      - CA:urban
+      - CA-AB:urban
+      - CA-AB:rural
+      - CA-AB:zone40
+      lcn:
+      - 'yes'
+      - proposed
+      - with_care
+      is_in: 54
+      parking:right:orientation:
+      - diagonal
+      - perpendicular
+      - parallel
+      placement:
+      - left_of:3
+      - left_of:2
+      - right_of:3
+      - transition
+      - middle_of:3
+      - middle_of:2
+      - right_of:2
+      - middle_of:1
+      - left_of:4
+      - left_of:1
+      - right_of:4
+      - right_of:1
+      reg_name:
+      - Highway 2
+      - Highway 630
+      - Highway 814
+      - Secondary Highway 824
+      addr:housenumber:first:left: 145
+      addr:housenumber:first:right: 151
+      addr:housenumber:last:left: 188
+      addr:housenumber:last:right: 193
+      construction_date:
+      - '1902'
+      heritage:website:
+      - http://www.historicplaces.ca/en/rep-reg/place-lieu.aspx?id=2984
+      historic:
+      - bridge
+      - 'yes'
+      motor_vehicle:
+      - 'yes'
+      - designated
+      - 'no'
+      - private
+      - customers
+      - bus
+      - destination
+      - permissive
+      - agricultural
+      - permit
+      wikidata:
+      - Q27500620
+      - Q5471113
+      - Q4711737
+      - Q42331731
+      turn:lanes:forward: 60
+      maxspeed:variable:
+      - school zone
+      - school_zone
+      minspeed:
+      - '30'
+      destination:ref:to:
+      - '16'
+      - 14;16 East
+      - 16 East
+      - '216'
+      - 216 North
+      - '2'
+      - 16A West;216
+      - 2 South
+      - 2 North
+      - '44'
+      - 15 North
+      - '21'
+      - 28 North
+      - '37'
+      - 16 West;2 South
+      footway:
+      - sidewalk
+      - crossing
+      - access_aisle
+      - traffic_island
+      - residential
+      - trail
+      - link
+      geobase:datasetName:
+      - NRN:Alberta
+      - Canvec:Alberta
+      geobase:uuid: 807
+      smoothness:
+      - excellent
+      - intermediate
+      - horrible
+      - bad
+      - rough
+      - good
+      - very_bad
+      - impassable
+      - very_horrible
+      embankment:
+      - 'yes'
+      - left
+      - 'no'
+      flood_prone:
+      - 'no'
+      - 'yes'
+      trolley_wire:
+      - 'no'
+      tracktype:
+      - grade3
+      - grade1
+      - grade4
+      - grade2
+      - grade5
+      source:geometry:
+      - Bing
+      - bing
+      - b
+      ford:
+      - 'yes'
+      - 'no'
+      loc_name:
+      - Range Road 222
+      shoulder:
+      - right
+      - 'no'
+      - both
+      - left
+      official_name:
+      - Alberta Trail
+      - Devonian Way
+      - Township Road 503A
+      - Township Road 503C
+      - Township Road 504
+      - Township Road 502
+      - Range Road 275
+      - Range Road 272
+      - Chuck Kulak Way
+      - Parkland Highway
+      - Canadian Forces Trail
+      - Highway 630
+      - Yellowhead Trail
+      junction:
+      - roundabout
+      - circular
+      - jughandle
+      placement:forward:
+      - left_of:2
+      - left_of:1
+      - right_of:3
+      - middle_of:1
+      - transition
+      motorcar:
+      - 'no'
+      ski:
+      - designated
+      - 'no'
+      - 'yes'
+      snowmobile:
+      - 'yes'
+      - permissive
+      - designated
+      - 'no'
+      step_count:
+      - '24'
+      - '360'
+      - '6'
+      - '17'
+      - '38'
+      - '8'
+      - '33'
+      - '35'
+      - '37'
+      - '9'
+      - '2'
+      - '4'
+      - '200'
+      - '18'
+      - '57'
+      - '58'
+      - '19'
+      - '176'
+      - '5'
+      - '10'
+      - '3'
+      - '7'
+      - '100'
+      - '15'
+      - '67'
+      - '141'
+      - '23'
+      - '50'
+      - '71'
+      - '163'
+      - '43'
+      - '97'
+      - '145'
+      - '91'
+      - '21'
+      - '20'
+      - '40'
+      - '32'
+      - '75'
+      - '26'
+      - '44'
+      - '55'
+      - '39'
+      - '127'
+      - '14'
+      - '1'
+      overtaking:forward:
+      - 'no'
+      dog:
+      - leashed
+      - 'no'
+      - 'yes'
+      - designated
+      stroller:
+      - 'yes'
+      - 'no'
+      - limited
+      turn:lanes:backward: 55
+      ref_old:
+      - '28'
+      - '633'
+      - '14'
+      - '814'
+      - '15'
+      toll:
+      - 'no'
+      addr:interpolation:
+      - even
+      - odd
+      piste:difficulty:
+      - easy
+      - intermediate
+      - advanced
+      piste:grooming:
+      - classic
+      - classic+skating
+      - classic;skating
+      piste:name:
+      - Royal Mayfair Golf Course Loop
+      - Shoreline Path
+      - Beaver Hills Loops
+      - George's Way
+      - Waskahegan Trail Society Connector Trail
+      - Wanisan
+      - Siksika
+      - Detour
+      - Hare
+      - Lost Lake
+      - Don's Way
+      - Grouse
+      - Waskehegan South
+      - Spruce Hollow
+      - Neon Lake
+      - Waskehegan North
+      - Blackfoot West
+      - North
+      - Outline
+      - Boundary
+      - J.J.
+      - Switch Backs
+      - Creek Crossing
+      - Two Way Lake
+      - North Shore
+      - The Hadhirgaan (50th St.)
+      piste:type:
+      - nordic
+      piste:lit:
+      - 'no'
+      piste:oneway:
+      - 'no'
+      - 'yes'
+      piste:status:
+      - open
+      sac_scale:
+      - hiking
+      - mountain_hiking
+      name:en:
+      - 55 Avenue
+      - Yellowhead Highway
+      - St. Albert Trail
+      - Caillou Bay
+      - 49 Street
+      name:fr:
+      - 55e Avenue
+      - Route Yellowhead
+      - Chemin St. Albert
+      - Baie Caillou
+      - Rue 49
+      frontage_road:
+      - 'yes'
+      area: []
+      handrail:
+      - 'yes'
+      - 'no'
+      - both
+      incline:
+      - up
+      - varies
+      - 1.5%
+      - down
+      - up/down
+      - 0%
+      - '0'
+      - 15%
+      - 8%
+      - 'yes'
+      - '-0.5'
+      - 6.4%
+      - '3.6'
+      - -3.4%
+      - 10%
+      - 20%
+      ramp:
+      - 'no'
+      - 'yes'
+      ramp:bicycle:
+      - 'yes'
+      - 'no'
+      lot:
+      - 'yes'
+      psv:
+      - 'yes'
+      - designated
+      tunnel:
+      - 'yes'
+      - building_passage
+      - covered
+      - passage
+      trail_visibility:
+      - bad
+      - good
+      - 'no'
+      - intermediate
+      - excellent
+      - horrible
+      informal:
+      - 'yes'
+      - 'no'
+      source_1:
+      - local knowledge
+      - maxspeed=70 + source:maxspeed=sign
+      mtb:scale:
+      - '2'
+      - '1'
+      - B.F.R.
+      - '0'
+      - '3'
+      - '6'
+      mtb:scale:uphill:
+      - '0'
+      - '2'
+      sloped_curb:
+      - 'yes'
+      destination:lanes:
+      - Red Deer|Millet;Wetaskiwin
+      - Red Deer|Red Deer|Leduc City Centre;Drayton Valley
+      - Airport Perimeter Road South|Airport Perimeter Road South|Edmonton International|Edmonton
+        International|Edmonton International
+      - Nisku Business Park|Leduc North Industrial District|Outlet Collection Way|Outlet
+        Collection Way
+      - Nisku Business Park|Leduc North Industrial District|Outlet Collection Way|Outlet
+        Collection Way|Edmonton International
+      - Airport Perimeter Road North|Edmonton;Calgary|Edmonton;Calgary|Airport Perimeter
+        Road South;Premium Outlet Collection
+      - Nisku Business Park;Leduc North Industrial District|Edmonton|Calgary
+      - East Whitemud Drive|West Whitemud Drive
+      - '|||West Edmonton Mall'
+      - '||West Edmonton Mall'
+      - '||Spruce Grove;Stony Plain|Spruce Grove;Stony Plain'
+      - '||||West Edmonton Mall'
+      - Spruce Grove;Stony Plain|Spruce Grove;Stony Plain|
+      - Jasper||||
+      - '|City Centre|City Centre|City Centre'
+      - City Centre|City Centre|||
+      - University|
+      - Spruce Grove;Stony Plain;Jasper|Edmonton
+      - '||Acheson Industrial Area; Devon'
+      - '|||Business Frontage'
+      - '||Edmonton;Jasper'
+      - '|||Edmonton;Jasper'
+      - '||St. Albert;West Edmonton Mall'
+      - '||St. Albert'
+      - St. Albert||
+      - '|Access CN Rail'
+      - '|||St. Albert'
+      - '|||St. Albert;West Edmonton Mall'
+      - '|Edmonton'
+      - Jasper|Jasper|Edmonton
+      - Jasper|Edmonton
+      - Jasper|Jasper||
+      - Edmonton;Business Areas|Edmonton;Business Areas|Edmonton;Business Areas|St.
+        Albert; Access CN Rail
+      - '||Red Deer South;St. Albert North'
+      - '||By-Pass to Cold Lake, Fort McMurray, Calgary'
+      - Jasper|
+      - Camrose|Wainwright
+      - North;Anthony Henday Drive|North;Anthony Henday Drive|North;Anthony Henday
+        Drive|West;Sherwood Park Freeway|East;Wye Road
+      - West;Edmonton;Sherwood Park Freeway|East;Sherwood Park;Wye Road
+      - West;Edmonton;Sherwood Park Freeway|West;Edmonton;Sherwood Park Freeway|South;Anthony
+        Henday Drive|North;Anthony Henday Drive
+      - East;Sherwood Park|West;Edmonton
+      - South;Anthony Henday Drive|South;Anthony Henday Drive|South;Anthony Henday
+        Drive|East;Sherwood Park|West;Edmonton
+      - Fort Road North|Fort Road North|Wayne Gretzky Drive;Fort Road South|Wayne
+        Gretzky Drive;Fort Road South
+      - Lloydminster|Lloydminster|Lloydminster|Broadmoor Boulevard;Sherwood Drive
+      - Lloydminster|Fort Saskatchewan
+      - Lloydminster|Lloydminster|Fort Saskatchewan
+      - Namao|Redwater|Fort Saskatchewan|Fort Saskatchewan
+      taxi:
+      - 'yes'
+      golf:
+      - cartpath
+      - path
+      golf_cart:
+      - designated
+      - 'yes'
+      check_date:surface:
+      - '2023-04-30'
+      - '2023-04-10'
+      - '2025-07-11'
+      - '2026-03-13'
+      - '2025-10-11'
+      - '2025-05-14'
+      - '2025-09-26'
+      - '2021-06-25'
+      - '2025-03-21'
+      - '2025-04-15'
+      - '2023-05-15'
+      - '2023-05-16'
+      emergency:
+      - designated
+      - 'yes'
+      name:de:
+      - "Garsconstra\xDFe"
+      abandoned:highway:
+      - 'yes'
+      placement:backward:
+      - left_of:2
+      - left_of:1
+      - right_of:1
+      - middle_of:1
+      demolished:highway:
+      - primary
+      waterway:
+      - weir
+      mtb:scale:imba:
+      - '2'
+      - '3'
+      - '1'
+      mtb:type:
+      - allmountain
+      - crosscountry
+      destination:street:lanes: 63
+      access:note:
+      - Bypass for oversize loads
+      motor_vehicle:conditional:
+      - yes @ height>5.4
+      - no @ (Mo-Fr 08:00-17:00)
+      indoor:
+      - 'yes'
+      - 'no'
+      cycleway:right:oneway:
+      - 'no'
+      sidewalk:both:surface:
+      - concrete
+      bicycle_road:
+      - 'no'
+      cycleway:left:segregated:
+      - 'no'
+      bus:lanes:
+      - yes|yes|yes|yes|designated|yes
+      - yes|yes|yes|yes|designated
+      - yes|yes|yes|designated
+      - yes|yes|yes|yes|yes|designated
+      - yes|yes|yes|yes|yes|designated|yes
+      - '|||||designated'
+      - yes|yes|yes|designated|yes
+      - no|no|no|designated
+      - no|no|no|no|no|designated
+      - '|||designated'
+      - none|none|none|designated
+      - none|none|none|none|designated
+      - none|none|none|none|right
+      - none|none|none|none|none
+      - '||designated'
+      - designated||
+      parking:left:orientation:school_bus:
+      - parallel
+      parking:left:restriction:conditional:
+      - no_stopping @ (Mo-Fr 08:15-09:00,15:00-15:30; PH off)
+      parking:left:restriction:reason:
+      - bus_stop
+      parking:left:restriction:school_bus:
+      - none
+      parking:left:reason:
+      - narrow
+      driveway:
+      - pipestem
+      cycleway:both:segregated:
+      - 'no'
+      disused:highway:
+      - busway
+      - unclassified
+      maxheight:signed:
+      - 'no'
+      access:both_ways:
+      - 'no'
+      destination:ref:lanes:
+      - 2 South|2A South
+      - 2 South|2 South|39
+      - '|2|2|'
+      - '|2 North|2 South'
+      - '||216 West'
+      - AB 2 North to AB 216|AB 2 North to AB 216||
+      - 216 North|216 North|
+      - 216 North||
+      - 216 South||
+      - '||216 North'
+      - '|216 South|216 South'
+      - '||16A West|16A West'
+      - '|||216 North'
+      - 16A West|16A West|216 South
+      - AB 2 East|||
+      - '|||to AB 16A West, AB 216'
+      - '|||16A, 216'
+      - through|slight_right
+      - '|16 West|16 East'
+      - '||216'
+      - '||216 South'
+      - '||60'
+      - 216 North|216 North|16
+      - 216 North|216 North|216 North|16
+      - 16 West|16 West|16 West;none
+      - 16 East|16 East|16 East
+      - 16 West|16 West|16 West|
+      - '|16 West|'
+      - 16 East|16 East|16 East|
+      - '|16 East'
+      - 16 West|16 West|16 East
+      - 16 West|16 East
+      - 16 West|16 West||
+      - '|||216'
+      - 16 West|
+      - 21 South|14 East
+      - 37 West|825 North|15 North|15 North
+      turn:
+      - left
+      - right
+      - through
+      access:conditional:
+      - yes @ Mo-Fr 18:00-06:00
+      NHS:
+      - 'yes'
+      - former
+      alt_name:en:
+      - Yellowhead Highway
+      alt_name:fr:
+      - Route Yellowhead
+      nat_name:
+      - Trans-Canada Highway
+      - Yellowhead Route
+      nat_name:en:
+      - Trans-Canada Highway
+      - TransCanada Highway
+      nat_name:fr:
+      - Route Transcanadienne
+      geobase:roadsegmentid: 76
+      bridge:name:
+      - South Smith Crossing Bridge
+      - Constable Travis Jordan EPS Memorial Bridge
+      - Constable Brett Ryan EPS Memorial Bridge
+      - Rainbow Valley Bridge
+      - Campbell Bridge
+      - Quesnell Bridge
+      - Groat Bridge
+      - Groat
+      - Cunningham Bridge
+      - James MacDonald Bridge
+      - Grierson Bridge
+      - Dawson Bridge
+      - Latta Bridge
+      - Capilano Bridge
+      - Grant Moellmann Bridge
+      - Clover Bar Bridge
+      - Beverly Bridge
+      - Vinca Bridge
+      bridge:structure:
+      - cantilever
+      - suspension
+      - beam
+      - truss
+      destination:ref:to:lanes:
+      - 14;16 East||||
+      - '|||216'
+      - 16A;216|16;2|16;2|16;2|
+      - 16A; 216|16A; 216||||
+      - 16A; 216|16A; 216|||
+      - '|||16A, 216'
+      - 216|216|216|2
+      - 2 North|2 North|2 North|
+      - '|||2'
+      - 16 West|||16 East|16 East
+      - 16 West|||
+      cycleway:both:lane:
+      - pictogram
+      sidewalk:left:surface:
+      - concrete
+      destination:backward:
+      - Keephills
+      - Rosenthal Hall
+      - Grove Berry Patch
+      - Kiwi Nurseries
+      - Edmonton
+      - Namao
+      - Sandy Beach
+      route:
+      - foot
+      - ski
+      - hiking
+      bus:lanes:backward:
+      - '|designated'
+      - '||designated'
+      bus:lanes:forward:
+      - '|only'
+      - no|no|no|designated
+      - '||designated'
+      proposed:
+      - cycleway
+      - tertiary
+      - secondary
+      - residential
+      - unclassified
+      - primary
+      - primary_link
+      - motorway_link
+      - path
+      change:lanes:
+      - yes|yes|yes|not_right|not_left|no
+      - yes|yes|yes|yes|not_right|no
+      - yes|yes|yes|no
+      - yes|yes|not_right|no
+      - not_right|no|no
+      - yes|not_right|no|no
+      - no|no|no
+      - yes|not_right|not_left|yes
+      - no|no
+      - yes|yes|yes|yes|yes|no
+      - yes|no
+      - yes|yes|yes|not_right|no
+      - no|not_left|yes|yes
+      - no|not_left|yes
+      - yes|not_right|no
+      - not_left|not_right|not_left|yes|not_right
+      old_name:-2023:
+      - River Road
+      was:highway:
+      - tertiary_link
+      - tertiary
+      geobase:routeName1:en:
+      - TransCanada Highway
+      fut_name:
+      - Lakeland Drive
+      - Rancher Road
+      - Taylor Place
+      - Harvest Crescent
+      - Hayfield Grove
+      - Sherwood Drive
+      - Yellowhead Trail North-east
+      destination:to:
+      - 199 Street
+      - 119 Street
+      - Sparrow Drive
+      - Ellerslie Road
+      - Lloydminster
+      - Jasper;Calgary
+      exit:
+      - '44'
+      - '28'
+      roof:levels:
+      - '2'
+      vehicle:
+      - 'no'
+      destination:street:to:
+      - 99 Street
+      motorcycle:
+      - 'no'
+      light_rail: []
+      spirce:
+      - Bomg
+      disused:aeroway:
+      - taxiway
+      branch: []
+      brand: []
+      brand:wikidata: []
+      fax: []
+      phone: []
+      source:name_1:
+      - survey
+      sport:
+      - motor
+      lit:perceived:
+      - none
+      mtb:
+      - 'yes'
+      TDIRECT_EN:
+      - Both Directions
+      lanes:reversible:
+      - '1'
+      access:lanes:
+      - '|||no'
+      - '||no'
+      - no||
+      destination:ref:backward:
+      - '16'
+      ramp:wheelchair:
+      - 'yes'
+      - 'no'
+      layer_1:
+      - '-1'
+      atv:
+      - 'no'
+      maxspeed:backward:
+      - '60'
+      - '50'
+      - '100'
+      - '70'
+      - '80'
+      maxspeed:forward:
+      - '100'
+      - '60'
+      - '70'
+      - '50'
+      destination:forward:
+      - Edmonton
+      - Spruce Grove
+      - The Ranch Golf & Country Club
+      - Recycling Centre
+      - Industrial Area
+      - City Centre
+      - Auction Market
+      - Fort Saskatchewan
+      - Gibbons;Redwater;Cold Lake
+      - Gibbons
+      - Morinville
+      curves:
+      - serpentine
+      - continuous
+      school_bus:
+      - designated
+      cycleway:right:lane:
+      - pictogram
+      school_bus:conditional:
+      - yes @ (Mo-Fr 08:00-17:00)
+      leisure:
+      - slipway
+      conveying:
+      - 'yes'
+      location:
+      - bridge
+      - underground
+      project:
+      - build
+      usage:
+      - link
+      source:surface:
+      - Esri
+      - https://www.fortsask.ca/en/news/construction-updates-october-26-2023.aspx
+      drive_through:
+      - 'yes'
+      comment:
+      - Each direction has from inside to outside a driving lane, cycle lane, parking
+        lane
+      abutters:
+      - commercial
+      psv:lanes:
+      - '|||designated'
+      - '||designated'
+      name_1:
+      - '25519'
+      - 33 Ave NW
+      name_2:
+      - TWP 512A
+      junction:unsigned_ref:
+      - '521'
+      bicycle:lanes:
+      - 'yes'
+      length:
+      - '262'
+      - '246'
+      maintained:
+      - 'no'
+      mtb:name:
+      - Cameron Ravine Double Track
+      - Hyperloop
+      - Bottle Rocket
+      - Treatment Plant traverse
+      - No Horses
+      - Fox Drive Flow
+      - Helen
+      - Sask Drive / Belgravia Singletrack
+      - Farm Road
+      - Just Pedal
+      - Bruce Almighty
+      - Belgravia Climb
+      - Ass Over Tea Kettle
+      - Lower Back Breaker
+      destination:lang:en:
+      - Passenger Pick-Up and Drop-Off;Parcade
+      - Commercial Vehicles;Car Rental Return
+      destination:lang:fr:
+      - "Embarcad\xE9re et d\xE9barcad\xE9re de passagers;Stationnement \xE9tag\xE9"
+      - "V\xE9hicules commerciaux;Retour de voiture de location"
+      type:
+      - route
+      was:foot:
+      - designated
+      maxwidth:
+      - '5.3'
+      parking:condition:right:
+      - disc
+      parking:condition:right:maxstay:
+      - 2 h
+      parking:condition:right:time_interval:
+      - Mo-Sa 09:00-18:00
+      parking:left:restriction:
+      - no_parking
+      bus_bay:
+      - right
+      - left
+      construction_end_expected:
+      - '2026-01-01'
+      - '2025-06-01'
+      construction_start_expected:
+      - '2024-01-01'
+      psv:lanes:forward:
+      - '|only'
+      turn:backward:
+      - left
+      - through
+      check_date:lit:
+      - '2021-06-25'
+      access_control:
+      - full
+      private:
+      - employees
+      handrail:left:
+      - 'yes'
+      handrail:right:
+      - 'yes'
+      ramp:luggage:
+      - 'no'
+      ramp:stroller:
+      - 'no'
+      turn:forward:
+      - left
+      - through
+      destination:symbol:lanes:
+      - '||airport|airport|airport'
+      - '||||airport'
+      horse_scale:
+      - common
+      visible:
+      - 'no'
+      access:lanes:forward:
+      - no||
+      overtaking:
+      - 'no'
+      destination:street:to:lanes:
+      - '|||199 Street'
+      - '||199 Street'
+      source:width:
+      - ARCore
+      cycleway:surface:
+      - concrete
+      footway:surface:
+      - concrete
+      cartpath:
+      - designated
+      name:cr:
+      - "\u146D\u1426\u148B\u141F\u141A\u1424 \u140A\u14EB\u142F\u1551\u141F \u14A3\
+        \u1422\u1472\u14C7\u1424"
+      name:cr-Latn:
+      - "kihcitw\xE2w albert meskanaw"
+      maxheight:physical:
+      - '5.6'
+      hgv_articulated:
+      - 'no'
+      destination:street:backward:
+      - Winterburn Road (215 Street)
+      narrow:
+      - 'yes'
+      parking:lane:
+      - 'no'
+      destination:symbol:forward:
+      - camp_site;golf_court
+      - police
+      cycle_network:
+      - CA:AB:Edmonton
+      change:lanes:forward:
+      - no|no
+      change:lanes:backward:
+      - no|no
+      - yes|yes|yes|not_left
+      source:tracktype:
+      - bing
+      place: []
+      width:backward:
+      - '7.4'
+      width:lanes:forward:
+      - 7.4|3.5
+      cycleway:left:lane:
+      - pictogram
+      access:lanes:both_ways:
+      - 'no'
+      access:lanes:backward:
+      - '|no'
+      maxspeed:forward:conditional:
+      - 30 @ 07:30-21:00
+      geobase:routeName1:fr:
+      - Route Transcanadienne
+      paved: []
+      tourism: []
+    style_rules:
+      highway:
+        unclassified:
+          linewidth: 0.15
+        motorway:
+          linewidth: 0.6
+        motorway_link: {}
+        tertiary:
+          linewidth: 0.32
+        residential:
+          linewidth: 0.3
+        service:
+          linewidth: 0.15
+        footway: {}
+        track:
+          linewidth: 0.1
+        primary:
+          linewidth: 0.45
+        path: {}
+        secondary:
+          linewidth: 0.38
+        cycleway: {}
+        living_street:
+          linewidth: 0.1
+        construction: {}
+        secondary_link: {}
+        primary_link: {}
+        tertiary_link: {}
+        corridor: {}
+        steps: {}
+        proposed: {}
+        raceway: {}
+        future: {}
+        road: {}
+        bridleway: {}
+        trunk:
+          linewidth: 0.52
+        trunk_link: {}
+        busway: {}
+        pedestrian: {}
+        platform: {}
+        bus_stop: {}
+      maxspeed:
+        '80': {}
+        '50': {}
+        '110': {}
+        '100': {}
+        '70': {}
+        '40': {}
+        '20': {}
+        '10': {}
+        '30': {}
+        '60': {}
+        '15': {}
+        '90': {}
+        '25': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Point:
+    file: downloads/regions/edmonton-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 73668
+      crossing:
+      - traffic_signals
+      - marked
+      - uncontrolled
+      - unmarked
+      - zebra
+      - stop_sign
+      - pedestrian_signals
+      - 'no'
+      - 'yes'
+      - traffic_signals;unmarked
+      - pedestrian
+      - traffic_signals;marked
+      - marked;uncontrolled
+      - informal
+      crossing:markings:
+      - zebra
+      - 'yes'
+      - lines
+      - 'no'
+      - ladder:skewed
+      - ladder
+      - lines:paired
+      - ladder;yes
+      - surface
+      - dashes
+      - rainbow
+      highway:
+      - motorway_junction
+      - turning_circle
+      - crossing
+      - bus_stop
+      - traffic_signals
+      - stop
+      - street_lamp
+      - turning_loop
+      - elevator
+      - priority
+      - give_way
+      - mini_roundabout
+      - platform
+      - speed_camera
+      - speed_display
+      - trailhead
+      - emergency_access_point
+      - sidewalk
+      - bus_stop;street_lamp
+      - passing_place
+      - traffic_mirror
+      - services
+      kerb:
+      - lowered
+      - flush
+      - raised
+      - 'no'
+      - 'yes'
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      noref:
+      - 'yes'
+      ref: 5287
+      source:
+      - Bing
+      - ETS
+      - AB Transportation
+      - CanVec 6.0 - NRCan
+      - GPS
+      - Yahoo
+      - improve_osm_tn
+      - local_knowledge
+      - Edmonton Transit Service GTFS
+      - AB Transporation
+      - gps
+      - ETS Maps
+      - BIng
+      - CanVec 6.0 - NRCan;Yahoo
+      - Yahoo;CanVec 6.0 - NRCan
+      - bing
+      - Bing;aerial imagery;local knowledge
+      - esri
+      traffic_signals:
+      - signal
+      - traffic_lights
+      - emergency
+      - pedestrian_crossing
+      - crossing
+      - tram_priority
+      - level_crossing
+      direction:
+      - both
+      - forward
+      - backward
+      - N
+      - S
+      - se;wsw
+      - wsw
+      - '315'
+      - '345'
+      - '160'
+      - W
+      - E
+      - '110'
+      - '180'
+      - '90'
+      - '0'
+      - '270'
+      - '300'
+      - '255'
+      - '205'
+      - '165'
+      - '60'
+      - '245'
+      - '340'
+      - '145'
+      - '150'
+      - '70'
+      - '294'
+      - '250'
+      - '158'
+      - '256'
+      - anticlockwise
+      - west
+      - '128'
+      ref:left:
+      - 64A
+      - 64B
+      - 61A
+      - 61B
+      ref:right:
+      - '76'
+      - 64B
+      - 64A
+      - 61B
+      - 61A
+      - '403'
+      source:ref:
+      - AB Transportation
+      stop:
+      - all
+      - minor
+      - E;W
+      traffic_signals:direction:
+      - both
+      - forward
+      - backward
+      - '10'
+      - '190'
+      - all
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing:signals:
+      - 'yes'
+      - 'no'
+      addr:city:
+      - Edmonton
+      - Fort Saskatchewan
+      addr:housenumber:
+      - '605'
+      - '5359'
+      - '8404'
+      - '11172'
+      - '10236'
+      - '4004'
+      - '3504'
+      - '8306'
+      addr:street:
+      - Allard Blvd SW
+      - Calgary Trail NW
+      - 149 Street   North-west
+      - 105 Street North-west
+      - 96 Street North-west
+      - 37 Avenue North-west
+      - 38a Avenue North-west
+      - 113 Street
+      note:
+      - '#edmonton-stop-yield added stop/give-way sign.'
+      - '#edmonton-stop-yield added stop sign.'
+      - '#edmonton-stop-yield'
+      - If funicular above it down for maintenance, wheelchair users can only access
+        the viewpoint level.
+      - Controls traffic for the nearby fire station. Displays a red light when fire
+        trucks are leaving the station.
+      - Bike Activated Pedestrian Signal
+      - Unsure if this is supposed to be a street lamp here on the path under the
+        Anthony Henday here. Esri imagery shows a shadow shape that's similar to a
+        street lamp, but the positioning appears odd, and it would be the only streetlamp
+        along the entire path.
+      - Inner ladder lines are not visible on-ground anymore
+      turning_circle:
+      - knuckle
+      - circle
+      - oval
+      - y-head
+      button_operated:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound:
+      - 'no'
+      - 'yes'
+      - walk
+      - locate
+      bench:
+      - 'no'
+      - 'yes'
+      bus:
+      - 'yes'
+      name: 5440
+      network:
+      - Leduc Transit
+      - ETS
+      - Red Arrow;Ebus
+      - '8542'
+      - '8598'
+      - Stony Plain Transit
+      - Spruce Grove Transit
+      - Rider Express
+      - Ebus;Red Arrow
+      - ETS;Spruce Grove Transit;STAT
+      - ETS;STAT
+      - Cold Shot
+      - StAT
+      - Edmonton Transit Service
+      - Beaumont Transit
+      - Edmonton Transit System
+      - Strathcona County Transit
+      - FlixBus
+      - Red Arrow
+      - Ets
+      - Strathcona Public Transit
+      - FST
+      network:wikidata:
+      - Q3048058
+      - Q124288063
+      - Q124288077
+      - Q7586770
+      - Q7622074
+      - Q15712258
+      operator:
+      - Leduc Transit
+      - City of Leduc
+      - Edmonton Airports
+      - Edmonton Transit Service
+      - Edmonton Transit System
+      - ETS
+      - City of Edmonton
+      - Edmonton Transit Service;Leduc Transit
+      - Pacific Western Transportation Ltd.
+      - ets
+      - Alberta Transportation
+      - Town of Stony Plain
+      - Stony Plain Transit
+      - Edmonton Catholic Schools
+      - Fortis Alberta
+      - The City of Spruce Grove
+      - FortisAlberta
+      - Edmonton Transit Service;Spruce Grove Transit
+      - Spruce Grove Transit
+      - Edmonton Transit Service;Strathcona County Transit
+      - Edmonton Transit Service;St. Albert Transit;Strathcona County Transit
+      - Rider Express
+      - St. Albert Transit
+      - Edmonton Transit Service;St. Albert Transit
+      - St. Albert Transit;Strathcona County Transit
+      - Strathcona County Transit
+      - Edmonton Transit Service;Spruce Grove Transit;St. Albert Transit
+      - Balwaria Empire Pvt. Ltd.
+      - City of St. Albert
+      - City of Beaumont
+      - Leduc County
+      - Strathcona County
+      - Strathcona County;St. Albert Transit
+      - Pacific Western Transportation
+      - Strathcona Public Transit
+      - Edmonton Transit
+      - City of Fort Saskatchewan
+      - Fort Sask Transit
+      public_transport:
+      - platform
+      route_ref: 780
+      shelter:
+      - 'no'
+      - 'yes'
+      traffic_signals:vibration:
+      - 'no'
+      - 'yes'
+      traffic_sign:
+      - stop
+      - give_way
+      - maxspeed
+      - hazard
+      - hazard;maxspeed
+      - '*'
+      flashing_lights:
+      - button
+      - 'no'
+      - sensor
+      fut_ref:
+      - 61A
+      - 401/400B
+      - 399/400A-B
+      - 401/403
+      - '399'
+      - 400A
+      bin:
+      - 'yes'
+      - 'no'
+      wheelchair:
+      - 'yes'
+      lit:
+      - 'yes'
+      - 'no'
+      - automatic
+      departures_board:
+      - 'no'
+      network:wikipedia:
+      - en:Edmonton Transit Service
+      - en:Strathcona County Transit
+      description:
+      - Stop for Capital and Metro Line bus replacement services
+      - Gate
+      - temporary location
+      - Industrial safety services
+      local_ref: 56
+      ref:signed:
+      - 'no'
+      surface:
+      - asphalt
+      - concrete
+      barrier:
+      - kerb
+      crossing_ref:
+      - toucan
+      - zebra
+      - pelican
+      bicycle:
+      - 'yes'
+      - designated
+      - 'no'
+      - dismount
+      segregated:
+      - 'no'
+      construction:
+      - turning_circle
+      lamp_type:
+      - sodium_vapor
+      - led
+      - LED
+      - electric
+      - sodium
+      - high_pressure_sodium
+      - low_pressure_sodium
+      - floodlight
+      - gaslight
+      lamp_mount:
+      - bent_mast
+      - straight_mast
+      - high_mast
+      - suspended
+      - pole
+      - wall
+      tower:type:
+      - lighting
+      check_date:
+      - '2018-11-09'
+      addr:province:
+      - Alberta
+      internet_access:
+      - 'no'
+      operator:wikidata:
+      - Q18167942
+      - Q7122769
+      - Q1438987
+      website:
+      - https://www.redarrow.ca/locations
+      support:
+      - pole
+      - power_pole
+      traffic_calming:
+      - island
+      - table
+      - hump
+      - 'yes'
+      - choker
+      - 'no'
+      wikipedia:
+      - en:Strathcona County Transit
+      power:
+      - pole
+      - catenary_mast
+      height:
+      - '12'
+      - '9'
+      - '6'
+      - '10'
+      - '7.5'
+      - '15'
+      - '13'
+      line_attachment:
+      - pin
+      - anchor
+      - pulley
+      material:
+      - wood
+      - metal
+      traffic_signals:countdown:
+      - 'yes'
+      access:
+      - passengers
+      - 'yes'
+      maxspeed:
+      - '60'
+      - '40'
+      - '50'
+      fixme:
+      - Please merge me into a nearby highway
+      - stop number
+      camera:direction:
+      - '179'
+      camera:type:
+      - dome
+      - fixed
+      man_made:
+      - surveillance
+      - utility_pole
+      surveillance:type:
+      - camera
+      camera:mount:
+      - pole
+      surveillance:
+      - outdoor
+      surveillance:zone:
+      - building
+      - traffic
+      noname:
+      - 'yes'
+      check_date:crossing:
+      - '2021-06-25'
+      - '2023-02-02'
+      fut_ref:left:
+      - 400A
+      fut_ref:right:
+      - '399'
+      - 400B
+      alt_name:
+      - Fort Sask Park & Ride
+      - Dow Centennial Centre
+      bicycle_parking:
+      - rack
+      toilets:wheelchair:
+      - 'no'
+      source:date:
+      - '2025-08-01'
+      - '2025'
+      covered:
+      - 'yes'
+      addr:floor:
+      - G;1
+      - G
+      - '1'
+      - G/0, L2/1
+      - G,1
+      - G,2
+      level:
+      - 0;1
+      - L2
+      - '1'
+      signed:
+      - 'yes'
+      check_date:shelter:
+      - '2023-02-02'
+      light:lit:
+      - dusk-dawn
+      opening_hours:
+      - sunrise-sunset
+      - dusk-dawn
+      light:method:
+      - high_pressure_sodium
+      - LED
+      output:
+      - 91 W
+      supervised:
+      - 'no'
+      colour:
+      - pride
+      abandoned:
+      - 'yes'
+      light:colour:
+      - orange
+      - white
+      light:count:
+      - '1'
+      light:tilt:
+      - '0'
+      - '-90'
+      tower:construction:
+      - freestanding
+      temporary:
+      - 'yes'
+      rout_ref:
+      - '111'
+      platforms:
+      - '2'
+      start_date:
+      - '2019-01-21'
+      - '2022-10-15'
+      addr:postcode:
+      - T6W 0W8
+      designation:
+      - '9846'
+      unsigned_ref:
+      - '521'
+      end_date:
+      - '2021-04-25'
+      old_ref:
+      - '9646'
+      - '9661'
+      - '9644'
+      - '9696'
+      - '9691'
+      - '9694'
+      - '9663'
+      operator:wikipedia:
+      - en:Leduc Transit
+      noexit:
+      - 'yes'
+      horse:
+      - 'no'
+      highway_1:
+      - crossing
+      ref:ruian:addr:
+      - '9440'
+      - '9474'
+      - '9602'
+      - '9441'
+      speed_camera:
+      - traffic_signals
+      foot:
+      - 'yes'
+      - 'no'
+      light:power:
+      - 150W
+      - 70W
+      - 100W
+      - 66W
+      - 40W
+      - 65W
+      - 43W
+      - 35W
+      - 120W
+      - 105W
+      - 90W
+      - 68W
+      - 31W
+      - 39W
+      - 58W
+      - 33W
+      - 72W
+      - 38W
+      - 98W
+      - 250W
+      - 61W
+      - 79W
+      - 114W
+      - 180W
+      - 60W
+      - 140W
+      - 50W
+      - 92W
+      - 129W
+      - 149W
+      - 141W
+      - 55W
+      - 107W
+      - 106W
+      - 131W
+      - 400W
+      crossing:light:
+      - 'yes'
+      old_name:
+      - Home Depot Access & McLeod Avenue
+      location:transition:
+      - 'yes'
+      not:network:wikidata:
+      - Q7586770
+      hazard:
+      - children
+      - school_zone
+      maxspeed:conditional:
+      - 30 @ 07:30-21:00
+      railway:
+      - tram_level_crossing
+      utility:
+      - power
+      hgv: []
+      lanes: []
+      oneway: []
+      sidewalk: []
+      lanes:backward: []
+      lanes:forward: []
+      cycleway: []
+      destination: []
+      destination:street: []
+      junction:ref: []
+      cycleway:both: []
+      parking:left: []
+      parking:left:orientation: []
+      parking:right: []
+      sidewalk:both: []
+      source:name: []
+      destination:ref: []
+      maxspeed:advisory: []
+      turn:lanes: []
+      destination:symbol: []
+      maxheight: []
+      hgv:conditional: []
+      parking:both: []
+      lane_markings: []
+      source:maxspeed: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      width: []
+      dual_carriageway: []
+      expressway: []
+      cutting: []
+      hazmat: []
+      bridge: []
+      layer: []
+      maxweight:signed: []
+      sidewalk:left: []
+      sidewalk:right: []
+      attribution: []
+      geobase:acquisitionTechnique: []
+      opening_date: []
+      cycleway:left: []
+      cycleway:right: []
+      service: []
+      parking:both:orientation: []
+      created_by: []
+      maxspeed:type: []
+      lcn: []
+      is_in: []
+      parking:right:orientation: []
+      placement: []
+      reg_name: []
+      addr:housenumber:first:left: []
+      addr:housenumber:first:right: []
+      addr:housenumber:last:left: []
+      addr:housenumber:last:right: []
+      construction_date: []
+      heritage:website: []
+      historic: []
+      motor_vehicle: []
+      wikidata: []
+      turn:lanes:forward: []
+      maxspeed:variable: []
+      minspeed: []
+      destination:ref:to: []
+      footway: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      smoothness: []
+      embankment: []
+      flood_prone: []
+      trolley_wire: []
+      tracktype: []
+      source:geometry: []
+      ford: []
+      loc_name: []
+      shoulder: []
+      official_name: []
+      junction: []
+      placement:forward: []
+      motorcar: []
+      ski: []
+      snowmobile: []
+      step_count: []
+      overtaking:forward: []
+      dog: []
+      stroller: []
+      turn:lanes:backward: []
+      ref_old: []
+      toll: []
+      addr:interpolation: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      piste:lit: []
+      piste:oneway: []
+      piste:status: []
+      sac_scale: []
+      name:en: []
+      name:fr: []
+      frontage_road: []
+      area: []
+      handrail: []
+      incline: []
+      ramp: []
+      ramp:bicycle: []
+      lot: []
+      psv: []
+      tunnel: []
+      trail_visibility: []
+      informal: []
+      source_1: []
+      mtb:scale: []
+      mtb:scale:uphill: []
+      sloped_curb: []
+      destination:lanes: []
+      taxi: []
+      golf: []
+      golf_cart: []
+      check_date:surface: []
+      emergency: []
+      name:de: []
+      abandoned:highway: []
+      placement:backward: []
+      demolished:highway: []
+      waterway: []
+      mtb:scale:imba: []
+      mtb:type: []
+      destination:street:lanes: []
+      access:note: []
+      motor_vehicle:conditional: []
+      indoor: []
+      cycleway:right:oneway: []
+      sidewalk:both:surface: []
+      bicycle_road: []
+      cycleway:left:segregated: []
+      bus:lanes: []
+      parking:left:orientation:school_bus: []
+      parking:left:restriction:conditional: []
+      parking:left:restriction:reason: []
+      parking:left:restriction:school_bus: []
+      parking:left:reason: []
+      driveway: []
+      cycleway:both:segregated: []
+      disused:highway: []
+      maxheight:signed: []
+      access:both_ways: []
+      destination:ref:lanes: []
+      turn: []
+      access:conditional: []
+      NHS: []
+      alt_name:en: []
+      alt_name:fr: []
+      nat_name: []
+      nat_name:en: []
+      nat_name:fr: []
+      geobase:roadsegmentid: []
+      bridge:name: []
+      bridge:structure: []
+      destination:ref:to:lanes: []
+      cycleway:both:lane: []
+      sidewalk:left:surface: []
+      destination:backward: []
+      route: []
+      bus:lanes:backward: []
+      bus:lanes:forward: []
+      proposed: []
+      change:lanes: []
+      old_name:-2023: []
+      was:highway: []
+      geobase:routeName1:en: []
+      fut_name: []
+      destination:to: []
+      exit: []
+      roof:levels: []
+      vehicle: []
+      destination:street:to: []
+      motorcycle: []
+      light_rail: []
+      spirce: []
+      disused:aeroway: []
+      branch: []
+      brand: []
+      brand:wikidata: []
+      fax: []
+      phone: []
+      source:name_1: []
+      sport: []
+      lit:perceived: []
+      mtb: []
+      TDIRECT_EN: []
+      lanes:reversible: []
+      access:lanes: []
+      destination:ref:backward: []
+      ramp:wheelchair: []
+      layer_1: []
+      atv: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      destination:forward: []
+      curves: []
+      school_bus: []
+      cycleway:right:lane: []
+      school_bus:conditional: []
+      leisure: []
+      conveying: []
+      location: []
+      project: []
+      usage: []
+      source:surface: []
+      drive_through: []
+      comment: []
+      abutters: []
+      psv:lanes: []
+      name_1: []
+      name_2: []
+      junction:unsigned_ref: []
+      bicycle:lanes: []
+      length: []
+      maintained: []
+      mtb:name: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      type: []
+      was:foot: []
+      maxwidth: []
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:left:restriction: []
+      bus_bay: []
+      construction_end_expected: []
+      construction_start_expected: []
+      psv:lanes:forward: []
+      turn:backward: []
+      check_date:lit: []
+      access_control: []
+      private: []
+      handrail:left: []
+      handrail:right: []
+      ramp:luggage: []
+      ramp:stroller: []
+      turn:forward: []
+      destination:symbol:lanes: []
+      horse_scale: []
+      visible: []
+      access:lanes:forward: []
+      overtaking: []
+      destination:street:to:lanes: []
+      source:width: []
+      cycleway:surface: []
+      footway:surface: []
+      cartpath: []
+      name:cr: []
+      name:cr-Latn: []
+      maxheight:physical: []
+      hgv_articulated: []
+      destination:street:backward: []
+      narrow: []
+      parking:lane: []
+      destination:symbol:forward: []
+      cycle_network: []
+      change:lanes:forward: []
+      change:lanes:backward: []
+      source:tracktype: []
+      place: []
+      width:backward: []
+      width:lanes:forward: []
+      cycleway:left:lane: []
+      access:lanes:both_ways: []
+      access:lanes:backward: []
+      maxspeed:forward:conditional: []
+      geobase:routeName1:fr: []
+      paved: []
+      tourism: []
+    style_rules:
+      highway:
+        motorway_junction: {}
+        turning_circle: {}
+        crossing: {}
+        bus_stop: {}
+        traffic_signals: {}
+        stop: {}
+        street_lamp: {}
+        turning_loop: {}
+        elevator: {}
+        priority: {}
+        give_way: {}
+        mini_roundabout: {}
+        platform: {}
+        speed_camera: {}
+        speed_display: {}
+        trailhead: {}
+        emergency_access_point: {}
+        sidewalk: {}
+        bus_stop;street_lamp: {}
+        passing_place: {}
+        traffic_mirror: {}
+        services: {}
+      maxspeed:
+        '60': {}
+        '40': {}
+        '50': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__MultiLineString:
+    file: downloads/regions/edmonton-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 1649
+      crossing:
+      - traffic_signals
+      crossing:markings: []
+      highway:
+      - service
+      - residential
+      - footway
+      - track
+      - cycleway
+      - path
+      - unclassified
+      - road
+      - living_street
+      - construction
+      - tertiary
+      kerb: []
+      tactile_paving:
+      - 'no'
+      noref: []
+      ref: []
+      source:
+      - Bing
+      - Geobase_Import_2009
+      - Local data
+      - survey & Esri World Imagery 26--11-20
+      - survey & Esri World Imagery 27--11-20
+      - improve_osm_tn
+      - survey & Esri World Imagery 24--11-20
+      - gps
+      - NRCan-CanVec-7.0
+      - GPS,Bing
+      - bing
+      - GPS
+      - Yahoo,Fort Edmonton Park
+      - NRN - Alberta V7.0
+      - maxar
+      - Geobase_Import_2010
+      - Geobase_Import_2009;Geobase_Import_2010
+      - local_knowledge
+      - Canvec
+      - NRN - Alberta V7.0; Geobase_Import_2009
+      - esri
+      - NRN - Alberta V7.0;Geobase_Import_2009
+      - Geobase_Import_2009;NRN - Alberta V7.0
+      traffic_signals: []
+      direction: []
+      ref:left: []
+      ref:right: []
+      source:ref: []
+      stop: []
+      traffic_signals:direction: []
+      crossing:island: []
+      crossing:signals: []
+      addr:city: []
+      addr:housenumber: []
+      addr:street: []
+      note: []
+      turning_circle: []
+      button_operated: []
+      traffic_signals:sound: []
+      bench: []
+      bus: []
+      name: 199
+      network: []
+      network:wikidata: []
+      operator: []
+      public_transport: []
+      route_ref: []
+      shelter: []
+      traffic_signals:vibration: []
+      traffic_sign: []
+      flashing_lights: []
+      fut_ref: []
+      bin: []
+      wheelchair:
+      - 'no'
+      lit:
+      - 'yes'
+      - 'no'
+      - 24/7
+      departures_board: []
+      network:wikipedia: []
+      description: []
+      local_ref: []
+      ref:signed: []
+      surface:
+      - asphalt
+      - unpaved
+      - paved
+      - concrete
+      - gravel
+      - dirt
+      - grass
+      - ground
+      - compacted
+      - paving_stones
+      - rock
+      barrier: []
+      crossing_ref: []
+      bicycle:
+      - designated
+      - 'yes'
+      - dismount
+      - 'no'
+      segregated:
+      - 'no'
+      construction:
+      - service
+      lamp_type: []
+      lamp_mount: []
+      tower:type: []
+      check_date:
+      - '2025-10-29'
+      addr:province: []
+      internet_access: []
+      operator:wikidata: []
+      website: []
+      support: []
+      traffic_calming: []
+      wikipedia: []
+      power: []
+      height: []
+      line_attachment: []
+      material: []
+      traffic_signals:countdown: []
+      access:
+      - private
+      - 'yes'
+      - permissive
+      - customers
+      - destination
+      - 'no'
+      - permit
+      maxspeed:
+      - '50'
+      - '40'
+      - '20'
+      - '15'
+      - '30'
+      fixme: []
+      camera:direction: []
+      camera:type: []
+      man_made: []
+      surveillance:type: []
+      camera:mount: []
+      surveillance: []
+      surveillance:zone: []
+      noname:
+      - 'yes'
+      check_date:crossing: []
+      fut_ref:left: []
+      fut_ref:right: []
+      alt_name: []
+      bicycle_parking: []
+      toilets:wheelchair: []
+      source:date: []
+      covered:
+      - 'no'
+      addr:floor: []
+      level: []
+      signed: []
+      check_date:shelter: []
+      light:lit: []
+      opening_hours: []
+      light:method: []
+      output: []
+      supervised: []
+      colour: []
+      abandoned: []
+      light:colour: []
+      light:count: []
+      light:tilt: []
+      tower:construction: []
+      temporary: []
+      rout_ref: []
+      platforms: []
+      start_date: []
+      addr:postcode: []
+      designation: []
+      unsigned_ref: []
+      end_date: []
+      old_ref: []
+      operator:wikipedia: []
+      noexit: []
+      horse:
+      - 'no'
+      highway_1: []
+      ref:ruian:addr: []
+      speed_camera: []
+      foot:
+      - designated
+      - 'yes'
+      light:power: []
+      crossing:light: []
+      old_name: []
+      location:transition: []
+      not:network:wikidata: []
+      hazard: []
+      maxspeed:conditional: []
+      railway: []
+      utility: []
+      hgv:
+      - 'no'
+      lanes:
+      - '2'
+      - '1'
+      oneway:
+      - 'no'
+      - 'yes'
+      sidewalk:
+      - both
+      - none
+      lanes:backward: []
+      lanes:forward: []
+      cycleway: []
+      destination: []
+      destination:street: []
+      junction:ref: []
+      cycleway:both: []
+      parking:left: []
+      parking:left:orientation: []
+      parking:right: []
+      sidewalk:both: []
+      source:name:
+      - survey
+      - Canvec
+      destination:ref: []
+      maxspeed:advisory: []
+      turn:lanes: []
+      destination:symbol: []
+      maxheight: []
+      hgv:conditional: []
+      parking:both:
+      - lane
+      lane_markings:
+      - 'no'
+      source:maxspeed: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      width:
+      - '5'
+      - '9'
+      - '2'
+      dual_carriageway: []
+      expressway: []
+      cutting: []
+      hazmat: []
+      bridge: []
+      layer:
+      - '1'
+      - '2'
+      - '-1'
+      maxweight:signed: []
+      sidewalk:left: []
+      sidewalk:right: []
+      attribution:
+      - "GeoBase\xAE"
+      geobase:acquisitionTechnique:
+      - GPS
+      - Orthoimage
+      - GPS;Orthoimage
+      opening_date: []
+      cycleway:left: []
+      cycleway:right: []
+      service:
+      - driveway
+      - parking_aisle
+      - alley
+      - emergency_access
+      - drive-through
+      parking:both:orientation:
+      - perpendicular
+      created_by:
+      - Potlatch 0.10f
+      maxspeed:type:
+      - sign
+      lcn: []
+      is_in:
+      - Spruce Grove,Alberta
+      - Strathcona County,Alberta
+      - Strathcona County
+      - Strathcona County; Strathcona County,Alberta
+      - I.D. No. 13 Elk Island,Alberta
+      - Sturgeon County,Alberta
+      parking:right:orientation: []
+      placement: []
+      reg_name: []
+      addr:housenumber:first:left:
+      - '2'
+      - '24'
+      addr:housenumber:first:right:
+      - '217'
+      - '1'
+      addr:housenumber:last:left:
+      - '194'
+      - '52'
+      addr:housenumber:last:right:
+      - '10849'
+      - '223'
+      - '229'
+      construction_date: []
+      heritage:website: []
+      historic: []
+      motor_vehicle:
+      - 'no'
+      - private
+      - permissive
+      wikidata: []
+      turn:lanes:forward: []
+      maxspeed:variable: []
+      minspeed: []
+      destination:ref:to: []
+      footway:
+      - sidewalk
+      - crossing
+      geobase:datasetName:
+      - NRN:Alberta
+      geobase:uuid:
+      - e31c92bcc1d0412096ef0847a85bb8ed; 97692e0c5b954506a4d0563d8c289069
+      - f9d454f49bd04561ae8d881fd5cc8b92; d758adfb9c704ceb99abdc2014cebe9e
+      smoothness:
+      - bad
+      embankment: []
+      flood_prone:
+      - 'no'
+      trolley_wire: []
+      tracktype:
+      - grade5
+      - grade2
+      - grade3
+      - grade4
+      source:geometry:
+      - Bing
+      ford: []
+      loc_name: []
+      shoulder: []
+      official_name: []
+      junction: []
+      placement:forward: []
+      motorcar:
+      - 'no'
+      ski: []
+      snowmobile: []
+      step_count: []
+      overtaking:forward: []
+      dog: []
+      stroller: []
+      turn:lanes:backward: []
+      ref_old: []
+      toll: []
+      addr:interpolation: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      piste:lit: []
+      piste:oneway: []
+      piste:status: []
+      sac_scale: []
+      name:en: []
+      name:fr: []
+      frontage_road: []
+      area: []
+      handrail: []
+      incline: []
+      ramp: []
+      ramp:bicycle: []
+      lot: []
+      psv: []
+      tunnel:
+      - 'yes'
+      trail_visibility: []
+      informal:
+      - 'yes'
+      source_1: []
+      mtb:scale: []
+      mtb:scale:uphill: []
+      sloped_curb: []
+      destination:lanes: []
+      taxi: []
+      golf:
+      - cartpath
+      golf_cart:
+      - 'yes'
+      check_date:surface: []
+      emergency: []
+      name:de: []
+      abandoned:highway: []
+      placement:backward: []
+      demolished:highway: []
+      waterway: []
+      mtb:scale:imba: []
+      mtb:type: []
+      destination:street:lanes: []
+      access:note: []
+      motor_vehicle:conditional: []
+      indoor: []
+      cycleway:right:oneway: []
+      sidewalk:both:surface: []
+      bicycle_road: []
+      cycleway:left:segregated: []
+      bus:lanes: []
+      parking:left:orientation:school_bus: []
+      parking:left:restriction:conditional: []
+      parking:left:restriction:reason: []
+      parking:left:restriction:school_bus: []
+      parking:left:reason: []
+      driveway: []
+      cycleway:both:segregated: []
+      disused:highway: []
+      maxheight:signed: []
+      access:both_ways: []
+      destination:ref:lanes: []
+      turn: []
+      access:conditional: []
+      NHS: []
+      alt_name:en: []
+      alt_name:fr: []
+      nat_name: []
+      nat_name:en: []
+      nat_name:fr: []
+      geobase:roadsegmentid: []
+      bridge:name: []
+      bridge:structure: []
+      destination:ref:to:lanes: []
+      cycleway:both:lane: []
+      sidewalk:left:surface: []
+      destination:backward: []
+      route: []
+      bus:lanes:backward: []
+      bus:lanes:forward: []
+      proposed: []
+      change:lanes: []
+      old_name:-2023: []
+      was:highway: []
+      geobase:routeName1:en: []
+      fut_name: []
+      destination:to: []
+      exit: []
+      roof:levels: []
+      vehicle: []
+      destination:street:to: []
+      motorcycle:
+      - 'no'
+      light_rail: []
+      spirce: []
+      disused:aeroway: []
+      branch: []
+      brand: []
+      brand:wikidata: []
+      fax: []
+      phone: []
+      source:name_1: []
+      sport: []
+      lit:perceived: []
+      mtb: []
+      TDIRECT_EN: []
+      lanes:reversible: []
+      access:lanes: []
+      destination:ref:backward: []
+      ramp:wheelchair: []
+      layer_1: []
+      atv: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      destination:forward: []
+      curves: []
+      school_bus: []
+      cycleway:right:lane: []
+      school_bus:conditional: []
+      leisure: []
+      conveying: []
+      location: []
+      project: []
+      usage: []
+      source:surface: []
+      drive_through: []
+      comment: []
+      abutters: []
+      psv:lanes: []
+      name_1: []
+      name_2: []
+      junction:unsigned_ref: []
+      bicycle:lanes: []
+      length: []
+      maintained: []
+      mtb:name: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      type: []
+      was:foot: []
+      maxwidth: []
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:left:restriction: []
+      bus_bay: []
+      construction_end_expected: []
+      construction_start_expected: []
+      psv:lanes:forward: []
+      turn:backward: []
+      check_date:lit: []
+      access_control: []
+      private: []
+      handrail:left: []
+      handrail:right: []
+      ramp:luggage: []
+      ramp:stroller: []
+      turn:forward: []
+      destination:symbol:lanes: []
+      horse_scale: []
+      visible: []
+      access:lanes:forward: []
+      overtaking: []
+      destination:street:to:lanes: []
+      source:width: []
+      cycleway:surface: []
+      footway:surface: []
+      cartpath: []
+      name:cr: []
+      name:cr-Latn: []
+      maxheight:physical: []
+      hgv_articulated: []
+      destination:street:backward: []
+      narrow: []
+      parking:lane: []
+      destination:symbol:forward: []
+      cycle_network: []
+      change:lanes:forward: []
+      change:lanes:backward: []
+      source:tracktype: []
+      place: []
+      width:backward: []
+      width:lanes:forward: []
+      cycleway:left:lane: []
+      access:lanes:both_ways: []
+      access:lanes:backward: []
+      maxspeed:forward:conditional: []
+      geobase:routeName1:fr: []
+      paved: []
+      tourism: []
+    style_rules:
+      highway:
+        service:
+          linewidth: 0.15
+        residential:
+          linewidth: 0.3
+        footway: {}
+        track:
+          linewidth: 0.1
+        cycleway: {}
+        path: {}
+        unclassified:
+          linewidth: 0.15
+        road: {}
+        living_street:
+          linewidth: 0.1
+        construction: {}
+        tertiary:
+          linewidth: 0.32
+      maxspeed:
+        '50': {}
+        '40': {}
+        '20': {}
+        '15': {}
+        '30': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Polygon:
+    file: downloads/regions/edmonton-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 204
+      crossing: []
+      crossing:markings: []
+      highway:
+      - services
+      - platform
+      - pedestrian
+      - path
+      - rest_area
+      - footway
+      - corridor
+      - service
+      - elevator
+      - raceway
+      kerb: []
+      tactile_paving:
+      - 'yes'
+      - 'no'
+      noref: []
+      ref: []
+      source:
+      - Bing
+      traffic_signals: []
+      direction: []
+      ref:left: []
+      ref:right: []
+      source:ref: []
+      stop: []
+      traffic_signals:direction: []
+      crossing:island: []
+      crossing:signals: []
+      addr:city:
+      - Acheson
+      - Edmonton
+      addr:housenumber:
+      - '26230'
+      - '9918'
+      addr:street:
+      - 114 Avenue
+      - 102 Avenue NW
+      note:
+      - UofA
+      turning_circle: []
+      button_operated: []
+      traffic_signals:sound: []
+      bench:
+      - 'yes'
+      - 'no'
+      bus:
+      - 'yes'
+      name:
+      - South Campus/Fort Edmonton Park Transit Centre
+      - Four Winds Plaza
+      - Entry Plaza
+      - West Edmonton Mall Temporary Transit Centre
+      - Esso Travel Centre
+      - Petro-Pass
+      - Sir Winston Churchill Square
+      - Flying J Travel Center
+      - Centre Court
+      - Prarie Walk
+      - Volunteer Plaza
+      - Legislature Plaza
+      - North Amphitheatre
+      - Violet Henry King Plaza
+      - Coliseum
+      - Lower Level - Hudson's Bay Outlet
+      - Upper Level - Hudson's Bay Outlet
+      - Upper Level - Simons
+      - Lower Level - Simons
+      - Parade Square
+      network:
+      - ETS
+      - StAT
+      - ETS;Spruce Grove Transit
+      - Strathcona County Transit
+      - Edmonton LRT
+      network:wikidata: []
+      operator:
+      - Edmonton Transit Service
+      - St. Albert Transit
+      - The City of Spruce Grove
+      - Strathcona County
+      public_transport:
+      - platform
+      route_ref: []
+      shelter:
+      - 'yes'
+      - 'no'
+      traffic_signals:vibration: []
+      traffic_sign: []
+      flashing_lights: []
+      fut_ref: []
+      bin:
+      - 'yes'
+      wheelchair:
+      - 'yes'
+      - designated
+      lit:
+      - 'yes'
+      - 24/7
+      departures_board:
+      - timetable
+      network:wikipedia: []
+      description:
+      - Sir Winston Churchill Square is the main downtown square in Edmonton, Alberta,
+        which plays host to a large majority of festivals and events.
+      local_ref: []
+      ref:signed: []
+      surface:
+      - concrete
+      - asphalt
+      - concrete:plates
+      - gravel
+      - paving_stones
+      - paved
+      - dirt
+      barrier: []
+      crossing_ref: []
+      bicycle:
+      - 'no'
+      - 'yes'
+      segregated: []
+      construction: []
+      lamp_type: []
+      lamp_mount: []
+      tower:type: []
+      check_date:
+      - '2024-08-02'
+      addr:province:
+      - AB
+      internet_access: []
+      operator:wikidata: []
+      website:
+      - https://locations.pilotflyingj.com/ca/ab/nisku/302-20-avenue
+      - https://www.edmonton.ca/ets/stadium-lrt-station.aspx
+      - https://locations.pilotflyingj.com/ca/ab/sherwood-park/50-pembina-rd.
+      support: []
+      traffic_calming: []
+      wikipedia:
+      - en:Churchill Square (Edmonton)
+      - en:Northlands LRT Station
+      power: []
+      height: []
+      line_attachment: []
+      material: []
+      traffic_signals:countdown: []
+      access:
+      - 'yes'
+      - private
+      maxspeed: []
+      fixme: []
+      camera:direction: []
+      camera:type: []
+      man_made: []
+      surveillance:type: []
+      camera:mount: []
+      surveillance: []
+      surveillance:zone: []
+      noname:
+      - 'yes'
+      check_date:crossing: []
+      fut_ref:left: []
+      fut_ref:right: []
+      alt_name:
+      - South Campus Transit Centre
+      bicycle_parking: []
+      toilets:wheelchair: []
+      source:date: []
+      covered:
+      - 'yes'
+      addr:floor: []
+      level:
+      - '0'
+      - -1;0;1;2;3;4
+      - -1;0;1;2;3;4;5
+      - 0;-1
+      - -1;-2
+      signed: []
+      check_date:shelter: []
+      light:lit: []
+      opening_hours: []
+      light:method: []
+      output: []
+      supervised: []
+      colour: []
+      abandoned: []
+      light:colour: []
+      light:count: []
+      light:tilt: []
+      tower:construction: []
+      temporary:
+      - 'yes'
+      rout_ref: []
+      platforms: []
+      start_date: []
+      addr:postcode:
+      - T7X 3G4
+      - T5J 5H7
+      designation: []
+      unsigned_ref: []
+      end_date: []
+      old_ref: []
+      operator:wikipedia: []
+      noexit: []
+      horse:
+      - 'no'
+      highway_1: []
+      ref:ruian:addr: []
+      speed_camera: []
+      foot:
+      - 'yes'
+      light:power: []
+      crossing:light: []
+      old_name: []
+      location:transition: []
+      not:network:wikidata: []
+      hazard: []
+      maxspeed:conditional: []
+      railway:
+      - platform
+      utility: []
+      hgv:
+      - 'yes'
+      lanes: []
+      oneway: []
+      sidewalk: []
+      lanes:backward: []
+      lanes:forward: []
+      cycleway: []
+      destination: []
+      destination:street: []
+      junction:ref: []
+      cycleway:both: []
+      parking:left: []
+      parking:left:orientation: []
+      parking:right: []
+      sidewalk:both: []
+      source:name: []
+      destination:ref: []
+      maxspeed:advisory: []
+      turn:lanes: []
+      destination:symbol: []
+      maxheight: []
+      hgv:conditional: []
+      parking:both: []
+      lane_markings: []
+      source:maxspeed: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      width: []
+      dual_carriageway: []
+      expressway: []
+      cutting: []
+      hazmat: []
+      bridge: []
+      layer:
+      - '1'
+      maxweight:signed: []
+      sidewalk:left: []
+      sidewalk:right: []
+      attribution: []
+      geobase:acquisitionTechnique: []
+      opening_date: []
+      cycleway:left: []
+      cycleway:right: []
+      service: []
+      parking:both:orientation: []
+      created_by: []
+      maxspeed:type: []
+      lcn: []
+      is_in: []
+      parking:right:orientation: []
+      placement: []
+      reg_name: []
+      addr:housenumber:first:left: []
+      addr:housenumber:first:right: []
+      addr:housenumber:last:left: []
+      addr:housenumber:last:right: []
+      construction_date: []
+      heritage:website: []
+      historic: []
+      motor_vehicle:
+      - 'no'
+      wikidata:
+      - Q5118225
+      - Q5145762
+      turn:lanes:forward: []
+      maxspeed:variable: []
+      minspeed: []
+      destination:ref:to: []
+      footway:
+      - sidewalk
+      geobase:datasetName: []
+      geobase:uuid: []
+      smoothness: []
+      embankment: []
+      flood_prone: []
+      trolley_wire: []
+      tracktype: []
+      source:geometry: []
+      ford: []
+      loc_name: []
+      shoulder: []
+      official_name: []
+      junction: []
+      placement:forward: []
+      motorcar: []
+      ski: []
+      snowmobile: []
+      step_count: []
+      overtaking:forward: []
+      dog: []
+      stroller: []
+      turn:lanes:backward: []
+      ref_old: []
+      toll: []
+      addr:interpolation: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      piste:lit: []
+      piste:oneway: []
+      piste:status: []
+      sac_scale: []
+      name:en: []
+      name:fr: []
+      frontage_road: []
+      area:
+      - 'yes'
+      handrail: []
+      incline: []
+      ramp: []
+      ramp:bicycle: []
+      lot: []
+      psv: []
+      tunnel: []
+      trail_visibility: []
+      informal: []
+      source_1: []
+      mtb:scale: []
+      mtb:scale:uphill: []
+      sloped_curb: []
+      destination:lanes: []
+      taxi: []
+      golf:
+      - cartpath
+      golf_cart:
+      - designated
+      - 'yes'
+      check_date:surface: []
+      emergency: []
+      name:de: []
+      abandoned:highway: []
+      placement:backward: []
+      demolished:highway: []
+      waterway: []
+      mtb:scale:imba: []
+      mtb:type: []
+      destination:street:lanes: []
+      access:note: []
+      motor_vehicle:conditional: []
+      indoor:
+      - 'yes'
+      - room
+      cycleway:right:oneway: []
+      sidewalk:both:surface: []
+      bicycle_road: []
+      cycleway:left:segregated: []
+      bus:lanes: []
+      parking:left:orientation:school_bus: []
+      parking:left:restriction:conditional: []
+      parking:left:restriction:reason: []
+      parking:left:restriction:school_bus: []
+      parking:left:reason: []
+      driveway: []
+      cycleway:both:segregated: []
+      disused:highway: []
+      maxheight:signed: []
+      access:both_ways: []
+      destination:ref:lanes: []
+      turn: []
+      access:conditional: []
+      NHS: []
+      alt_name:en: []
+      alt_name:fr: []
+      nat_name: []
+      nat_name:en: []
+      nat_name:fr: []
+      geobase:roadsegmentid: []
+      bridge:name: []
+      bridge:structure: []
+      destination:ref:to:lanes: []
+      cycleway:both:lane: []
+      sidewalk:left:surface: []
+      destination:backward: []
+      route: []
+      bus:lanes:backward: []
+      bus:lanes:forward: []
+      proposed: []
+      change:lanes: []
+      old_name:-2023: []
+      was:highway: []
+      geobase:routeName1:en: []
+      fut_name: []
+      destination:to: []
+      exit: []
+      roof:levels: []
+      vehicle: []
+      destination:street:to: []
+      motorcycle: []
+      light_rail:
+      - 'yes'
+      spirce: []
+      disused:aeroway: []
+      branch:
+      - Sherwood Park
+      brand:
+      - Flying J
+      brand:wikidata:
+      - Q64130592
+      fax:
+      - +1 780-955-7756
+      - +1 780-416-2084
+      phone:
+      - +1 780-652-6052
+      - +1 780-416-2035
+      source:name_1: []
+      sport: []
+      lit:perceived: []
+      mtb: []
+      TDIRECT_EN: []
+      lanes:reversible: []
+      access:lanes: []
+      destination:ref:backward: []
+      ramp:wheelchair: []
+      layer_1: []
+      atv: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      destination:forward: []
+      curves: []
+      school_bus: []
+      cycleway:right:lane: []
+      school_bus:conditional: []
+      leisure: []
+      conveying: []
+      location: []
+      project: []
+      usage: []
+      source:surface: []
+      drive_through: []
+      comment: []
+      abutters: []
+      psv:lanes: []
+      name_1: []
+      name_2: []
+      junction:unsigned_ref: []
+      bicycle:lanes: []
+      length: []
+      maintained: []
+      mtb:name: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      type:
+      - multipolygon
+      was:foot: []
+      maxwidth: []
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:left:restriction: []
+      bus_bay: []
+      construction_end_expected: []
+      construction_start_expected: []
+      psv:lanes:forward: []
+      turn:backward: []
+      check_date:lit: []
+      access_control: []
+      private: []
+      handrail:left: []
+      handrail:right: []
+      ramp:luggage: []
+      ramp:stroller: []
+      turn:forward: []
+      destination:symbol:lanes: []
+      horse_scale: []
+      visible: []
+      access:lanes:forward: []
+      overtaking: []
+      destination:street:to:lanes: []
+      source:width: []
+      cycleway:surface: []
+      footway:surface: []
+      cartpath: []
+      name:cr: []
+      name:cr-Latn: []
+      maxheight:physical: []
+      hgv_articulated: []
+      destination:street:backward: []
+      narrow: []
+      parking:lane: []
+      destination:symbol:forward: []
+      cycle_network: []
+      change:lanes:forward: []
+      change:lanes:backward: []
+      source:tracktype: []
+      place:
+      - square
+      width:backward: []
+      width:lanes:forward: []
+      cycleway:left:lane: []
+      access:lanes:both_ways: []
+      access:lanes:backward: []
+      maxspeed:forward:conditional: []
+      geobase:routeName1:fr: []
+      paved:
+      - cobbles
+      tourism:
+      - attraction
+    style_rules:
+      highway:
+        services: {}
+        platform: {}
+        pedestrian: {}
+        path: {}
+        rest_area: {}
+        footway: {}
+        corridor: {}
+        service:
+          linewidth: 0.15
+        elevator: {}
+        raceway: {}
+    style_order:
+    - highway
+  landuse__Polygon:
+    file: downloads/regions/edmonton-ab/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 21260
+      landuse:
+      - cemetery
+      - forest
+      - residential
+      - retail
+      - religious
+      - grass
+      - commercial
+      - farmland
+      - industrial
+      - construction
+      - education
+      - brownfield
+      - allotments
+      - farmyard
+      - meadow
+      - recreation_ground
+      - aquaculture
+      - greenfield
+      - landfill
+      - basin
+      - 'yes'
+      - railway
+      - reservoir
+      - quarry
+      - winter_sports
+      - civil
+      - churchyard
+      - recreation
+      - greenhouse_horticulture
+      - orchard
+      - traffic_island
+      - residential+disused
+      - healthcare
+      - civic_admin
+      - civic
+      - plant_nursery
+      - emergency
+      - utility
+      - military
+      - flowerbed
+      - garages
+      - institutional
+  landuse__MultiPolygon:
+    file: downloads/regions/edmonton-ab/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '12382178'
+      - '14949056'
+      - '6409129'
+      - '1407791'
+      - '16848260'
+      - '17687766'
+      - '17142978'
+      - '17049207'
+      - '4212493'
+      - '13945377'
+      - '5134315'
+      - '17036930'
+      - '17036931'
+      - '16399138'
+      - '16069153'
+      - '18973590'
+      - '7456653'
+      - '19507827'
+      - '17305735'
+      - '17699837'
+      - '17245996'
+      - '9385960'
+      - '16018613'
+      - '14568065'
+      - '16811079'
+      - '6554386'
+      landuse:
+      - retail
+      - forest
+      - construction
+      - industrial
+      - meadow
+      - commercial
+      - residential
+      - railway
+      - brownfield
+      - recreation_ground
+      - military
+  landuse__Point:
+    file: downloads/regions/edmonton-ab/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '3117725532'
+      - '3117725531'
+      - '3117725533'
+      - '12547934467'
+      - '11484463858'
+      - '11484434096'
+      - '12954951808'
+      - '3936773543'
+      - '1119724156'
+      - '1119717208'
+      - '1119716016'
+      - '1119720094'
+      landuse:
+      - quarry
+      - residential
+      - industrial
+  natural__Polygon:
+    file: downloads/regions/edmonton-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id: 8549
+      natural:
+      - wood
+      - wetland
+      - beach
+      - scrub
+      - heath
+  natural__MultiPolygon:
+    file: downloads/regions/edmonton-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id:
+      - '10650965'
+      - '1410475'
+      - '1410437'
+      - '98675683'
+      - '1406799'
+      - '98564948'
+      - '10613681'
+      - '14949056'
+      - '14941823'
+      - '9192850'
+      - '1410442'
+      - '1410474'
+      - '1410471'
+      - '1410455'
+      - '3139764'
+      - '2109552'
+      - '1410424'
+      - '3139674'
+      - '1404022'
+      - '3158200'
+      - '1396742'
+      - '97070626'
+      - '1396728'
+      - '1392959'
+      - '9368832'
+      - '11129343'
+      - '17952924'
+      - '8527126'
+      - '6247821'
+      - '97792218'
+      - '97793908'
+      - '1403734'
+      - '1403738'
+      - '1403742'
+      - '1403748'
+      - '1396724'
+      - '1396767'
+      - '96051103'
+      - '96999160'
+      - '1396009'
+      natural:
+      - wetland
+      - wood
+      - heath
+  natural__LineString:
+    file: downloads/regions/edmonton-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: LineString
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id:
+      - '813328777'
+      - '813328778'
+      - '813328779'
+      - '726868208'
+      - '704919359'
+      - '713437589'
+      - '713437591'
+      - '1058727474'
+      - '1058727473'
+      - '1058727472'
+      - '1058727486'
+      natural:
+      - cliff
+      - wetland
+  natural__Point:
+    file: downloads/regions/edmonton-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '12507591458'
+      - '11055926437'
+      - '11055926439'
+      - '11055926436'
+      - '11055926435'
+      - '11055926438'
+      - '12154549229'
+      - '12154549464'
+      - '12154549465'
+      - '12154534447'
+      - '12154534446'
+      - '12154534445'
+      - '9606073861'
+      natural:
+      - peak
+      - rock
+      - wetland
+  pois__Point:
+    file: downloads/regions/edmonton-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 0.1
+    attributes:
+      element:
+      - node
+      id: 6978
+      name: 1921
+      amenity: 113
+  pois__Polygon:
+    file: downloads/regions/edmonton-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 13201
+      name: 2194
+      amenity: 85
+  pois__MultiPolygon:
+    file: downloads/regions/edmonton-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '6375717'
+      - '17468819'
+      - '17049209'
+      - '17049210'
+      - '19123639'
+      - '10238561'
+      - '17461066'
+      - '17049206'
+      - '14111421'
+      - '7100690'
+      - '19818341'
+      - '20182430'
+      - '6417746'
+      - '15437257'
+      - '17699838'
+      - '19507832'
+      - '15437170'
+      - '15437171'
+      name:
+      - Enterprise
+      - NorQuest College
+      - Impark
+      - University of Alberta
+      - EPS Vallevand Kennels
+      - Police Seized Vehicle Storage Lot
+      - CIBC
+      - The Mustard Seed Prairie Manor
+      - ATB Financial Arts Barn
+      - Cloverdale Community League
+      - Stadium Park & Ride
+      - Virginia Park Senior Citizens Complex
+      - East Edmonton Health Clinic
+      - Clareview East Park & Ride
+      - Clareview West Park & Ride
+      amenity:
+      - car_rental
+      - college
+      - parking
+      - university
+      - police
+      - bank
+      - social_facility
+      - events_venue
+      - community_centre
+      - hospital
+    style_rules:
+      name:
+        Enterprise: {}
+        NorQuest College: {}
+        Impark: {}
+        University of Alberta: {}
+        EPS Vallevand Kennels: {}
+        Police Seized Vehicle Storage Lot: {}
+        CIBC: {}
+        The Mustard Seed Prairie Manor: {}
+        ATB Financial Arts Barn: {}
+        Cloverdale Community League: {}
+        Stadium Park & Ride: {}
+        Virginia Park Senior Citizens Complex: {}
+        East Edmonton Health Clinic: {}
+        Clareview East Park & Ride: {}
+        Clareview West Park & Ride: {}
+    style_order:
+    - name
+  pois__LineString:
+    file: downloads/regions/edmonton-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id:
+      - '1110667677'
+      - '1110667674'
+      - '1110667676'
+      - '1110667675'
+      - '1110667672'
+      - '1110667673'
+      - '1110667671'
+      - '1110667666'
+      - '1110667667'
+      - '1110667670'
+      - '1110667669'
+      - '1110667668'
+      - '1280950523'
+      - '1291009970'
+      - '1379174025'
+      - '1379174024'
+      - '1379174023'
+      - '1379174028'
+      - '1291009986'
+      - '1291009969'
+      - '1291009964'
+      - '1291009968'
+      - '1291009967'
+      - '1291009961'
+      name: []
+      amenity:
+      - bench
+      - bicycle_parking
+  water__Polygon:
+    file: downloads/regions/edmonton-ab/layers/water.gpkg
+    layer: water
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 5972
+      water:
+      - lake
+      - pond
+      - river
+      - basin
+      - reservoir
+      - stream
+      - stormwater
+      - ditch
+      - oxbow
+  water__MultiPolygon:
+    file: downloads/regions/edmonton-ab/layers/water.gpkg
+    layer: water
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id:
+      - '360057025'
+      - '1410447'
+      - '1413314'
+      - '1413319'
+      - '98564282'
+      - '1406207'
+      - '8247173'
+      - '19039534'
+      - '18042773'
+      - '11820459'
+      - '17543194'
+      - '402743647'
+      - '1409263591'
+      - '402748194'
+      - '10308703'
+      - '11491407'
+      - '9143308'
+      - '7281956'
+      - '19453515'
+      water:
+      - lake
+      - pond
+      - river
+  waterway__LineString:
+    file: downloads/regions/edmonton-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id: 4181
+      waterway:
+      - stream
+      - ditch
+      - flowline
+      - river
+      - drain
+      - dam
+      - canal
+      - outfall
+      - weir
+    style_rules:
+      waterway:
+        stream:
+          linewidth: 0.4
+        ditch:
+          linewidth: 0.2
+        flowline: {}
+        river:
+          linewidth: 1.0
+        drain:
+          linewidth: 0.3
+        dam: {}
+        canal:
+          linewidth: 0.8
+        outfall: {}
+        weir: {}
+    style_order:
+    - waterway
+  waterway__MultiLineString:
+    file: downloads/regions/edmonton-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id:
+      - '98051641'
+      - '97073135'
+      - '402737480'
+      - '402748344'
+      - '402748345'
+      waterway:
+      - stream
+      - river
+    style_rules:
+      waterway:
+        stream:
+          linewidth: 0.4
+        river:
+          linewidth: 1.0
+    style_order:
+    - waterway
+  waterway__Point:
+    file: downloads/regions/edmonton-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '1136624760'
+      - '1120818037'
+      - '1136304813'
+      - '13468896153'
+      - '3408319368'
+      - '13615285500'
+      - '13615376203'
+      - '1136742429'
+      - '1136649217'
+      - '7130081043'
+      - '11106919093'
+      - '1137270804'
+      - '1137441717'
+      - '10048441533'
+      - '1132218153'
+      - '2306762114'
+      - '4546582743'
+      - '297831947'
+      - '1120802888'
+      waterway:
+      - dam
+      - lock_gate
+      - dock
+      - waterfall
+      - weir
+    style_rules:
+      waterway:
+        dam: {}
+        lock_gate: {}
+        dock: {}
+        waterfall: {}
+        weir: {}
+    style_order:
+    - waterway
+  waterway__Polygon:
+    file: downloads/regions/edmonton-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      id:
+      - '840564773'
+      - '68577539'
+      waterway:
+      - boatyard
+      - dock
+    style_rules:
+      waterway:
+        boatyard: {}
+        dock: {}
+    style_order:
+    - waterway

@@ -1,0 +1,7117 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#aa332e'
+    fc: '#aa332e'
+  hillshade:
+    alpha: 0.25
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gist_heat
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 1.0
+    vert_exag: 1.0
+    weights:
+    - 1.2
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#000000'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: true
+    text: ps
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/vancouver-bc/satellite.tif
+  scheme: coral
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#4A2511'
+    - '#6B3410'
+    - '#8B4513'
+    - '#aa332e'
+    - '#d45d5a'
+    - '#e89894'
+    - '#f4c4c2'
+    - '#fae8e6'
+    - '#fef5f4'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.6
+    visible: false
+    zorder: 0
+  dem: downloads/regions/vancouver-bc/dem.tif
+layers:
+  building__Polygon:
+    file: downloads/regions/vancouver-bc/layers/building.gpkg
+    layer: building
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 287407
+      building: 111
+  building__MultiPolygon:
+    file: downloads/regions/vancouver-bc/layers/building.gpkg
+    layer: building
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id:
+      - '1484009917'
+      - '14716987'
+      - '11247931'
+      - '11247932'
+      - '9720827'
+      - '16733314'
+      - '13234548'
+      - '909342654'
+      - '1224683637'
+      - '6744638'
+      - '1301656949'
+      - '19016647'
+      - '11565745'
+      - '4761998'
+      - '5476570'
+      - '5366419'
+      - '1221910290'
+      building:
+      - 'yes'
+      - roof
+      - school
+      - apartments
+      - residential
+      - house
+      - detached
+      - retail
+  building__Point:
+    file: downloads/regions/vancouver-bc/layers/building.gpkg
+    layer: building
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 70
+      building:
+      - 'yes'
+      - commercial
+      - construction
+      - retail
+      - service
+      - house
+      - residential
+      - office
+      - ruins
+      - 'no'
+      - apartments
+      - industrial
+      - shed
+      - cabin
+      - detached
+  highway__LineString:
+    file: downloads/regions/vancouver-bc/layers/highway.gpkg
+    layer: highway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 170740
+      highway:
+      - cycleway
+      - residential
+      - footway
+      - service
+      - tertiary
+      - trunk
+      - trunk_link
+      - secondary
+      - motorway_link
+      - motorway
+      - path
+      - secondary_link
+      - living_street
+      - steps
+      - unclassified
+      - track
+      - construction
+      - pedestrian
+      - tertiary_link
+      - corridor
+      - busway
+      - primary
+      - primary_link
+      - proposed
+      - bridleway
+      - raceway
+      - platform
+      - road
+      traffic_signals:
+      - 'no'
+      traffic_signals:direction: []
+      direction:
+      - anticlockwise
+      - forward
+      stop: []
+      ref: 96
+      noref: []
+      button_operated:
+      - 'yes'
+      - 'no'
+      - only
+      crossing:
+      - unmarked
+      - uncontrolled
+      - traffic_signals
+      - zebra
+      - marked
+      - pedestrian_signals
+      - ND_Lions_Walking_Loop
+      - 'yes'
+      - informal
+      crossing:island:
+      - 'no'
+      - 'yes'
+      - separate
+      crossing:markings: 66
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      - partial
+      - primitive
+      traffic_signals:sound:
+      - 'no'
+      - 'yes'
+      - locate
+      - walk
+      traffic_calming:
+      - table
+      - choker
+      - 'no'
+      - 'yes'
+      - island
+      - table;choker
+      - hump
+      traffic_signals:vibration:
+      - 'yes'
+      - 'no'
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      bicycle:
+      - designated
+      - 'no'
+      - 'yes'
+      - dismount
+      - permissive
+      - optional_sidepath
+      - use_sidepath
+      - private
+      - discouraged
+      - customers
+      - destination
+      - unknown
+      kerb:
+      - flush
+      - lowered
+      - 'no'
+      except: []
+      distance:
+      - '1'
+      turning_circle: []
+      source: 84
+      description: 261
+      noexit:
+      - 'yes'
+      traffic_signals:countdown:
+      - 'yes'
+      - 'no'
+      crossing_ref:
+      - zebra
+      barrier: []
+      colour:
+      - yellow
+      - red
+      foot:
+      - designated
+      - 'yes'
+      - 'no'
+      - destination
+      - permissive
+      - private
+      - discouraged
+      - unknown
+      - customers
+      - permit
+      - delivery
+      locked:
+      - 'no'
+      material:
+      - roots
+      - wood
+      - plastic
+      - Preformed_thermoplastic
+      - metal
+      - concrete
+      - paved
+      - aluminium
+      - aluminum, wood
+      - soil
+      - aluminum
+      - stone
+      motor_vehicle:
+      - 'no'
+      - private
+      - designated
+      - permit
+      - permissive
+      - 'yes'
+      - destination
+      - customers
+      - unknown
+      - '||no'
+      - '|||no'
+      - service
+      - bus
+      operator:
+      - District of North Vancouver
+      - Metro Vancouver
+      - City of Richmond
+      - Metro Vancouver Regional Parks
+      - TransLink (Coast Mountain Bus Company)
+      - Primrose Hill
+      - Canada Pacific Trials Association
+      - Village of Belcarra
+      - Village of Lions Bay
+      - BC Parks
+      - Metro Vancouver Regional District
+      - District of West Vancouver
+      - Bowen Island Golf Club
+      - Bowen Island Municipality
+      - BC Hydro
+      - Ministry of Transportation and Transit
+      - Grouse Mountain
+      - Union Steamships Company Marina
+      - Xenia
+      operator:type:
+      - government
+      - business
+      - private
+      swing_gate:type: []
+      flashing_lights:
+      - button
+      - 'no'
+      ref:left: []
+      ref:right: []
+      covered:
+      - 'yes'
+      - 'no'
+      - partial
+      - colonnade
+      surface:
+      - gravel
+      - asphalt
+      - concrete
+      - dirt
+      - wood
+      - grass
+      - fine_gravel
+      - ground
+      - paved
+      - concrete:plates
+      - unpaved
+      - woodchips
+      - paving_stones
+      - brick
+      - bricks
+      - compacted
+      - metal
+      - sett
+      - sand
+      - earth
+      - ass
+      - rubber
+      - concrete:lanes
+      - rock
+      - unhewn_cobblestone
+      - pebblestone
+      - mud
+      - wire_mesh
+      - metal_grid
+      - tiles
+      - stepping_stones
+      - rubbercrumb
+      - grass_paver
+      - stone
+      - chipseal
+      - wood;metal_grid
+      - loose_gravel
+      - clay
+      - boardwalk
+      - cement
+      - aluminum
+      - bare_rock
+      - scree;ground;mud
+      - unpaved,_gravel
+      - dirt;gravel
+      - cobblestone
+      - asphalt;paving_stones
+      - wood;gravel
+      - dirt,wood
+      segregated:
+      - 'no'
+      - 'yes'
+      unsigned_ref: []
+      note: 292
+      source:url:
+      - http://www.surrey.ca/city-services/658.aspx
+      - http://www.th.gov.bc.ca/gateway/SFPR/docs/proposed_alignment/proposed_alignment.html
+      - ftp://ftp2.cits.rncan.gc.ca/pub/cantopo/
+      check_date:crossing: []
+      junction:
+      - roundabout
+      - circular
+      crossing:markings:colour:
+      - green;white
+      - green
+      natural: []
+      parking:restriction: []
+      turning_loop: []
+      traffic_sign:
+      - hazard
+      cycleway:
+      - shared_lane
+      - crossing
+      - lane
+      - 'no'
+      - separate
+      - traffic_island
+      - track
+      - shoulder
+      - shared
+      - link
+      - share_busway
+      - designated
+      bench:
+      - 'yes'
+      bin:
+      - 'no'
+      - 'yes'
+      bus:
+      - designated
+      - 'yes'
+      - only
+      - 'no'
+      departures_board: []
+      lit:
+      - 'yes'
+      - 'no'
+      local_ref: []
+      name: 7006
+      network:
+      - mtb
+      - CypressNordicLower
+      - CypressNordicRidge
+      - CypressNordicEast
+      - CypressNordicUpper
+      network:wikidata: []
+      network:wikipedia: []
+      public_transport:
+      - platform
+      route_ref: []
+      shelter:
+      - 'yes'
+      check_date: 103
+      wheelchair:
+      - 'no'
+      - 'yes'
+      - moderate
+      - difficult
+      - limited
+      trolleybus:
+      - 'yes'
+      access:
+      - private
+      - 'no'
+      - permissive
+      - customers
+      - 'yes'
+      - destination
+      - permit
+      - delivery
+      - unknown
+      - emergency
+      - designated
+      - agricultural
+      - residents
+      - tidal
+      - bus
+      - discouraged
+      board_type: []
+      historic:
+      - 'yes'
+      inscription: []
+      source:website: []
+      wikidata:
+      - Q4356863
+      - Q7270851
+      - Q5547820
+      - Q14629008
+      - Q3484391
+      - Q5278725
+      - Q337830
+      - Q6422284
+      - Q123274444
+      - Q14628999
+      - Q7439919
+      - Q710283
+      - Q2008430
+      - Q7053967
+      - Q134985396
+      - Q1543294
+      - Q278084
+      - Q919808
+      - Q5547852
+      - Q1628675
+      - Q124352
+      - Q1477359
+      - Q1878848
+      - Q862283
+      - Q841926
+      wikipedia:
+      - en:Alex Fraser Bridge
+      - en:Queensborough Bridge
+      - en:South Fraser Perimeter Road
+      - en:No. 2 Road Bridge
+      - en:Dinsmore Bridge
+      - en:George Massey Tunnel
+      - en:Knight Street Bridge
+      - en:Moray Bridge
+      - en:Sea Island Connector
+      - en:Arthur Laing Bridge
+      - en:Oak Street Bridge
+      - en:North Arm Bridge
+      - en:Musqueamview Street
+      - en:Granville Street Bridge
+      - en:Burrard Bridge
+      - en:Lions Gate Bridge
+      - en:Ironworkers Memorial Second Narrows Crossing
+      - en:Lynn Canyon Suspension Bridge
+      - en:Capilano Suspension Bridge
+      - en:Grouse Mountain#Grouse Grind
+      surface:colour:
+      - red
+      - green
+      - rainbow
+      - grey
+      - blue
+      - gren
+      level:
+      - '1'
+      - '0'
+      - 0;1
+      - 1;0
+      - 1;2
+      - '2'
+      - 0;2
+      - '3'
+      - 3;4;5
+      - '5'
+      - '4'
+      - 4;5
+      - '0.5'
+      - 0;3
+      - 0;-1;-2
+      - 0;-1
+      - 2;3
+      - '-1'
+      - 2;0
+      - 2;1
+      - '-2'
+      - -1;-2
+      - 0;-0.5
+      - -1;0
+      - -1;1
+      - 3;4
+      - '6'
+      - '56'
+      - 3;6
+      - 0,1
+      - 1;2;3;4
+      - 4;3;2;1
+      towards: []
+      bench:backrest: []
+      bench:note: []
+      image:
+      - https://web.archive.org/web/20231118045607/https://westnordost.de/p/186534.jpg
+      - https://web.archive.org/web/20231127185515/https://westnordost.de/p/186531.jpg
+      - https://web.archive.org/web/20231127185515/https://westnordost.de/p/186532.jpg
+      bench:check_date: []
+      check_date:shelter: []
+      addr:housenumber:
+      - '3735'
+      addr:street:
+      - Capilano Road
+      footway:
+      - crossing
+      - sidewalk
+      - traffic_island
+      - access_aisle
+      - path
+      - link
+      - steps
+      fixme: 73
+      backrest: []
+      horse:
+      - 'yes'
+      - 'no'
+      - unknown
+      - designated
+      - permissive
+      - private
+      check_date:lit:
+      - '2025-11-23'
+      - '2026-02-28'
+      - '2025-11-19'
+      - '2022-07-23'
+      - '2021-07-19'
+      - '2023-11-19'
+      amenity:
+      - weighbridge
+      ground: []
+      seats: []
+      kerb:approach_aid: []
+      passenger_information_display: []
+      hiking: []
+      information:
+      - old path
+      tourism:
+      - attraction
+      cycleway:crossing:priority:
+      - dots;surface:colour=green
+      footway:crossing:markings:
+      - zebra
+      - lines
+      oneway:
+      - 'yes'
+      - 'no'
+      - reversible
+      asset_ref: []
+      check_date:tactile_paving:
+      - '2023-06-19'
+      wheelchair:description: []
+      diameter: []
+      line_attachment: []
+      power: []
+      support: []
+      supervised: []
+      bench:colour: []
+      bench:material: []
+      bench:seats: []
+      lamp_type:
+      - LED
+      capacity: []
+      contact:phone: []
+      email: []
+      fee:
+      - 'yes'
+      - 'no'
+      phone: []
+      website:
+      - https://metrovancouver.org/services/liquid-waste/winston-street-sewer-project
+      - http://www.metrovancouver.org/services/liquid-waste/projects-initiatives/construction-maintenance/Pages/Winston-Street-Sewer-Project.aspx
+      - https://news.gov.bc.ca/releases/2025TT0064-000588
+      - https://www.dnv.org/gallant-pilot-project
+      - https://www.richmond.ca/parks/trails/trails-map/bathslough.htm
+      - https://vancouver.ca/streets-transportation/west-king-edward-upgrades.aspx
+      - https://www.milb.com/vancouver/ballpark/construction
+      - https://vancouver.ca/streets-transportation/cambie-18th-plaza-construction.aspx
+      - https://www.broadwaysubway.ca/construction/current-work/
+      - https://vancouver.ca/news-calendar/new-seawall-path-by-science-world-now-open-may-2025.aspx
+      - https://vanmapp1.vancouver.ca/gmaps/covmap.htm?map=road_ahead&zoom=13
+      - https://vancouver.ca/news-calendar/expo-deck-south-of-science-world-to-close-indefinitely-feb-2025.aspx
+      - https://en.wikipedia.org/wiki/Militant_Mothers_of_Raymur
+      - https://vancouver.ca/files/cov/Stanley-Park-trails-map.pdf
+      - https://vancouver.ca/files/cov/stanley-park-map-and-guide.pdf
+      - https://www.cnv.org/streets-transportation/transportation-projects/casano-loutet-overpass
+      - http://www.metrovancouver.org/services/parks/ParksPublications/DogMountainTrailhead.pdf
+      - https://www.trailforks.com/trails/bobsled/
+      - https://www.trailforks.com/trails/kirkford/
+      - https://www.trailforks.com/trails/leppard/
+      - https://www.trailforks.com/trails/lower-griffen/
+      - https://www.trailforks.com/trails/upper-griffen/
+      - https://metrovancouver.org/services/water/Documents/lower-seymour-conservation-reserve-trail-map.pdf
+      - https://vancouver.ca/streets-transportation/yew-open-street-pilot.aspx
+      - https://vancouver.ca/parks-recreation-culture/tatlow-and-volunteer-park-stream-restoration.aspx
+      - https://westvancouver.ca/parks-recreation/parks-trails/capilano-pacific-trail
+      - https://www.capbridge.com/
+      - https://www.trailforks.com/trails/executioner/
+      - https://www.trailforks.com/trails/executioner-connector/
+      - https://lvca.ca/category/lv-link/
+      - https://www.trailforks.com/trails/7th-secret/
+      - https://www.trailforks.com/trails/lower-oilcan/
+      - https://www.trailforks.com/trails/upper-oilcan/
+      roundtrip: []
+      designation: []
+      bench:notes: []
+      bench:armrest: []
+      bench:image: []
+      line:
+      - 'yes'
+      man_made:
+      - pier
+      - pipeline
+      tower:type: []
+      layer:
+      - '1'
+      - '-1'
+      - '2'
+      - '0'
+      - '3'
+      - '-2'
+      - 0;1
+      - '4'
+      - '-5'
+      - '5'
+      lamp_mount: []
+      utility: []
+      check_date:bin: []
+      toilets:wheelchair: []
+      check_date:surface: 108
+      stroller:
+      - 'no'
+      - limited
+      - 'yes'
+      path:
+      - crossing
+      - traffic_island
+      - desire
+      - informal
+      information_type: []
+      flag: []
+      pole: []
+      bollard: []
+      position: []
+      crossing:continuous:
+      - 'yes'
+      maxweight:
+      - '5'
+      - '9'
+      - '10'
+      - 5000 lbs
+      - '13'
+      - '15'
+      - 5000 kg
+      - 15000 kg
+      check_date:traffic_signals:vibration: []
+      railway:
+      - abandoned
+      - disused
+      traffic_signals:arrow:
+      - 'no'
+      - 'yes'
+      traffic_signals:minimap:
+      - 'no'
+      bench:type: []
+      seasonal:
+      - winter
+      - 'yes'
+      ref:signed: []
+      alt_name: 102
+      check_date:bench: []
+      accessible: []
+      notes: []
+      waste_basket: []
+      name:en:
+      - Deas Slough Bridge
+      - Rice Mill Underpass
+      - George Massey Tunnel
+      - Alderbridge Way Overpass
+      - Westminster Highway Underpass
+      - Cambie Road Underpass
+      - Bridgeport Trail
+      - Sennok Crescent
+      - Kullahun Drive
+      - Salish Drive
+      - Musqueam Avenue
+      - Mali Avenue
+      - Mali Lane
+      - West 51st Avenue
+      - Jericho Drive
+      - Si-lu Drive
+      - Kekait Place
+      - Humlusum Drive
+      - Thellaiwhaltun Avenue
+      - Staulo Crescent
+      - Musqueam Drive
+      - Crown Place
+      - Crown Street
+      - Musqueam Close
+      - Yuculta Crescent
+      - Stautlo Avenue
+      - Halss Crescent
+      - Tytahun Crescent
+      - Tamath Crescent
+      - Semana Crescent
+      - Oak Street Bridge
+      - Musqueamview Street
+      - Lower Mall
+      - West Mall
+      - Main Mall
+      - University Boulevard
+      - Agricultural Road
+      - Memorial Road
+      - Lions Gate Bridge
+      - North Lynn Creek Bridge
+      - Newt Trail (Green Room)
+      - Student Union Boulevard
+      - Crescent Road
+      - Musqueamview Street Link
+      - Shanghai Alley
+      - Cypress East Climb Trail
+      - Mystery DH
+      - Old Mystery DH
+      - Mystery Old Exit
+      - Old Mystery Old Exit
+      cycleway:crossing:markings:
+      - dots
+      memorial: []
+      crossing:signed:
+      - 'yes'
+      mapillary: []
+      name:fr:
+      - Pont Lions Gate
+      - Route Transcanadienne
+      disused:crossing: []
+      traffic_signals:turn: []
+      start_date:
+      - '1986-09-22'
+      - '2026-02-14'
+      - '1911'
+      - '2021'
+      - '2025'
+      - '2022-11-07'
+      - '2026'
+      - '2020'
+      - '1998'
+      - '1912'
+      - '2011'
+      - '2023'
+      - '2022'
+      - '2024'
+      - '2004'
+      advertising: []
+      temporary:disused: []
+      ele:
+      - '98.921'
+      - '98'
+      - '95.665'
+      artist_name: []
+      raised:
+      - 'yes'
+      survey:date:
+      - '2020-10-20'
+      - '2021-04-03'
+      flashing_light: []
+      crossing:kerb_extension: []
+      bic: []
+      handrail:
+      - 'no'
+      - 'yes'
+      - both
+      - left
+      handrail:center:
+      - 'yes'
+      handrail:left:
+      - 'yes'
+      - 'no'
+      handrail:right:
+      - 'yes'
+      - 'no'
+      step_count: 66
+      not:network:wikidata: []
+      informal:
+      - 'yes'
+      - 'no'
+      - unknown
+      height:
+      - 2.74m
+      - '2.74'
+      - ~1.8
+      - '7.7'
+      - '7'
+      - '7.5'
+      - '7.3'
+      - '8.5'
+      light:method: []
+      light_source: []
+      camera:type: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      camera:mount: []
+      internet_access: []
+      internet_access:fee: []
+      location:
+      - roof
+      - underground
+      voltage: []
+      entrance: []
+      leisure:
+      - slipway
+      sport:
+      - motor
+      operator:wikidata:
+      - Q2000891
+      - Q1061069
+      - Q110072524
+      - Q991329
+      indoor:
+      - 'yes'
+      - 'no'
+      - footway
+      tower:construction: []
+      crossing:barrier: []
+      crossing:bell: []
+      crossing:light: []
+      railway:signal:direction: []
+      level:ref:
+      - '3'
+      - '1'
+      - L2
+      - L3
+      construction:
+      - path
+      - residential
+      - unclassified
+      - motorway_link
+      - track
+      - minor
+      - 'yes'
+      - cycleway
+      - primary_link
+      - footway
+      - service
+      - footpath
+      - parking
+      - secondary
+      - pedestrian
+      - steps
+      - tertiary
+      - trunk_link
+      - primary
+      mapillary:image: []
+      mapillary:map_feature: []
+      red_turn:right: []
+      opening_hours:
+      - 2023 closed
+      - 2022 closed
+      maxspeed:
+      - '80'
+      - '50'
+      - '60'
+      - '90'
+      - '30'
+      - '40'
+      - '20'
+      - '15'
+      - '70'
+      - '10'
+      - '100'
+      - '5'
+      - 30, 50
+      - '25'
+      - 30;50
+      - '4'
+      enforcement: []
+      addr:floor: []
+      light:count: []
+      light:lit: []
+      light:colour: []
+      opening_date:
+      - '2021-07-01'
+      - '2022-02-28'
+      - '2022-10-07'
+      - '2021-09-20'
+      - '2021-09-09'
+      - '2021-12-03'
+      - '2021-07-08'
+      - '2026'
+      - '2026-02-14'
+      - '2025-08-31'
+      - '2022-05-20'
+      - '2025'
+      - '2025-09-01'
+      - '2021'
+      - '2025-12-23'
+      - '2026-04-01'
+      - '2026-01-08'
+      - '2026-06-01'
+      - '2021-09-01'
+      - 2025-Spring
+      - '2024-07-19'
+      sidewalk:
+      - 'no'
+      - both
+      - left
+      - separate
+      - right
+      - none
+      - 'yes'
+      name:etymology:
+      - Named for W.J. Carroll, Deputy Warden at the BC Penitentiary
+      - Named for Thomas Ovens, mayor of New Westminster (1898 to 1899)
+      - Named for A.J. Allison, Councillor
+      - Named for the province of Alberta
+      - Named for Samuel Archer, Royal Engineer
+      - Named for Andrew Carnegie, a Scottish philanthropist who provided money for
+        a library in New Westminster
+      - Named for the City of Burnaby which is named for Robert Burnaby.
+      sidewalk:both:
+      - separate
+      - 'no'
+      - 'yes'
+      lane_markings:
+      - 'yes'
+      - 'no'
+      cycleway:both:
+      - 'no'
+      - shared_lane
+      - separate
+      - lane
+      - track
+      - shared
+      - shoulder
+      cycleway:both:lane:
+      - pictogram
+      - exclusive
+      cycleway:left:oneway:
+      - 'no'
+      - '-1'
+      oneway:bicycle:
+      - 'yes'
+      - 'no'
+      - bicycle
+      lanes:
+      - '2'
+      - '1'
+      - '3'
+      - '4'
+      - '5'
+      - '6'
+      - '7'
+      - 1 (Alternating)
+      - '8'
+      - '15'
+      cycleway:left:
+      - 'no'
+      - lane
+      - separate
+      - shared_lane
+      - share_busway
+      - track
+      - shared
+      - share_sidewalk
+      - shoulder
+      parking:both:
+      - lane
+      - 'no'
+      - shoulder
+      - parallel
+      - separate
+      - street_side
+      - on_kerb
+      - no_parking
+      - half_on_kerb
+      - no_stopping
+      sidewalk:left:
+      - 'no'
+      - separate
+      - 'yes'
+      - none
+      - lane
+      sidewalk:right:
+      - separate
+      - 'no'
+      - 'yes'
+      - lane
+      - none
+      destination: 373
+      destination:ref: 58
+      hgv:
+      - designated
+      - 'no'
+      - 'yes'
+      - delivery
+      - destination
+      maxheight: 107
+      official_name:
+      - Annacis Highway
+      - South Fraser Perimeter Road
+      - Queensborough Connector
+      - "Vancouver \u2013 Blaine Highway"
+      - Vancouver - Blaine Highway
+      - Queensborough Bridge
+      - "stal\u0315\u0259w\u0313as\u0259m Bridge"
+      - "\u0161x\u02B7m\u0259\u03B8k\u02B7\u0259y\u0313\u0259mas\u0259m Street"
+      - Newt Trail
+      cycleway:right:
+      - lane
+      - shared_lane
+      - separate
+      - 'no'
+      - share_busway
+      - shoulder
+      - track
+      - shared
+      - opposite
+      - 'yes'
+      lcn:
+      - 'yes'
+      - proposed
+      name:etymology:wikidata:
+      - Q2258
+      - Q5596331
+      - Q4180160
+      - Q5490306
+      - Q20875
+      - Q1369818
+      - Q2642030
+      - Q1272318
+      - Q712344
+      - Q361267
+      - Q3442504
+      - Q15443007
+      - Q102347415
+      - Q7747518
+      parking:left:
+      - 'no'
+      - separate
+      - lane
+      - street_side
+      - on_kerb
+      - shoulder
+      - parallel
+      - no_parking
+      - no_stopping
+      - 'yes'
+      bus:lanes:forward:conditional:
+      - 1 @ (Mo-Fr 07:00-09:30)
+      - 1 @ (07:00-19:00)
+      - (yes|yes|yes) @ (21:00-07:00)
+      - (yes|yes|yes|yes) @ (21:00-07:00)
+      cycleway:right:conditional:
+      - share_busway @ (07:00-19:00)
+      - share_busway @ (Mo-Fr 15:00-18:00)
+      - share_busway @ (Mo-Fr 15:00-19:00)
+      - share_busway @ (Mo-Fr 07:00-09:30)
+      - share_busway @ (Mo-Fr 07:00-10:00,15:00-19:00)
+      - share_busway @ (Mo-Fr 07:00-10:00)
+      - share_busway @ (Mo-Fr 07:00-10:00, 15:00-19:00)
+      - share_busway @ (Mo-Fr 07:00-9:30)
+      trolley_wire:
+      - 'yes'
+      - 'no'
+      - forward
+      destination:lanes: 88
+      destination:ref:lanes:
+      - '||BC 91 NORTH|BC 91 SOUTH'
+      - 91 West|
+      - 1 East|1 East|1 East||
+      - Hwy 1 EAST|Hwy 1 EAST|Hwy 1 EAST|EXIT 33|EXIT 32
+      - Hwy 1 WEST|Hwy 1 WEST||
+      - Hwy 1 WEST|Hwy 1 WEST|
+      - 99 NORTH|99 NORTH|91
+      - 91 East|99 South
+      - '||91 EAST|TO 99 SOUTH'
+      - 99 North|none|none
+      - 1 West|1 West
+      - none|none|1 West
+      - Keith Road;1 East|Keith Road;1 East|1 West
+      - none|none|1 East
+      hov:lanes:
+      - designated|yes|yes
+      - yes|yes|designated
+      - designated||||
+      - designated|||
+      - yes|yes|yes|designated
+      - yes|yes|yes|yes|designated
+      - designated|designated|||
+      - none|none|none|designated
+      - '||designated'
+      - '||||designated'
+      - '|||designated'
+      hov:minimum:
+      - '6'
+      - '2'
+      motor_vehicle:lanes:
+      - yes|yes|no
+      - yes|yes|no|yes
+      - yes|no|yes
+      - yes|yes|yes|no|yes
+      - yes|no
+      - yes|yes|yes|yes|yes|no|yes
+      - yes|yes|yes|no
+      - no||||
+      - no|||
+      - '||no'
+      - '|||no'
+      - '||||no'
+      - yes|yes|yes|yes|no
+      - yes|yes|yes
+      - yes|yes|yes|yes|no|yes
+      - no|yes|yes
+      - no|yes
+      - yes|yes|yes|yes|yes|no
+      - yes|no|no
+      - yes|yes
+      - yes|yes|no|yes|yes
+      reg_name:
+      - British Columbia Provincial Highway 1
+      sidewalk:both:bicycle:
+      - 'yes'
+      lanes:backward:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      - '5'
+      lanes:forward:
+      - '2'
+      - '1'
+      - '3'
+      - '4'
+      - '5'
+      destination:street: 54
+      bridge:
+      - 'yes'
+      - boardwalk
+      - viaduct
+      - movable
+      - covered
+      - 'no'
+      - cantilever
+      - bent
+      - log_bridge
+      bridge:structure:
+      - suspension
+      - beam
+      - truss
+      - simple-suspension
+      toll:
+      - 'no'
+      - 'yes'
+      lanes:both_ways:
+      - '1'
+      - left
+      junction:ref:
+      - '1'
+      - '4'
+      - '6'
+      - '8'
+      - '31'
+      - 23B
+      - '23'
+      - '13'
+      - '15'
+      - '11'
+      - '10'
+      - 23A
+      - '9'
+      - '28'
+      - '21'
+      - '38'
+      - '37'
+      - '33'
+      - EXIT 33
+      - '32'
+      - EXIT 29
+      - '29'
+      - 28A
+      - 28B
+      - '27'
+      - '26'
+      - '36'
+      - '22'
+      - 39B
+      - '39'
+      - 39A
+      - '25'
+      - 22B
+      - '19'
+      - '18'
+      - 22A
+      - '7'
+      - '2'
+      - '0'
+      - '17'
+      - '14'
+      turn:lanes: 184
+      old_ref:
+      - 1A;99A
+      - 7A
+      - 99A;1A
+      - 1A
+      - 1A;7A;99A
+      - '99'
+      width: 86
+      parking:right:
+      - lane
+      - shoulder
+      - 'no'
+      - separate
+      - street_side
+      - 'yes'
+      - no_parking
+      - parallel
+      - on_kerb
+      - half_on_kerb
+      - no_stopping
+      name:hur:
+      - "s\u0259n\u0313a\u0294q\u02B7"
+      - "q\u0313\u0259l\u0259\u03C7\u0259n"
+      - "seyl\u0259\u0161"
+      - "x\u02B7m\u0259\u03B8k\u02B7\u0259y\u0313\u0259m"
+      - "mal\u0259y\u0313"
+      - "\u026Cq\u0313\u0259cs\u0259\u026Csxe\u0294 \u0294i\u0294 k\u0313\u02B7 n\u0259\
+        c\u0313a\u0294"
+      - "\u0294\u0259y\u0313alm\u0259x\u02B7"
+      - "sil\u0313\u0259"
+      - "qiq\xE9yt"
+      - "h\u0259m\u0313l\u0259sem\u0313"
+      - "\u03B8\u0259li\u03C7\u02B7\u0259lt\u0259n"
+      - "stal\u0313\u0259w\u0313"
+      - "\u019B\u0313aw\u0259n"
+      - "y\u0259q\u02B7\u0259\u026Cte\u0294\u03C7"
+      - "statl\u0313\u0259w\u0313"
+      - "\u03C7e:l\u0313s"
+      - "t\u0259yt\u03C7\u0259n"
+      - "t\u0259m\u0259\u026C"
+      - "s\u0294\u0259men\u0313\u0259"
+      - "\u0161x\u02B7m\u0259\u03B8k\u02B7\u0259y\u0313\u0259mas\u0259m"
+      - "st\u0259yw\u0259t"
+      - "sme:nt\xE1s\u0259m"
+      - "\u0161x\u02B7\u0294ey\u0313e\u0294"
+      - "\u0161x\u02B7y\u0259\u03B8\u0259st\u0259m"
+      - "q\u0313\u02B7e\u03C7t"
+      - "c\u0259l\u0315q\u02B7as"
+      - "\u0161x\u02B7h\u0259k\u0313\u02B7m\u0259t"
+      - "sq\u0313\u02B7\u0259lex\xE9l\u0259"
+      - "x\u02B7sel\u0313c\u0313\u0259\u03C7\u0259n\u0313"
+      smoothness:
+      - intermediate
+      - good
+      - bad
+      - excellent
+      - impassable
+      - horrible
+      - very_horrible
+      - very_bad
+      - off_road_wheels
+      type:
+      - minor
+      - gas
+      maxspeed:type:
+      - sign
+      - CA-BC:urban
+      - CA:urban
+      - zone
+      - CA-BC:rural
+      turn:lanes:backward: 65
+      maxspeed:conditional:
+      - 30 @ ("school days" 08:00-17:00)
+      - 30 @ (sunrise-sunset)
+      - 50 @ (sunset-sunrise)
+      - 30 @ ("school days" 07:00-22:00)
+      - 30 @ (Mo-Fr 07:00-22:00; SH off; PH off)
+      - 50 @ (dusk-dawn)
+      - 30 @ (Mo-Fr 08:00-17:00)
+      - 30 @ (Mo-Fr 08:00-17:00; SH off; PH off)
+      - 30 @ (Mo-Fr 07:00-22:00; PH off; SH off)
+      - 30 @ (Mo-Fr 07:00-20:00; SH off)
+      - 30 (Mo-Fr 08:00-17:00; PH SH off)
+      - 30 @ (08:00-17:00 "school days")
+      - 30 @ (Mo-Su dawn-dusk)
+      - 30 @ (Mo-Fr 08:00-17:00; PH Off)
+      - 60 @ (23:00-05:00)
+      - 40 @ (Mo-Fr 08:00-17:00; PH off; SH off)
+      - 30 @ (dawn-dusk)
+      - 30 @ (08:00-17:00 "school days")0)
+      - 30 @ (08:00-17:00)
+      - 30 @ (Mo-Fr 08:00-17:00; PH off; SH off)
+      - (Mo-Fr 08:00-17:00; PH off; SH off)
+      - 30 @ (8:00-17:00)
+      - 30 @ (06:00-20:00)
+      - '30'
+      maxweight:signed:
+      - 'no'
+      psv:
+      - 'yes'
+      - designated
+      lanes:reversible:
+      - '1'
+      name:ja:
+      - "\u30E9\u30A4\u30AA\u30F3\u30BA\u30B2\u30FC\u30C8\u30D6\u30EA\u30C3\u30B8"
+      name:zh:
+      - "\u7DEC\u8857"
+      - "\u7247\u8DEF\u8857"
+      - "\u7247\u820D\u7564\u8857"
+      - "\u5354\u5229\u8857"
+      - "\u88D5\u4EC1\u8857"
+      - "\u5B78\u58EB\u8857"
+      - "\u6B4C\u96C5\u8857"
+      - "\u7A4D\u5584\u8857"
+      - "\u767B\u5229\u7DAD\u8857"
+      - "\u4F50\u6CBB\u6771\u8857"
+      - "\u5947\u82B1\u8857"
+      - "\u7247\u6253\u6771\u8857"
+      - "\u91D1\u5BF6\u8857"
+      - "\u7247\u6253\u897F\u8857"
+      - "\u54E5\u502B\u6BD4\u4E9E\u8857"
+      - "\u7345\u9580\u6A4B"
+      - "\u4E0A\u6D77\u5DF7"
+      bicycle:conditional:
+      - dismount @ "Use shuttle bus"
+      source:width:
+      - ARCore
+      name:pronunciation:
+      - "\u02C8lo\u028Ahi\u02D0d \u02C8ha\u026Awe\u026A"
+      - "k\xE6mbi st\u0279i\u02D0t"
+      - "k\xE6mbi st\u0279i\u02D0t br\u026A\u02A4"
+      - "k\xE6mbi st\u0279i\u02D0t r\xE6mp"
+      - "\u02C8de\u026Avi st\u0279it"
+      - "k\xE6mbi st\u0279i\u02D0t n\u0254r\u03B8 ba\u028And ba\u026Ak rut"
+      - "\u02C8r\u0251bs\u0259n"
+      - "\u02C8r\u0251bs\u0259n st\u0279it"
+      - "\u02C8d\u025Bnm\u0259n st\u0279it"
+      attribution:
+      - "GeoBase\xAE"
+      - Natural Resources Canada
+      service:
+      - driveway
+      - alley
+      - parking_aisle
+      - drive-through
+      - emergency_access
+      - fuel
+      - slipway
+      - utility
+      - service
+      - psv
+      - track
+      - parking
+      alt_name:hur:
+      - "q\u0313\u0259l\u0259\uAB53\u0259n"
+      - "\u03B8\u0259li\uAB53\u02B7\u0259lt\u0259n"
+      - "\uAB53e:l\u0313s"
+      - "t\u0259yt\uAB53\u0259n"
+      source:maxspeed:
+      - sign
+      - CA-BC:urban
+      - '30'
+      block:
+      - '1800'
+      destination:symbol:
+      - airport
+      - ferry
+      - airport;ferry
+      maxspeed:advisory:
+      - '40'
+      - '60'
+      - '50'
+      - '20'
+      - '10'
+      - '30'
+      - '15'
+      - '70'
+      hazard:
+      - school_zone
+      - children
+      - pedestrians
+      lcn_ref: 114
+      shoulder:
+      - 'no'
+      - right
+      - 'yes'
+      - both
+      bridge:name:
+      - Brunette River Bridge
+      - Moray Bridge
+      - Arthur Laing Bridge
+      - Ironworkers Memorial Second Narrows Crossing
+      - South Lynn Creek Bridge
+      - Lynn Creek Bridge
+      - Spur 4 Bridge
+      - Cypress Creek Bridge
+      - Nelson Creek Bridge
+      - Mosquito Creek Bridge
+      - Capilano River Bridge
+      - Abelard Canyon Bridge
+      bridge:name:en:
+      - Brunette River Bridge
+      - Arthur Laing Bridge
+      bridge:name:fr:
+      - Pont Arthur Laing
+      expressway:
+      - 'yes'
+      sidewalk:left:surface:
+      - concrete
+      sidewalk:left:width:
+      - 6'
+      short_name:
+      - Mt Seymour Pky
+      - Mt Seymour Rd
+      - Second Narrows Bridge
+      - Old Buck
+      - High School League
+      - Indian River Dr
+      - Sagar
+      - LLOMR
+      - Bowen Island MUP
+      cutting:
+      - both
+      - 'no'
+      - 'yes'
+      lanes:bus:forward:conditional:
+      - 1 @ (Mo-Fr 15:00-18:00)
+      - 1 @ (Mo-Fr 07:00-10:00)
+      - 1 @ (Mo-Fr 15:00-19:00)
+      - 1 @ (07:00-19:00)
+      - 1 @ (Mo-Fr 07:00-09:30)
+      - 1 @ (Mo-Fr 07:00-10:00,15:00-19:00)
+      - 1 @ (Mo-Fr 07:00-9:30)
+      parking:right:orientation:
+      - parallel
+      - diagonal
+      - perpendicular
+      parking:right:restriction:
+      - no_stopping
+      - passenger_loading_zone
+      - loading_only
+      - no_parking
+      noname:
+      - 'yes'
+      is_in:
+      - Surrey,British Columbia
+      - Delta,British Columbia
+      - New Westminster,British Columbia
+      - Richmond,British Columbia
+      - Burnaby,British Columbia
+      - Vancouver,British Columbia
+      - Burnaby, BC
+      - Coquitlam,British Columbia
+      - Vancouver, BC
+      - Burnaby
+      - Belcarra,British Columbia
+      - North Vancouver,British Columbia
+      - West Vancouver,British Columbia
+      - Port Moody,British Columbia
+      - Bowen Island,British Columbia
+      mtb:scale:imba:
+      - '1'
+      - '2'
+      - '3'
+      - '0'
+      - '2.5'
+      - '5'
+      - '4'
+      sac_scale:
+      - hiking
+      - mountain_hiking
+      - demanding_mountain_hiking
+      - strolling
+      - alpine_hiking
+      - demanding_alpine_hiking
+      - hiking;mountain_hiking
+      - demanding_mountain_biking
+      - T1
+      - mountain_hiking; hiking; mountain_hiking
+      - demanding_mountain_hiking;mountain_hiking
+      - mountain_hiking;hiking;mountain_hiking
+      name:etymology:wikipedia:
+      - Q4180160
+      wikipedia:en:
+      - Cambie Bridge
+      hazmat:
+      - designated
+      - 'no'
+      - designated;no
+      - n
+      tunnel:
+      - building_passage
+      - 'yes'
+      - 'no'
+      - covered
+      - pipe
+      - culvert
+      maxspeed:school:
+      - '30'
+      change:lanes:
+      - no|no
+      - yes|not_right|not_left
+      - no|not_left|yes
+      - no|not_left|not_right|no
+      - no|yes|yes
+      - yes|not_right|no
+      - yes|yes|yes
+      - yes|yes|not_right|no
+      - not_right|not_left|yes
+      - yes|not_right|not_left|yes
+      - no|no|not_left|yes
+      - no|no|no
+      - not_left|not_right|no|no
+      - no|not_left|yes|yes
+      parking:both:orientation:
+      - parallel
+      - diagonal
+      - perpendicular
+      turn:lanes:forward: 69
+      cycleway:surface:
+      - asphalt
+      - concrete
+      - concrete:plates
+      - paving_stones
+      footway:surface:
+      - concrete
+      - asphalt
+      - concrete:plates
+      - paving_stones
+      ramp_speed:
+      - '60'
+      - '50'
+      turn:
+      - right
+      - left
+      - through
+      - reverse
+      - merge_to_right
+      - slight_right
+      - slight_left
+      - through;left
+      - merge_to_left
+      - left;through
+      - sharp_right
+      - through;right
+      incline:
+      - down
+      - up
+      - steep
+      - 0%
+      - 16%
+      - -20%
+      - 20%
+      - -40%
+      - 25%
+      - -50%
+      - 50%
+      - 10%
+      - 'yes'
+      - -15%
+      - 'no'
+      - 11%
+      - 6%
+      - 30%
+      - -25%
+      - -17%
+      - < 2%
+      - '>10%'
+      - '0'
+      - -0%
+      - '37'
+      - -30%
+      - 21%
+      - '30'
+      - -27%
+      - 5%
+      - 40%
+      bus:lanes:
+      - yes|yes|designated
+      - yes|designated
+      - yes|yes|yes|designated
+      - yes|yes|designated|yes
+      - no|yes|yes
+      - yes|yes|yes|yes|designated
+      - '||designated'
+      - designated|yes|yes
+      - designated|yes
+      - yes|yes|yes|yes|yes|designated
+      - yes|no|designated
+      - yes|yes
+      - yes|yes|designated|yes|yes
+      - yes|yes|yes|yes|designated|yes
+      - yes|yes|yes|designated|yes
+      - yes|designated|no
+      - yes|dedicated
+      - yes|designated|yes
+      created_by:
+      - Potlatch 0.9c
+      - Potlatch 0.10f
+      - Potlatch 0.8a
+      - Potlatch 0.9a
+      - Potlatch 0.8b
+      - Potlatch 0.8c
+      old_name:
+      - Nordel Way
+      - Gibson Road
+      - Highway 91 Connector
+      - Benson Road
+      - Vasey Road
+      - Crescent Island Road
+      - Mcdonald Road
+      - Hjorth Road
+      - Cemetery Street
+      - Scenic Highway
+      - Trutch Avenue
+      - Trutch Street
+      - Keefer Street Pedestrian Overpass
+      - Montrose St
+      - Second Narrows Bridge
+      - TNT
+      - Deep Green
+      - Heavenly Wang
+      - Nimbly Bimbly
+      - More Lumpy
+      - Less Lumpy
+      - Trutch Street Link
+      - Chinook Trail
+      - Old Forks Trail
+      - No Stairs Allowed
+      maxheight:signed:
+      - 'no'
+      dog:
+      - leashed
+      - 'yes'
+      - 'no'
+      - unleashed
+      - unknown
+      mtb:scale:
+      - '0'
+      - '1'
+      - '4'
+      - '3'
+      - '2'
+      - '6'
+      - 2+
+      parking:left:orientation:
+      - parallel
+      - diagonal
+      - perpendicular
+      bicycle_road:
+      - 'yes'
+      destination:ref:to:
+      - '1'
+      - 1 East
+      - 91A North
+      - '17'
+      - '7'
+      - 1 West
+      - '91'
+      - '99'
+      - 99 South
+      - 91;99
+      - 7A
+      placement:
+      - transition
+      tracktype:
+      - grade2
+      - grade3
+      - grade5
+      - grade4
+      - grade1
+      vehicle:
+      - bus
+      - 'no'
+      - private
+      trail_visibility:
+      - excellent
+      - intermediate
+      - bad
+      - good
+      - horrible
+      - 'no'
+      - excellent;good;excellent
+      - excellent; good; excellent
+      - T1
+      - intermediate;good
+      turn:lanes:both_ways:
+      - left
+      motorroad:
+      - 'yes'
+      destination:symbol:lanes:
+      - '|airport'
+      - none|ferry
+      - '|airport|airport'
+      - airport|airport|
+      loc_name:
+      - 120 Street
+      - Ironworkers Memorial Second Narrows Crossing
+      - Cabin Tree Trail
+      - The Cedar Trail
+      - John Queer
+      - Valhalla to Seymour Trail
+      private:
+      - residents
+      - 'yes'
+      destination:forward:
+      - Cloverdale
+      - ROUTE 91 SOUTH
+      - BC Parkway | Queensborough Bridge
+      - 22nd Street
+      - Richmond;Delta;Highway 91A South
+      - Coquitlam;Surrey
+      - Dundee Street
+      - Kensington Avenue
+      - Steveston Village
+      - Number 2 Road Bridge
+      - New Westminster
+      - City Centre
+      - Jacombs Road
+      - Highway 99 South;New Westminster
+      - HIghway 99 North;Richmond Centre
+      - Knight Street North
+      - Park'N Fly
+      - South Campus Research Precinct
+      - West Boulevard
+      - Richmond City Centre
+      - Oak Street North
+      - Victoria & Nanaimo Ferries;U S A Border
+      - Victoria;Nanaimo;USA Border
+      - Marine Drive
+      - Vancouver
+      - 4th Avenue West
+      - Costco Wholesale Parking
+      - Lynn Valley Road;Boulevard Crescent;East 21st Street;Grand Boulevard
+      - Boulevard Crescent;East 21st Street;Grand Boulevard
+      - North Campus;Rose Garden Parkade
+      - U.E.L.;Vancouver
+      - Ambleside;Dundarave Village
+      - Horseshoe Bay;Squamish
+      - Vancouver;Highway 1 East
+      - Westport;Woodgreen Drive;Ferries
+      - To Woodgreen Drive
+      - To Hwy 99 North
+      - Squamish;Whistler
+      destination:en:
+      - Terminal;Designer Outlet Centre
+      - Airport
+      destination:fr:
+      - "A\xE9rogare;Boutiques de marque"
+      - "A\xE9roport"
+      bus:lanes:backward:
+      - yes|no|designated
+      - yes|designated
+      - '1'
+      - yes|yes|designated
+      - yes|yes|yes|designated
+      - none|designated
+      - yes|yes|designated @ (07:00-19:00)
+      - no|no|yes
+      - yes|designated|no
+      - designated|yes|yes
+      motor_vehicle:lanes:backward:
+      - yes|no|yes
+      - yes|yes|yes|no|yes
+      - yes|no
+      - none|none|none|no
+      - none|none|no
+      - yes|yes|no
+      - yes|yes|yes|no
+      - yes|yes
+      - yes|yes|yes
+      note:bicycle:
+      - Cycling on the shoulder to reach Steveston Hwy was previously allowed, but
+        is now prohibited. Cyclists are now directed to the multi-use path off Featherstone
+        Way.
+      - As an alternative to crossing the Hwy 99 onramp using the cycle lane, cyclists
+        may follow the shoulder until this crosswalk, dismount, and cross. Cyclists
+        are not permitted on the onramp beyond the crossing.
+      - use York bikeway
+      tunnel:name:
+      - Cassiar Tunnel
+      hov:
+      - designated
+      - 'no'
+      cycleway:left:lane:
+      - pictogram
+      - exclusive
+      - advisory
+      surface:note:
+      - was initially paved but appears to have been done decades ago. lots of natural
+        growth now.
+      - rubber mat on top of a metal structure
+      - asphalt with embedded stones
+      - asphalt with pebbles inside
+      - patchy asphaltnwith pebbles
+      - stone step with rail handle bar
+      - indoor part with heavy duty carpet middle part concrete pavement, bus station
+        with asphalt
+      - asphalt with painted pedestrian crossing
+      - different variants of concrete mixed with laid bricks
+      - asphalt with pedestrian crossing marking
+      parking:
+      - 'no'
+      - lane
+      cycleway:right:traffic_mode:left:
+      - parking
+      geobase:acquisitionTechnique:
+      - GPS
+      - Orthophoto
+      - Other
+      cycle_network:
+      - ca:bc:richmond
+      turn:bus:lanes:
+      - left|none|through;right
+      - left|none|none|through;right
+      - left|none|none|none
+      - '||'
+      - left|left|none|none|none
+      - left|none|none|right;through
+      - none
+      - none|none
+      - none|none|none
+      - left|none|none
+      - none|none|none|none
+      - left||
+      turn:motor_vehicle:lanes:
+      - none|none|right
+      - left|none|none|right
+      - none|none|merge_to_left
+      cycleway:right:lane:
+      - exclusive
+      - pictogram
+      - advisory
+      bus:lanes:forward:
+      - yes|designated|yes
+      - yes|designated|yes|yes
+      - yes|yes|designated
+      - yes|yes|designated|yes
+      - yes|yes|yes|designated
+      - yes|designated
+      - '1'
+      - designated|yes
+      motor_vehicle:lanes:forward:
+      - yes|no|yes
+      - yes|no|yes|yes
+      - yes|yes|no
+      - yes|yes|no|yes
+      - no|yes
+      - none|none|no
+      - yes|yes|yes|no
+      - yes|yes
+      - yes|no
+      motor_vehicle:lanes:forward:conditional:
+      - (yes|yes|yes) @ (21:00-07:00)
+      - (yes|yes|yes|yes) @ (21:00-07:00)
+      alt_name:en:
+      - Hwy 10
+      - East-West Connector
+      - Hwy 17
+      - Green Room
+      - Mystery Downhill
+      - Old Mystery Downhill
+      - Hwy 99
+      maxweightrating:hgv:
+      - '11.8'
+      - '27'
+      destination:backward:
+      - Stewardson Way
+      - Downtown;Quay / Waterfront
+      - Columbia St
+      - Moss Street
+      - Lougheed Highway
+      - Middle Arm Trail
+      - No. 3 Rd NORTH
+      - Sidaway Road
+      - City Centre;Horseshoe Bay;Whistler
+      - Vancouver;2nd Narrows Bridge
+      - Cypress
+      - Caulfeild Drive;Vancouver
+      - To Bridge
+      - Vancouver
+      - Horseshoe Bay
+      - Costco Wholesale Parking
+      destination:to:
+      - Vancouver International Airport
+      - Scott Road
+      - Lougheed Highway
+      - Knight Street
+      - No 5 Road
+      - Cambie Road
+      lanes:bus:conditional:
+      - 1 @ (07:00-19:00)
+      - 1 @ (Mo-Fr 07:00-10:00)
+      - 1 @ (Mo-Fr 15:00-18:00)
+      - 2 @ (07:00-19:00)
+      - 1 @ (Mo-Fr 07:00-09:30)
+      - 1 @ (Mo-Fr 07:00-10:00,15:00-19:00)
+      - 2 @ (Mo-Fr 07:00-10:00,15:00-19:00)
+      - 1 @ (Mo-Fr 15:00-19:00)
+      - 1 @ (Mo-Fr 07:00-10:00, 15:00-19:00)
+      - 1 @ (Mo-Fr 07:00-9:30)
+      lanes:conditional:
+      - 3 @ (mo-fri 04:30-11:30)
+      - 4 @ (mo-fri 04:30-11:30)
+      - 3 @ (Mo-Fr 07:00-09:30, 15:00-18:00)
+      wikimedia_commons:
+      - File:Alex_Fraser_Bridge.jpg
+      parking:condition:left:
+      - free
+      - residents
+      embankment:
+      - right
+      - left
+      - 'yes'
+      - dyke
+      - both
+      - 'no'
+      bicycle:forward:
+      - designated
+      description:bicycle:
+      - Okay for riding during Off-Peak (non rush hour) . During Peak Traffic, use
+        Pandora St or Franklin St.
+      est_width:
+      - 27'
+      cycleway:left:conditional:
+      - share_busway @ (Mo-Fr 07:00-10:00)
+      - share_busway @ (Mo-Fr 07:00-09:30)
+      - share_busway @ (Mo-Fr 15:00-18:00)
+      - share_busway @ (Mo-Fr 07:00-10:00, 15:00-19:00)
+      - share_busway @ (07:00-10:00,15:00-19:00)
+      - share_busway @ (07:00-19:00)
+      lanes:bus:backward:conditional:
+      - 1 @ (Mo-Fr 07:00-10:00)
+      - 1 @ (Mo-Fr 15:00-18:00)
+      - 1 @ (Mo-Fr 07:00-09:30, 15:00-18:00)
+      - 1 @ (Mo-Fr 07:00-09:30)
+      - 1 @ (Mo-Fr 07:00-10:00, 15:00-19:00)
+      - 1 @ (07:00-10:00,15:00-19:00)
+      - 1 @ (07:00-19:00)
+      trailblazed:
+      - 'no'
+      - 'yes'
+      - yellow square
+      - unknown
+      - symbols
+      - flags
+      trolley_wire:forward:
+      - 'yes'
+      parking:left:maxstay:conditional:
+      - 5 minutes @ (Mo-Fr 07:00-18:00)
+      - 2 @ (09:00-18:00)
+      route:
+      - mtb
+      - proposed
+      - piste
+      name:left:
+      - Fenwick Street
+      name:right:
+      - Fenwick Avenue
+      maxspeed:source:
+      - sign
+      - implicit
+      check_date:ramp:
+      - '2025-01-07'
+      - '2025-11-17'
+      - '2025-11-23'
+      - '2025-11-06'
+      - '2025-06-07'
+      - '2023-11-04'
+      - '2024-06-18'
+      - '2025-10-30'
+      - '2024-10-23'
+      - '2025-04-03'
+      - '2025-04-13'
+      - '2024-07-12'
+      - '2025-11-05'
+      - '2025-11-12'
+      - '2025-08-10'
+      - '2025-01-18'
+      - '2025-06-30'
+      - '2025-07-02'
+      - '2024-07-23'
+      - '2026-02-13'
+      - '2024-07-28'
+      - '2025-05-25'
+      - '2025-07-26'
+      - '2025-10-05'
+      - '2025-03-02'
+      - '2026-03-06'
+      - '2024-12-21'
+      - '2026-02-06'
+      - '2026-02-17'
+      - '2025-12-27'
+      - '2025-10-21'
+      conveying:
+      - 'yes'
+      - forward
+      - reversible
+      - backward
+      - parallel
+      ramp:
+      - 'no'
+      - 'yes'
+      - separate
+      turn:backward:
+      - left
+      - left;right
+      - right
+      mtb:scale:uphill:
+      - '4'
+      - '5'
+      - '3'
+      - '2'
+      - '1'
+      - '6'
+      parking:both:fee:
+      - 'yes'
+      - 'no'
+      name:hur-fonipa:
+      - "\u0283x\u02B7m\u0259\u03B8k\u02B7\u0259j\u0330\u0259mas\u0259m"
+      name:hur:pronunciation:
+      - sh-MUTH-quee-um-AW-sum
+      official_name:en:
+      - Riverview Bridge
+      - "\u0161x\u02B7m\u0259\u03B8k\u02B7\u0259y\u0313\u0259mas\u0259m Street"
+      - Newt Trail
+      official_name:en-fonipa:
+      - "\u0283x\u02B7m\u0259\u03B8k\u02B7\u0259j\u0330\u0259mas\u0259m st\u0279it"
+      official_name:hur:
+      - "stal\u0315\u0259w\u0313as\u0259m"
+      - "\u0161x\u02B7m\u0259\u03B8k\u02B7\u0259y\u0313\u0259mas\u0259m Street"
+      old_name:en:
+      - Trutch Street
+      - Trutch Street Link
+      - Old Forks Trail
+      old_name:en:1886-2025:
+      - Trutch Street
+      destination:lang:en:
+      - Terminal;Parking
+      - Arrivals
+      - Terminal
+      - Richmond;South Terminal
+      - Arrivals - International/USA
+      - Departures;Fairmont Hotel;Gateway Valet
+      - Parkade
+      - Car Rental Return
+      - Car Rental Return;Arrivals - Canada
+      - Arrivals - Canada
+      - Departures
+      - Main Terminal
+      destination:lang:fr:
+      - Aerogare;Stationnement
+      - "Arriv\xE9es"
+      - Aerogare
+      - "Richmond;A\xE9rogare Sud"
+      - "Arriv\xE9e - International/\xC9tas-Unis"
+      - "D\xE9parts;Fairmont Hotel;Gateway Valet"
+      - "Stationnement \xE9tag\xE9"
+      - "Retour de Voitures Lou\xE9es"
+      - "Retour de Voitures Lou\xE9es;Arriv\xE9es - Canada"
+      - "Arriv\xE9es - Canada"
+      - "D\xE9parts"
+      - "A\xE9rogare principale"
+      access:backward:
+      - 'no'
+      bus:backward:
+      - designated
+      area:
+      - 'no'
+      building:levels:
+      - '2'
+      - 2;3;4;5
+      - 0;1;2
+      - '3'
+      - '0'
+      - 1;0
+      - 0;1
+      mtb:type:
+      - allmountain
+      - downhill
+      - DH
+      - freeride
+      assisted_trail:
+      - 'no'
+      - 'yes'
+      - unknown
+      motorcycle:
+      - designated
+      - 'yes'
+      - 'no'
+      bicycle:lanes:forward:
+      - yes|designated|yes
+      - designated|yes
+      - yes|yes|designated|yes
+      - yes|designated
+      - yes|yes|designated
+      - yes|yes|yes|designated
+      geobase:datasetName:
+      - NRN:British Columbia
+      geobase:uuid: 93
+      not:service:
+      - parking_aisle
+      oneway:foot:
+      - 'no'
+      cycleway:left:segregated:
+      - 'no'
+      sidewalk:left:bicycle:
+      - designated
+      lanes:bus:
+      - '1'
+      - designated|no|no|yes
+      - '2'
+      lanes:hov:
+      - '1'
+      goods:
+      - 'yes'
+      - 'no'
+      not:name:
+      - Squirrel Trail
+      - Lovers Walk
+      - Sasamat-Woodhaven Connector
+      - Bowzer Trail
+      sidewalk:both:surface:
+      - asphalt
+      - concrete
+      - concrete:plates
+      geobase:routeName1:en:
+      - Hwy 10
+      - Hwy 17
+      - Lougheed Highway
+      - Hwy 99
+      name:pa:
+      - "92  \u0A0F  \u0A10\u0A35\u0A40\u0A28\u0A3F."
+      gauge:
+      - '1435'
+      clothing:
+      - optional
+      bus_bay:
+      - left
+      - right
+      - both
+      - 'yes'
+      destination:lanes:backward:
+      - none|none|Kensington Avenue|Highway 1;Hope;Vancouver
+      - Lougheed Highway West|Kensington Avenue;Lougheed Highway East
+      - Kensington Highway;Kensington South|none
+      - Vancouver|Airport|Airport
+      - none|Fir Street;4th Avenue|Fir Street;4th Avenue
+      - Kingsway|Kingsway|Main Street|Main Street
+      - none|none|Port of Vancouver;New Brighton Parkj
+      rcn_ref:
+      - Alex Fraser Bridge
+      - Delta South Surrey Regional Greenway
+      - Queensborough Bridge
+      - BC Parkway
+      - Central Valley Greenway
+      - Canada Line
+      cycleway:both:conditional:
+      - share_busway @ (07:00-19:00)
+      - share_busway @ (Mo-Fr 07:00-10:00,15:00-19:00)
+      destination:street:to:
+      - Nordel Way
+      - Marine Way;22nd Street
+      visibility:
+      - horrible
+      - intermediate
+      - 'no'
+      - bad
+      - poor
+      winter_service:
+      - 'yes'
+      piste:difficulty:
+      - novice
+      - easy
+      - intermediate
+      - advanced
+      - expert
+      piste:oneway:
+      - 'yes'
+      piste:type:
+      - hike
+      - downhill
+      - skitour
+      - snowshoe
+      - nordic
+      - hike;skitour
+      piste:grooming:
+      - backcountry
+      - classic;skating
+      - classic+skating
+      osmc:symbol:
+      - orange_diamond
+      - yellow_square
+      - yellow_diamond
+      - orange_square
+      trailblazed:visibility:
+      - intermediate
+      - 'no'
+      - good
+      note:accuracy:
+      - This trail has changed and old OSM traces should not be used to align the
+        trail.
+      piste:name:
+      - Brockton Gully
+      - Backdoor
+      - Hollyburn
+      - Lower Powerline
+      - Start - Access
+      - Mountain Highway
+      - Chalet Road
+      - Dam Mountain Loop
+      - Ski School Flats
+      - Upper Burfield
+      - Sidewinder
+      - Sidewinder Connector
+      - Lower Burfield
+      - Cross Glades
+      - Sitzmark
+      - Upper Powerline
+      - Grand National
+      - Brothers Canyon West
+      - Upper Wells Grey
+      - West Lake Hill
+      - Jack Pratt
+      - West Lake Lookout
+      - West Lake Trail
+      - West Lake Weir
+      - Far East Powerline
+      - Lower Wells Grey
+      - Old Ropetow
+      - Lower Telemark
+      - Dean's Drop
+      - Pacific
+      - Triangle Lake
+      - Hollyburn Winter Access Trail
+      piste:priority:
+      - '1'
+      - '5'
+      - '4'
+      piste:status:
+      - open
+      ski:
+      - designated
+      - 'yes'
+      - 'no'
+      snowshoe:
+      - designated
+      - 'yes'
+      note:informal:
+      - Confirmed official
+      - This trail shows up in the DNV's questionable database but is not an official
+        trail for MV.
+      abandoned:
+      - 'yes'
+      website:trailforks: 55
+      note:access:
+      - There are signs at earlier end of this path saying "this is not a path, do
+        not enter".
+      - Closed due to land clearing operations.
+      - This trail has been previously labelled as closed but no signs of closure
+        or deactivation works were noted in person.
+      - Trail officially closed in 2016 by DNV with restoration work occuring in 2017.
+      - Metro Vancouver's Private Property sign does not mean the road is prrivate.
+      patrolled:
+      - 'no'
+      handrail:both:
+      - 'no'
+      - 'yes'
+      floating:
+      - 'no'
+      - 'yes'
+      mooring:
+      - 'no'
+      - ferry
+      sidewalk:right:surface:
+      - concrete
+      - concrete:plates
+      destinations:
+      - Whytecliff Park
+      turn:bicycle:lanes:
+      - left|none|none|none
+      - left|||
+      - none
+      - none|none
+      - none|none|none
+      - left||
+      - left|left|none|none|none
+      - left|none|none
+      bicycle:lanes:
+      - '||designated|'
+      - '||yes'
+      - yes|designated|yes
+      - yes|yes|yes|yes|designated
+      - yes|yes|yes|designated|yes
+      - yes|yes|yes|yes|yes|designated|yes
+      - yes|yes|designated|yes
+      - yes|designated
+      - yes|yes|yes|yes|designated|yes
+      - designated|yes
+      - yes|yes|yes
+      - yes|designated|no
+      - no|no|designated|yes
+      - yes|yes|yes|designated
+      - yes|yes|designated
+      - no|designated|yes
+      canvec:CODE:
+      - '2420021'
+      name:bridge:
+      - Cypress Creek Bridge
+      parking:left:maxstay:
+      - 2 hours @ (09:00-18:00)
+      - 3 hours
+      parking:right:maxstay:
+      - 2 hour @ (09:00-18:00)
+      - 3 hours
+      - 15 minutes
+      maxspeed:backward:
+      - '30'
+      - '50'
+      - '10'
+      maxspeed:forward:
+      - '50'
+      - '70'
+      - '20'
+      - '30'
+      motorboat:
+      - 'no'
+      motorcar:
+      - private
+      - 'no'
+      destination:pronunciation:
+      - "\u02C8lo\u028Ahi\u02D0d \u02C8ha\u026Awe\u026A i\u02D0st"
+      addr:block_number:
+      - '700'
+      - '200'
+      disused:highway:
+      - footway
+      - path
+      - cycleway
+      golf_cart:
+      - designated
+      - 'yes'
+      parking:fee:
+      - 'no'
+      - 'yes'
+      parking:lane:
+      - 'no'
+      transit:lanes:
+      - fork|new_on_right
+      emergency:
+      - designated
+      - 'yes'
+      taxi:
+      - 'no'
+      - designated
+      - 'yes'
+      destination:lang:en:lanes:
+      - Parkade|Car Rental Return;Arrivals - Canada|Arrivals - International/USA|Departures;Fairmont
+        Hotel;Gateway Valet
+      - Parkade|Car Rental Return;Arrivals - Canada|Arrivals - International/USA
+      - Parking;Car Rental Return|Terminal
+      - Parkade|Car Rental Return;Arrivals - Canada
+      destination:lang:fr:lanes:
+      - "Stationnement \xE9tag\xE9|Retour de Voitures Lou\xE9es;Arriv\xE9es - Canada|Arriv\xE9\
+        es - International/\xC9tas-Unis|D\xE9parts;Fairmont Hotel;Gateway Valet"
+      - "Stationnement \xE9tag\xE9|Retour de Voitures Lou\xE9es;Arriv\xE9es - Canada|Arriv\xE9\
+        es - International/\xC9tas-Unis"
+      - "Stationnement;Retour de Voitures Lou\xE9es|A\xE9rogare"
+      - "Stationnement \xE9tag\xE9|Retour de Voitures Lou\xE9es;Arriv\xE9es - Canada"
+      cycleway:right:oneway:
+      - 'no'
+      - 'yes'
+      bus:lanes:backward:conditional:
+      - 1 @ (Mo-Fr 07:00-09:30)
+      - (yes|yes|yes) @ (21:00-07:00)
+      - (yes|yes|yes|yes) @ (21:00-07:00)
+      motor_vehicle:lanes:backward:conditional:
+      - (yes|yes|yes) @ (21:00-07:00)
+      vehicle:lanes:
+      - yes|yes|yes|yes|no
+      - yes|yes|no
+      - yes|no
+      - no|yes
+      - yes|yes|yes
+      - yes|no|no
+      tram:
+      - razed
+      cycleway:width:
+      - '4'
+      - '0.9'
+      - '1'
+      - '5.8'
+      - '2'
+      - '2.5'
+      access:lanes:
+      - yes|no
+      - yes|yes|yes|no
+      - yes|yes|yes|no|yes
+      - yes|yes|no
+      - yes|no|yes
+      flood_prone:
+      - 'yes'
+      ford:
+      - 'yes'
+      - stepping_stones
+      - 'no'
+      atv:
+      - 'no'
+      dirtbike:
+      - 'no'
+      mtb:
+      - 'no'
+      - 'yes'
+      - designated
+      symbol:
+      - orange_diamond
+      snowmobile:
+      - 'no'
+      - 'yes'
+      turn:lane:forward:
+      - left|none|none
+      stairs:
+      - 'yes'
+      lanes:bus:backward:
+      - 1 @ (Mo-Fr 15:00-18:00)
+      - '1'
+      lanes:bus:forward:
+      - 1 @ (Mo-Fr 07:00-10:00)
+      - '1'
+      - 1 @ (Mo-Fr 07:00-9:30)
+      - '2'
+      bridge:colour:
+      - green
+      bridge:type:
+      - suspension
+      lanes:2026-05-27-:
+      - '4'
+      oneway:2026-05-27-:
+      - 'no'
+      abandoned:highway:
+      - path
+      - tertiary
+      - track
+      restriction:
+      - school_zone
+      rollerblade:
+      - 'no'
+      - 'yes'
+      parking:both:restriction:
+      - no_stopping
+      parking:right:fee:
+      - 'no'
+      - 'yes'
+      parking:right:restriction:conditional:
+      - no_stopping @ (Mo-Fr 07:00-9:30)
+      - no_stopping @ (Mo-Fr 07:00-09:30, 15:00-18:00)
+      - no_stopping @ (Mo-Fr 15:00-19:00)
+      ramp:bicycle:
+      - 'yes'
+      mtb:organization:
+      - nsmba.ca
+      undefined:
+      - need to explore this trail.  appears to be a cycle path
+      - These stairs go nowhere.
+      access:covid19:
+      - restricted
+      check_date:handrail:
+      - '2025-06-07'
+      - '2023-02-28'
+      - '2022-11-19'
+      - '2023-11-15'
+      - '2026-03-13'
+      - '2023-10-28'
+      parking:lane:both:parallel:
+      - on_kerb
+      - on_street
+      tourist_bus:
+      - 'yes'
+      ramp:wheelchair:
+      - 'yes'
+      - separate
+      building:min_level:
+      - '2'
+      - '-1'
+      end_date:railway:
+      - '1960'
+      subway: []
+      golf:
+      - cartpath
+      - path
+      piste:lit:
+      - 'yes'
+      building: []
+      turn:bicycle:lanes:forward:
+      - none|none|none
+      - left|through|through
+      - left|none|none|none
+      - none|none
+      - left|none|none
+      surrey:geodb_oid: []
+      access:lanes:forward:
+      - yes|yes|yes|no
+      - yes|yes|yes|yes
+      turn:bus:lanes:forward:
+      - left|none|none|none
+      - left|through|through
+      - none|none|none
+      source:bicycle:
+      - survey
+      busway:
+      - lane
+      horse_scale:
+      - impossible
+      - 'no'
+      check_date:smoothness:
+      - '2024-10-30'
+      - '2025-08-29'
+      - '2023-10-09'
+      - '2023-11-13'
+      smoking:
+      - 'no'
+      old_railway_operator:
+      - Vancouver & Lulu Island Railway
+      - BCER
+      - BC Electric Railway
+      - Canadian Pacific Railway
+      shoulder:right:
+      - 'no'
+      destination:street:lanes:
+      - Westminter Hwy|Westminster Hwy|91 EAST|To 99 SOUTH
+      - '||Bridgeport Rd;EXIT ONLY'
+      scooter:
+      - 'no'
+      skateboard:
+      - 'no'
+      bicycle:lanes:backward:
+      - yes|designated|yes
+      - yes|yes|yes|designated|yes
+      - designated
+      - no|designated
+      - no|no|designated
+      - yes|yes|yes|designated
+      - yes|yes|designated
+      cycleway:lanes:backward:
+      - no|lane|no
+      cycleway:lanes:forward:
+      - no|lanes|no
+      agricultural:
+      - 'yes'
+      hov:lanes:backward:
+      - none|none|none|designated
+      hov:lanes:forward:
+      - none|none|designated
+      turn:hov:lanes:backward:
+      - left|none|none|right;through
+      slope:
+      - 2.1 - 5%
+      source:location:
+      - extrapolation
+      bridge:movable:
+      - swing
+      access:2025-10-01-2025-12-10:
+      - 'no'
+      disused:
+      - 'yes'
+      source:bridge:
+      - survey
+      fut_name:
+      - 60 Avenue
+      source:name:
+      - Wikipedia
+      railing:
+      - 'yes'
+      - 'no'
+      speed:
+      - '80'
+      cycleway:lane:
+      - exclusive
+      - pictogram
+      closed:
+      - 'yes'
+      destination:symbol:forward:
+      - ferry
+      source:busway:
+      - survey
+      source:parking:lane:both:
+      - survey
+      source:parking:
+      - survey
+      abandoned:electrified:
+      - contact_line
+      oneway:bus:
+      - 'no'
+      sac_scale_ref:
+      - T3
+      access:delivery:
+      - 'no'
+      turn:hov:lanes:
+      - left|none|none|none
+      - '||'
+      - left|left|none|none|none
+      - left|none|none|right;through
+      pier:
+      - footbridge
+      toilets: []
+      parking:left:restriction:
+      - passenger_loading_zone
+      - no_stopping
+      - no_parking
+      destination:lanes:forward:
+      - Sixth Avenue|Queensborough Bridge|Queensborough Bridge
+      - none|none|Queensborough Bridge|Marine Way;22nd Street
+      - Hwy 17 West;Delta|Hwy 17 West;Delta|Timberland Road
+      - Gaglardi Way|Cariboo Road
+      - Broadway|Lougheed Highway
+      - Park|Plant
+      addr:city: []
+      railing:both:
+      - 'yes'
+      - 'no'
+      desintaion:
+      - Hudson Avenue
+      note:name:
+      - "This compound name containing both the h\u0259n\u0313q\u0313\u0259min\u0313\
+        \u0259m\u0313 and English terms is the official name that the Province uses\
+        \ to refer to the bridge. It is used here as a neutral balance to reduce chance\
+        \ of edit wars and show equal respect to both names."
+      - '"Bridge Connector" is the actual name of this road. It is not a placeholder.'
+      - Trail is not named "Shared Trail". The side just refers to that this is a
+        shared trail.
+      vehicle:lanes:backward:
+      - yes|no|yes
+      - yes|no
+      - yes|no|no
+      bus:lanes:conditional:
+      - 1 @ (Mo-Fr 07:00-09:30)
+      end_date:
+      - 05.31.2019
+      source:cycleway:width:
+      - ARCore
+      parking:left:access:
+      - private
+      parking:left:private:
+      - residents
+      parking:condition:right:
+      - free
+      - residents
+      playground:
+      - tunnel_tube
+      hazard:forward:
+      - pedestrians
+      - cyclists
+      note:surface:
+      - Gravel ontop of asphalt
+      change:
+      - 'no'
+      url:
+      - https://cfapp.vancouver.ca/parkfinder_wa/index.cfm?fuseaction=FAC.ParkDetails&park_id=102
+      school_zone:
+      - 'yes'
+      overtaking:
+      - 'no'
+      steps:
+      - 'yes'
+      parking:both:access:
+      - permit
+      parking:both:access:conditional:
+      - yes @ (Mo-Fr 09:00-16:00)
+      parking:left:fee:
+      - 'yes'
+      parking:right:maxstay:conditional:
+      - 2 @ (09:00-18:00)
+      - 1 hour @ (Mo-Sa 09:00-18:00)
+      min_height: []
+      roof:direction: []
+      roof:height: []
+      roof:shape: []
+      building:part: []
+      class:bicycle:mtb:
+      - '1'
+      check_date:cycleway:
+      - '2023-03-09'
+      parking:condition:both:
+      - free
+      - no_parking
+      parking:condition:both:conditional:
+      - no parking @ (22:00-06:00)
+      source1:
+      - http://www.th.gov.bc.ca/tranprojectsbc/#view=details&id=1912
+      - http://www.th.gov.bc.ca/tranprojectsbc/#view=details&id=2089
+      parking:left:restriction:conditional:
+      - no_stopping @ (Mo-Fr 07:00-09:30, 15:00-18:00)
+      source:date:
+      - 2006-12
+      - 2014-02
+      - 2010-03
+      - 2004-10
+      - 2013-02
+      - 2003-05
+      shoulder:both:
+      - 'no'
+      sidewalk:surface:
+      - concrete
+      maxweightrating:
+      - '10'
+      ownership:
+      - private
+      - BC Parks
+      turn:forward:
+      - left
+      - right
+      hgv:lanes:
+      - no|yes|yes
+      source:maxheight:
+      - ARCore
+      sidewalk:right:bicycle:
+      - 'yes'
+      note1:
+      - 'Estimated Project Completion: Summer 2019'
+      change:lanes:backward:
+      - no|no
+      - not_left|yes|yes|yes
+      - no|not_left|yes
+      - yes|not_right|no
+      change:lanes:forward:
+      - no|no|no
+      - not_left|yes
+      - not_left|not_right|no|no
+      platform_lift:
+      - 'no'
+      step:height:
+      - '0.15'
+      tactile_writing:
+      - 'no'
+      area:highway: []
+      name:squ: []
+      colonnade:left:
+      - open
+      disused:railway:
+      - platform
+      busway:right:
+      - lane
+      spiral:
+      - 'yes'
+      lane:
+      - '1'
+      bicycle:signed:
+      - 'yes'
+      waterway:
+      - dam
+      destination:ref:lanes:backward:
+      - 99 North|none|none
+      destination:symbol:lanes:backward:
+      - '|airport|airport'
+      removed:highway:
+      - path
+      description:ref:
+      - BC-17 WEST;BC-91
+      - 17 West;91
+      proposed:
+      - cycleway
+      - secondary
+      - unclassified
+      - residential
+      - tertiary
+      - service
+      maxspeed:truck:
+      - '30'
+      maxspeed:hgv:
+      - '30'
+      turn:bus:lanes:backward:
+      - left|none|none
+      - none|none
+      - left||
+      - none|none|none
+      - left|none|none|none
+      official_name:hur:pronunciation:
+      - STALL-oh-ah-sum
+      tidal:
+      - 'yes'
+      boundary:
+      - administrative
+      shower: []
+      abandoned:railway: []
+      name:es:
+      - Carretera Transcanadiense
+      place: []
+      parking:lane:right:perpendicular:
+      - half_on_kerb
+      grades:
+      - 0-6
+      temporary:access:
+      - no @ (2021 Nov 16 - 2022 Nov 30)
+      - no @ (2021 Dec 09 - 2022 Nov 30)
+      brand: []
+      brand:wikidata: []
+      fax: []
+      parking:both:parallel:
+      - street_side
+      pedestrian:
+      - 'no'
+      comment:
+      - No shoulder bike lane for this short section
+      operator:website:
+      - https://www.dnv.org/
+      - https://www.dnv.org
+      landuse: []
+      construction_start_expected:
+      - 2023-06
+      aeroway:
+      - jet_bridge
+      parking:right:restriction:bus:
+      - none
+      parking:right:restriction:bus:conditional:
+      - loading_only @ (Mo-Sa 09:30-18:00)
+      parking:right:disabled:
+      - designated
+      trolley_wire:backward:
+      - 'yes'
+      was:crossing:markings:
+      - zebra
+      turn:bicycle:lanes:backward:
+      - left|none
+      - left|none|none
+      - left|none|none|none
+      designated:
+      - bicycle
+      parking:left:access:conditional:
+      - yes @ (Mo-Fr 09:00-16:00)
+      access:conditional:
+      - no @ (Mar 18 2025-Jun 01 2025)
+      cycleway:surface:colour:
+      - green
+      turn:motor_vehicle:lanes:forward:
+      - none|right
+      turn:motor_vehicle:lanes:backward:
+      - none|right
+      - left|none|right
+      access_aisle:
+      - disabled
+      parking:both:fee:conditional:
+      - yes @ (09:00-22:00)
+      carriage:
+      - private
+      parking:left:restriction:bus:
+      - none
+      cycleway:conditional:
+      - share_busway @ (07:00-19:00)
+      destination:ref:backward:
+      - 1 East
+      addr:province: []
+      foot:conditional:
+      - no @ May 1 - Oct 1
+      maxspeed:hgv:forward:
+      - '30'
+      traffic_calming:backward:
+      - table
+      temporary:
+      - 'yes'
+      room: []
+      parking:right:restriction:reason:
+      - passenger_loading_zone
+      cycleway:lanes:
+      - no|lane|no
+      maintained:
+      - 'no'
+      surface_survey:
+      - gravel
+      traffic_calming:forward:
+      - choker
+      was:name:
+      - Salvation
+      vehicle:lanes:forward:
+      - yes|no|yes
+      note:cycleway:
+      - As an alternative to crossing the Highway 99 onramp using the cycle lane,
+        cyclists may follow the shoulder until the pedestrian crossing, dismount,
+        and cross. Cyclists are not permitted on the onramp beyond the crossing.
+      parking:lane:right:diagonal:
+      - street_side
+      taxi:lanes:
+      - yes|yes|designated
+      hazard:backward:
+      - pedestrians
+      driveway:
+      - pipestem
+      overgrown:
+      - 'yes'
+      iata: []
+      icao: []
+    style_rules:
+      highway:
+        cycleway: {}
+        residential:
+          linewidth: 0.3
+        footway: {}
+        service:
+          linewidth: 0.15
+        tertiary:
+          linewidth: 0.32
+        trunk:
+          linewidth: 0.52
+        trunk_link: {}
+        secondary:
+          linewidth: 0.38
+        motorway_link: {}
+        motorway:
+          linewidth: 0.6
+        path: {}
+        secondary_link: {}
+        living_street:
+          linewidth: 0.1
+        steps: {}
+        unclassified:
+          linewidth: 0.15
+        track:
+          linewidth: 0.1
+        construction: {}
+        pedestrian: {}
+        tertiary_link: {}
+        corridor: {}
+        busway: {}
+        primary:
+          linewidth: 0.45
+        primary_link: {}
+        proposed: {}
+        bridleway: {}
+        raceway: {}
+        platform: {}
+        road: {}
+      maxspeed:
+        '80': {}
+        '50': {}
+        '60': {}
+        '90': {}
+        '30': {}
+        '40': {}
+        '20': {}
+        '15': {}
+        '70': {}
+        '10': {}
+        '100': {}
+        '5': {}
+        30, 50: {}
+        '25': {}
+        30;50: {}
+        '4': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Point:
+    file: downloads/regions/vancouver-bc/layers/highway.gpkg
+    layer: highway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 76766
+      highway:
+      - stop
+      - crossing
+      - bus_stop
+      - turning_circle
+      - traffic_signals
+      - motorway_junction
+      - turning_loop
+      - street_lamp
+      - give_way
+      - elevator
+      - milestone
+      - traffic_mirror
+      - raceway
+      - speed_camera
+      - mini_roundabout
+      - steps
+      - speed_display
+      - passing_place
+      - disused:bus_stop
+      - trailhead
+      - emergency_access_point
+      - priority
+      traffic_signals:
+      - signal
+      - pedestrian_crossing
+      - emergency
+      - level_crossing
+      - traffic_lights
+      - pedestrian
+      - signal;level_crossing
+      - blink_mode
+      - blinker
+      - pedestrian_crossing,bus_priority
+      - crossing
+      - stop_line
+      - continuous_green
+      - bus_priority
+      - request_button
+      - stop
+      - 'no'
+      - flashing red
+      traffic_signals:direction:
+      - forward
+      - backward
+      - both
+      - backward;90
+      direction: 59
+      stop:
+      - minor
+      - all
+      ref: 3829
+      noref:
+      - 'yes'
+      button_operated:
+      - 'yes'
+      - 'no'
+      - only
+      crossing:
+      - unmarked
+      - uncontrolled
+      - traffic_signals
+      - marked
+      - pavement
+      - 'no'
+      - zebra
+      - pedestrian_signals
+      - informal
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing:markings: 71
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      - partial
+      - incorrect
+      - primitive
+      traffic_signals:sound:
+      - 'yes'
+      - 'no'
+      - locate
+      - walk
+      traffic_calming:
+      - hump
+      - table
+      - 'no'
+      - choker
+      - bump
+      - table;choker
+      - table;hump
+      - 'yes'
+      traffic_signals:vibration:
+      - 'no'
+      - 'yes'
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      bicycle:
+      - designated
+      - 'yes'
+      - dismount
+      kerb:
+      - lowered
+      - flush
+      - raised
+      - 'no'
+      except:
+      - bicycle
+      - bus
+      - psv
+      distance:
+      - '1'
+      - '2.4'
+      - 2.2 km
+      - 3.2 km
+      - 2.5 km
+      - '2.8'
+      - '0.5'
+      - '2.9'
+      - '2'
+      - '3'
+      - '4'
+      - '8'
+      - '9'
+      - '3.5'
+      - '1.5'
+      - '0'
+      - '6'
+      - '7'
+      - '5'
+      - '10'
+      - 9 km
+      - 0.5 km
+      - 0 km
+      - 2.0 km
+      - 0.0 km
+      - '6.9'
+      - '6.0'
+      - '11'
+      - '5.5'
+      - '4.5'
+      - 11 km
+      - 12 km
+      - 9.9 km
+      - 18.4 km
+      - 19.8 km
+      - '14'
+      turning_circle:
+      - knuckle
+      - circle
+      - oval
+      - hammer
+      - square
+      - y-head
+      source:
+      - Yahoo
+      - Bing
+      - City of Surrey 2010 Orthographs
+      - bing
+      - gps/photo survey
+      - survey;aerial imagery
+      - survey
+      - yahoo
+      - wood
+      - local_knowledge
+      - PGS
+      description:
+      - Bus stop has a small platform with a ramp to the road, but no access to a
+        sidewalk
+      - Bus stop has no access via sidewalk
+      - 49 UBC, 430 Brighouse Station
+      - Has stop number, not used by any route (only electric bus charging)
+      - 26 Joyce Station
+      - 125, 130, 25
+      - '125'
+      - Only accessible by walking on the road
+      - 125, 123
+      - No platform, no wheelchair access, must cross grass
+      - Can only be accessed my walking on roadway
+      - Shuttle Bus Stop
+      - Stop sign only affects on direction of traffic.
+      - '"Give way to busses on left"'
+      - Covered metal backrest and wooden seat. Altitude 60cm above ground. Wheelchair
+        accessible. divisions between the 3 seats.
+      - 84 UBC
+      - 3-way stop
+      - Unloading only
+      - Elevator up to viewing walkway
+      - Stanley Park Loop
+      - R2 and 254 unloading only - departure across the street
+      - unloading only
+      - spare bay
+      - fire station controlled signal
+      - All buses to SFU exchange
+      - R5 to Burrard Station; 143 to Burquitlam Station; 144 to Metrotown Station;
+        145 to Production Station; N35 to Downtown
+      - Buttons for cyclists at road side
+      - 250 - Vancouver 253 - Vancouver
+      - 250 - Horseshoe Bay 253 - Caulfeild
+      - 250 - Horseshoe Bay 253 - Caulfield
+      - 250 - Vancouver 250a - Vancouver 253 - Vancouver
+      - 250 - Horseshoe Bay
+      - 253 - Caulfield
+      noexit:
+      - 'yes'
+      traffic_signals:countdown:
+      - 'yes'
+      - 'no'
+      crossing_ref:
+      - zebra
+      barrier:
+      - kerb
+      - gate
+      - jersey_barrier
+      - bollard
+      - swing_gate
+      colour:
+      - green
+      - brown
+      - brown, grey
+      - yellow
+      - black
+      foot:
+      - 'no'
+      - 'yes'
+      - designated
+      - permit
+      locked:
+      - 'yes'
+      material:
+      - wood
+      - steel
+      - concrete
+      - metal
+      - Preformed_thermoplastic
+      - wood;metal
+      motor_vehicle:
+      - 'no'
+      - private
+      operator:
+      - Coast Mountain Bus Company
+      - Coast Mountain Bus Company-
+      - City of Richmond
+      - BC Ministry of Transportation and Infastucture
+      - TransLink
+      - Parks Canada
+      - Burnaby South Secondary School
+      - Translink
+      - BC Hydro
+      - Vancouver International Airport Authority
+      - HandyDART
+      - Coast Mountain BUs COmpany
+      - Coast Mountai n Bus Company
+      - CMBC
+      - Westcoast Sightseeing
+      - Capilano Suspension Bridge
+      - The Vancouver Trolley Company
+      - LandSea Tours
+      - Capilano Bridge
+      - West Vancouver Transit
+      - TransLink (Coast Mountain Bus Company)
+      - TransDev Canada
+      - BC Parks
+      - District of North Vancouver
+      - North Shore Rescue
+      - District of West Vancouver
+      - Cypress Coach Lines
+      - City Of North Vancouver
+      - Grouse Mountain
+      operator:type:
+      - government
+      swing_gate:type:
+      - single
+      flashing_lights:
+      - button
+      - 'no'
+      - sensor
+      ref:left:
+      - '26'
+      ref:right:
+      - '25'
+      covered:
+      - 'yes'
+      - 'no'
+      surface:
+      - asphalt
+      - concrete
+      - paved
+      - ground
+      - paving_stones
+      segregated:
+      - 'no'
+      - 'yes'
+      unsigned_ref:
+      - 41A
+      note:
+      - Exit 8 - Temporary Exit Number 8A during construction in 2022.
+      - There is only a bike lane on the north side of River Road. There is no sidewalk.
+        The crossing should not be extended past the road.
+      - The shoulder on the north side of Westminster Highway is for cyclists, and
+        is not a proper sidewalk. Walking on the shoulder would be very unplesant
+        if not unsafe. The crossing should not be extended past the road.
+      - As of 2020 March, Translink's location of this stop is incorrect, after it
+        was moved for the SFPR.
+      - No name regarding which route this is for. TBD.
+      - The Terry Fox Route
+      - Cyclist signal
+      - 106 unloading only
+      - 123 Layover Only
+      - Unloading only
+      - Top circuit, normally closed
+      - normally open
+      - Temporary stop sign to be replaced with a traffic signal in the near future.
+      - No longer used, but Bay 1 does not exist elsewhere. A 5digit stop code may
+        exist but no longer published by Translink.
+      - Bus line 26 to Joyce Station stops here.
+      - ref might be slightly wrong
+      - twin-headed
+      - twin headed
+      - Sign says Late Night Service; no mention of being wheelchair-friendly
+      - Yield to cyclists
+      - Crossing here is legal but hazardous since many drivers are not aware this
+        is a crossing
+      - 9 - Alma N9 - Downtown
+      - Layover only, buses do no pickup nor drop off at this stop.
+      - This stop will be moved north to a new traffic island within the next few
+        weeks of the check_date.
+      - To gates D60-61
+      - HandyDart Only
+      - Crossing markings are worn.
+      - Yield to oncoming traffic.
+      - This bus stop has received two "Amenity doesn't exist" reports from maps.me
+        users, but it is in the TransLink database and has been confirmed to exist
+      - Temporary for Arbutus Greenway construction diversion.
+      - When the EB bus stop at Columbia St was established in summer 2024, this bus
+        stop was decommissioned. The shelter has also been removed. Aerial maps showing
+        this bus stop are outdated.
+      - Bench covered by bus stop
+      - 'Bench material: wood/metal/, Road: paved concrete; No arm rest'
+      - 'Bench material: wood/metal/glass, no arm rest, Ground: paved concrete'
+      - Always green for straight-through traffic, as far as I can tell. But right
+        turn signal changes.
+      - Wooden, no side rests, back rest is glass, accomodates 2 people, uncovered
+      - Also unloading bay for all WB routes terminating at Kootenay
+      - Terminus for '4 Powell' (start point for '4 UBC')
+      - unloading only, Translink has no official name for the stop.
+      - Unloading Only
+      source:url:
+      - http://www.surrey.ca/city-services/658.aspx
+      check_date:crossing:
+      - '2023-11-27'
+      - '2023-03-26'
+      - '2023-11-19'
+      - '2023-06-14'
+      - '2024-02-03'
+      - '2023-11-28'
+      junction:
+      - roundabout
+      crossing:markings:colour:
+      - green;white
+      - green
+      - white;green
+      - yellow
+      natural:
+      - tree
+      parking:restriction:
+      - no_parking
+      turning_loop:
+      - knuckle
+      traffic_sign:
+      - stop
+      cycleway:
+      - crossing
+      bench:
+      - 'yes'
+      - 'no'
+      bin:
+      - 'yes'
+      - 'no'
+      bus:
+      - 'yes'
+      departures_board:
+      - timetable
+      - realtime
+      - 'yes'
+      - 'no'
+      lit:
+      - 'yes'
+      - 'no'
+      local_ref:
+      - '9'
+      - '1'
+      - '8'
+      - '2'
+      - '7'
+      - '3'
+      - '5'
+      - '6'
+      - '4'
+      - '10'
+      - '14'
+      - '13'
+      - '12'
+      - '11'
+      name: 4762
+      network:
+      - Translink
+      - HandyDart 58642
+      - Vancouver International Airport Authority
+      - BC Children's Shuttle
+      - Greyhound
+      - Flixbus;Rider Express
+      - Ebus;Red Arrow
+      - BC Ferries Connector Bus
+      - Hop-On Hop-Off
+      - GVRD
+      - BC Transit
+      - Cypress Coach Lines
+      network:wikidata:
+      - Q1142140
+      - Q755309
+      - Q4179186
+      network:wikipedia:
+      - en:TransLink (British Columbia)
+      public_transport:
+      - platform
+      - disused:platform
+      route_ref: 80
+      shelter:
+      - 'yes'
+      - 'no'
+      check_date:
+      - '2025-11-30'
+      - '2025-11-19'
+      - '2025-04-05'
+      - '2025-11-20'
+      - '2026-01-15'
+      - '2026-01-04'
+      - '2025-10-21'
+      - '2024-03-14'
+      - '2024-04-05'
+      - '2025-10-27'
+      - '2024-03-27'
+      - '2026-01-02'
+      - '2025-10-22'
+      - '2024-03-29'
+      - '2026-02-04'
+      - '2025-11-24'
+      - '2026-01-21'
+      - '2026-03-10'
+      - '2025-12-08'
+      - '2025-11-05'
+      - '2026-02-05'
+      - '2025-10-20'
+      - '2026-01-14'
+      - '2025-06-26'
+      - '2026-01-18'
+      - '2026-01-26'
+      - '2025-11-17'
+      - '2026-01-08'
+      - '2026-02-16'
+      - '2025-11-28'
+      - '2026-01-22'
+      - '2025-11-26'
+      - '2025-12-23'
+      - '2025-05-19'
+      - '2025-12-28'
+      - '2025-12-22'
+      - '2025-10-26'
+      - '2025-09-28'
+      - '2025-10-05'
+      - '2024-12-28'
+      - '2025-10-28'
+      wheelchair:
+      - 'yes'
+      - 'no'
+      - limited
+      - wheelchair
+      - designated
+      trolleybus:
+      - 'yes'
+      - 'no'
+      access:
+      - 'yes'
+      - 'no'
+      - permit
+      - customers
+      - private
+      board_type:
+      - history
+      historic:
+      - memorial
+      inscription:
+      - In 1859 military considerations induced Colonel Richard Moody to select the
+        site of New Westminster as the capital of the new colony of British Columbia.
+        Jointly developed until 1863 by civilians and the Royal Engineers, whose campground
+        was here, the tow
+      source:website:
+      - https://www.pc.gc.ca/apps/dfhd/page_nhs_eng.aspx?id=1641&i=78263
+      wikidata:
+      - Q876122
+      wikipedia:
+      - en:New Westminster
+      surface:colour:
+      - green
+      - grey
+      - red
+      - blue
+      level:
+      - '1'
+      - '0'
+      - 0;1
+      - -2;-1;0
+      - 0;2
+      - '-1'
+      - 1;2;3
+      - 1;2
+      - -2;-1;1;2;3
+      - 0;2;3
+      - -1;0;1
+      - 0;1;2;3;4
+      - -1;0
+      - 0;1;2;3
+      - 1;2;0
+      - 0;1;-1;-2;-3
+      - 0;-1;-2
+      - 2;1;0;-1;-2
+      - 0;-1
+      - '3'
+      - 0;3
+      towards:
+      - U.B.C.
+      bench:backrest:
+      - 'yes'
+      - 'no'
+      bench:note:
+      - 'Material: wood/metal/glass, no arm rest, Ground: paved concrete'
+      - 'Material: wood/metal, Road: paved concrete;No arm rest'
+      image:
+      - https://flic.kr/p/2iBTrVC
+      - https://flic.kr/p/2iBPpR1
+      - https://www.flickr.com/photos/162942472@N07/46559320995/in/dateposted-public/
+      - https://www.flickr.com/photos/162942472@N07/32532731107/in/dateposted-public/
+      - https://www.flickr.com/photos/105513410@N03/33510703808/in/dateposted-public/
+      - https://flic.kr/p/2e2Wv8m
+      - https://flic.kr/p/Ruo9Mc
+      - https://www.flickr.com/photos/162942472@N07/32532731007/in/dateposted-public/
+      - https://www.flickr.com/photos/162942472@N07/32532731467/in/dateposted-public/
+      - https://www.flickr.com/photos/162942472@N07/46559321275/in/dateposted-public/
+      - https://www.flickr.com/photos/162942472@N07/32532731717/in/dateposted-public/
+      - https://www.flickr.com/photos/162942472@N07/46559320705/in/dateposted-public/
+      - https://www.flickr.com/photos/168993437@N08/46440125145/in/dateposted/
+      - https://www.flickr.com/photos/164561300@N04/47279540272/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47279540392/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47279540642/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47279539962/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47332102331/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47279539852/in/dateposted-public/
+      - https://www.flickr.com/photos/164561300@N04/47332102381/in/dateposted-public/
+      - https://www.flickr.com/photos/157042006@N08/32480736667/in/photostream/
+      - https://www.flickr.com/photos/157042006@N08/47422652791/in/photostream/
+      - https://www.flickr.com/photos/157042006@N08/32480736817/in/photostream/
+      - https://www.flickr.com/photos/168993437@N08/33479003948/in/dateposted/
+      - https://www.flickr.com/photos/168993437@N08/46631839474/in/dateposted/
+      - https://www.flickr.com/photos/164561300@N04/47332102221/in/dateposted-public/
+      - https://www.flickr.com/photos/168993437@N08/46440124775/in/dateposted/
+      - https://www.flickr.com/photos/164561300@N04/47279540572/in/dateposted-public/
+      - https://www.flickr.com/photos/168993437@N08/33479003628/in/dateposted/
+      bench:check_date:
+      - '2025-05-21'
+      - '2023-02-18'
+      check_date:shelter: 142
+      addr:housenumber:
+      - '7526'
+      - '6400'
+      addr:street:
+      - Shackleton Drive
+      - Nancy Greene Way
+      footway:
+      - crossing
+      fixme:
+      - find more stop detail
+      - Survey once open again
+      - refine location of this feature once aerial imagery is updated
+      - add to routes and find stop ID
+      - find ref and add to 100
+      - Crossing markings are unknown, and need to be updated.
+      - Not a 20 stop
+      - 'Add relation: 16 - Arbutus'
+      - nonexistent; delete
+      - 'Add relation: N8 Downtown'
+      - 'Add relation: 8 Downtown, N8 Downtown'
+      - please confirm via survey
+      - Bus stop not visible on street-level or aerial imgary
+      - N19 does not visit here?
+      - "resurvey data in \u201Cearly 2026\u201D"
+      - Check whether crossing markings have been painted here.
+      - Undocumented but exists on the ground? Resurvey in a few months (January 2026?)
+        once water main repairs complete
+      - Survey - does this exist on the ground? If not; delete
+      backrest:
+      - 'yes'
+      horse:
+      - designated
+      check_date:lit:
+      - '2025-11-20'
+      - '2026-01-15'
+      - '2026-01-04'
+      - '2022-01-13'
+      - '2023-05-20'
+      - '2025-10-27'
+      - '2025-11-30'
+      - '2026-01-08'
+      - '2026-02-16'
+      - '2025-11-28'
+      - '2025-12-23'
+      - '2025-12-28'
+      - '2025-10-26'
+      amenity:
+      - waste_basket
+      - bench
+      - parking_entrance
+      ground:
+      - slanted
+      seats:
+      - '3'
+      kerb:approach_aid:
+      - 'no'
+      passenger_information_display:
+      - 'no'
+      hiking:
+      - 'yes'
+      information:
+      - guidepost
+      - map_board
+      tourism:
+      - artwork
+      - information
+      - attraction
+      cycleway:crossing:priority:
+      - dots;surface:colour=green
+      footway:crossing:markings:
+      - lines
+      oneway:
+      - 'no'
+      - 'yes'
+      asset_ref:
+      - '51837'
+      check_date:tactile_paving: 51
+      wheelchair:description:
+      - Concrete platform but only accessible over grass and curbs.
+      - Concrete platform, but poor access
+      - Paved platform. Bus stop has no access via sidewalk
+      - Bus stop does not have a platform and has no access via sidewalk
+      - Bus stop has a paved platform but not access via sidewalk. Access is only
+        via gravel shoulder along the road
+      - Paved platform exists but no access via sidewalk. Access via road with raised
+        curb.
+      - No sidewalk access. Can only access via road with raised curb.
+      - No paved platform. No sidewalk access. Can only access via road with raised
+        curb.
+      - No access via sidewalk, only accessible via the roadway with a medium-sized
+        curb between
+      - Bus stop has a paved platform;not access via sidewalk, must use road shoulder
+      - Bus stop has a paved platform;the only access is via paved road or long stretches
+        of grass, both with curbs to cross
+      - No access via sidewalk;only accessible via unpaved road shoulder
+      - No platform and inaccessible via sidewalk
+      - No access to a sidewalk;only accessible  using the highway shoulder
+      - Bus stop has a platform but no access via sidewalk;The only access is along
+        the road
+      - No access via sidewalk;the only access is along the road
+      - No access via sidewalk;only access is along the road
+      - No access via sidewalk. Can only be accessed via roadway or over grass and
+        obstacles.
+      - No access via sidewalk. Only accessible via the roadway or over grass and
+        obstacles.
+      - No access via sidewalk. Only accessible via roadway or on grass and over obstacles.
+      - No access via sidewalk
+      diameter:
+      - 30m
+      line_attachment:
+      - anchor
+      - pin
+      power:
+      - pole
+      - catenary_mast
+      - switch
+      - switch;pole
+      support:
+      - pole
+      - ground
+      - power_pole
+      - utility_pole
+      - street_lamp
+      - pedestal
+      supervised:
+      - 'no'
+      bench:colour:
+      - silver
+      - brown with metal between seats
+      - brown
+      - brown, blue
+      - Maple
+      - Grey and brown
+      bench:material:
+      - metal
+      - wood
+      - wood,steel
+      - wood;metal
+      bench:seats:
+      - '3'
+      - '8'
+      - '2'
+      lamp_type:
+      - LED
+      - electric
+      - led
+      - floodlight
+      capacity:
+      - '8'
+      - '7'
+      contact:phone:
+      - +1-604-271-0337
+      email:
+      - Keith.Lastoria@gov.bc.ca
+      fee:
+      - 'no'
+      phone:
+      - +1-604-527-2221
+      - +1-604-271-0337
+      website:
+      - https://www.gov.bc.ca/george-massey-shuttle
+      - https://www.pattullobridgereplacement.ca/active-transportation
+      - https://quickcoach.com/
+      - https://covapp.vancouver.ca/PublicArtRegistry/ArtworkDetail.aspx?FromArtworkSearch=True&ArtworkId=824
+      - https://vancouver.ca/files/cov/west-king-edward-arbutus-detour-sign.pdf
+      - https://westcoastsightseeing.com/hop_on/sightseeing_pass/
+      - https://westcoastsightseeing.com/live-bus-map
+      - https://www.translink.ca/schedules-and-maps/stop/60467/schedule
+      - https://www.grousemountain.com/grousegrind
+      roundtrip:
+      - 'no'
+      designation:
+      - '52878'
+      bench:notes:
+      - Bench undercover at bus stop. Not a stable backrest, however one may be able
+        to lean against the glass. Bench divided into three seats by small metal arm
+        rests.
+      bench:armrest:
+      - 'yes'
+      bench:image:
+      - https://www.flickr.com/photos/147639097@N04/47460712691/in/dateposted-public/
+      - https://www.flickr.com/photos/105513410@N03/33510703808/in/dateposted-public/
+      line:
+      - '16'
+      - '49'
+      man_made:
+      - utility_pole
+      - surveillance
+      - tower
+      - poster_cylinder
+      tower:type:
+      - communication
+      layer:
+      - '1'
+      - '2'
+      lamp_mount:
+      - bent_mast
+      - straight_mast
+      - angled_mast
+      - high_mast
+      - pole
+      utility:
+      - power
+      - power;street_lighting
+      check_date:bin:
+      - '2023-06-24'
+      - '2023-05-31'
+      - '2024-05-01'
+      - '2025-10-26'
+      - '2023-09-12'
+      toilets:wheelchair:
+      - 'no'
+      check_date:surface:
+      - '2025-12-22'
+      stroller:
+      - 'yes'
+      - 'no'
+      path:
+      - crossing
+      information_type:
+      - board
+      flag:
+      - 'yes'
+      - 'no'
+      pole:
+      - 'yes'
+      - 'no'
+      bollard:
+      - removable
+      position:
+      - Lougheed @ Gagliardi
+      crossing:continuous:
+      - 'yes'
+      - pedestrian
+      - 'no'
+      maxweight:
+      - '1.184'
+      - '1.8'
+      - '1.13'
+      - '1.81'
+      - 341 kg
+      check_date:traffic_signals:vibration:
+      - '2025-12-17'
+      - '2023-07-14'
+      - '2021-07-13'
+      - '2024-10-13'
+      railway:
+      - crossing
+      traffic_signals:arrow:
+      - 'no'
+      - 'yes'
+      traffic_signals:minimap:
+      - 'no'
+      bench:type:
+      - stand_up
+      seasonal:
+      - autumn
+      ref:signed:
+      - 'no'
+      alt_name:
+      - Value Long Term Shuttle Bus
+      - Victoria Drive (SB) at Broadway
+      - Victoria Drive (NB) at Broadway
+      - Production Way Station @ Bay 4
+      - Quarry Rock Trailhead
+      check_date:bench:
+      - '2025-02-01'
+      - '2023-06-26'
+      - '2023-08-26'
+      - '2023-09-29'
+      - '2025-10-26'
+      - '2025-04-04'
+      - '2025-01-25'
+      - '2025-08-02'
+      accessible:
+      - 'yes'
+      notes:
+      - bus stop, covered
+      - patio benches, no cover
+      - Bench covered
+      - bench covered
+      waste_basket:
+      - 'yes'
+      name:en:
+      - Free Shuttle Pick-Up
+      - Courtesy Shuttle
+      - Stanley Park-Totems
+      cycleway:crossing:markings:
+      - dots
+      memorial:
+      - sculpture
+      crossing:signed:
+      - 'yes'
+      mapillary:
+      - '522681220349805'
+      name:fr:
+      - Navettes gratuites
+      disused:crossing:
+      - marked
+      traffic_signals:turn:
+      - left
+      start_date:
+      - '2019'
+      - '2004'
+      advertising:
+      - 'no'
+      temporary:disused:
+      - yes @ (2025 Mar 24 - 2025 Apr 25)
+      ele:
+      - '111'
+      - '196'
+      - '225'
+      - '275'
+      - '370'
+      - '685'
+      - '540'
+      - '410'
+      - '906'
+      artist_name:
+      - Robyn Sparrow
+      raised:
+      - 'yes'
+      survey:date:
+      - '2020-11-20'
+      - '2020-11-05'
+      - '2020-10-28'
+      - '2021-08-10'
+      - '2023-09-05'
+      - '2021-08-23'
+      - '2022-04-22'
+      - '2021-06-04'
+      - '2021-08-03'
+      flashing_light:
+      - 'yes'
+      crossing:kerb_extension:
+      - both
+      bic:
+      - designated
+      handrail:
+      - 'yes'
+      handrail:center:
+      - 'yes'
+      handrail:left:
+      - 'yes'
+      handrail:right:
+      - 'yes'
+      step_count:
+      - '5'
+      not:network:wikidata:
+      - Q1142140
+      informal:
+      - 'yes'
+      height:
+      - '3.5'
+      - '15'
+      - '4'
+      - '5'
+      light:method:
+      - LED
+      light_source:
+      - 'yes'
+      camera:type:
+      - dome
+      - fixed
+      surveillance:
+      - public
+      - outdoor
+      surveillance:type:
+      - camera
+      surveillance:zone:
+      - traffic
+      - area
+      camera:mount:
+      - pole
+      - street_lamp
+      internet_access:
+      - wlan
+      internet_access:fee:
+      - 'no'
+      location:
+      - indoor
+      - pole
+      voltage:
+      - '12470'
+      entrance:
+      - staircase
+      leisure:
+      - track
+      sport:
+      - karting
+      operator:wikidata:
+      - Q795720
+      - Q1104377
+      indoor:
+      - 'yes'
+      tower:construction:
+      - freestanding
+      crossing:barrier:
+      - 'no'
+      - double_half
+      crossing:bell:
+      - 'yes'
+      crossing:light:
+      - 'yes'
+      railway:signal:direction:
+      - forward
+      level:ref:
+      - P3;P2;P1;2,3
+      construction:
+      - 'yes'
+      mapillary:image:
+      - '1035588061596443'
+      mapillary:map_feature:
+      - '3820106751640392'
+      red_turn:right:
+      - 'no'
+      opening_hours:
+      - Mo-Fr 07:00-09:00,15:30-17:30
+      - 06:00-23:00
+      maxspeed:
+      - '50'
+      - '15'
+      enforcement:
+      - traffic_signals
+      addr:floor:
+      - '3'
+      light:count:
+      - '1'
+      light:lit:
+      - dusk-dawn
+      light:colour:
+      - white
+      opening_date:
+      - '2026-02-17'
+      sidewalk: []
+      name:etymology: []
+      sidewalk:both: []
+      lane_markings: []
+      cycleway:both: []
+      cycleway:both:lane: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes: []
+      cycleway:left: []
+      parking:both: []
+      sidewalk:left: []
+      sidewalk:right: []
+      destination: []
+      destination:ref: []
+      hgv: []
+      maxheight: []
+      official_name: []
+      cycleway:right: []
+      lcn: []
+      name:etymology:wikidata: []
+      parking:left: []
+      bus:lanes:forward:conditional: []
+      cycleway:right:conditional: []
+      trolley_wire: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      hov:lanes: []
+      hov:minimum: []
+      motor_vehicle:lanes: []
+      reg_name: []
+      sidewalk:both:bicycle: []
+      lanes:backward: []
+      lanes:forward: []
+      destination:street: []
+      bridge: []
+      bridge:structure: []
+      toll: []
+      lanes:both_ways: []
+      junction:ref: []
+      turn:lanes: []
+      old_ref: []
+      width: []
+      parking:right: []
+      name:hur: []
+      smoothness: []
+      type: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      maxspeed:conditional: []
+      maxweight:signed: []
+      psv: []
+      lanes:reversible: []
+      name:ja: []
+      name:zh: []
+      bicycle:conditional: []
+      source:width: []
+      name:pronunciation: []
+      attribution: []
+      service: []
+      alt_name:hur: []
+      source:maxspeed: []
+      block: []
+      destination:symbol: []
+      maxspeed:advisory: []
+      hazard: []
+      lcn_ref: []
+      shoulder: []
+      bridge:name: []
+      bridge:name:en: []
+      bridge:name:fr: []
+      expressway: []
+      sidewalk:left:surface: []
+      sidewalk:left:width: []
+      short_name: []
+      cutting: []
+      lanes:bus:forward:conditional: []
+      parking:right:orientation: []
+      parking:right:restriction: []
+      noname: []
+      is_in: []
+      mtb:scale:imba: []
+      sac_scale: []
+      name:etymology:wikipedia: []
+      wikipedia:en: []
+      hazmat: []
+      tunnel: []
+      maxspeed:school: []
+      change:lanes: []
+      parking:both:orientation: []
+      turn:lanes:forward: []
+      cycleway:surface: []
+      footway:surface: []
+      ramp_speed: []
+      turn: []
+      incline: []
+      bus:lanes: []
+      created_by: []
+      old_name: []
+      maxheight:signed: []
+      dog: []
+      mtb:scale: []
+      parking:left:orientation: []
+      bicycle_road: []
+      destination:ref:to: []
+      placement: []
+      tracktype: []
+      vehicle: []
+      trail_visibility: []
+      turn:lanes:both_ways: []
+      motorroad: []
+      destination:symbol:lanes: []
+      loc_name: []
+      private: []
+      destination:forward: []
+      destination:en: []
+      destination:fr: []
+      bus:lanes:backward: []
+      motor_vehicle:lanes:backward: []
+      note:bicycle: []
+      tunnel:name: []
+      hov: []
+      cycleway:left:lane: []
+      surface:note: []
+      parking: []
+      cycleway:right:traffic_mode:left: []
+      geobase:acquisitionTechnique: []
+      cycle_network: []
+      turn:bus:lanes: []
+      turn:motor_vehicle:lanes: []
+      cycleway:right:lane: []
+      bus:lanes:forward: []
+      motor_vehicle:lanes:forward: []
+      motor_vehicle:lanes:forward:conditional: []
+      alt_name:en: []
+      maxweightrating:hgv: []
+      destination:backward: []
+      destination:to: []
+      lanes:bus:conditional: []
+      lanes:conditional: []
+      wikimedia_commons: []
+      parking:condition:left: []
+      embankment: []
+      bicycle:forward: []
+      description:bicycle: []
+      est_width: []
+      cycleway:left:conditional: []
+      lanes:bus:backward:conditional: []
+      trailblazed: []
+      trolley_wire:forward: []
+      parking:left:maxstay:conditional: []
+      route: []
+      name:left: []
+      name:right: []
+      maxspeed:source: []
+      check_date:ramp: []
+      conveying: []
+      ramp: []
+      turn:backward: []
+      mtb:scale:uphill: []
+      parking:both:fee: []
+      name:hur-fonipa: []
+      name:hur:pronunciation: []
+      official_name:en: []
+      official_name:en-fonipa: []
+      official_name:hur: []
+      old_name:en: []
+      old_name:en:1886-2025: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      access:backward: []
+      bus:backward: []
+      area: []
+      building:levels: []
+      mtb:type: []
+      assisted_trail: []
+      motorcycle: []
+      bicycle:lanes:forward: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      not:service: []
+      oneway:foot: []
+      cycleway:left:segregated: []
+      sidewalk:left:bicycle: []
+      lanes:bus: []
+      lanes:hov: []
+      goods: []
+      not:name: []
+      sidewalk:both:surface: []
+      geobase:routeName1:en: []
+      name:pa: []
+      gauge: []
+      clothing: []
+      bus_bay: []
+      destination:lanes:backward: []
+      rcn_ref: []
+      cycleway:both:conditional: []
+      destination:street:to: []
+      visibility: []
+      winter_service: []
+      piste:difficulty: []
+      piste:oneway: []
+      piste:type: []
+      piste:grooming: []
+      osmc:symbol: []
+      trailblazed:visibility: []
+      note:accuracy: []
+      piste:name: []
+      piste:priority: []
+      piste:status: []
+      ski: []
+      snowshoe: []
+      note:informal: []
+      abandoned: []
+      website:trailforks: []
+      note:access: []
+      patrolled: []
+      handrail:both: []
+      floating: []
+      mooring: []
+      sidewalk:right:surface: []
+      destinations: []
+      turn:bicycle:lanes: []
+      bicycle:lanes: []
+      canvec:CODE: []
+      name:bridge: []
+      parking:left:maxstay: []
+      parking:right:maxstay: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      motorboat: []
+      motorcar: []
+      destination:pronunciation: []
+      addr:block_number: []
+      disused:highway: []
+      golf_cart: []
+      parking:fee: []
+      parking:lane: []
+      transit:lanes: []
+      emergency: []
+      taxi: []
+      destination:lang:en:lanes: []
+      destination:lang:fr:lanes: []
+      cycleway:right:oneway: []
+      bus:lanes:backward:conditional: []
+      motor_vehicle:lanes:backward:conditional: []
+      vehicle:lanes: []
+      tram: []
+      cycleway:width: []
+      access:lanes: []
+      flood_prone: []
+      ford: []
+      atv: []
+      dirtbike: []
+      mtb: []
+      symbol: []
+      snowmobile: []
+      turn:lane:forward: []
+      stairs: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      bridge:colour: []
+      bridge:type: []
+      lanes:2026-05-27-: []
+      oneway:2026-05-27-: []
+      abandoned:highway: []
+      restriction: []
+      rollerblade: []
+      parking:both:restriction: []
+      parking:right:fee: []
+      parking:right:restriction:conditional: []
+      ramp:bicycle: []
+      mtb:organization: []
+      undefined: []
+      access:covid19: []
+      check_date:handrail: []
+      parking:lane:both:parallel: []
+      tourist_bus: []
+      ramp:wheelchair: []
+      building:min_level: []
+      end_date:railway: []
+      subway: []
+      golf: []
+      piste:lit: []
+      building: []
+      turn:bicycle:lanes:forward: []
+      surrey:geodb_oid: []
+      access:lanes:forward: []
+      turn:bus:lanes:forward: []
+      source:bicycle: []
+      busway: []
+      horse_scale: []
+      check_date:smoothness: []
+      smoking: []
+      old_railway_operator: []
+      shoulder:right: []
+      destination:street:lanes: []
+      scooter: []
+      skateboard: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      cycleway:lanes:forward: []
+      agricultural: []
+      hov:lanes:backward: []
+      hov:lanes:forward: []
+      turn:hov:lanes:backward: []
+      slope: []
+      source:location: []
+      bridge:movable: []
+      access:2025-10-01-2025-12-10: []
+      disused: []
+      source:bridge: []
+      fut_name: []
+      source:name: []
+      railing: []
+      speed: []
+      cycleway:lane: []
+      closed: []
+      destination:symbol:forward: []
+      source:busway: []
+      source:parking:lane:both: []
+      source:parking: []
+      abandoned:electrified: []
+      oneway:bus: []
+      sac_scale_ref: []
+      access:delivery: []
+      turn:hov:lanes: []
+      pier: []
+      toilets: []
+      parking:left:restriction: []
+      destination:lanes:forward: []
+      addr:city: []
+      railing:both: []
+      desintaion: []
+      note:name: []
+      vehicle:lanes:backward: []
+      bus:lanes:conditional: []
+      end_date: []
+      source:cycleway:width: []
+      parking:left:access: []
+      parking:left:private: []
+      parking:condition:right: []
+      playground: []
+      hazard:forward: []
+      note:surface: []
+      change: []
+      url: []
+      school_zone: []
+      overtaking: []
+      steps: []
+      parking:both:access: []
+      parking:both:access:conditional: []
+      parking:left:fee: []
+      parking:right:maxstay:conditional: []
+      min_height: []
+      roof:direction: []
+      roof:height: []
+      roof:shape: []
+      building:part: []
+      class:bicycle:mtb: []
+      check_date:cycleway: []
+      parking:condition:both: []
+      parking:condition:both:conditional: []
+      source1: []
+      parking:left:restriction:conditional: []
+      source:date: []
+      shoulder:both: []
+      sidewalk:surface: []
+      maxweightrating: []
+      ownership: []
+      turn:forward: []
+      hgv:lanes: []
+      source:maxheight: []
+      sidewalk:right:bicycle: []
+      note1: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      platform_lift: []
+      step:height: []
+      tactile_writing: []
+      area:highway: []
+      name:squ: []
+      colonnade:left: []
+      disused:railway: []
+      busway:right: []
+      spiral: []
+      lane: []
+      bicycle:signed: []
+      waterway: []
+      destination:ref:lanes:backward: []
+      destination:symbol:lanes:backward: []
+      removed:highway: []
+      description:ref: []
+      proposed: []
+      maxspeed:truck: []
+      maxspeed:hgv: []
+      turn:bus:lanes:backward: []
+      official_name:hur:pronunciation: []
+      tidal: []
+      boundary: []
+      shower: []
+      abandoned:railway: []
+      name:es: []
+      place: []
+      parking:lane:right:perpendicular: []
+      grades: []
+      temporary:access: []
+      brand: []
+      brand:wikidata: []
+      fax: []
+      parking:both:parallel: []
+      pedestrian: []
+      comment: []
+      operator:website: []
+      landuse: []
+      construction_start_expected: []
+      aeroway: []
+      parking:right:restriction:bus: []
+      parking:right:restriction:bus:conditional: []
+      parking:right:disabled: []
+      trolley_wire:backward: []
+      was:crossing:markings: []
+      turn:bicycle:lanes:backward: []
+      designated: []
+      parking:left:access:conditional: []
+      access:conditional: []
+      cycleway:surface:colour: []
+      turn:motor_vehicle:lanes:forward: []
+      turn:motor_vehicle:lanes:backward: []
+      access_aisle: []
+      parking:both:fee:conditional: []
+      carriage: []
+      parking:left:restriction:bus: []
+      cycleway:conditional: []
+      destination:ref:backward: []
+      addr:province: []
+      foot:conditional: []
+      maxspeed:hgv:forward: []
+      traffic_calming:backward: []
+      temporary: []
+      room: []
+      parking:right:restriction:reason: []
+      cycleway:lanes: []
+      maintained: []
+      surface_survey: []
+      traffic_calming:forward: []
+      was:name: []
+      vehicle:lanes:forward: []
+      note:cycleway: []
+      parking:lane:right:diagonal: []
+      taxi:lanes: []
+      hazard:backward: []
+      driveway: []
+      overgrown: []
+      iata: []
+      icao: []
+    style_rules:
+      highway:
+        stop: {}
+        crossing: {}
+        bus_stop: {}
+        turning_circle: {}
+        traffic_signals: {}
+        motorway_junction: {}
+        turning_loop: {}
+        street_lamp: {}
+        give_way: {}
+        elevator: {}
+        milestone: {}
+        traffic_mirror: {}
+        raceway: {}
+        speed_camera: {}
+        mini_roundabout: {}
+        steps: {}
+        speed_display: {}
+        passing_place: {}
+        disused:bus_stop: {}
+        trailhead: {}
+        emergency_access_point: {}
+        priority: {}
+      maxspeed:
+        '50': {}
+        '15': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__MultiLineString:
+    file: downloads/regions/vancouver-bc/layers/highway.gpkg
+    layer: highway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 565
+      highway:
+      - path
+      - service
+      - living_street
+      - residential
+      - footway
+      - cycleway
+      - track
+      - corridor
+      - construction
+      - unclassified
+      - bridleway
+      - tertiary
+      traffic_signals: []
+      traffic_signals:direction: []
+      direction: []
+      stop: []
+      ref: []
+      noref: []
+      button_operated: []
+      crossing:
+      - traffic_signals
+      crossing:island: []
+      crossing:markings:
+      - lines
+      tactile_paving: []
+      traffic_signals:sound: []
+      traffic_calming: []
+      traffic_signals:vibration: []
+      crossing:signals: []
+      bicycle:
+      - designated
+      - 'yes'
+      - 'no'
+      - private
+      - unknown
+      kerb: []
+      except: []
+      distance: []
+      turning_circle: []
+      source:
+      - Yahoo
+      - Bing
+      - bing
+      - improve_osm_tn
+      - City of Surrey 2010 Orthographs
+      - City of Surrey 2010 GIS Data
+      - Geobase_Import_2009
+      - NRCan-CanVec-8.0
+      - Bing;BC Mosaic
+      - yahoo
+      description: []
+      noexit: []
+      traffic_signals:countdown: []
+      crossing_ref: []
+      barrier: []
+      colour: []
+      foot:
+      - designated
+      - permissive
+      - 'yes'
+      - private
+      - discouraged
+      locked: []
+      material: []
+      motor_vehicle:
+      - 'no'
+      - private
+      - permissive
+      operator:
+      - Metro Vancouver
+      - District of North Vancouver
+      - BC Parks
+      operator:type:
+      - government
+      swing_gate:type: []
+      flashing_lights: []
+      ref:left: []
+      ref:right: []
+      covered:
+      - 'yes'
+      - 'no'
+      surface:
+      - dirt
+      - asphalt
+      - bricks
+      - paving_stones
+      - unpaved
+      - paved
+      - fine_gravel
+      - compacted
+      - concrete
+      - sett
+      - gravel
+      - ground
+      - grass
+      segregated:
+      - 'yes'
+      unsigned_ref: []
+      note: []
+      source:url:
+      - http://www.surrey.ca/city-services/658.aspx
+      check_date:crossing: []
+      junction:
+      - roundabout
+      crossing:markings:colour: []
+      natural: []
+      parking:restriction: []
+      turning_loop: []
+      traffic_sign: []
+      cycleway:
+      - shared_lane
+      bench: []
+      bin: []
+      bus: []
+      departures_board: []
+      lit:
+      - 'yes'
+      - 'no'
+      local_ref: []
+      name: 51
+      network: []
+      network:wikidata: []
+      network:wikipedia: []
+      public_transport: []
+      route_ref: []
+      shelter: []
+      check_date: []
+      wheelchair:
+      - 'yes'
+      trolleybus: []
+      access:
+      - private
+      - destination
+      - customers
+      - 'no'
+      - permissive
+      - permit
+      board_type: []
+      historic: []
+      inscription: []
+      source:website: []
+      wikidata: []
+      wikipedia: []
+      surface:colour: []
+      level:
+      - '-1'
+      - '1'
+      - '0'
+      - '2'
+      towards: []
+      bench:backrest: []
+      bench:note: []
+      image: []
+      bench:check_date: []
+      check_date:shelter: []
+      addr:housenumber: []
+      addr:street: []
+      footway:
+      - sidewalk
+      - crossing
+      fixme: []
+      backrest: []
+      horse:
+      - 'no'
+      - unknown
+      check_date:lit: []
+      amenity: []
+      ground: []
+      seats: []
+      kerb:approach_aid: []
+      passenger_information_display: []
+      hiking: []
+      information: []
+      tourism: []
+      cycleway:crossing:priority: []
+      footway:crossing:markings: []
+      oneway:
+      - 'yes'
+      - 'no'
+      asset_ref: []
+      check_date:tactile_paving: []
+      wheelchair:description: []
+      diameter: []
+      line_attachment: []
+      power: []
+      support: []
+      supervised: []
+      bench:colour: []
+      bench:material: []
+      bench:seats: []
+      lamp_type: []
+      capacity: []
+      contact:phone: []
+      email: []
+      fee: []
+      phone: []
+      website:
+      - https://metrovancouver.org/services/water/Documents/lower-seymour-conservation-reserve-trail-map.pdf
+      roundtrip: []
+      designation: []
+      bench:notes: []
+      bench:armrest: []
+      bench:image: []
+      line: []
+      man_made: []
+      tower:type: []
+      layer:
+      - '-1'
+      - '3'
+      - '2'
+      - '1'
+      lamp_mount: []
+      utility: []
+      check_date:bin: []
+      toilets:wheelchair: []
+      check_date:surface: []
+      stroller: []
+      path: []
+      information_type: []
+      flag: []
+      pole: []
+      bollard: []
+      position: []
+      crossing:continuous: []
+      maxweight: []
+      check_date:traffic_signals:vibration: []
+      railway: []
+      traffic_signals:arrow: []
+      traffic_signals:minimap: []
+      bench:type: []
+      seasonal: []
+      ref:signed: []
+      alt_name: []
+      check_date:bench: []
+      accessible: []
+      notes: []
+      waste_basket: []
+      name:en: []
+      cycleway:crossing:markings: []
+      memorial: []
+      crossing:signed: []
+      mapillary: []
+      name:fr: []
+      disused:crossing: []
+      traffic_signals:turn: []
+      start_date: []
+      advertising: []
+      temporary:disused: []
+      ele: []
+      artist_name: []
+      raised: []
+      survey:date: []
+      flashing_light: []
+      crossing:kerb_extension: []
+      bic: []
+      handrail: []
+      handrail:center: []
+      handrail:left: []
+      handrail:right: []
+      step_count: []
+      not:network:wikidata: []
+      informal:
+      - 'yes'
+      - 'no'
+      height: []
+      light:method: []
+      light_source: []
+      camera:type: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      camera:mount: []
+      internet_access: []
+      internet_access:fee: []
+      location:
+      - roof
+      voltage: []
+      entrance: []
+      leisure: []
+      sport: []
+      operator:wikidata: []
+      indoor:
+      - 'yes'
+      tower:construction: []
+      crossing:barrier: []
+      crossing:bell: []
+      crossing:light: []
+      railway:signal:direction: []
+      level:ref: []
+      construction:
+      - cycleway
+      - motorway_link
+      - footway
+      mapillary:image: []
+      mapillary:map_feature: []
+      red_turn:right: []
+      opening_hours: []
+      maxspeed:
+      - '50'
+      - '5'
+      - '15'
+      - '20'
+      - '30'
+      enforcement: []
+      addr:floor: []
+      light:count: []
+      light:lit: []
+      light:colour: []
+      opening_date:
+      - '2026'
+      sidewalk:
+      - 'no'
+      name:etymology: []
+      sidewalk:both:
+      - separate
+      lane_markings:
+      - 'no'
+      cycleway:both:
+      - 'no'
+      cycleway:both:lane: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes:
+      - '2'
+      - '1'
+      cycleway:left: []
+      parking:both: []
+      sidewalk:left:
+      - separate
+      - 'no'
+      sidewalk:right:
+      - 'no'
+      - separate
+      destination: []
+      destination:ref: []
+      hgv: []
+      maxheight: []
+      official_name: []
+      cycleway:right: []
+      lcn: []
+      name:etymology:wikidata: []
+      parking:left: []
+      bus:lanes:forward:conditional: []
+      cycleway:right:conditional: []
+      trolley_wire: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      hov:lanes: []
+      hov:minimum: []
+      motor_vehicle:lanes: []
+      reg_name: []
+      sidewalk:both:bicycle: []
+      lanes:backward: []
+      lanes:forward: []
+      destination:street: []
+      bridge:
+      - 'yes'
+      bridge:structure: []
+      toll: []
+      lanes:both_ways: []
+      junction:ref: []
+      turn:lanes: []
+      old_ref: []
+      width:
+      - '0.6'
+      parking:right: []
+      name:hur: []
+      smoothness:
+      - intermediate
+      - very_bad
+      - good
+      type: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      maxspeed:conditional: []
+      maxweight:signed: []
+      psv: []
+      lanes:reversible: []
+      name:ja: []
+      name:zh: []
+      bicycle:conditional: []
+      source:width: []
+      name:pronunciation: []
+      attribution:
+      - "GeoBase\xAE"
+      service:
+      - parking_aisle
+      - driveway
+      - alley
+      alt_name:hur: []
+      source:maxspeed: []
+      block: []
+      destination:symbol: []
+      maxspeed:advisory: []
+      hazard: []
+      lcn_ref: []
+      shoulder: []
+      bridge:name: []
+      bridge:name:en: []
+      bridge:name:fr: []
+      expressway: []
+      sidewalk:left:surface: []
+      sidewalk:left:width: []
+      short_name: []
+      cutting: []
+      lanes:bus:forward:conditional: []
+      parking:right:orientation: []
+      parking:right:restriction: []
+      noname: []
+      is_in:
+      - Vancouver,British Columbia
+      - Burnaby,British Columbia
+      - Richmond,British Columbia
+      - Bowen Island,British Columbia
+      mtb:scale:imba: []
+      sac_scale:
+      - strolling
+      - mountain_hiking
+      - hiking
+      name:etymology:wikipedia: []
+      wikipedia:en: []
+      hazmat: []
+      tunnel: []
+      maxspeed:school: []
+      change:lanes: []
+      parking:both:orientation: []
+      turn:lanes:forward: []
+      cycleway:surface:
+      - compacted
+      footway:surface:
+      - compacted
+      ramp_speed: []
+      turn: []
+      incline: []
+      bus:lanes: []
+      created_by: []
+      old_name: []
+      maxheight:signed: []
+      dog:
+      - leashed
+      - 'no'
+      mtb:scale: []
+      parking:left:orientation: []
+      bicycle_road: []
+      destination:ref:to: []
+      placement: []
+      tracktype:
+      - grade1
+      vehicle: []
+      trail_visibility:
+      - intermediate
+      - excellent
+      - good
+      turn:lanes:both_ways: []
+      motorroad: []
+      destination:symbol:lanes: []
+      loc_name: []
+      private: []
+      destination:forward: []
+      destination:en: []
+      destination:fr: []
+      bus:lanes:backward: []
+      motor_vehicle:lanes:backward: []
+      note:bicycle: []
+      tunnel:name: []
+      hov: []
+      cycleway:left:lane: []
+      surface:note: []
+      parking: []
+      cycleway:right:traffic_mode:left: []
+      geobase:acquisitionTechnique:
+      - GPS
+      - Orthophoto
+      cycle_network: []
+      turn:bus:lanes: []
+      turn:motor_vehicle:lanes: []
+      cycleway:right:lane: []
+      bus:lanes:forward: []
+      motor_vehicle:lanes:forward: []
+      motor_vehicle:lanes:forward:conditional: []
+      alt_name:en: []
+      maxweightrating:hgv: []
+      destination:backward: []
+      destination:to: []
+      lanes:bus:conditional: []
+      lanes:conditional: []
+      wikimedia_commons: []
+      parking:condition:left: []
+      embankment: []
+      bicycle:forward: []
+      description:bicycle: []
+      est_width: []
+      cycleway:left:conditional: []
+      lanes:bus:backward:conditional: []
+      trailblazed:
+      - 'no'
+      trolley_wire:forward: []
+      parking:left:maxstay:conditional: []
+      route: []
+      name:left: []
+      name:right: []
+      maxspeed:source: []
+      check_date:ramp: []
+      conveying: []
+      ramp: []
+      turn:backward: []
+      mtb:scale:uphill: []
+      parking:both:fee: []
+      name:hur-fonipa: []
+      name:hur:pronunciation: []
+      official_name:en: []
+      official_name:en-fonipa: []
+      official_name:hur: []
+      old_name:en: []
+      old_name:en:1886-2025: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      access:backward: []
+      bus:backward: []
+      area: []
+      building:levels: []
+      mtb:type: []
+      assisted_trail:
+      - 'no'
+      motorcycle: []
+      bicycle:lanes:forward: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      not:service: []
+      oneway:foot:
+      - 'no'
+      cycleway:left:segregated: []
+      sidewalk:left:bicycle: []
+      lanes:bus: []
+      lanes:hov: []
+      goods: []
+      not:name: []
+      sidewalk:both:surface: []
+      geobase:routeName1:en: []
+      name:pa: []
+      gauge: []
+      clothing: []
+      bus_bay: []
+      destination:lanes:backward: []
+      rcn_ref: []
+      cycleway:both:conditional: []
+      destination:street:to: []
+      visibility: []
+      winter_service: []
+      piste:difficulty: []
+      piste:oneway: []
+      piste:type: []
+      piste:grooming: []
+      osmc:symbol: []
+      trailblazed:visibility: []
+      note:accuracy: []
+      piste:name: []
+      piste:priority: []
+      piste:status: []
+      ski: []
+      snowshoe: []
+      note:informal: []
+      abandoned: []
+      website:trailforks: []
+      note:access: []
+      patrolled: []
+      handrail:both: []
+      floating: []
+      mooring: []
+      sidewalk:right:surface: []
+      destinations: []
+      turn:bicycle:lanes: []
+      bicycle:lanes: []
+      canvec:CODE: []
+      name:bridge: []
+      parking:left:maxstay: []
+      parking:right:maxstay: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      motorboat: []
+      motorcar: []
+      destination:pronunciation: []
+      addr:block_number: []
+      disused:highway: []
+      golf_cart:
+      - 'yes'
+      - designated
+      parking:fee: []
+      parking:lane: []
+      transit:lanes: []
+      emergency: []
+      taxi: []
+      destination:lang:en:lanes: []
+      destination:lang:fr:lanes: []
+      cycleway:right:oneway: []
+      bus:lanes:backward:conditional: []
+      motor_vehicle:lanes:backward:conditional: []
+      vehicle:lanes: []
+      tram: []
+      cycleway:width:
+      - '2'
+      access:lanes: []
+      flood_prone: []
+      ford: []
+      atv:
+      - 'no'
+      dirtbike:
+      - 'no'
+      mtb:
+      - 'no'
+      symbol: []
+      snowmobile: []
+      turn:lane:forward: []
+      stairs: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      bridge:colour: []
+      bridge:type: []
+      lanes:2026-05-27-: []
+      oneway:2026-05-27-: []
+      abandoned:highway: []
+      restriction: []
+      rollerblade: []
+      parking:both:restriction: []
+      parking:right:fee: []
+      parking:right:restriction:conditional: []
+      ramp:bicycle: []
+      mtb:organization: []
+      undefined: []
+      access:covid19: []
+      check_date:handrail: []
+      parking:lane:both:parallel: []
+      tourist_bus: []
+      ramp:wheelchair: []
+      building:min_level: []
+      end_date:railway: []
+      subway: []
+      golf:
+      - cartpath
+      piste:lit: []
+      building: []
+      turn:bicycle:lanes:forward: []
+      surrey:geodb_oid:
+      - '11383'
+      access:lanes:forward: []
+      turn:bus:lanes:forward: []
+      source:bicycle: []
+      busway: []
+      horse_scale: []
+      check_date:smoothness: []
+      smoking: []
+      old_railway_operator: []
+      shoulder:right: []
+      destination:street:lanes: []
+      scooter: []
+      skateboard: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      cycleway:lanes:forward: []
+      agricultural: []
+      hov:lanes:backward: []
+      hov:lanes:forward: []
+      turn:hov:lanes:backward: []
+      slope: []
+      source:location: []
+      bridge:movable: []
+      access:2025-10-01-2025-12-10: []
+      disused: []
+      source:bridge: []
+      fut_name: []
+      source:name: []
+      railing: []
+      speed: []
+      cycleway:lane: []
+      closed: []
+      destination:symbol:forward: []
+      source:busway: []
+      source:parking:lane:both: []
+      source:parking: []
+      abandoned:electrified: []
+      oneway:bus: []
+      sac_scale_ref: []
+      access:delivery: []
+      turn:hov:lanes: []
+      pier: []
+      toilets: []
+      parking:left:restriction: []
+      destination:lanes:forward: []
+      addr:city: []
+      railing:both: []
+      desintaion: []
+      note:name: []
+      vehicle:lanes:backward: []
+      bus:lanes:conditional: []
+      end_date: []
+      source:cycleway:width: []
+      parking:left:access: []
+      parking:left:private: []
+      parking:condition:right: []
+      playground: []
+      hazard:forward: []
+      note:surface: []
+      change: []
+      url: []
+      school_zone: []
+      overtaking: []
+      steps: []
+      parking:both:access: []
+      parking:both:access:conditional: []
+      parking:left:fee: []
+      parking:right:maxstay:conditional: []
+      min_height: []
+      roof:direction: []
+      roof:height: []
+      roof:shape: []
+      building:part: []
+      class:bicycle:mtb: []
+      check_date:cycleway: []
+      parking:condition:both: []
+      parking:condition:both:conditional: []
+      source1: []
+      parking:left:restriction:conditional: []
+      source:date: []
+      shoulder:both: []
+      sidewalk:surface: []
+      maxweightrating: []
+      ownership: []
+      turn:forward: []
+      hgv:lanes: []
+      source:maxheight: []
+      sidewalk:right:bicycle: []
+      note1: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      platform_lift: []
+      step:height: []
+      tactile_writing: []
+      area:highway: []
+      name:squ: []
+      colonnade:left: []
+      disused:railway: []
+      busway:right: []
+      spiral: []
+      lane: []
+      bicycle:signed: []
+      waterway: []
+      destination:ref:lanes:backward: []
+      destination:symbol:lanes:backward: []
+      removed:highway: []
+      description:ref: []
+      proposed: []
+      maxspeed:truck: []
+      maxspeed:hgv: []
+      turn:bus:lanes:backward: []
+      official_name:hur:pronunciation: []
+      tidal: []
+      boundary: []
+      shower: []
+      abandoned:railway: []
+      name:es: []
+      place: []
+      parking:lane:right:perpendicular: []
+      grades: []
+      temporary:access: []
+      brand: []
+      brand:wikidata: []
+      fax: []
+      parking:both:parallel: []
+      pedestrian: []
+      comment: []
+      operator:website: []
+      landuse: []
+      construction_start_expected: []
+      aeroway: []
+      parking:right:restriction:bus: []
+      parking:right:restriction:bus:conditional: []
+      parking:right:disabled: []
+      trolley_wire:backward: []
+      was:crossing:markings: []
+      turn:bicycle:lanes:backward: []
+      designated: []
+      parking:left:access:conditional: []
+      access:conditional: []
+      cycleway:surface:colour: []
+      turn:motor_vehicle:lanes:forward: []
+      turn:motor_vehicle:lanes:backward: []
+      access_aisle: []
+      parking:both:fee:conditional: []
+      carriage: []
+      parking:left:restriction:bus: []
+      cycleway:conditional: []
+      destination:ref:backward: []
+      addr:province: []
+      foot:conditional: []
+      maxspeed:hgv:forward: []
+      traffic_calming:backward: []
+      temporary: []
+      room: []
+      parking:right:restriction:reason: []
+      cycleway:lanes: []
+      maintained: []
+      surface_survey: []
+      traffic_calming:forward: []
+      was:name: []
+      vehicle:lanes:forward: []
+      note:cycleway: []
+      parking:lane:right:diagonal: []
+      taxi:lanes: []
+      hazard:backward: []
+      driveway: []
+      overgrown: []
+      iata: []
+      icao: []
+    style_rules:
+      highway:
+        path: {}
+        service:
+          linewidth: 0.15
+        living_street:
+          linewidth: 0.1
+        residential:
+          linewidth: 0.3
+        footway: {}
+        cycleway: {}
+        track:
+          linewidth: 0.1
+        corridor: {}
+        construction: {}
+        unclassified:
+          linewidth: 0.15
+        bridleway: {}
+        tertiary:
+          linewidth: 0.32
+      maxspeed:
+        '50': {}
+        '5': {}
+        '15': {}
+        '20': {}
+        '30': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Polygon:
+    file: downloads/regions/vancouver-bc/layers/highway.gpkg
+    layer: highway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 756
+      highway:
+      - services
+      - pedestrian
+      - platform
+      - footway
+      - path
+      - elevator
+      - corridor
+      - residential
+      - service
+      - steps
+      traffic_signals: []
+      traffic_signals:direction: []
+      direction: []
+      stop: []
+      ref: []
+      noref: []
+      button_operated: []
+      crossing: []
+      crossing:island: []
+      crossing:markings: []
+      tactile_paving:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound: []
+      traffic_calming: []
+      traffic_signals:vibration: []
+      crossing:signals: []
+      bicycle:
+      - 'yes'
+      - 'no'
+      - permissive
+      - destination
+      - designated
+      - dismount
+      kerb: []
+      except: []
+      distance: []
+      turning_circle: []
+      source:
+      - Bing
+      - city of surrey orthophotos.
+      - City of Surrey 2010 Orthographs
+      - city of surrey orthophotos 2011
+      - bing
+      - BC Government Openmaps
+      description:
+      - Gilmore Station entrance area
+      - Pop-up parklet with tables and chairs. Also al-fresco dining area for Stable
+        House Bistro. Refer to linked Google Map street image.
+      - Pop-up plaza
+      - School courtyard
+      - Bath House Roof
+      noexit: []
+      traffic_signals:countdown: []
+      crossing_ref: []
+      barrier: []
+      colour: []
+      foot:
+      - designated
+      - customers
+      locked: []
+      material:
+      - wood
+      motor_vehicle:
+      - private
+      - 'no'
+      operator:
+      - Coast Mountain Bus Company
+      - ProTransBC
+      - City of Vancouver / Stable House Bistro
+      operator:type: []
+      swing_gate:type: []
+      flashing_lights: []
+      ref:left: []
+      ref:right: []
+      covered:
+      - 'no'
+      - 'yes'
+      surface:
+      - concrete
+      - paving_stones
+      - wood
+      - asphalt
+      - paved
+      - woodchips
+      - concrete:plates
+      - sett
+      - gravel
+      - unhewn_cobblestone
+      - compacted
+      - bricks
+      - fine_gravel
+      - pebblestone
+      segregated: []
+      unsigned_ref: []
+      note:
+      - washroom footways
+      - Permanant plaza under construction.
+      source:url:
+      - http://www.surrey.ca/city-services/658.aspx
+      check_date:crossing: []
+      junction: []
+      crossing:markings:colour: []
+      natural: []
+      parking:restriction: []
+      turning_loop: []
+      traffic_sign: []
+      cycleway: []
+      bench:
+      - 'no'
+      - 'yes'
+      bin:
+      - 'yes'
+      - 'no'
+      bus:
+      - 'yes'
+      departures_board:
+      - realtime
+      lit:
+      - 'yes'
+      - 'no'
+      local_ref: []
+      name:
+      - Flying J Travel Center
+      - Hyack Square
+      - Lookout tower
+      - German Canadian Heritage Plaza
+      - Filipino Plaza
+      - Orientation Plaza
+      - Beedie Plaza
+      - Art Plaza
+      - Gilmore Plaza
+      - Lougheed Plaza
+      - Piazza Giovanni Caboto
+      - Kamloops St and Hastings St Plaza
+      - Williams Road Picnic Site
+      - Civic Plaza
+      - Park Plaza
+      - Cambie Plaza
+      - Marine Gateway Plaza
+      - Main & 50th Plaza
+      - Norman McKenzie Square
+      - 13th @ Granville Parklet
+      - Martha Piper Plaza
+      - 17th Ave & Cambie Plaza
+      - Leg-in-boot Square
+      - Husain Rahim Plaza
+      - Boathouse Mews
+      - Clark Drive Plaza
+      - Margaret Mitchell Plaza
+      - Plaza of Nations
+      - Terry Fox Plaza
+      - North Plaza
+      - Adanac-Vernon Plaza
+      - Jim Deva Plaza
+      - Bute-Robson Plaza
+      - "\u0161x\u02B7\u019B\u0313\u0259n\u0259q Xwtl\u2019e7\xE9n\u1E35 Square"
+      - Jack Poole Plaza
+      - Komagata Maru Memorial
+      - Vancouver Harbour Flight Centre
+      - Convocation Mall
+      - Lynn Valley Village Plaza
+      - Robert Wyman Plaza
+      - Chinatown Memorial Square
+      - "\u0161x\u02B7\u019B\u0313ex\u0259n Xwtl\u2019a7shn"
+      - Main Courtyard
+      - Sun Yat-Sen Plaza
+      - Sara Anne McLagan Plaza
+      - Shipbuilders' Square
+      - Sailor's Point
+      - Stella Jo Dean Plaza
+      - Gondola Queue Area
+      network:
+      - Translink
+      - TransLink
+      network:wikidata: []
+      network:wikipedia: []
+      public_transport:
+      - platform
+      route_ref: []
+      shelter:
+      - 'yes'
+      check_date:
+      - '2024-08-02'
+      - '2025-07-12'
+      - '2025-11-30'
+      wheelchair:
+      - 'yes'
+      trolleybus: []
+      access:
+      - customers
+      - private
+      - permissive
+      - 'no'
+      board_type: []
+      historic:
+      - turntable
+      inscription: []
+      source:website: []
+      wikidata:
+      - Q5448603
+      - Q106882428
+      - Q3912738
+      wikipedia:
+      - en:Filipino_Plaza
+      - en:Jack Poole Plaza
+      - en:Vancouver Harbour Flight Centre
+      surface:colour: []
+      level:
+      - '3'
+      - 0;1
+      - '0'
+      - '1'
+      - '2'
+      - '-2'
+      - 0-2
+      - 0;1;-1;-2;-3
+      - 0;-1
+      - -1;-2
+      - '4'
+      towards: []
+      bench:backrest: []
+      bench:note: []
+      image:
+      - https://www.google.ca/maps/@49.2598401,-123.1386589,3a,75y,278.85h,90.88t,1.92r/data=!3m6!1e1!3m4!1stmacrDjrdfhL1YY99GpZgw!2e0!7i16384!8i8192
+      bench:check_date: []
+      check_date:shelter:
+      - '2025-06-07'
+      addr:housenumber:
+      - '480'
+      - '4692'
+      - '4507'
+      - '1055'
+      addr:street:
+      - Boundary Road
+      - Imperial Street
+      - Kingsway
+      - Hastings Street
+      - Canada Place
+      footway:
+      - sidewalk
+      fixme: []
+      backrest: []
+      horse:
+      - 'no'
+      check_date:lit: []
+      amenity:
+      - parking
+      ground: []
+      seats: []
+      kerb:approach_aid: []
+      passenger_information_display: []
+      hiking: []
+      information: []
+      tourism: []
+      cycleway:crossing:priority: []
+      footway:crossing:markings: []
+      oneway:
+      - 'no'
+      asset_ref: []
+      check_date:tactile_paving:
+      - '2023-02-06'
+      wheelchair:description: []
+      diameter: []
+      line_attachment: []
+      power: []
+      support: []
+      supervised: []
+      bench:colour: []
+      bench:material: []
+      bench:seats: []
+      lamp_type: []
+      capacity: []
+      contact:phone: []
+      email: []
+      fee: []
+      phone:
+      - +1 604-521-4445
+      website:
+      - https://locations.pilotflyingj.com/ca/bc/annacis-island-delta/1291-cliveden-ave
+      - https://www.deutscherplatz.org/
+      - http://JimDevaPlaza.ca
+      - https://www.cnv.org/Parks-Recreation/the-shipyards/shipbuilders'-square
+      roundtrip: []
+      designation: []
+      bench:notes: []
+      bench:armrest: []
+      bench:image: []
+      line: []
+      man_made:
+      - pier
+      - bridge
+      tower:type: []
+      layer:
+      - '1'
+      - '-1'
+      - '2'
+      - '4'
+      lamp_mount: []
+      utility: []
+      check_date:bin: []
+      toilets:wheelchair: []
+      check_date:surface:
+      - '2022-02-22'
+      - '2025-10-26'
+      stroller: []
+      path: []
+      information_type: []
+      flag: []
+      pole: []
+      bollard: []
+      position: []
+      crossing:continuous: []
+      maxweight: []
+      check_date:traffic_signals:vibration: []
+      railway:
+      - platform
+      - abandoned
+      traffic_signals:arrow: []
+      traffic_signals:minimap: []
+      bench:type: []
+      seasonal:
+      - 'yes'
+      ref:signed: []
+      alt_name:
+      - Floatplane Terminal
+      - 14th St Civic Plaza
+      check_date:bench: []
+      accessible: []
+      notes: []
+      waste_basket: []
+      name:en:
+      - Cultural Gathering Square
+      - Invitation Plaza
+      cycleway:crossing:markings: []
+      memorial: []
+      crossing:signed: []
+      mapillary: []
+      name:fr: []
+      disused:crossing: []
+      traffic_signals:turn: []
+      start_date:
+      - '2024'
+      - '2009-08-18'
+      - '1986'
+      advertising: []
+      temporary:disused: []
+      ele: []
+      artist_name: []
+      raised: []
+      survey:date: []
+      flashing_light: []
+      crossing:kerb_extension: []
+      bic: []
+      handrail:
+      - 'yes'
+      handrail:center: []
+      handrail:left: []
+      handrail:right: []
+      step_count: []
+      not:network:wikidata: []
+      informal: []
+      height:
+      - '3'
+      - '2'
+      - '1'
+      - '.5'
+      - '7'
+      - '5'
+      light:method: []
+      light_source: []
+      camera:type: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      camera:mount: []
+      internet_access: []
+      internet_access:fee: []
+      location:
+      - roof
+      voltage: []
+      entrance: []
+      leisure:
+      - schoolyard
+      - pitch
+      - park
+      - outdoor_seating
+      - ice_rink
+      sport:
+      - basketball
+      operator:wikidata: []
+      indoor:
+      - 'yes'
+      - room
+      - 'no'
+      tower:construction: []
+      crossing:barrier: []
+      crossing:bell: []
+      crossing:light: []
+      railway:signal:direction: []
+      level:ref: []
+      construction:
+      - highway
+      mapillary:image: []
+      mapillary:map_feature: []
+      red_turn:right: []
+      opening_hours:
+      - 24/7
+      maxspeed: []
+      enforcement: []
+      addr:floor: []
+      light:count: []
+      light:lit: []
+      light:colour: []
+      opening_date: []
+      sidewalk: []
+      name:etymology: []
+      sidewalk:both: []
+      lane_markings: []
+      cycleway:both: []
+      cycleway:both:lane: []
+      cycleway:left:oneway: []
+      oneway:bicycle: []
+      lanes: []
+      cycleway:left: []
+      parking:both: []
+      sidewalk:left: []
+      sidewalk:right: []
+      destination: []
+      destination:ref: []
+      hgv:
+      - 'yes'
+      maxheight: []
+      official_name: []
+      cycleway:right: []
+      lcn: []
+      name:etymology:wikidata:
+      - Q7945948
+      - Q7421551
+      parking:left: []
+      bus:lanes:forward:conditional: []
+      cycleway:right:conditional: []
+      trolley_wire: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      hov:lanes: []
+      hov:minimum: []
+      motor_vehicle:lanes: []
+      reg_name: []
+      sidewalk:both:bicycle: []
+      lanes:backward: []
+      lanes:forward: []
+      destination:street: []
+      bridge:
+      - 'yes'
+      - viaduct
+      - boardwalk
+      bridge:structure: []
+      toll: []
+      lanes:both_ways: []
+      junction:ref: []
+      turn:lanes: []
+      old_ref: []
+      width: []
+      parking:right: []
+      name:hur:
+      - "\u0161x\u02B7\u019B\u0313\u0259n\u0259q"
+      - "\u0161x\u02B7\u019B\u0313ex\u0259n"
+      smoothness:
+      - good
+      - intermediate
+      - excellent
+      - bad
+      type:
+      - multipolygon
+      maxspeed:type: []
+      turn:lanes:backward: []
+      maxspeed:conditional: []
+      maxweight:signed: []
+      psv: []
+      lanes:reversible: []
+      name:ja: []
+      name:zh: []
+      bicycle:conditional: []
+      source:width: []
+      name:pronunciation: []
+      attribution: []
+      service: []
+      alt_name:hur: []
+      source:maxspeed: []
+      block: []
+      destination:symbol: []
+      maxspeed:advisory: []
+      hazard: []
+      lcn_ref: []
+      shoulder: []
+      bridge:name: []
+      bridge:name:en: []
+      bridge:name:fr: []
+      expressway: []
+      sidewalk:left:surface: []
+      sidewalk:left:width: []
+      short_name: []
+      cutting: []
+      lanes:bus:forward:conditional: []
+      parking:right:orientation: []
+      parking:right:restriction: []
+      noname: []
+      is_in: []
+      mtb:scale:imba: []
+      sac_scale: []
+      name:etymology:wikipedia: []
+      wikipedia:en: []
+      hazmat: []
+      tunnel:
+      - building_passage
+      - 'yes'
+      maxspeed:school: []
+      change:lanes: []
+      parking:both:orientation: []
+      turn:lanes:forward: []
+      cycleway:surface: []
+      footway:surface: []
+      ramp_speed: []
+      turn: []
+      incline: []
+      bus:lanes: []
+      created_by: []
+      old_name:
+      - Vancouver Art Gallery north plaza
+      - Queen Elizabeth Theatre Plaza
+      maxheight:signed: []
+      dog:
+      - leashed
+      - 'no'
+      mtb:scale: []
+      parking:left:orientation: []
+      bicycle_road: []
+      destination:ref:to: []
+      placement: []
+      tracktype: []
+      vehicle: []
+      trail_visibility: []
+      turn:lanes:both_ways: []
+      motorroad: []
+      destination:symbol:lanes: []
+      loc_name: []
+      private: []
+      destination:forward: []
+      destination:en: []
+      destination:fr: []
+      bus:lanes:backward: []
+      motor_vehicle:lanes:backward: []
+      note:bicycle: []
+      tunnel:name: []
+      hov: []
+      cycleway:left:lane: []
+      surface:note: []
+      parking: []
+      cycleway:right:traffic_mode:left: []
+      geobase:acquisitionTechnique: []
+      cycle_network: []
+      turn:bus:lanes: []
+      turn:motor_vehicle:lanes: []
+      cycleway:right:lane: []
+      bus:lanes:forward: []
+      motor_vehicle:lanes:forward: []
+      motor_vehicle:lanes:forward:conditional: []
+      alt_name:en: []
+      maxweightrating:hgv: []
+      destination:backward: []
+      destination:to: []
+      lanes:bus:conditional: []
+      lanes:conditional: []
+      wikimedia_commons: []
+      parking:condition:left: []
+      embankment: []
+      bicycle:forward: []
+      description:bicycle: []
+      est_width: []
+      cycleway:left:conditional: []
+      lanes:bus:backward:conditional: []
+      trailblazed: []
+      trolley_wire:forward: []
+      parking:left:maxstay:conditional: []
+      route: []
+      name:left: []
+      name:right: []
+      maxspeed:source: []
+      check_date:ramp: []
+      conveying: []
+      ramp: []
+      turn:backward: []
+      mtb:scale:uphill: []
+      parking:both:fee: []
+      name:hur-fonipa: []
+      name:hur:pronunciation: []
+      official_name:en: []
+      official_name:en-fonipa: []
+      official_name:hur: []
+      old_name:en: []
+      old_name:en:1886-2025: []
+      destination:lang:en: []
+      destination:lang:fr: []
+      access:backward: []
+      bus:backward: []
+      area:
+      - 'yes'
+      building:levels:
+      - '2'
+      - '3'
+      mtb:type: []
+      assisted_trail: []
+      motorcycle: []
+      bicycle:lanes:forward: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      not:service: []
+      oneway:foot: []
+      cycleway:left:segregated: []
+      sidewalk:left:bicycle: []
+      lanes:bus: []
+      lanes:hov: []
+      goods: []
+      not:name: []
+      sidewalk:both:surface: []
+      geobase:routeName1:en: []
+      name:pa: []
+      gauge: []
+      clothing: []
+      bus_bay: []
+      destination:lanes:backward: []
+      rcn_ref: []
+      cycleway:both:conditional: []
+      destination:street:to: []
+      visibility: []
+      winter_service: []
+      piste:difficulty: []
+      piste:oneway: []
+      piste:type: []
+      piste:grooming: []
+      osmc:symbol: []
+      trailblazed:visibility: []
+      note:accuracy: []
+      piste:name: []
+      piste:priority: []
+      piste:status: []
+      ski: []
+      snowshoe: []
+      note:informal: []
+      abandoned: []
+      website:trailforks: []
+      note:access: []
+      patrolled: []
+      handrail:both: []
+      floating:
+      - 'no'
+      - 'yes'
+      mooring:
+      - 'no'
+      - commercial
+      sidewalk:right:surface: []
+      destinations: []
+      turn:bicycle:lanes: []
+      bicycle:lanes: []
+      canvec:CODE: []
+      name:bridge: []
+      parking:left:maxstay: []
+      parking:right:maxstay: []
+      maxspeed:backward: []
+      maxspeed:forward: []
+      motorboat: []
+      motorcar: []
+      destination:pronunciation: []
+      addr:block_number: []
+      disused:highway: []
+      golf_cart:
+      - 'yes'
+      - designated
+      parking:fee: []
+      parking:lane: []
+      transit:lanes: []
+      emergency: []
+      taxi: []
+      destination:lang:en:lanes: []
+      destination:lang:fr:lanes: []
+      cycleway:right:oneway: []
+      bus:lanes:backward:conditional: []
+      motor_vehicle:lanes:backward:conditional: []
+      vehicle:lanes: []
+      tram: []
+      cycleway:width: []
+      access:lanes: []
+      flood_prone: []
+      ford: []
+      atv: []
+      dirtbike: []
+      mtb: []
+      symbol: []
+      snowmobile: []
+      turn:lane:forward: []
+      stairs: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      bridge:colour: []
+      bridge:type: []
+      lanes:2026-05-27-: []
+      oneway:2026-05-27-: []
+      abandoned:highway: []
+      restriction: []
+      rollerblade: []
+      parking:both:restriction: []
+      parking:right:fee: []
+      parking:right:restriction:conditional: []
+      ramp:bicycle: []
+      mtb:organization: []
+      undefined: []
+      access:covid19: []
+      check_date:handrail: []
+      parking:lane:both:parallel: []
+      tourist_bus: []
+      ramp:wheelchair: []
+      building:min_level:
+      - '1'
+      end_date:railway: []
+      subway:
+      - 'yes'
+      golf:
+      - cartpath
+      piste:lit: []
+      building:
+      - 'yes'
+      turn:bicycle:lanes:forward: []
+      surrey:geodb_oid: []
+      access:lanes:forward: []
+      turn:bus:lanes:forward: []
+      source:bicycle: []
+      busway: []
+      horse_scale: []
+      check_date:smoothness: []
+      smoking: []
+      old_railway_operator: []
+      shoulder:right: []
+      destination:street:lanes: []
+      scooter: []
+      skateboard: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      cycleway:lanes:forward: []
+      agricultural: []
+      hov:lanes:backward: []
+      hov:lanes:forward: []
+      turn:hov:lanes:backward: []
+      slope: []
+      source:location: []
+      bridge:movable: []
+      access:2025-10-01-2025-12-10: []
+      disused: []
+      source:bridge: []
+      fut_name: []
+      source:name: []
+      railing: []
+      speed: []
+      cycleway:lane: []
+      closed: []
+      destination:symbol:forward: []
+      source:busway: []
+      source:parking:lane:both: []
+      source:parking: []
+      abandoned:electrified: []
+      oneway:bus: []
+      sac_scale_ref: []
+      access:delivery: []
+      turn:hov:lanes: []
+      pier:
+      - floating
+      toilets:
+      - 'yes'
+      - 'no'
+      parking:left:restriction: []
+      destination:lanes:forward: []
+      addr:city:
+      - New Westminster
+      - Vancouver
+      railing:both: []
+      desintaion: []
+      note:name: []
+      vehicle:lanes:backward: []
+      bus:lanes:conditional: []
+      end_date: []
+      source:cycleway:width: []
+      parking:left:access: []
+      parking:left:private: []
+      parking:condition:right: []
+      playground: []
+      hazard:forward: []
+      note:surface: []
+      change: []
+      url: []
+      school_zone: []
+      overtaking: []
+      steps: []
+      parking:both:access: []
+      parking:both:access:conditional: []
+      parking:left:fee: []
+      parking:right:maxstay:conditional: []
+      min_height:
+      - '6'
+      roof:direction:
+      - '192'
+      - '300'
+      - '330'
+      - '358'
+      - '35'
+      roof:height:
+      - '3'
+      - '1'
+      - '2'
+      roof:shape:
+      - skillion
+      - flat
+      building:part:
+      - 'yes'
+      - roof
+      class:bicycle:mtb: []
+      check_date:cycleway: []
+      parking:condition:both: []
+      parking:condition:both:conditional: []
+      source1: []
+      parking:left:restriction:conditional: []
+      source:date: []
+      shoulder:both: []
+      sidewalk:surface: []
+      maxweightrating: []
+      ownership: []
+      turn:forward: []
+      hgv:lanes: []
+      source:maxheight: []
+      sidewalk:right:bicycle: []
+      note1: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      platform_lift: []
+      step:height: []
+      tactile_writing: []
+      area:highway:
+      - traffic_island
+      - residential
+      - pedestrian
+      - path
+      name:squ:
+      - "Xwtl\u2019e7\xE9n\u1E35"
+      - "Xwtl\u2019a7shn"
+      colonnade:left: []
+      disused:railway:
+      - platform
+      busway:right: []
+      spiral: []
+      lane: []
+      bicycle:signed: []
+      waterway: []
+      destination:ref:lanes:backward: []
+      destination:symbol:lanes:backward: []
+      removed:highway: []
+      description:ref: []
+      proposed: []
+      maxspeed:truck: []
+      maxspeed:hgv: []
+      turn:bus:lanes:backward: []
+      official_name:hur:pronunciation: []
+      tidal: []
+      boundary: []
+      shower:
+      - 'no'
+      abandoned:railway:
+      - turntable
+      name:es: []
+      place:
+      - square
+      parking:lane:right:perpendicular: []
+      grades: []
+      temporary:access: []
+      brand:
+      - Flying J
+      brand:wikidata:
+      - Q64130592
+      fax:
+      - +1 604-521-4051
+      parking:both:parallel: []
+      pedestrian: []
+      comment: []
+      operator:website: []
+      landuse:
+      - construction
+      construction_start_expected: []
+      aeroway:
+      - aerodrome
+      parking:right:restriction:bus: []
+      parking:right:restriction:bus:conditional: []
+      parking:right:disabled: []
+      trolley_wire:backward: []
+      was:crossing:markings: []
+      turn:bicycle:lanes:backward: []
+      designated: []
+      parking:left:access:conditional: []
+      access:conditional: []
+      cycleway:surface:colour: []
+      turn:motor_vehicle:lanes:forward: []
+      turn:motor_vehicle:lanes:backward: []
+      access_aisle: []
+      parking:both:fee:conditional: []
+      carriage: []
+      parking:left:restriction:bus: []
+      cycleway:conditional: []
+      destination:ref:backward: []
+      addr:province:
+      - BC
+      foot:conditional: []
+      maxspeed:hgv:forward: []
+      traffic_calming:backward: []
+      temporary: []
+      room:
+      - elevator
+      parking:right:restriction:reason: []
+      cycleway:lanes: []
+      maintained: []
+      surface_survey: []
+      traffic_calming:forward: []
+      was:name: []
+      vehicle:lanes:forward: []
+      note:cycleway: []
+      parking:lane:right:diagonal: []
+      taxi:lanes: []
+      hazard:backward: []
+      driveway: []
+      overgrown: []
+      iata:
+      - CXH
+      icao:
+      - CYHC
+    style_rules:
+      highway:
+        services: {}
+        pedestrian: {}
+        platform: {}
+        footway: {}
+        path: {}
+        elevator: {}
+        corridor: {}
+        residential:
+          linewidth: 0.3
+        service:
+          linewidth: 0.15
+        steps: {}
+    style_order:
+    - highway
+  landuse__Polygon:
+    file: downloads/regions/vancouver-bc/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 14495
+      landuse:
+      - farmland
+      - farmyard
+      - forest
+      - grass
+      - residential
+      - meadow
+      - commercial
+      - religious
+      - retail
+      - recreation_ground
+      - brownfield
+      - construction
+      - industrial
+      - allotments
+      - cemetery
+      - flowerbed
+      - military
+      - quarry
+      - railway
+      - greenfield
+      - greenhouse_horticulture
+      - landfill
+      - orchard
+      - plant_nursery
+      - institutional
+      - traffic_island
+      - animal_keeping
+      - bench_anchoring
+      - education
+      - greenery
+      - institution
+      - islet
+      - winter_sports
+      - civic
+      - harbour
+      - reservoir
+      - garages
+      - none
+      - government
+      - leisure
+  landuse__MultiPolygon:
+    file: downloads/regions/vancouver-bc/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id: 51
+      landuse:
+      - residential
+      - retail
+      - industrial
+      - grass
+      - construction
+      - religious
+      - cemetery
+      - harbour
+      - farmland
+      - orchard
+      - recreation_ground
+      - winter_sports
+      - meadow
+  landuse__Point:
+    file: downloads/regions/vancouver-bc/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '10544427919'
+      - '10544427920'
+      - '13517222219'
+      - '8858068481'
+      - '13086208310'
+      - '12873493347'
+      - '10141528955'
+      - '13591659069'
+      - '9403541279'
+      - '9312808806'
+      - '11208733244'
+      - '11208733249'
+      - '6783088575'
+      - '6783088566'
+      - '6783088557'
+      - '6783047799'
+      - '6783088564'
+      - '6783088573'
+      - '6783109286'
+      - '6783088569'
+      - '6783088571'
+      - '6783088562'
+      - '6783042705'
+      - '6783109307'
+      - '6783068367'
+      - '6783042746'
+      - '6783088559'
+      - '6783042726'
+      - '6783109335'
+      - '3725347747'
+      - '3725347442'
+      - '3725347441'
+      - '3725347637'
+      - '3725347238'
+      - '3945290784'
+      - '5727181321'
+      - '9196764547'
+      - '11812824209'
+      - '11812824208'
+      - '13075269328'
+      - '11160126234'
+      - '9301444895'
+      - '9301444894'
+      - '5421397521'
+      landuse:
+      - residential
+      - industrial
+      - military
+      - grass
+      - allotments
+  natural__Polygon:
+    file: downloads/regions/vancouver-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 4999
+      natural:
+      - wetland
+      - wood
+      - beach
+      - scrub
+      - heath
+      - rock
+      - valley
+  natural__MultiPolygon:
+    file: downloads/regions/vancouver-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id:
+      - '8313907'
+      - '16131549'
+      - '12890162'
+      - '7662831'
+      - '14180476'
+      - '1304580'
+      - '15070708'
+      - '16350634'
+      - '1209175040'
+      - '7142743'
+      - '530616'
+      - '16762618'
+      - '14471604'
+      - '54147148'
+      - '57403592'
+      - '3421503'
+      - '14711891'
+      - '7143064'
+      - '5560281'
+      - '16640445'
+      - '1193645938'
+      - '1632209'
+      - '1468420'
+      - '533395'
+      natural:
+      - wood
+      - wetland
+      - beach
+      - heath
+  natural__LineString:
+    file: downloads/regions/vancouver-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: LineString
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id: 486
+      natural:
+      - cliff
+      - ridge
+  natural__Point:
+    file: downloads/regions/vancouver-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 79
+      natural:
+      - peak
+      - rock
+      - wetland
+      - wood
+  natural__MultiLineString:
+    file: downloads/regions/vancouver-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiLineString
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id:
+      - '1106488202'
+      natural:
+      - cliff
+  ocean:
+    file: downloads/regions/vancouver-bc/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#888888'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#888888'
+      edge_width: 0.1
+    attributes:
+      NAME:
+      - The Coastal Waters of Southeast Alaska and British Columbia
+      ID:
+      - '59'
+      Longitude:
+      - '-130.27032545934'
+      Latitude:
+      - '53.35057767286'
+      min_X:
+      - '-137.13016986804'
+      min_Y:
+      - '47.02382314232'
+      max_X:
+      - '-122.14991795975'
+      max_Y:
+      - '59.49716317664'
+      area:
+      - '124532'
+      MRGID:
+      - '4313'
+  pois__Point:
+    file: downloads/regions/vancouver-bc/layers/pois.gpkg
+    layer: pois
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 0.1
+    attributes:
+      element:
+      - node
+      id: 26671
+      name: 6196
+      amenity: 142
+  pois__Polygon:
+    file: downloads/regions/vancouver-bc/layers/pois.gpkg
+    layer: pois
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 13949
+      name: 1803
+      amenity: 97
+  pois__LineString:
+    file: downloads/regions/vancouver-bc/layers/pois.gpkg
+    layer: pois
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id: 63
+      name:
+      - Megabench
+      amenity:
+      - bench
+      - bicycle_parking
+      - weighbridge
+    style_rules:
+      name:
+        Megabench: {}
+    style_order:
+    - name
+  pois__MultiPolygon:
+    file: downloads/regions/vancouver-bc/layers/pois.gpkg
+    layer: pois
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '14716987'
+      - '14716985'
+      - '14716986'
+      - '6744638'
+      - '1424987'
+      - '9463233'
+      - '11565745'
+      - '16277861'
+      - '5391860'
+      - '17286359'
+      - '9538365'
+      - '19595511'
+      - '14049587'
+      - '9519106'
+      - '9467678'
+      name:
+      - Flying J Travel Center
+      - University of British Columbia
+      - Regent College
+      - West Point Grey United Church
+      - West Point Grey Community Centre
+      - Vancouver General Hospital
+      - Stratford Hall
+      - Vancouver Community College
+      - Mushroom Terrain Park
+      - Beach & Quarry Rock
+      - University Hill Elementary School
+      amenity:
+      - fuel
+      - parking
+      - place_of_worship
+      - university
+      - college
+      - community_centre
+      - hospital
+      - school
+      - snow_park
+    style_rules:
+      name:
+        Flying J Travel Center: {}
+        University of British Columbia: {}
+        Regent College: {}
+        West Point Grey United Church: {}
+        West Point Grey Community Centre: {}
+        Vancouver General Hospital: {}
+        Stratford Hall: {}
+        Vancouver Community College: {}
+        Mushroom Terrain Park: {}
+        Beach & Quarry Rock: {}
+        University Hill Elementary School: {}
+    style_order:
+    - name
+  water__Polygon:
+    file: downloads/regions/vancouver-bc/layers/water.gpkg
+    layer: water
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 923
+      water:
+      - reservoir
+      - river
+      - pond
+      - basin
+      - ditch
+      - wastewater
+      - lake
+      - stream
+      - drain
+      - reflecting_pool
+      - lagoon
+      - Dolphin
+      - canal
+  water__MultiPolygon:
+    file: downloads/regions/vancouver-bc/layers/water.gpkg
+    layer: water
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id:
+      - '85287'
+      - '5981481'
+      - '54147145'
+      - '10725885'
+      - '10843751'
+      water:
+      - river
+      - lake
+      - pond
+  waterway__LineString:
+    file: downloads/regions/vancouver-bc/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id: 6959
+      waterway:
+      - ditch
+      - stream
+      - drain
+      - river
+      - tidal_channel
+      - canal
+      - floating_barrier
+      - weir
+      - boat_lift
+      - dam
+      - fish_pass
+      - pressurised
+    style_rules:
+      waterway:
+        ditch:
+          linewidth: 0.2
+        stream:
+          linewidth: 0.4
+        drain:
+          linewidth: 0.3
+        river:
+          linewidth: 1.0
+        tidal_channel: {}
+        canal:
+          linewidth: 0.8
+        floating_barrier: {}
+        weir: {}
+        boat_lift: {}
+        dam: {}
+        fish_pass: {}
+        pressurised: {}
+    style_order:
+    - waterway
+  waterway__Point:
+    file: downloads/regions/vancouver-bc/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 53
+      waterway:
+      - sluice_gate
+      - boatyard
+      - waterfall
+      - lock_gate
+      - weir
+      - flow_control
+      - fuel
+      - dam
+      - dock
+    style_rules:
+      waterway:
+        sluice_gate: {}
+        boatyard: {}
+        waterfall: {}
+        lock_gate: {}
+        weir: {}
+        flow_control: {}
+        fuel: {}
+        dam: {}
+        dock: {}
+    style_order:
+    - waterway
+  waterway__MultiLineString:
+    file: downloads/regions/vancouver-bc/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id:
+      - '488166567'
+      - '1140257151'
+      - '72185193'
+      - '72167122'
+      - '72197716'
+      - '72194533'
+      waterway:
+      - stream
+      - tidal_channel
+    style_rules:
+      waterway:
+        stream:
+          linewidth: 0.4
+        tidal_channel: {}
+    style_order:
+    - waterway
+  waterway__Polygon:
+    file: downloads/regions/vancouver-bc/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      id:
+      - '1227597817'
+      - '135839759'
+      - '125089238'
+      - '1068299992'
+      - '43537879'
+      - '1166285765'
+      - '1253802759'
+      - '1133934352'
+      - '1167855444'
+      - '113600859'
+      - '1347611954'
+      - '1189064976'
+      - '55478075'
+      - '1352759968'
+      - '100687962'
+      - '1160088389'
+      - '1260680363'
+      waterway:
+      - boatyard
+      - fuel
+      - dock
+      - dam
+    style_rules:
+      waterway:
+        boatyard: {}
+        fuel: {}
+        dock: {}
+        dam: {}
+    style_order:
+    - waterway
