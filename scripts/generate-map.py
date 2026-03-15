@@ -1,8 +1,12 @@
 import yaml
 from pathlib import Path
 import math
+import warnings
 
 import argparse
+
+# Suppress GDAL warnings about unsupported bbox field type
+warnings.filterwarnings("ignore", message=".*unsupported OGR type.*")
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
