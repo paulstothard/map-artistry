@@ -354,13 +354,13 @@ DESIGN_SETTINGS = {
                 "multidirectional": True,
                 "vert_exag": 1.0,
                 "cmap": "gist_heat",
-                "alpha": 0.25,
+                "alpha": 0,
                 "sigma": 1.0,
                 "interpolation": "bicubic",
                 "zorder": 0,
             },
             "terrain": {
-                "visible": False,
+                "visible": True,
                 "alpha": 1.0,
                 "zorder": 0,
                 "percentiles": [2, 98],
@@ -368,15 +368,15 @@ DESIGN_SETTINGS = {
                 "shade_strength": 0.6,
                 "interpolation": "bicubic",
                 "colors": [
-                    "#4A2511",
-                    "#6B3410",
-                    "#8B4513",
-                    "#aa332e",
-                    "#d45d5a",
-                    "#e89894",
-                    "#f4c4c2",
-                    "#fae8e6",
-                    "#fef5f4",
+                    "#2a0000",
+                    "#420000",
+                    "#5e0000",
+                    "#7a0a0a",
+                    "#961414",
+                    "#aa2020",
+                    "#be3030",
+                    "#cc4040",
+                    "#d85050",
                 ],
             },
             "satellite": {
@@ -464,8 +464,8 @@ DESIGN_SETTINGS = {
             "lw": {
                 "motorway": 0.60,
                 "trunk": 0.52,
-                "primary": 0.45,
-                "secondary": 0.38,
+                "primary": 0.38,
+                "secondary": 0.35,
                 "tertiary": 0.32,
                 "residential": 0.30,
                 "unclassified": 0.15,
@@ -672,13 +672,13 @@ DESIGN_SETTINGS = {
                 "multidirectional": True,
                 "vert_exag": 1.0,
                 "cmap": "gist_heat",
-                "alpha": 0.25,
+                "alpha": 0,
                 "sigma": 1.0,
                 "interpolation": "bicubic",
                 "zorder": 0,
             },
             "terrain": {
-                "visible": False,
+                "visible": True,
                 "alpha": 1.0,
                 "zorder": 0,
                 "percentiles": [2, 98],
@@ -686,15 +686,15 @@ DESIGN_SETTINGS = {
                 "shade_strength": 0.6,
                 "interpolation": "bicubic",
                 "colors": [
-                    "#000000",
-                    "#330000",
-                    "#660000",
-                    "#990000",
-                    "#cc0000",
-                    "#ff2400",
-                    "#ff6666",
-                    "#ff9999",
-                    "#ffcccc",
+                    "#0a0000",
+                    "#1a0800",
+                    "#2e1200",
+                    "#421a00",
+                    "#5a2200",
+                    "#6e2a00",
+                    "#7a3010",
+                    "#8a3a18",
+                    "#964020",
                 ],
             },
             "satellite": {
@@ -813,10 +813,10 @@ DESIGN_SETTINGS = {
         "natural": {
             "fc": "#354038",
             "ec": "#354038",
-            "alpha": 0.4,
+            "alpha": 0.0,
             "zorder": 1,
             "ew": 0,
-            "visible": True,
+            "visible": False,
             "geometry_visibility": {
                 "Point": False,
                 "MultiPoint": False,
@@ -1007,26 +1007,24 @@ DESIGN_SETTINGS = {
                 "visible": True,
                 "alpha": 1.0,
                 "zorder": 0,
-                "percentiles": [1, 99.7],
-                "stretch": "gamma",
-                "stretch_exponent": 0.78,
+                "percentiles": [2, 98],
                 "blend_mode": "soft_light",
                 "shade_strength": 0.6,
                 "interpolation": "bicubic",
                 "colors": [
-                    "#3d5941",
-                    "#4a6b4d",
-                    "#5a7a52",
-                    "#6d8a5c",
-                    "#7f9766",
-                    "#93a670",
-                    "#a8b67f",
-                    "#bdc68f",
-                    "#d2d6a0",
-                    "#e0ddb5",
-                    "#ece5c8",
-                    "#f5f0dc",
-                    "#fefef2",
+                    "#4a8c4a",  # deep lowland green
+                    "#6ba05a",  # medium green
+                    "#8fb46b",  # lighter green
+                    "#b3c87a",  # yellow-green
+                    "#d4c87a",  # buff-yellow
+                    "#c8a850",  # tan
+                    "#b08040",  # light brown
+                    "#8c5820",  # medium brown
+                    "#6e3c10",  # dark brown
+                    "#8a7868",  # grey-brown (alpine rock)
+                    "#b0a090",  # light grey-brown
+                    "#d8d0c8",  # grey
+                    "#ffffff",  # snow/ice
                 ],
             },
             "satellite": {

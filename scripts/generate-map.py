@@ -318,7 +318,9 @@ def _rasterize_polygon_layer_mask(
             if gdf.empty:
                 continue
 
-        geoms.extend([geom for geom in gdf.geometry if geom is not None and not geom.is_empty])
+        geoms.extend(
+            [geom for geom in gdf.geometry if geom is not None and not geom.is_empty]
+        )
 
     if not geoms:
         return None

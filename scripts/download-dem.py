@@ -80,7 +80,9 @@ def get_copernicus_tile_names(minx, miny, maxx, maxy):
     return tiles
 
 
-def download_opentopography_globaldem(demtype, minx, miny, maxx, maxy, tmpdir, output_name):
+def download_opentopography_globaldem(
+    demtype, minx, miny, maxx, maxy, tmpdir, output_name
+):
     """Download a Global DEM subset via OpenTopography API."""
     print(f"    Requesting {demtype} via OpenTopography API...")
 
@@ -96,7 +98,7 @@ def download_opentopography_globaldem(demtype, minx, miny, maxx, maxy, tmpdir, o
     }
 
     response = requests.get(url, params=params, stream=True)
-    
+
     if response.status_code != 200:
         error_msg = f"OpenTopography API error: {response.status_code}"
         try:
@@ -107,7 +109,7 @@ def download_opentopography_globaldem(demtype, minx, miny, maxx, maxy, tmpdir, o
             error_msg
             + "\n    Note: Check the dataset name, request bounds, and API key. The demo key is rate limited."
         )
-    
+
     response.raise_for_status()
 
     tile_path = Path(tmpdir) / output_name
@@ -127,7 +129,9 @@ def download_cop90(minx, miny, maxx, maxy, tmpdir):
 
 def download_gmted2010(minx, miny, maxx, maxy, tmpdir):
     """Backward-compatible alias for the retired GMTED2010 source."""
-    print("    GMTED2010 is no longer available in OpenTopography; using COP90 instead...")
+    print(
+        "    GMTED2010 is no longer available in OpenTopography; using COP90 instead..."
+    )
     return download_cop90(minx, miny, maxx, maxy, tmpdir)
 
 

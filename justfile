@@ -202,7 +202,7 @@ _build-map region scheme width height dpi format buffer:
             --boundary "$DATA_DIR/area.geojson" \
             --output "$DATA_DIR/dem.tif" \
             --source "$DEM_SOURCE"; then
-            
+
             # Fallback strategy if primary source fails
             if [ "$DEM_SOURCE" = "cop90" ] || [ "$DEM_SOURCE" = "gmted2010" ]; then
                 echo "   ⚠️  COP90 failed, falling back to SRTM..."
@@ -288,10 +288,10 @@ _build-map region scheme width height dpi format buffer:
     # Apply overlay if exists
     if [ -f "$CONFIG_OVERLAY" ]; then
         echo "   ✓ Applying overlay: $CONFIG_OVERLAY"
-        {{ python }} scripts/apply-overlay.py \
-            --base "$CONFIG_BASE" \
-            --overlay "$CONFIG_OVERLAY" \
-            --output "$CONFIG_FINAL"
+        {{ python }} scripts/merge-config.py \
+            "$CONFIG_BASE" \
+            "$CONFIG_OVERLAY" \
+            "$CONFIG_FINAL"
     else
         echo "   ℹ️  No overlay found (create with: configs/${LOCATION}-${SCHEME}.yaml)"
         cp "$CONFIG_BASE" "$CONFIG_FINAL"

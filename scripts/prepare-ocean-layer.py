@@ -23,7 +23,9 @@ def read_boundary(boundary_path: Path) -> gpd.GeoDataFrame:
     return boundary.to_crs("EPSG:4326")
 
 
-def read_ocean(ocean_path: Path, bbox: tuple[float, float, float, float]) -> gpd.GeoDataFrame:
+def read_ocean(
+    ocean_path: Path, bbox: tuple[float, float, float, float]
+) -> gpd.GeoDataFrame:
     try:
         ocean = gpd.read_file(
             ocean_path,

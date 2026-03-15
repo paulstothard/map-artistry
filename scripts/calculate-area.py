@@ -83,10 +83,10 @@ def determine_buffer(area_km2):
     """Determine appropriate buffer size based on estimated area."""
     if area_km2 < 1000:
         # Small city
-        return 10
+        return 5
     elif area_km2 < 10_000:
         # Large city/metro
-        return 20
+        return 5
     elif area_km2 < 100_000:
         # Region/island
         return 50
