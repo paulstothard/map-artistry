@@ -4,18 +4,20 @@
 # Generate artistic topographic maps with multiple color schemes
 #
 # Usage:
-#   just build edmonton coral     # Build specific map
 #   just edmonton                 # Build all Edmonton schemes
+#   just edmonton coral           # Build specific scheme
 #   just locations                # List available locations
 #   just schemes                  # List available schemes
 #   just all                      # Build everything
 #
+# Customization:
+#   just create-overlay edmonton coral  # Create template for customization
+#   # Edit configs/edmonton-coral-overlay.yaml
+#   just edmonton coral                 # Rebuild with your changes
+#
 # ============================================================================
 
 python := "python"
-
-# Suppress GDAL warnings about bbox fields
-export CPL_LOG := "/dev/null"
 
 # Available color schemes (add new schemes here)
 
@@ -281,6 +283,35 @@ _generate-map location output_dir width height dpi format:
 # ============================================================================
 # Utilities
 # ============================================================================
+
+# Create overlay template for customization (never overwrites existing)
+create-overlay location scheme:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    SOURCE="output/{{ location }}-{{ scheme }}/config-base.yaml"
+    TARGET="configs/{{ location }}-{{ scheme }}-overlay.yaml"
+
+    # Check if source exists
+    if [ ! -f "$SOURCE" ]; then
+        echo "❌ Config not found: $SOURCE"
+        echo "   Run 'just {{ location }} {{ scheme }}' first to generate the base config"
+        exit 1
+    fi
+
+    # Check if target already exists
+    if [ -f "$TARGET" ]; then
+        echo "⚠️  Overlay already exists: $TARGET"
+        echo "   Not overwriting. Delete it first if you want to recreate it."
+        exit 1
+    fi
+
+    # Copy and create
+    mkdir -p configs
+    cp "$SOURCE" "$TARGET"
+    echo "✅ Created overlay template: $TARGET"
+    echo "   Edit this file to customize {{ location }}-{{ scheme }}"
+    echo "   Then run 'just {{ location }} {{ scheme }}' to apply your changes"
 
 # Publish maps to publish/ folder
 publish:
