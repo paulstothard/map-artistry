@@ -35,11 +35,13 @@ around the region boundary, in kilometers.
 
 ## Color Schemes
 
-- `coral` — red-toned scheme with white water features
-- `river_runs_red` — dark red/black scheme with red water features
-- `natural` — hypsometric tints (green → brown → grey → white), bluish water
-- `lava` — fiery elevation coloring, orange water
-- `satellite` — satellite imagery base with vector/map layer overlays
+- `coral` — red-toned scheme with white water features (hides natural layer)
+- `river_runs_red` — dark red/black scheme with red water features (hides natural and land use layers)
+- `natural` — hypsometric tints (green → brown → grey → white), bluish water (hides roads, buildings, and land use layers)
+- `lava` — fiery elevation coloring, orange water (hides roads, buildings, and land use layers)
+- `satellite` — satellite imagery base with vector/map layer overlays (hides natural and land use layers)
+
+**Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street network), buildings (footprints), water/waterway (bodies of water and streams).
 
 ## Examples
 
