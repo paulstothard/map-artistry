@@ -25,7 +25,3 @@ cache/
 
 # Publish folder
 publish/
-
-# Auto-generated config files (keep user overlay configs)
-configs/*-base.yaml
-configs/*-final.yaml

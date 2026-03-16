@@ -262,6 +262,8 @@ def _render_hillshade_textured_polygon_fill(
     return True
 
 
+
+
 def _compute_multidirectional_hillshade(
     dem: np.ndarray,
     dx: float,

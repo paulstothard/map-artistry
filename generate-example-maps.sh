@@ -46,7 +46,6 @@ echo ""
 
 just publish
 
-python scripts/resize-images.py --input publish/ --output examples/ --width 1200
-
 echo ""
-echo "✅ Examples saved to examples/"
+
+just publish-examples

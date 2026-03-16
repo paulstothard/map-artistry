@@ -292,7 +292,7 @@ _build-map region scheme width height dpi format buffer:
     # ========================================================================
     echo "⚙️  Step 6: Generating map configuration..."
     CONFIG_BASE="$CONFIG_DIR/${LOCATION}-base.yaml"
-    CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-${SCHEME}.yaml"
+    CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-${SCHEME}-overlay.yaml"
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-${SCHEME}-final.yaml"
 
     # Generate base config
@@ -312,7 +312,7 @@ _build-map region scheme width height dpi format buffer:
             "$CONFIG_OVERLAY" \
             "$CONFIG_FINAL"
     else
-        echo "   ℹ️  No overlay found (create with: configs/${LOCATION}-${SCHEME}.yaml)"
+        echo "   ℹ️  No overlay found (create with: configs/${LOCATION}-${SCHEME}-overlay.yaml)"
         cp "$CONFIG_BASE" "$CONFIG_FINAL"
     fi
 

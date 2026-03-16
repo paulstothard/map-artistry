@@ -39,6 +39,7 @@ around the region boundary, in kilometers.
 - `river_runs_red` — dark red/black scheme with red water features (hides natural and land use layers)
 - `natural` — hypsometric tints (green → brown → grey → white), bluish water (hides roads, buildings, and land use layers)
 - `lava` — fiery elevation coloring, orange water (hides roads, buildings, and land use layers)
+- `glacier` — cool grey-green to white elevation palette, blue-grey water (hides roads, buildings, and land use layers)
 - `satellite` — satellite imagery base with vector/map layer overlays (hides natural and land use layers)
 
 **Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street network), buildings (footprints), water/waterway (bodies of water and streams).
@@ -51,6 +52,7 @@ around the region boundary, in kilometers.
 [![British Columbia - River Runs Red](examples/thumbnails/british-columbia-river_runs_red.png)](examples/full/british-columbia-river_runs_red.png)
 [![British Columbia - Natural](examples/thumbnails/british-columbia-natural.png)](examples/full/british-columbia-natural.png)
 [![British Columbia - Lava](examples/thumbnails/british-columbia-lava.png)](examples/full/british-columbia-lava.png)
+[![British Columbia - Glacier](examples/thumbnails/british-columbia-glacier.png)](examples/full/british-columbia-glacier.png)
 [![British Columbia - Satellite](examples/thumbnails/british-columbia-satellite.png)](examples/full/british-columbia-satellite.png)
 
 ### Edmonton, AB
@@ -59,6 +61,7 @@ around the region boundary, in kilometers.
 [![Edmonton - River Runs Red](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
 [![Edmonton - Natural](examples/thumbnails/edmonton-ab-natural.png)](examples/full/edmonton-ab-natural.png)
 [![Edmonton - Lava](examples/thumbnails/edmonton-ab-lava.png)](examples/full/edmonton-ab-lava.png)
+[![Edmonton - Glacier](examples/thumbnails/edmonton-ab-glacier.png)](examples/full/edmonton-ab-glacier.png)
 [![Edmonton - Satellite](examples/thumbnails/edmonton-ab-satellite.png)](examples/full/edmonton-ab-satellite.png)
 
 ### Iceland
@@ -67,6 +70,7 @@ around the region boundary, in kilometers.
 [![Iceland - River Runs Red](examples/thumbnails/iceland-river_runs_red.png)](examples/full/iceland-river_runs_red.png)
 [![Iceland - Natural](examples/thumbnails/iceland-natural.png)](examples/full/iceland-natural.png)
 [![Iceland - Lava](examples/thumbnails/iceland-lava.png)](examples/full/iceland-lava.png)
+[![Iceland - Glacier](examples/thumbnails/iceland-glacier.png)](examples/full/iceland-glacier.png)
 [![Iceland - Satellite](examples/thumbnails/iceland-satellite.png)](examples/full/iceland-satellite.png)
 
 ### Vancouver, BC
@@ -75,6 +79,7 @@ around the region boundary, in kilometers.
 [![Vancouver - River Runs Red](examples/thumbnails/vancouver-bc-river_runs_red.png)](examples/full/vancouver-bc-river_runs_red.png)
 [![Vancouver - Natural](examples/thumbnails/vancouver-bc-natural.png)](examples/full/vancouver-bc-natural.png)
 [![Vancouver - Lava](examples/thumbnails/vancouver-bc-lava.png)](examples/full/vancouver-bc-lava.png)
+[![Vancouver - Glacier](examples/thumbnails/vancouver-bc-glacier.png)](examples/full/vancouver-bc-glacier.png)
 [![Vancouver - Satellite](examples/thumbnails/vancouver-bc-satellite.png)](examples/full/vancouver-bc-satellite.png)
 
 ### Vancouver Island, BC
@@ -83,6 +88,7 @@ around the region boundary, in kilometers.
 [![Vancouver Island - River Runs Red](examples/thumbnails/vancouver-island-bc-river_runs_red.png)](examples/full/vancouver-island-bc-river_runs_red.png)
 [![Vancouver Island - Natural](examples/thumbnails/vancouver-island-bc-natural.png)](examples/full/vancouver-island-bc-natural.png)
 [![Vancouver Island - Lava](examples/thumbnails/vancouver-island-bc-lava.png)](examples/full/vancouver-island-bc-lava.png)
+[![Vancouver Island - Glacier](examples/thumbnails/vancouver-island-bc-glacier.png)](examples/full/vancouver-island-bc-glacier.png)
 [![Vancouver Island - Satellite](examples/thumbnails/vancouver-island-bc-satellite.png)](examples/full/vancouver-island-bc-satellite.png)
 
 ## Customizing a Map
@@ -91,8 +97,9 @@ Each build produces two auto-generated files:
 
 - `configs/{location}-base.yaml` — full generated config
 - `configs/{location}-{scheme}-final.yaml` — final merged config (used for rendering)
+- `configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to auto-apply)
 
-Create an overlay file named `configs/{location}-{scheme}.yaml` and place it in `configs/`. The
+Create an overlay file named `configs/{location}-{scheme}-overlay.yaml` and place it in `configs/`. The
 build detects it automatically and deep-merges it over the base config to produce the final config.
 
 ```bash
@@ -100,10 +107,10 @@ build detects it automatically and deep-merges it over the base config to produc
 just build "Edmonton, AB" coral
 
 # 2. Copy the current final config as your overlay starting point
-cp configs/edmonton-ab-coral-final.yaml configs/edmonton-ab-coral.yaml
+cp configs/edmonton-ab-coral-final.yaml configs/edmonton-ab-coral-overlay.yaml
 
 # 3. Edit it — change whatever you like; leave everything else as-is
-vi configs/edmonton-ab-coral.yaml
+vi configs/edmonton-ab-coral-overlay.yaml
 
 # 4. Rebuild — the overlay is applied automatically
 just build "Edmonton, AB" coral

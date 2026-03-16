@@ -1,0 +1,789 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#aa332e'
+    fc: '#aa332e'
+  hillshade:
+    alpha: 0
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gist_heat
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 1.0
+    vert_exag: 1.0
+    weights:
+    - 1.2
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#000000'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: true
+    text: ps
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/vancouver-island-bc/satellite.tif
+  scheme: coral
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#6a0000'
+    - '#7e0000'
+    - '#920606'
+    - '#a81414'
+    - '#bc2424'
+    - '#ce3434'
+    - '#dd4a4a'
+    - '#ea6666'
+    - '#f18585'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.4
+    visible: false
+    zorder: 0
+  dem: downloads/regions/vancouver-island-bc/dem.tif
+layers:
+  landuse:
+    file: downloads/regions/vancouver-island-bc/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      scalerank:
+      - '4'
+      - '7'
+      - '9'
+      - '8'
+      - '2'
+      - '5'
+      featurecla:
+      - Urban area
+      area_sqkm:
+      - '18.016'
+      - '14.504'
+      - '92.742'
+      - '14.991'
+      - '26.74'
+      - '14.326'
+      - '1.766'
+      - '11.561'
+      - '533.987'
+      - '25.21'
+      - '14.433'
+      - '762.154'
+      - '124.186'
+      - '185.841'
+      - '28.977'
+      - '30.02'
+      - '33.826'
+      - '17.001'
+      - '55.13'
+      - '14.833'
+      min_zoom:
+      - '4.0'
+      - '7.0'
+      - '7.7'
+      - '7.6'
+      - '3.6'
+      - '5.0'
+  natural__MultiPolygon:
+    file: downloads/regions/vancouver-island-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Range/mtn
+      - Continent
+      NAME:
+      - COAST RANGES
+      - NORTH AMERICA
+      - COAST MOUNTAINS
+      NAMEALT: []
+      REGION:
+      - North America
+      SUBREGION: []
+      MIN_LABEL:
+      - '4.0'
+      - '0.0'
+      - '3.5'
+      MAX_LABEL:
+      - '8.0'
+      - '4.0'
+      - '7.0'
+      SCALERANK:
+      - '3'
+      - '0'
+      - '2'
+      LABEL:
+      - NORTH AMERICA
+      - COAST MOUNTAINS
+      WIKIDATAID:
+      - Q660304
+      - Q49
+      - Q920070
+      NAME_AR:
+      - "\u0633\u0644\u0627\u0633\u0644 \u062C\u0628\u0627\u0644 \u0633\u0627\u062D\
+        \u0644 \u0627\u0644\u0645\u062D\u064A\u0637 \u0627\u0644\u0647\u0627\u062F\
+        \u0626"
+      - "\u0623\u0645\u0631\u064A\u0643\u0627 \u0627\u0644\u0634\u0645\u0627\u0644\
+        \u064A\u0629"
+      - "\u062C\u0628\u0627\u0644 \u0627\u0644\u0633\u0627\u062D\u0644"
+      NAME_BN:
+      - "\u0995\u09CB\u09B8\u09CD\u099F \u09B0\u09C7\u099E\u09CD\u099C\u09C7\u09B8"
+      - "\u0989\u09A4\u09CD\u09A4\u09B0 \u0986\u09AE\u09C7\u09B0\u09BF\u0995\u09BE"
+      - "\u0995\u09CB\u09B8\u09CD\u099F \u09AE\u09BE\u0989\u09A8\u09CD\u099F\u09C7\
+        \u09A8\u09CD\u09B8"
+      NAME_DE:
+      - "Gebirgskette an der nordamerikanischen Pazifikk\xFCste"
+      - Nordamerika
+      - Coast Mountains
+      NAME_EN:
+      - Pacific Coast Ranges
+      - North America
+      - Coast Mountains
+      NAME_ES:
+      - "Cadena costera del Pac\xEDfico"
+      - "Am\xE9rica del Norte"
+      - "Monta\xF1as Costeras"
+      NAME_FR:
+      - "cha\xEEnes c\xF4ti\xE8res du Pacifique"
+      - "Am\xE9rique du Nord"
+      - "cha\xEEne C\xF4ti\xE8re"
+      NAME_EL:
+      - "\u039F\u03A1\u039F\u03A3\u0395\u0399\u03A1\u0395\u03A3 \u039A\u039F\u0391\
+        \u03A3\u03A4"
+      - "\u0392\u03CC\u03C1\u03B5\u03B9\u03B1 \u0391\u03BC\u03B5\u03C1\u03B9\u03BA\
+        \u03AE"
+      - "\u03A0\u03B1\u03C1\u03AC\u03BB\u03B9\u03B1 \u038C\u03C1\u03B7"
+      NAME_HI:
+      - "\u0924\u091F\u0940\u092F \u092A\u0939\u093E\u095C"
+      - "\u0909\u0924\u094D\u0924\u0930 \u0905\u092E\u0947\u0930\u093F\u0915\u093E"
+      NAME_HU:
+      - "\xC9szak-amerikai Parti-hegys\xE9g"
+      - "\xC9szak-Amerika"
+      - "COAST-HEGYS\xC9G"
+      NAME_ID:
+      - COAST RANGES
+      - Amerika Utara
+      - COAST MOUNTAINS
+      NAME_IT:
+      - Catena Costiera Pacifica
+      - America del Nord
+      - Montagne Costiere
+      NAME_JA:
+      - "\u592A\u5E73\u6D0B\u5CB8\u5C71\u8108"
+      - "\u5317\u30A2\u30E1\u30EA\u30AB"
+      - "\u30B3\u30FC\u30B9\u30C8\u5C71\u8108"
+      NAME_KO:
+      - "\uCF54\uC2A4\uD2B8 \uB808\uC778\uC9C0\uC2A4"
+      - "\uBD81\uC544\uBA54\uB9AC\uCE74"
+      - "\uCF54\uC2A4\uD2B8 \uB9C8\uC6B4\uD2F4\uC2A4"
+      NAME_NL:
+      - Pacific Coast Range
+      - Noord-Amerika
+      - Coast Mountains
+      NAME_PL:
+      - "G\xF3ry Nadbrze\u017Cne"
+      - "Ameryka P\xF3\u0142nocna"
+      NAME_PT:
+      - "Cadeias montanhosas da costa do Pac\xEDfico"
+      - "Am\xE9rica do Norte e Am\xE9rica Central"
+      - Montanhas Costeiras
+      NAME_RU:
+      - "\u0411\u0435\u0440\u0435\u0433\u043E\u0432\u044B\u0435 \u0445\u0440\u0435\
+        \u0431\u0442\u044B"
+      - "\u0421\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0410\u043C\u0435\u0440\
+        \u0438\u043A\u0430"
+      - "\u0411\u0435\u0440\u0435\u0433\u043E\u0432\u043E\u0439 \u0445\u0440\u0435\
+        \u0431\u0435\u0442"
+      NAME_SV:
+      - Kustbergen
+      - Nordamerika
+      - Coast Mountains
+      NAME_TR:
+      - "Pasifik K\u0131y\u0131 Da\u011Flar\u0131"
+      - Kuzey Amerika
+      - "K\u0131y\u0131 Da\u011Flar\u0131"
+      NAME_VI:
+      - "D\xE3y n\xFAi Duy\xEAn h\u1EA3i Th\xE1i B\xECnh D\u01B0\u01A1ng"
+      - "B\u1EAFc M\u1EF9"
+      - "D\xC3Y COAST MOUNTAINS"
+      NAME_ZH:
+      - "\u592A\u5E73\u6D0B\u6D77\u5CB8\u5C71\u8108"
+      - "\u5317\u7F8E\u6D32"
+      - "\u6D77\u5CB8\u5C71\u8108"
+      NE_ID:
+      - '1159103947'
+      - '1159104607'
+      - '1159104197'
+      NAME_FA:
+      - "\u0631\u0634\u062A\u0647\u06A9\u0648\u0647\u0647\u0627\u06CC \u0633\u0627\
+        \u062D\u0644\u06CC \u0627\u0642\u06CC\u0627\u0646\u0648\u0633 \u0622\u0631\
+        \u0627\u0645"
+      - "\u0622\u0645\u0631\u06CC\u06A9\u0627\u06CC \u0634\u0645\u0627\u0644\u06CC"
+      - "\u06A9\u0648\u0647\u0633\u062A\u0627\u0646 \u06A9\u0648\u0633\u062A"
+      NAME_HE:
+      - "\u05E8\u05DB\u05E1\u05D9 \u05D4\u05D7\u05D5\u05E3 \u05D4\u05E4\u05E1\u05D9\
+        \u05E4\u05D9"
+      - "\u05D0\u05DE\u05E8\u05D9\u05E7\u05D4 \u05D4\u05E6\u05E4\u05D5\u05E0\u05D9\
+        \u05EA"
+      - "\u05E8\u05DB\u05E1\u05D9 \u05D4\u05D7\u05D5\u05E3"
+      NAME_UK:
+      - "\u0411\u0435\u0440\u0435\u0433\u043E\u0432\u0456 \u0425\u0440\u0435\u0431\
+        \u0442\u0438"
+      - "\u041F\u0456\u0432\u043D\u0456\u0447\u043D\u0430 \u0410\u043C\u0435\u0440\
+        \u0438\u043A\u0430"
+      - "\u0411\u0435\u0440\u0435\u0433\u043E\u0432\u0438\u0439 \u0445\u0440\u0435\
+        \u0431\u0435\u0442"
+      NAME_UR:
+      - "\u06A9\u0648\u0633\u0679 \u0631\u06CC\u0646\u062C\u0632"
+      - "\u0634\u0645\u0627\u0644\u06CC \u0627\u0645\u0631\u06CC\u06A9\u0627"
+      - "\u06A9\u0648\u0633\u0679 \u0645\u0627\u0624\u0646\u0679\u06CC\u0646\u0632"
+      NAME_ZHT:
+      - "\u592A\u5E73\u6D0B\u6D77\u5CB8\u5C71\u8108"
+      - "\u5317\u7F8E\u6D32"
+      - "\u6D77\u5CB8\u5C71\u8108"
+  natural__Polygon:
+    file: downloads/regions/vancouver-island-bc/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Range/mtn
+      - Island
+      - Plateau
+      NAME:
+      - CASCADE RANGE
+      - Vancouver Island
+      - FRASER PLATEAU
+      NAMEALT: []
+      REGION:
+      - North America
+      SUBREGION: []
+      MIN_LABEL:
+      - '3.5'
+      - '4.0'
+      - '5.3'
+      MAX_LABEL:
+      - '7.0'
+      - '8.0'
+      - '9.0'
+      SCALERANK:
+      - '2'
+      - '3'
+      - '4'
+      LABEL:
+      - CASCADE RANGE
+      - Vancouver Island
+      WIKIDATAID:
+      - Q4558
+      - Q170479
+      - Q4492616
+      NAME_AR:
+      - "\u062C\u0628\u0627\u0644 \u0643\u0627\u0633\u0643\u064A\u062F"
+      - "\u062C\u0632\u064A\u0631\u0629 \u0641\u0627\u0646\u0643\u0648\u0641\u0631"
+      - "\u0647\u0636\u0628\u0629 \u0641\u0631\u064A\u0632\u0631"
+      NAME_BN:
+      - "\u0995\u09CD\u09AF\u09BE\u09B8\u0995\u09C7\u09A1 \u09AA\u09B0\u09CD\u09AC\
+        \u09A4\u09AE\u09BE\u09B2\u09BE"
+      - "\u09AD\u09CD\u09AF\u09BE\u0999\u09CD\u0995\u09C1\u09AD\u09BE\u09B0 \u09A6\
+        \u09CD\u09AC\u09C0\u09AA"
+      - "\u09AB\u09CD\u09B0\u09C7\u099C\u09BE\u09B0 \u09AA\u09CD\u09B2\u09C7\u099F\
+        \u09CB"
+      NAME_DE:
+      - Kaskadenkette
+      - Vancouver Island
+      - Fraser-Plateau
+      NAME_EN:
+      - Cascade Range
+      - Vancouver Island
+      - Fraser Plateau
+      NAME_ES:
+      - Cordillera de las Cascadas
+      - Isla de Vancouver
+      - Meseta Fraser
+      NAME_FR:
+      - "cha\xEEne des Cascades"
+      - "\xEEle de Vancouver"
+      - Plateau Fraser
+      NAME_EL:
+      - "\u03BF\u03C1\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC \u039A\u03B1\u03C3\u03BA\
+        \u03AD\u03B9\u03BD\u03C4"
+      - "\u039D\u03AE\u03C3\u03BF\u03C2 \u0392\u03B1\u03BD\u03BA\u03BF\u03CD\u03B2\
+        \u03B5\u03C1"
+      - "\u039F\u03A1\u039F\u03A0\u0395\u0394\u0399\u039F \u03A6\u03A1\u0395\u0399\
+        \u0396\u0395\u03A1"
+      NAME_HI:
+      - "\u0915\u0948\u0938\u094D\u0915\u0947\u0921 \u0930\u0947\u0902\u091C"
+      - "\u0935\u0948\u0902\u0915\u0942\u0935\u0930 \u0926\u094D\u0935\u0940\u092A"
+      - "\u095E\u094D\u0930\u0947\u095B\u0930 \u092A\u0920\u093E\u0930"
+      NAME_HU:
+      - "Kaszk\xE1d-hegyl\xE1nc"
+      - Vancouver-sziget
+      - "FRASER-FENNS\xCDK"
+      NAME_ID:
+      - PEGUNUNGAN CASCADE
+      - Pulau Vancouver
+      - DATARAN TINGGI FRASER
+      NAME_IT:
+      - Catena delle Cascate
+      - isola di Vancouver
+      - Plateau Fraser
+      NAME_JA:
+      - "\u30AB\u30B9\u30B1\u30FC\u30C9\u5C71\u8108"
+      - "\u30D0\u30F3\u30AF\u30FC\u30D0\u30FC\u5CF6"
+      - "\u30D5\u30EC\u30A4\u30B6\u30FC\u30FB\u30D7\u30E9\u30C8\u30FC"
+      NAME_KO:
+      - "\uCE90\uC2A4\uCF00\uC774\uB4DC\uC0B0\uB9E5"
+      - "\uBC34\uCFE0\uBC84\uC12C"
+      - "\uD504\uB808\uC774\uC800 \uD50C\uB798\uD22C"
+      NAME_NL:
+      - Cascade Range
+      - Vancouvereiland
+      - Fraser Plateau
+      NAME_PL:
+      - "G\xF3ry Kaskadowe"
+      - Vancouver
+      - "WY\u017BYNA FRASERA"
+      NAME_PT:
+      - Cordilheira das Cascatas
+      - Ilha Vancouver
+      - Planalto Fraser
+      NAME_RU:
+      - "\u041A\u0430\u0441\u043A\u0430\u0434\u043D\u044B\u0435 \u0433\u043E\u0440\
+        \u044B"
+      - "\u0412\u0430\u043D\u043A\u0443\u0432\u0435\u0440"
+      - "\u0424\u0440\u0435\u0439\u0437\u0435\u0440"
+      NAME_SV:
+      - Kaskadbergen
+      - Vancouver Island
+      - Fraser Plateau
+      NAME_TR:
+      - "Cascade S\u0131rada\u011Flar\u0131"
+      - "Vancouver Adas\u0131"
+      - FRASER PLATOSU
+      NAME_VI:
+      - "D\xE3y n\xFAi Cascade"
+      - "\u0110\u1EA3o Vancouver"
+      - "CAO NGUY\xCAN FRASER"
+      NAME_ZH:
+      - "\u5580\u65AF\u5580\u7279\u5C71\u8109"
+      - "\u6EAB\u54E5\u83EF\u5CF6"
+      - "\u5F17\u96F7\u6CFD\u9AD8\u5730"
+      NE_ID:
+      - '1159104199'
+      - '1159103771'
+      - '1159103703'
+      NAME_FA:
+      - "\u06A9\u0633\u06A9\u06CC\u062F\u0632"
+      - "\u062C\u0632\u06CC\u0631\u0647 \u0648\u0646\u06A9\u0648\u0648\u0631"
+      - "\u0641\u0644\u0627\u062A \u0641\u0631\u06CC\u0632\u0631"
+      NAME_HE:
+      - "\u05E8\u05DB\u05E1 \u05E7\u05E1\u05E7\u05D9\u05D9\u05D3"
+      - "\u05D4\u05D0\u05D9 \u05D5\u05E0\u05E7\u05D5\u05D1\u05E8"
+      - "\u05E8\u05DE\u05EA \u05E4\u05E8\u05D9\u05D9\u05D6\u05E8"
+      NAME_UK:
+      - "\u041A\u0430\u0441\u043A\u0430\u0434\u043D\u0456 \u0433\u043E\u0440\u0438"
+      - "\u0412\u0430\u043D\u043A\u0443\u0432\u0435\u0440"
+      - "\u041F\u041B\u0410\u0422\u041E \u0424\u0420\u0415\u0419\u0417\u0415\u0420"
+      NAME_UR:
+      - "\u06A9\u0627\u0633\u06A9\u0627\u06CC\u0688 \u0631\u06CC\u0646\u062C"
+      - "\u0648\u06CC\u0646\u06A9\u0648\u0631 \u062C\u0632\u06CC\u0631\u06C1"
+      - "\u0641\u0631\u06CC\u0632\u0631 \u067E\u0644\u06CC\u0679\u06CC\u0648"
+      NAME_ZHT:
+      - "\u5580\u65AF\u5580\u7279\u5C71\u8109"
+      - "\u6EAB\u54E5\u83EF\u5CF6"
+      - "\u5F17\u96F7\u6FA4\u9AD8\u539F"
+  ocean:
+    file: downloads/regions/vancouver-island-bc/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0.1
+    attributes:
+      NAME:
+      - North Pacific Ocean
+      - The Coastal Waters of Southeast Alaska and British Columbia
+      ID:
+      - '57'
+      - '59'
+      Longitude:
+      - '-40.1574405109'
+      - '-130.27032545934'
+      Latitude:
+      - '23.9623940894'
+      - '53.35057767286'
+      min_X:
+      - '-76.9854403734'
+      - '-137.13016986804'
+      min_Y:
+      - 2e-11
+      - '47.02382314232'
+      max_X:
+      - '128.686531125'
+      - '-122.14991795975'
+      max_Y:
+      - '58.211545022'
+      - '59.49716317664'
+      area:
+      - '65154681'
+      - '124532'
+      MRGID:
+      - '1908'
+      - '4313'
+  road__LineString:
+    file: downloads/regions/vancouver-island-bc/layers/road.gpkg
+    layer: road
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      scalerank:
+      - '3'
+      - '6'
+      - '7'
+      - '8'
+      - '5'
+      - '4'
+      featurecla:
+      - Road
+      - Ferry
+      type:
+      - Major Highway
+      - Secondary Highway
+      - Road
+      - Ferry Route
+      sov_a3:
+      - USA
+      - CAN
+      note:
+      - Ferry operated by CAN and USA
+      edited:
+      - New in version 2.0.0
+      - 'Version 1.5: Changed alignment, a few adds in N.A.'
+      name:
+      - '5'
+      - '101'
+      - '7'
+      - '512'
+      - '705'
+      - '16'
+      - '518'
+      - '410'
+      - '167'
+      - '169'
+      - '516'
+      - '18'
+      - '405'
+      - '90'
+      - '520'
+      - '202'
+      - '522'
+      - '2'
+      - '9'
+      - '509'
+      - '20'
+      - '8'
+      - '14'
+      - '17'
+      - '1'
+      - '4'
+      - '19'
+      - '99'
+      - '539'
+      - '91'
+      - '534'
+      - '12'
+      - '97'
+      - '28'
+      namealt:
+      - '99'
+      - Sunshine Coast Highway
+      namealtt:
+      - State
+      routeraw: []
+      question:
+      - '0'
+      length_km: 60
+      toll:
+      - '0'
+      ne_part:
+      - ne_1d4_original
+      - north_america_extra
+      label: []
+      label2: []
+      local: []
+      localtype: []
+      localalt: []
+      labelrank:
+      - '0'
+      ignore:
+      - '0'
+      add:
+      - '0'
+      rwdb_rd_id:
+      - '0'
+      orig_fid:
+      - '0'
+      - '2227'
+      - '2241'
+      - '2217'
+      - '2218'
+      - '2225'
+      - '2215'
+      - '2240'
+      - '2221'
+      - '2238'
+      - '261'
+      - '262'
+      - '2226'
+      - '2216'
+      - '2222'
+      - '2220'
+      prefix:
+      - I
+      uident: 57
+      continent:
+      - North America
+      expressway:
+      - '1'
+      - '0'
+      level:
+      - Interstate
+      - Federal
+      - State
+      - Other
+      - Ferry
+      min_zoom:
+      - '3.0'
+      - '6.0'
+      - '7.0'
+      - '7.1'
+      - '5.0'
+      - '4.0'
+      min_label:
+      - '6.0'
+      - '7.9'
+      - '9.0'
+      - '9.6'
+      - '7.4'
+      - '8.4'
+      - '8.6'
+      - '7.5'
+      - '8.5'
+      - '9.5'
+      - '7.0'
+  road__MultiLineString:
+    file: downloads/regions/vancouver-island-bc/layers/road.gpkg
+    layer: road
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      scalerank:
+      - '3'
+      featurecla:
+      - Road
+      type:
+      - Major Highway
+      sov_a3:
+      - CAN
+      note: []
+      edited:
+      - New in version 2.0.0
+      name:
+      - '99'
+      namealt: []
+      namealtt: []
+      routeraw: []
+      question:
+      - '0'
+      length_km:
+      - '23'
+      toll:
+      - '0'
+      ne_part:
+      - ne_1d4_original
+      label: []
+      label2: []
+      local: []
+      localtype: []
+      localalt: []
+      labelrank:
+      - '0'
+      ignore:
+      - '0'
+      add:
+      - '0'
+      rwdb_rd_id:
+      - '0'
+      orig_fid:
+      - '0'
+      prefix: []
+      uident:
+      - '387005'
+      continent:
+      - North America
+      expressway:
+      - '1'
+      level:
+      - State
+      min_zoom:
+      - '3.0'
+      min_label:
+      - '6.0'
+  waterway:
+    file: downloads/regions/vancouver-island-bc/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      dissolve:
+      - 187River
+      scalerank:
+      - '5'
+      featurecla:
+      - River
+      name:
+      - Fraser
+      name_alt: []
+      rivernum:
+      - '187'
+      note: []
+      min_zoom:
+      - '4.7'
+      name_en:
+      - Fraser
+      min_label:
+      - '5.7'
+      ne_id:
+      - '1159113463'
+      label:
+      - Fraser
+      wikidataid:
+      - Q269710
+      name_ar:
+      - "\u0646\u0647\u0631 \u0641\u0631\u064A\u0632\u0631"
+      name_bn:
+      - "\u09AB\u09CD\u09B0\u09C7\u099C\u09BE\u09B0"
+      name_de:
+      - Fraser
+      name_es:
+      - Fraser
+      name_fr:
+      - fleuve Fraser
+      name_el:
+      - "\u03A6\u03C1\u03AD\u03B9\u03B6\u03B5\u03C1"
+      name_hi:
+      - "\u095E\u094D\u0930\u0947\u095B\u0930"
+      name_hu:
+      - Fraser
+      name_id:
+      - Fraser
+      name_it:
+      - Fraser
+      name_ja:
+      - "\u30D5\u30EC\u30FC\u30B6\u30FC\u5DDD"
+      name_ko:
+      - "\uD504\uB808\uC774\uC800\uAC15"
+      name_nl:
+      - Fraser
+      name_pl:
+      - Fraser
+      name_pt:
+      - Fraser
+      name_ru:
+      - "\u0424\u0440\u0435\u0439\u0437\u0435\u0440"
+      name_sv:
+      - Fraserfloden
+      name_tr:
+      - Fraser
+      name_vi:
+      - "S\xF4ng Fraser"
+      name_zh:
+      - "\u5F17\u96F7\u6CFD\u6CB3"
+      name_fa:
+      - "\u0631\u0648\u062F \u0641\u0631\u06CC\u0632\u0631"
+      name_he:
+      - "\u05E0\u05D4\u05E8 \u05E4\u05E8\u05D9\u05D9\u05D6\u05E8"
+      name_uk:
+      - "\u0424\u0440\u0435\u0439\u0437\u0435\u0440"
+      name_ur:
+      - "\u0641\u0631\u06CC\u0632\u0631 \u062F\u0631\u06CC\u0627"
+      name_zht:
+      - "\u5F17\u96F7\u6FA4\u6CB3"
