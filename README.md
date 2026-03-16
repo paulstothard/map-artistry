@@ -151,3 +151,11 @@ scripts/                     # Pipeline scripts
 ## Cache
 
 OSM query responses are cached in `cache/`. It can be deleted at any time to force fresh downloads.
+
+## Author
+
+Created by Paul Stothard.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

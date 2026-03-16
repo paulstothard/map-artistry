@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# Copyright (c) 2026 Paul Stothard
+# SPDX-License-Identifier: MIT
+
 from pathlib import Path
 import os
 import yaml

@@ -25,3 +25,6 @@ cache/
 
 # Publish folder
 publish/
+
+# Deploy folder (symlink)
+deploy

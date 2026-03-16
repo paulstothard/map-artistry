@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Paul Stothard
+# SPDX-License-Identifier: MIT
 """
 download-osm-layers.py
 
