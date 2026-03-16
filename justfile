@@ -7,7 +7,7 @@
 #   just build --width 36 --height 24 "Vancouver Island, BC" natural
 #   just build --buffer-km 20 "Victoria, BC" natural
 #
-# Most settings (buffer, zoom, DEM source, layer source) are calculated automatically.
+# Most settings (boundary padding, zoom, DEM source, layer source) are calculated automatically.
 # If ocean boundary source data is installed, the build also derives a local ocean
 # layer when it overlaps the requested region.
 #
@@ -23,7 +23,7 @@ python := if path_exists("venv/bin/python") == "true" { "venv/bin/python" } else
 # Build a map for any region with automatic settings
 [arg("height", long="height", help="Map height in inches")]
 [arg("width", long="width", help="Map width in inches")]
-[arg("buffer_km", long="buffer-km", help="Optional buffer override in kilometers")]
+[arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 build region scheme width="24" height="24" dpi="600" format="png" buffer_km="":
@@ -51,14 +51,14 @@ help:
     @echo "  --height     Map height in inches (default: 24)"
     @echo "  --dpi        Resolution in DPI (default: 600)"
     @echo "  --format     Output format: png, pdf, svg (default: png)"
-    @echo "  --buffer-km  Optional buffer override in kilometers"
+    @echo "  --buffer-km  Optional extra distance around the region boundary, in kilometers"
     @echo ""
     @echo "Other commands:"
     @echo "  just schemes  - List available color schemes"
     @echo "  just help     - Show this help"
     @echo ""
     @echo "All settings are calculated automatically based on region size:"
-    @echo "  • Buffer size (how much area around region)"
+    @echo "  • Boundary padding (extra distance added around the region boundary)"
     @echo "  • DEM source (Copernicus, COP90, SRTM, or ETOPO)"
     @echo "  • Satellite zoom level"
     @echo "  • Ocean layer derivation from installed ocean boundaries"
@@ -78,6 +78,28 @@ publish:
         echo "  ✓ $bn"; \
     done
     @echo "✅ Published $(find publish -type f | wc -l | tr -d ' ') maps"
+
+# Create resized examples for GitHub README from published maps
+publish-examples width="1200" thumbnail_width="400":
+    @echo "📸 Creating examples for GitHub README..."
+    @echo "  Full size: {{ width }}px → examples/full/"
+    @echo "  Thumbnails: {{ thumbnail_width }}px → examples/thumbnails/"
+    @echo "  Cropping 2.5% from all sides of all images"
+    {{ python }} scripts/resize-images.py \
+        --input publish/ \
+        --output examples/full/ \
+        --width {{ width }} \
+        --crop-pattern "*" \
+        --crop-bottom 2.5
+    {{ python }} scripts/resize-images.py \
+        --input publish/ \
+        --output examples/thumbnails/ \
+        --width {{ thumbnail_width }} \
+        --crop-pattern "*" \
+        --crop-bottom 2.5
+    @echo "✅ Examples ready:"
+    @echo "   Full: examples/full/"
+    @echo "   Thumbnails: examples/thumbnails/"
 
 # ============================================================================
 # Internal Recipes (prefixed with _)

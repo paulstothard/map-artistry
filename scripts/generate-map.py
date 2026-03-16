@@ -60,18 +60,35 @@ def _normalize_dem_for_colormap(
     dem: np.ndarray,
     finite_mask: np.ndarray,
     percentiles: list[float] | tuple[float, float],
+    elevation_mode: str = "percentiles",
+    elevation_cutoffs: list[float] | tuple[float, ...] | None = None,
     stretch: str | None = None,
     exponent: float = 1.0,
 ) -> np.ndarray:
-    p_low, p_high = np.nanpercentile(dem[finite_mask], percentiles)
-    if np.isclose(p_low, p_high):
-        p_low = float(np.nanmin(dem[finite_mask]))
-        p_high = float(np.nanmax(dem[finite_mask]))
-        if np.isclose(p_low, p_high):
-            p_high = p_low + 1.0
+    mode = (elevation_mode or "percentiles").lower()
 
-    normed = (dem - p_low) / (p_high - p_low)
-    normed = np.clip(normed, 0.0, 1.0)
+    if mode == "cutoffs" and elevation_cutoffs:
+        cutoffs = np.asarray(elevation_cutoffs, dtype=np.float32)
+        cutoffs = cutoffs[np.isfinite(cutoffs)]
+        cutoffs = np.unique(cutoffs)
+        if cutoffs.size >= 2:
+            anchors = np.linspace(0.0, 1.0, cutoffs.size, dtype=np.float32)
+            normed = np.zeros_like(dem, dtype=np.float32)
+            normed[finite_mask] = np.interp(dem[finite_mask], cutoffs, anchors)
+        else:
+            mode = "percentiles"
+
+    if mode != "cutoffs":
+        p_low, p_high = np.nanpercentile(dem[finite_mask], percentiles)
+        if np.isclose(p_low, p_high):
+            p_low = float(np.nanmin(dem[finite_mask]))
+            p_high = float(np.nanmax(dem[finite_mask]))
+            if np.isclose(p_low, p_high):
+                p_high = p_low + 1.0
+
+        normed = (dem - p_low) / (p_high - p_low)
+        normed = np.clip(normed, 0.0, 1.0)
+
     normed = _apply_elevation_stretch(
         normed,
         stretch=stretch,
@@ -187,7 +204,7 @@ def _render_hillshade_textured_polygon_fill(
     src_transform = from_bounds(
         raster_left, raster_bottom, raster_right, raster_top, src_w, src_h
     )
-    sampled_tone = np.empty((tex_height, tex_width), dtype=np.float32)
+    sampled_tone = np.full((tex_height, tex_width), 0.5, dtype=np.float32)
     reproject(
         source=water_tone,
         destination=sampled_tone,
@@ -200,7 +217,7 @@ def _render_hillshade_textured_polygon_fill(
 
     sampled_valid = None
     if water_valid is not None:
-        sampled_valid = np.empty((tex_height, tex_width), dtype=np.uint8)
+        sampled_valid = np.zeros((tex_height, tex_width), dtype=np.uint8)
         reproject(
             source=water_valid.astype(np.uint8),
             destination=sampled_valid,
@@ -219,6 +236,17 @@ def _render_hillshade_textured_polygon_fill(
 
     base_rgb = np.array(to_rgb(style.get("fc", "#000000")), dtype=np.float32)
     textured_rgb = _modulate_rgb(base_rgb, variation)
+
+    # Lay down a solid base fill first so any raster mask/interpolation edge
+    # artifacts in the textured overlay don't expose the background.
+    gdf.plot(
+        ax=ax,
+        facecolor=style.get("fc", "#000000"),
+        edgecolor="none",
+        linewidth=0,
+        alpha=style.get("alpha", 1.0),
+        zorder=style.get("zorder", 2),
+    )
 
     img = np.zeros((tex_height, tex_width, 4), dtype=np.float32)
     img[..., :3] = textured_rgb
@@ -332,6 +360,25 @@ def _rasterize_polygon_layer_mask(
         fill=0,
         dtype="uint8",
     ).astype(bool)
+
+
+def _get_layer_fill_color(
+    layers_cfg: dict,
+    layer_names: list[str] | tuple[str, ...],
+    fallback: str,
+) -> str:
+    for layer_name in layer_names:
+        for layer_cfg in layers_cfg.values():
+            if layer_cfg.get("layer") != layer_name:
+                continue
+            geom_type = str(layer_cfg.get("geometry_type", "")).lower()
+            if "polygon" not in geom_type:
+                continue
+            default_style = layer_cfg.get("default", {})
+            fill_color = default_style.get("fc")
+            if fill_color:
+                return fill_color
+    return fallback
 
 
 def draw_map_from_config(
@@ -536,6 +583,8 @@ def draw_map_from_config(
                 terrain_visible = terrain_cfg.get("visible", False)
                 if terrain_visible:
                     elev_percentiles = terrain_cfg.get("percentiles", [2, 98])
+                    elevation_mode = terrain_cfg.get("elevation_mode", "percentiles")
+                    elevation_cutoffs = terrain_cfg.get("elevation_cutoffs")
                     stretch = terrain_cfg.get("stretch", "linear")
                     stretch_exponent = terrain_cfg.get("stretch_exponent", 1.0)
                     terrain_scale_mask = finite.copy()
@@ -552,6 +601,8 @@ def draw_map_from_config(
                         dem_resampled,
                         finite_mask=terrain_scale_mask,
                         percentiles=elev_percentiles,
+                        elevation_mode=elevation_mode,
+                        elevation_cutoffs=elevation_cutoffs,
                         stretch=stretch,
                         exponent=stretch_exponent,
                     )
@@ -560,9 +611,17 @@ def draw_map_from_config(
                     terrain_rgb = cmap(terrain_norm)[..., :3]
 
                     invalid_rgb = np.array(plt.matplotlib.colors.to_rgb(face_fc))
+                    water_fill_fc = _get_layer_fill_color(
+                        cfg.get("layers", {}),
+                        ("ocean", "water"),
+                        face_fc,
+                    )
+                    water_fill_rgb = np.array(
+                        plt.matplotlib.colors.to_rgb(water_fill_fc)
+                    )
                     terrain_rgb[~finite] = invalid_rgb
                     if water_exclusion_mask is not None:
-                        terrain_rgb[water_exclusion_mask] = invalid_rgb
+                        terrain_rgb[water_exclusion_mask] = water_fill_rgb
 
                     blend_mode = terrain_cfg.get("blend_mode", "soft_light")
                     shade_strength = terrain_cfg.get("shade_strength", 0.6)
@@ -662,7 +721,7 @@ def draw_map_from_config(
                 # Polygon (Polygon or MultiPolygon)
                 if "polygon" in geom:
                     textured = False
-                    if not layer_palette:
+                    if not layer_palette and layer_cfg["layer"] == "ocean":
                         textured = _render_hillshade_textured_polygon_fill(
                             ax=ax,
                             gdf=subset,
@@ -743,7 +802,7 @@ def draw_map_from_config(
             geom_type_lower = layer_cfg["geometry_type"].lower()
             if "polygon" in geom_type_lower:
                 textured = False
-                if not layer_palette:
+                if not layer_palette and layer_cfg["layer"] == "ocean":
                     textured = _render_hillshade_textured_polygon_fill(
                         ax=ax,
                         gdf=rest,

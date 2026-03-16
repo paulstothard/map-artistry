@@ -106,7 +106,7 @@ def determine_strategy(area_km2):
         # City scale: < 10,000 km² (e.g., Edmonton ~7000 km²)
         tier = "city"
         dem_source = "copernicus"
-        sat_zoom = 11
+        sat_zoom = 12
         osm_source = "osm"
     elif area_km2 < 100_000:
         # Region scale: 10k-100k km² (e.g., Vancouver Island ~32,000 km²)
@@ -118,13 +118,13 @@ def determine_strategy(area_km2):
         # Country scale: 100k-1M km² (e.g., Alberta ~660,000 km²)
         tier = "country"
         dem_source = "cop90"
-        sat_zoom = 7
+        sat_zoom = 8
         osm_source = "natural-earth"
     else:
         # Continent scale: > 1M km² (e.g., Canada ~10M km²)
         tier = "continent"
         dem_source = "etopo1"
-        sat_zoom = 5
+        sat_zoom = 6
         osm_source = "natural-earth"
 
     buffer = determine_buffer(area_km2)

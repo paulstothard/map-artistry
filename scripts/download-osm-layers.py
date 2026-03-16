@@ -153,12 +153,13 @@ def download_and_cache_natural_earth(dataset_info, cache_dir="downloads/natural-
 
 
 def download_natural_earth_layer(poly, key, outdir):
-    """Download and clip Natural Earth layer to polygon boundary."""
+    """Download and clip Natural Earth layer to polygon boundary.
+    Returns True if successful, False if no features found."""
     print(f"> Downloading Natural Earth layer '{key}' …")
 
     if key not in NATURAL_EARTH_DATASETS:
-        print(f"  ⚠️  Natural Earth does not provide '{key}' layer, skipping")
-        return
+        print(f"  ⚠️  Natural Earth does not provide '{key}' layer")
+        return False
 
     dataset_info = NATURAL_EARTH_DATASETS[key]
 
@@ -177,7 +178,7 @@ def download_natural_earth_layer(poly, key, outdir):
 
         if clipped.empty:
             print(f"  – no features in '{key}' within boundary")
-            return
+            return False
 
         print(f"  → {len(clipped)} features in '{key}' layer")
 
@@ -186,9 +187,11 @@ def download_natural_earth_layer(poly, key, outdir):
         path = os.path.join(outdir, f"{output_name}.gpkg")
         clipped.to_file(path, driver="GPKG")
         print(f"  ✓ saved {path}")
+        return True
 
     except Exception as e:
         print(f"  ⚠️  Error downloading Natural Earth '{key}': {e}")
+        return False
 
 
 def download_layer(poly, key, tags, outdir):
@@ -286,6 +289,11 @@ def main():
         choices=["osm", "natural-earth"],
         help="Data source: osm (detailed, default) or natural-earth (simplified for large areas)",
     )
+    p.add_argument(
+        "--fallback-to-osm",
+        action="store_true",
+        help="When using natural-earth source, fallback to OSM for layers with no features",
+    )
     args = p.parse_args()
 
     if args.place:
@@ -308,16 +316,35 @@ def main():
 
         if args.source == "natural-earth":
             # Natural Earth data source
-            if key not in NATURAL_EARTH_DATASETS:
-                print(f"⚠️  Natural Earth does not provide '{key}', skipping")
-                continue
             start = time.time()
+            success = False
             try:
-                download_natural_earth_layer(poly, key, args.output_dir)
-                elapsed = time.time() - start
-                print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
+                success = download_natural_earth_layer(poly, key, args.output_dir)
+                if success:
+                    elapsed = time.time() - start
+                    print(
+                        f"✅ Completed '{key}' from Natural Earth in {elapsed:.1f} seconds"
+                    )
             except Exception as e:
-                print(f"❌ Error while downloading '{key}': {e}")
+                print(f"❌ Error while downloading '{key}' from Natural Earth: {e}")
+
+            # Fallback to OSM only if enabled and layer is supposed to be in Natural Earth
+            if (
+                args.fallback_to_osm
+                and not success
+                and key in NATURAL_EARTH_DATASETS
+                and key in TAG_MAP
+            ):
+                print(f"🔄 Falling back to OSM for '{key}'...")
+                start = time.time()
+                try:
+                    download_layer(poly, key, TAG_MAP[key], args.output_dir)
+                    elapsed = time.time() - start
+                    print(
+                        f"✅ Completed '{key}' from OSM fallback in {elapsed:.1f} seconds"
+                    )
+                except Exception as e:
+                    print(f"❌ Error while downloading '{key}' from OSM fallback: {e}")
         else:
             # OSM data source
             if key not in TAG_MAP:

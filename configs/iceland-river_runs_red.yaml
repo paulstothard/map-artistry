@@ -1,0 +1,7 @@
+# Overlay config for Iceland - River Runs Red scheme
+# Disables roads, ferry routes, and natural features
+layers:
+  road:
+    visible: false
+  natural:
+    visible: false

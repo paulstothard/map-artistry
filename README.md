@@ -24,19 +24,64 @@ just build "Edmonton, AB" coral
 just build "Vancouver Island, BC" natural
 just build --width 36 --height 24 "Iceland" river_runs_red
 just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
-just schemes                                          # list available color schemes
+
+# List available color schemes
+just schemes
 ```
 
-All settings (buffer size, DEM source, satellite zoom, layer source) are calculated automatically
-based on region size. Use `--buffer-km` to override the automatic buffer.
+All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated
+automatically based on region size. Use `--buffer-km` to override the automatic extra distance added
+around the region boundary, in kilometers.
 
 ## Color Schemes
 
-- `coral` — dark red elevation coloring, white water features
-- `river_runs_red` — dark brown/black elevation coloring, red water features
+- `coral` — red-toned scheme with white water features
+- `river_runs_red` — dark red/black scheme with red water features
 - `natural` — hypsometric tints (green → brown → grey → white), bluish water
 - `lava` — fiery elevation coloring, orange water
-- `satellite` — satellite imagery base with terrain overlay
+- `satellite` — satellite imagery base with vector/map layer overlays
+
+## Examples
+
+### British Columbia
+
+[![British Columbia - Coral](examples/thumbnails/british-columbia-coral.png)](examples/full/british-columbia-coral.png)
+[![British Columbia - River Runs Red](examples/thumbnails/british-columbia-river_runs_red.png)](examples/full/british-columbia-river_runs_red.png)
+[![British Columbia - Natural](examples/thumbnails/british-columbia-natural.png)](examples/full/british-columbia-natural.png)
+[![British Columbia - Lava](examples/thumbnails/british-columbia-lava.png)](examples/full/british-columbia-lava.png)
+[![British Columbia - Satellite](examples/thumbnails/british-columbia-satellite.png)](examples/full/british-columbia-satellite.png)
+
+### Edmonton, AB
+
+[![Edmonton - Coral](examples/thumbnails/edmonton-ab-coral.png)](examples/full/edmonton-ab-coral.png)
+[![Edmonton - River Runs Red](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
+[![Edmonton - Natural](examples/thumbnails/edmonton-ab-natural.png)](examples/full/edmonton-ab-natural.png)
+[![Edmonton - Lava](examples/thumbnails/edmonton-ab-lava.png)](examples/full/edmonton-ab-lava.png)
+[![Edmonton - Satellite](examples/thumbnails/edmonton-ab-satellite.png)](examples/full/edmonton-ab-satellite.png)
+
+### Iceland
+
+[![Iceland - Coral](examples/thumbnails/iceland-coral.png)](examples/full/iceland-coral.png)
+[![Iceland - River Runs Red](examples/thumbnails/iceland-river_runs_red.png)](examples/full/iceland-river_runs_red.png)
+[![Iceland - Natural](examples/thumbnails/iceland-natural.png)](examples/full/iceland-natural.png)
+[![Iceland - Lava](examples/thumbnails/iceland-lava.png)](examples/full/iceland-lava.png)
+[![Iceland - Satellite](examples/thumbnails/iceland-satellite.png)](examples/full/iceland-satellite.png)
+
+### Vancouver, BC
+
+[![Vancouver - Coral](examples/thumbnails/vancouver-bc-coral.png)](examples/full/vancouver-bc-coral.png)
+[![Vancouver - River Runs Red](examples/thumbnails/vancouver-bc-river_runs_red.png)](examples/full/vancouver-bc-river_runs_red.png)
+[![Vancouver - Natural](examples/thumbnails/vancouver-bc-natural.png)](examples/full/vancouver-bc-natural.png)
+[![Vancouver - Lava](examples/thumbnails/vancouver-bc-lava.png)](examples/full/vancouver-bc-lava.png)
+[![Vancouver - Satellite](examples/thumbnails/vancouver-bc-satellite.png)](examples/full/vancouver-bc-satellite.png)
+
+### Vancouver Island, BC
+
+[![Vancouver Island - Coral](examples/thumbnails/vancouver-island-bc-coral.png)](examples/full/vancouver-island-bc-coral.png)
+[![Vancouver Island - River Runs Red](examples/thumbnails/vancouver-island-bc-river_runs_red.png)](examples/full/vancouver-island-bc-river_runs_red.png)
+[![Vancouver Island - Natural](examples/thumbnails/vancouver-island-bc-natural.png)](examples/full/vancouver-island-bc-natural.png)
+[![Vancouver Island - Lava](examples/thumbnails/vancouver-island-bc-lava.png)](examples/full/vancouver-island-bc-lava.png)
+[![Vancouver Island - Satellite](examples/thumbnails/vancouver-island-bc-satellite.png)](examples/full/vancouver-island-bc-satellite.png)
 
 ## Customizing a Map
 
@@ -49,11 +94,11 @@ Create an overlay file named `configs/{location}-{scheme}.yaml` and place it in 
 build detects it automatically and deep-merges it over the base config to produce the final config.
 
 ```bash
-# 1. Build the map first to generate the base config
+# 1. Build the map first to generate the config files
 just build "Edmonton, AB" coral
 
-# 2. Copy the base config as your overlay starting point
-cp configs/edmonton-ab-base.yaml configs/edmonton-ab-coral.yaml
+# 2. Copy the current final config as your overlay starting point
+cp configs/edmonton-ab-coral-final.yaml configs/edmonton-ab-coral.yaml
 
 # 3. Edit it — change whatever you like; leave everything else as-is
 vi configs/edmonton-ab-coral.yaml
@@ -62,9 +107,11 @@ vi configs/edmonton-ab-coral.yaml
 just build "Edmonton, AB" coral
 ```
 
-Leaving unchanged keys in the overlay is fine — the merge just keeps the same value. The
-`{location}` is the region name lowercased with spaces and commas replaced by hyphens (e.g.
-`Edmonton, AB` → `edmonton-ab`).
+Leaving unchanged keys in the overlay is fine — the merge just keeps the same value. The base config
+is the raw generated config, while the `-final` file is the scheme-specific rendered config after
+overlay merging, so it is the better starting point if you want to copy what the map is currently
+using. The `{location}` is the region name lowercased with spaces and commas replaced by hyphens
+(e.g. `Edmonton, AB` → `edmonton-ab`).
 
 ## Ocean Data
 
