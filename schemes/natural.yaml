@@ -1,0 +1,319 @@
+map:
+  background:
+    fc: '#dfe7d6'
+    ec: '#dfe7d6'
+  scheme: natural
+  debug_water_hillshade: true
+  info:
+    text: ps
+    show: true
+    position: bottom-right
+    font: Gill Sans
+    fontsize: 8
+    color: '#2f3b2f'
+  hillshade:
+    azimuth: 315
+    altitude: 45
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    weights:
+    - 1.3
+    - 1.0
+    - 0.8
+    - 0.8
+    multidirectional: true
+    vert_exag: 2.0
+    cmap: gray
+    alpha: 0
+    sigma: 0.0
+    unsharp_radius: 2.0
+    unsharp_amount: 1.2
+    interpolation: bicubic
+    zorder: 0
+  water_hillshade:
+    blur_sigma: 6.0
+    contrast: 0.6
+    bias: 0.0
+  terrain:
+    visible: true
+    alpha: 1.0
+    zorder: 0
+    percentiles:
+    - 2
+    - 98
+    blend_mode: soft_light
+    shade_strength: 0.6
+    interpolation: bicubic
+    colors:
+    - '#4a8c4a'
+    - '#6ba05a'
+    - '#8fb46b'
+    - '#b3c87a'
+    - '#d4c87a'
+    - '#c8a850'
+    - '#b08040'
+    - '#8c5820'
+    - '#6e3c10'
+    - '#8a7868'
+    - '#b0a090'
+    - '#d8d0c8'
+    - '#ffffff'
+  satellite:
+    visible: false
+    opacity: 1.0
+water:
+  fc: '#4f7d95'
+  ec: '#4f7d95'
+  alpha: 1.0
+  zorder: 4
+  ew: 0
+  visible: true
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: true
+    MultiLineString: true
+    Polygon: true
+    MultiPolygon: true
+  palette: []
+  hillshade_texture:
+    visible: true
+    strength: 0.12
+    blur_sigma: 10.0
+    contrast: 0.25
+    bias: 0.0
+    interpolation: bilinear
+    max_texture_dim: 1024
+ocean:
+  fc: '#5a879f'
+  ec: '#5a879f'
+  alpha: 1.0
+  zorder: 4
+  ew: 0
+  visible: true
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: true
+    MultiLineString: true
+    Polygon: true
+    MultiPolygon: true
+  palette: []
+  hillshade_texture:
+    visible: true
+    strength: 0.08
+    blur_sigma: 10.0
+    contrast: 0.15
+    bias: 0.0
+    interpolation: bilinear
+    max_texture_dim: 1024
+waterway:
+  fc: '#4f7f98'
+  ec: '#4f7f98'
+  alpha: 1.0
+  ew: 0
+  zorder: 3
+  visible: true
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: true
+    MultiLineString: true
+    Polygon: true
+    MultiPolygon: true
+  palette: []
+  lw:
+    river: 1.0
+    canal: 0.0
+    stream: 0.4
+    drain: 0.0
+    ditch: 0.0
+    moat: 0.0
+    rapids: 0.0
+  default_lw: 0.3
+road:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  ew: 0
+  zorder: 6
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  lw:
+    motorway: 0.6
+    trunk: 0.52
+    primary: 0.45
+    secondary: 0.38
+    tertiary: 0.32
+    residential: 0.3
+    unclassified: 0.15
+    service: 0.15
+    living_street: 0.1
+    track: 0.1
+  default_lw: 0.15
+building:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 7
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+natural:
+  fc: '#7f9a70'
+  ec: '#7f9a70'
+  alpha: 0.0
+  zorder: 1
+  ew: 0
+  visible: true
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: true
+    MultiLineString: true
+    Polygon: true
+    MultiPolygon: true
+  palette: []
+landuse:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 2
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+railway:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 5
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  default_lw: 0.12
+transport:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 5
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  default_lw: 0.08
+places:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 5
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+poi:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 1
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  marker: o
+  size: 0.1
+pofw:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 5
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+traffic:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 5
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  default_lw: 0.15
+other:
+  fc: '#ffffff'
+  ec: '#ffffff'
+  alpha: 0.0
+  zorder: 0
+  ew: 0
+  visible: false
+  geometry_visibility:
+    Point: false
+    MultiPoint: false
+    LineString: false
+    MultiLineString: false
+    Polygon: false
+    MultiPolygon: false
+  palette: []
+  default_lw: 0.1

@@ -18,8 +18,45 @@ import argparse
 import sys
 
 
-# DESIGN_SETTINGS
-DESIGN_SETTINGS = {
+"""
+Load color schemes from YAML files in the schemes/ directory.
+Returns a dictionary mapping scheme names to their configurations.
+"""
+
+
+def load_schemes():
+    schemes_dir = Path(__file__).parent.parent / "schemes"
+    schemes = {}
+    
+    if not schemes_dir.exists():
+        raise FileNotFoundError(
+            f"Schemes directory not found: {schemes_dir}\n"
+            f"Please ensure the 'schemes/' directory exists in the project root."
+        )
+    
+    for scheme_file in schemes_dir.glob("*.yaml"):
+        scheme_name = scheme_file.stem
+        try:
+            with open(scheme_file, 'r') as f:
+                schemes[scheme_name] = yaml.safe_load(f)
+        except Exception as e:
+            print(f"Warning: Failed to load scheme '{scheme_name}': {e}", file=sys.stderr)
+    
+    if not schemes:
+        raise ValueError(
+            f"No valid color schemes found in {schemes_dir}\n"
+            f"Please ensure YAML scheme files exist in the 'schemes/' directory."
+        )
+    
+    return schemes
+
+
+# Load color schemes from external files on module initialization
+DESIGN_SETTINGS = load_schemes()
+
+# Below is the old hard-coded DESIGN_SETTINGS (kept for reference, can be deleted)
+"""
+OLD_DESIGN_SETTINGS = {
     "satellite": {
         "map": {
             "background": {"fc": "#05050d", "ec": "#05050d"},
@@ -2018,6 +2055,7 @@ DESIGN_SETTINGS = {
         },
     },
 }
+"""
 
 
 """

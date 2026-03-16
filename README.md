@@ -9,6 +9,17 @@ models. Generates high-resolution, stylized maps via a customizable pipeline.
   macOS)
 - Python 3
 
+## Getting Started
+
+First, download or clone the repository and switch to the project directory:
+
+```bash
+git clone https://github.com/stothard-group/map-artistry.git
+cd map-artistry
+```
+
+Then proceed with the setup steps below.
+
 ## Setup
 
 ```bash
@@ -20,9 +31,16 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
+# Build a map with default settings (24" × 24" @ 600 DPI, PNG format) - "coral" is the color scheme
 just build "Edmonton, AB" coral
+
+# Build with a different location and use the "natural" color scheme
 just build "Vancouver Island, BC" natural
+
+# Build with custom dimensions using the "river_runs_red" color scheme
 just build --width 36 --height 24 "Iceland" river_runs_red
+
+# Build with custom dimensions, DPI, format, boundary buffer, and "natural" color scheme
 just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
 
 # List available color schemes
@@ -122,6 +140,46 @@ overlay merging, so it is the better starting point if you want to copy what the
 using. The `{location}` is the region name lowercased with spaces and commas replaced by hyphens
 (e.g. `Edmonton, AB` → `edmonton-ab`).
 
+## Adding New Color Schemes
+
+To create a new color scheme, simply add a new YAML file to the `schemes/` directory. Each color
+scheme defines styling for all map layers (terrain, hillshade, water, roads, buildings, etc.),
+including colors, visibility, opacity, line weights, and more.
+
+The easiest approach is to copy an existing scheme file (e.g., `coral.yaml`, `natural.yaml`,
+`glacier.yaml`) as a starting point, rename it, and modify the colors and settings to your liking:
+
+```bash
+# Copy an existing scheme as a template
+cp schemes/coral.yaml schemes/my_scheme.yaml
+
+# Edit the new scheme file
+vi schemes/my_scheme.yaml
+
+# The scheme is now available immediately
+just build "Location" my_scheme
+```
+
+The scheme file should contain a YAML structure with `map` and layer-specific settings. For example:
+
+```yaml
+map:
+  background:
+    fc: '#ffffff'
+    ec: '#ffffff'
+  scheme: my_scheme
+  # ... terrain, hillshade, satellite settings
+water:
+  fc: '#0000ff'
+  ec: '#0000ff'
+  alpha: 1.0
+  # ... other water settings
+# ... other layers (waterway, road, building, etc.)
+```
+
+After adding your YAML file to `schemes/`, the new color scheme is automatically discovered and can
+be used in builds without any code changes.
+
 ## Ocean Data
 
 For coastal regions, the pipeline can derive an ocean layer from the **World Seas (IHO Sea Areas)**
@@ -133,6 +191,11 @@ this directory is absent.
 ## Project Structure
 
 ```text
+schemes/                     # Color scheme definitions (YAML files)
+  coral.yaml                 # Coral color scheme
+  natural.yaml               # Natural color scheme
+  # ... other schemes
+
 downloads/
   regions/                  # Per-region data (auto-downloaded)
     edmonton-ab/
