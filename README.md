@@ -14,7 +14,7 @@ models. Generates high-resolution, stylized maps via a customizable pipeline.
 First, download or clone the repository and switch to the project directory:
 
 ```bash
-git clone https://github.com/stothard-group/map-artistry.git
+git clone https://github.com/paulstothard/map-artistry.git
 cd map-artistry
 ```
 
