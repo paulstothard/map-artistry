@@ -94,6 +94,18 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 
 ## Examples
 
+These README examples are reduced-resolution previews (`400×400` thumbnails linking to `1200×1200`
+images); for full-detail output, increase build settings (default `24" × 24" @ 600 DPI` is about
+`14400×14400`) and use `--format pdf` if needed.
+
+### Resolution Example (Edmonton, River Runs Red)
+
+Left: standard full-map preview thumbnail. Right: crop-first detail preview thumbnail from the same
+render, used to highlight local detail.
+
+[![Edmonton - River Runs Red (Full Map)](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
+[![Edmonton - River Runs Red (Detail View)](examples/thumbnails/edmonton-ab-river_runs_red-detail.png)](examples/full/edmonton-ab-river_runs_red-detail.png)
+
 ### Banff, AB
 
 [![Banff - Coral](examples/thumbnails/banff-ab-coral.png)](examples/full/banff-ab-coral.png)

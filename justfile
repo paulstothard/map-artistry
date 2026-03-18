@@ -332,6 +332,7 @@ _build-map region scheme width height dpi format buffer:
         "$CONFIG_FINAL" \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$OUTPUT_FILE" \
+        --format "$FORMAT" \
         -W "$WIDTH" \
         -H "$HEIGHT" \
         --dpi "$DPI"
