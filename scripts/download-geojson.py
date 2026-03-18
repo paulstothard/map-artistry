@@ -90,9 +90,7 @@ def shortest_longitude_interval(west, east):
 def build_bbox_geometry(south, north, west, east):
     """Build a valid bbox geometry, splitting across antimeridian when needed."""
     if south >= north:
-        raise ValueError(
-            f"Invalid latitude bounds: south={south}, north={north}"
-        )
+        raise ValueError(f"Invalid latitude bounds: south={south}, north={north}")
 
     lon_span = east - west
     if lon_span <= 0:
@@ -127,9 +125,7 @@ def validate_geometry(geom):
 
     minx, miny, maxx, maxy = geom.bounds
     if minx < -180.0 - 1e-6 or maxx > 180.0 + 1e-6:
-        raise ValueError(
-            f"Generated longitude bounds out of range: [{minx}, {maxx}]"
-        )
+        raise ValueError(f"Generated longitude bounds out of range: [{minx}, {maxx}]")
     if miny < -90.0 - 1e-6 or maxy > 90.0 + 1e-6:
         raise ValueError(f"Generated latitude bounds out of range: [{miny}, {maxy}]")
 

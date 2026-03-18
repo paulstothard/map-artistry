@@ -56,18 +56,17 @@ around the region boundary, in kilometers.
 The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This
 controls DEM source, satellite zoom, and vector layer source.
 
-| Tier | Area (km²) | DEM source | Satellite zoom | Vector layer source |
-| --- | ---: | --- | ---: | --- |
-| city | `< 10,000` | `copernicus` | `12` | `osm` |
-| region | `10,000 - 100,000` | `srtm` | `9` | `osm` |
-| country | `100,000 - 1,000,000` | `cop90` | `8` | `natural-earth` |
-| continent | `>= 1,000,000` | `etopo1` | `6` | `natural-earth` |
+| Tier      |            Area (km²) | DEM source   | Satellite zoom | Vector layer source |
+| --------- | --------------------: | ------------ | -------------: | ------------------- |
+| city      |            `< 10,000` | `copernicus` |           `12` | `osm`               |
+| region    |    `10,000 - 100,000` | `srtm`       |            `9` | `osm`               |
+| country   | `100,000 - 1,000,000` | `cop90`      |            `8` | `natural-earth`     |
+| continent |        `>= 1,000,000` | `etopo1`     |            `6` | `natural-earth`     |
 
-Default buffer size also scales by area (`5`, `50`, `100`, `200` km), unless you set
-`--buffer-km`.
+Default buffer size also scales by area (`5`, `50`, `100`, `200` km), unless you set `--buffer-km`.
 
-Color schemes also control layer visibility/opacity in `schemes/*.yaml`. The order below matches
-the example image order:
+Color schemes also control layer visibility/opacity in `schemes/*.yaml`. The order below matches the
+example image order:
 
 - `coral` — hides natural and land use layers
 - `river_runs_red` — hides natural and land use layers
@@ -87,10 +86,8 @@ Listed in the same order as each example image row.
 - `natural` — green→brown→grey→white terrain, blue water; hides roads, buildings, and land use
   layers
 - `lava` — fiery terrain, orange water; hides roads, buildings, and land use layers
-- `glacier` — cool grey-green terrain, blue-grey water; hides roads, buildings, and land use
-  layers
-- `satellite` — satellite imagery base with vector/map overlays; hides natural and land use
-  layers
+- `glacier` — cool grey-green terrain, blue-grey water; hides roads, buildings, and land use layers
+- `satellite` — satellite imagery base with vector/map overlays; hides natural and land use layers
 
 **Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street
 network), buildings (footprints), water/waterway (bodies of water and streams).

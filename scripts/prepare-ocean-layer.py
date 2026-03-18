@@ -81,7 +81,11 @@ def main() -> None:
             f"using primary segment bounds: {primary_segment}"
         )
 
-    bbox = tuple(primary_segment) if primary_segment is not None else tuple(boundary.total_bounds)
+    bbox = (
+        tuple(primary_segment)
+        if primary_segment is not None
+        else tuple(boundary.total_bounds)
+    )
     ocean = read_ocean(args.ocean_boundaries, bbox)
 
     if ocean.empty:

@@ -269,7 +269,9 @@ def main():
         seen_tiles = set()
         tiles = []
         for minx, miny, maxx, maxy in bbox_segments:
-            for tile_name, lat, lon in get_copernicus_tile_names(minx, miny, maxx, maxy):
+            for tile_name, lat, lon in get_copernicus_tile_names(
+                minx, miny, maxx, maxy
+            ):
                 if tile_name in seen_tiles:
                     continue
                 seen_tiles.add(tile_name)
