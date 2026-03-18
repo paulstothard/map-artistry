@@ -121,15 +121,6 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 [![Cape Town - Glacier](examples/thumbnails/cape-town-south-africa-glacier.png)](examples/full/cape-town-south-africa-glacier.png)
 [![Cape Town - Satellite](examples/thumbnails/cape-town-south-africa-satellite.png)](examples/full/cape-town-south-africa-satellite.png)
 
-### Crete, Greece
-
-[![Crete - Coral](examples/thumbnails/crete-greece-coral.png)](examples/full/crete-greece-coral.png)
-[![Crete - River Runs Red](examples/thumbnails/crete-greece-river_runs_red.png)](examples/full/crete-greece-river_runs_red.png)
-[![Crete - Natural](examples/thumbnails/crete-greece-natural.png)](examples/full/crete-greece-natural.png)
-[![Crete - Lava](examples/thumbnails/crete-greece-lava.png)](examples/full/crete-greece-lava.png)
-[![Crete - Glacier](examples/thumbnails/crete-greece-glacier.png)](examples/full/crete-greece-glacier.png)
-[![Crete - Satellite](examples/thumbnails/crete-greece-satellite.png)](examples/full/crete-greece-satellite.png)
-
 ### Edmonton, AB
 
 [![Edmonton - Coral](examples/thumbnails/edmonton-ab-coral.png)](examples/full/edmonton-ab-coral.png)
@@ -139,15 +130,6 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 [![Edmonton - Glacier](examples/thumbnails/edmonton-ab-glacier.png)](examples/full/edmonton-ab-glacier.png)
 [![Edmonton - Satellite](examples/thumbnails/edmonton-ab-satellite.png)](examples/full/edmonton-ab-satellite.png)
 
-### Hokkaido, Japan
-
-[![Hokkaido - Coral](examples/thumbnails/hokkaido-japan-coral.png)](examples/full/hokkaido-japan-coral.png)
-[![Hokkaido - River Runs Red](examples/thumbnails/hokkaido-japan-river_runs_red.png)](examples/full/hokkaido-japan-river_runs_red.png)
-[![Hokkaido - Natural](examples/thumbnails/hokkaido-japan-natural.png)](examples/full/hokkaido-japan-natural.png)
-[![Hokkaido - Lava](examples/thumbnails/hokkaido-japan-lava.png)](examples/full/hokkaido-japan-lava.png)
-[![Hokkaido - Glacier](examples/thumbnails/hokkaido-japan-glacier.png)](examples/full/hokkaido-japan-glacier.png)
-[![Hokkaido - Satellite](examples/thumbnails/hokkaido-japan-satellite.png)](examples/full/hokkaido-japan-satellite.png)
-
 ### Iceland
 
 [![Iceland - Coral](examples/thumbnails/iceland-coral.png)](examples/full/iceland-coral.png)
@@ -156,15 +138,6 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 [![Iceland - Lava](examples/thumbnails/iceland-lava.png)](examples/full/iceland-lava.png)
 [![Iceland - Glacier](examples/thumbnails/iceland-glacier.png)](examples/full/iceland-glacier.png)
 [![Iceland - Satellite](examples/thumbnails/iceland-satellite.png)](examples/full/iceland-satellite.png)
-
-### New Zealand
-
-[![New Zealand - Coral](examples/thumbnails/new-zealand-coral.png)](examples/full/new-zealand-coral.png)
-[![New Zealand - River Runs Red](examples/thumbnails/new-zealand-river_runs_red.png)](examples/full/new-zealand-river_runs_red.png)
-[![New Zealand - Natural](examples/thumbnails/new-zealand-natural.png)](examples/full/new-zealand-natural.png)
-[![New Zealand - Lava](examples/thumbnails/new-zealand-lava.png)](examples/full/new-zealand-lava.png)
-[![New Zealand - Glacier](examples/thumbnails/new-zealand-glacier.png)](examples/full/new-zealand-glacier.png)
-[![New Zealand - Satellite](examples/thumbnails/new-zealand-satellite.png)](examples/full/new-zealand-satellite.png)
 
 ### Oahu, HI
 
@@ -192,15 +165,6 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 [![San Francisco - Lava](examples/thumbnails/san-francisco-ca-lava.png)](examples/full/san-francisco-ca-lava.png)
 [![San Francisco - Glacier](examples/thumbnails/san-francisco-ca-glacier.png)](examples/full/san-francisco-ca-glacier.png)
 [![San Francisco - Satellite](examples/thumbnails/san-francisco-ca-satellite.png)](examples/full/san-francisco-ca-satellite.png)
-
-### Scotland
-
-[![Scotland - Coral](examples/thumbnails/scotland-coral.png)](examples/full/scotland-coral.png)
-[![Scotland - River Runs Red](examples/thumbnails/scotland-river_runs_red.png)](examples/full/scotland-river_runs_red.png)
-[![Scotland - Natural](examples/thumbnails/scotland-natural.png)](examples/full/scotland-natural.png)
-[![Scotland - Lava](examples/thumbnails/scotland-lava.png)](examples/full/scotland-lava.png)
-[![Scotland - Glacier](examples/thumbnails/scotland-glacier.png)](examples/full/scotland-glacier.png)
-[![Scotland - Satellite](examples/thumbnails/scotland-satellite.png)](examples/full/scotland-satellite.png)
 
 ### Vancouver, BC
 

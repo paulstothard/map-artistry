@@ -5,15 +5,11 @@ REGIONS=(
   "Banff, AB"
   "British Columbia"
   "Cape Town, South Africa"
-  "Crete, Greece"
   "Edmonton, AB"
-  "Hokkaido, Japan"
   "Iceland"
-  "New Zealand"
   "Oahu, HI"
   "Patagonia"
   "San Francisco, CA"
-  "Scotland"
   "Vancouver, BC"
   "Vancouver Island, BC"
   "Vestland, Norway"
@@ -23,11 +19,6 @@ WIDTH=24
 HEIGHT=24
 DPI=600
 FORMAT="png"
-
-# calculate-area.py (determine_buffer) will usually recommend 100km for New Zealand
-# from place estimation. We use a larger fixed buffer for the example script so
-# both islands stay comfortably in frame on square outputs.
-NEW_ZEALAND_BUFFER_KM=200
 
 [ -d "venv" ] && source venv/bin/activate
 
@@ -79,7 +70,6 @@ done
 
 echo ""
 echo "  Settings: ${WIDTH}x${HEIGHT} inches @ ${DPI} DPI, format: $FORMAT"
-echo "  New Zealand buffer override: ${NEW_ZEALAND_BUFFER_KM}km"
 echo "  Data downloads : downloads/regions/"
 echo "  Configs        : configs/"
 echo "  Maps           : output/"
@@ -105,9 +95,6 @@ for region in "${REGIONS[@]}"; do
     echo "▶ $region — $scheme"
 
     build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
-    if [ "$region" = "New Zealand" ]; then
-      build_args+=(--buffer-km "$NEW_ZEALAND_BUFFER_KM")
-    fi
 
     just build "${build_args[@]}" "$region" "$scheme"
   done
