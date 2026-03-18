@@ -1,0 +1,1838 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#aa332e'
+    fc: '#aa332e'
+  hillshade:
+    alpha: 0
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gist_heat
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 1.0
+    vert_exag: 1.0
+    weights:
+    - 1.2
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#000000'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: true
+    text: ps
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/norway/satellite.tif
+  scheme: coral
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#6a0000'
+    - '#7e0000'
+    - '#920606'
+    - '#a81414'
+    - '#bc2424'
+    - '#ce3434'
+    - '#dd4a4a'
+    - '#ea6666'
+    - '#f18585'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.4
+    visible: false
+    zorder: 0
+  dem: downloads/regions/norway/dem.tif
+layers:
+  landuse:
+    file: downloads/regions/norway/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      scalerank:
+      - '8'
+      - '9'
+      - '6'
+      - '7'
+      - '5'
+      - '3'
+      - '4'
+      - '2'
+      featurecla:
+      - Urban area
+      area_sqkm: 7430
+      min_zoom:
+      - '7.6'
+      - '7.7'
+      - '6.0'
+      - '7.0'
+      - '5.0'
+      - '3.7'
+      - '4.0'
+      - '3.6'
+  natural__Polygon:
+    file: downloads/regions/norway/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Island group
+      - Island
+      - Plain
+      - Range/mtn
+      - Wetlands
+      - Plateau
+      - Coast
+      - Depression
+      - Desert
+      - Geoarea
+      - Delta
+      - Dragons-be-here
+      - Valley
+      - Basin
+      - Pen/cape
+      - Lowland
+      NAME: 337
+      NAMEALT:
+      - IS. MALVINAS
+      - Geocode fails routed to 0,0
+      - Sea of Sand
+      - Bear I.
+      - KYZYLKUM DESERT
+      - New Land
+      - Faroe Is.
+      - Disko I.
+      REGION:
+      - Seven seas (open ocean)
+      - South America
+      - Africa
+      - Europe
+      - Asia
+      - North America
+      SUBREGION:
+      - Southern Atlantic Ocean
+      - Falkland Islands
+      - North Atlantic Ocean
+      - Mediterranean Sea
+      - Southern Indian Ocean
+      - Indian Ocean
+      - Comores
+      - South Atlantic Ocean
+      - Mascarene Islands
+      - Seychelles
+      - Arabian Sea
+      - Arctic Ocean
+      - British Isles
+      - Iceland
+      - Greenland
+      MIN_LABEL:
+      - '6.0'
+      - '5.4'
+      - '4.0'
+      - '3.5'
+      - '5.0'
+      - '5.3'
+      - '6.7'
+      - '4.7'
+      - '5.7'
+      - '3.6'
+      - '2.0'
+      - '3.7'
+      - '3.0'
+      MAX_LABEL:
+      - '11.0'
+      - '10.0'
+      - '8.0'
+      - '7.0'
+      - '9.0'
+      - '12.0'
+      - '6.0'
+      - '5.0'
+      SCALERANK:
+      - '6'
+      - '5'
+      - '3'
+      - '2'
+      - '4'
+      - '7'
+      - '100'
+      - '1'
+      LABEL: 240
+      WIKIDATAID: 293
+      NAME_AR: 335
+      NAME_BN: 335
+      NAME_DE: 335
+      NAME_EN: 335
+      NAME_ES: 337
+      NAME_FR: 336
+      NAME_EL: 337
+      NAME_HI: 336
+      NAME_HU: 336
+      NAME_ID: 337
+      NAME_IT: 336
+      NAME_JA: 335
+      NAME_KO: 336
+      NAME_NL: 334
+      NAME_PL: 334
+      NAME_PT: 335
+      NAME_RU: 333
+      NAME_SV: 336
+      NAME_TR: 336
+      NAME_VI: 336
+      NAME_ZH: 335
+      NE_ID: 337
+      NAME_FA: 335
+      NAME_HE: 336
+      NAME_UK: 336
+      NAME_UR: 337
+      NAME_ZHT: 335
+  natural__MultiPolygon:
+    file: downloads/regions/norway/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Wetlands
+      - Range/mtn
+      - Plateau
+      - Continent
+      - Basin
+      - Desert
+      - Coast
+      - Delta
+      - Island
+      - Plain
+      - Pen/cape
+      - Geoarea
+      - Lowland
+      - Tundra
+      NAME: 53
+      NAMEALT: []
+      REGION:
+      - South America
+      - Africa
+      - Europe
+      - Asia
+      - North America
+      SUBREGION:
+      - Mediterranean Sea
+      - Indian Ocean
+      - British Isles
+      - Greenland
+      MIN_LABEL:
+      - '5.3'
+      - '4.0'
+      - '0.0'
+      - '2.0'
+      - '5.4'
+      - '3.0'
+      - '6.0'
+      - '3.5'
+      - '5.0'
+      MAX_LABEL:
+      - '9.0'
+      - '7.0'
+      - '4.0'
+      - '6.0'
+      - '10.0'
+      - '8.0'
+      SCALERANK:
+      - '4'
+      - '2'
+      - '0'
+      - '1'
+      - '5'
+      - '3'
+      LABEL:
+      - BRAZILIAN HIGHLANDS
+      - SOUTH AMERICA
+      - AMAZON BASIN
+      - Malta
+      - Sardegna
+      - Skeleton Coast
+      - Niger Delta
+      - AFRICA
+      - SAHARA
+      - Calabria
+      - MADAGASCAR
+      - SRI LANKA
+      - Coromandel Coast
+      - ARABIAN PENINSULA
+      - ASIA
+      - TIAN SHAN
+      - EUROPE
+      - Zealand
+      - JUTLAND
+      - Lofoten
+      - "Vester\xE5len"
+      - Volga Delta
+      - Tarbagatay Ra.
+      - IRELAND
+      - GREAT BRITAIN
+      - CANADIAN SHIELD
+      - NORTH AMERICA
+      WIKIDATAID:
+      - Q559784
+      - Q118899
+      - Q18
+      - Q244451
+      - Q375816
+      - Q10264912
+      - Q12837
+      - Q193896
+      - Q1462
+      - Q1135237
+      - Q29412
+      - Q15
+      - Q6583
+      - Q859018
+      - Q23522
+      - Q528042
+      - Q189915
+      - Q7463928
+      - Q4526612
+      - Q473181
+      - Q182561
+      - Q40556
+      - Q31945
+      - Q11767
+      - Q48
+      - Q5474
+      - Q46
+      - Q560549
+      - Q21195
+      - Q25535
+      - Q25389
+      - Q186822
+      - Q935795
+      - Q1431507
+      - Q737789
+      - Q2016601
+      - Q128500
+      - Q22890
+      - Q23666
+      - Q76034
+      - Q380307
+      - Q3695354
+      - Q49
+      - Q17515152
+      - Q223
+      - Q3984554
+      - Q11227746
+      NAME_AR: 53
+      NAME_BN: 53
+      NAME_DE: 53
+      NAME_EN: 53
+      NAME_ES: 53
+      NAME_FR: 53
+      NAME_EL: 53
+      NAME_HI: 53
+      NAME_HU: 53
+      NAME_ID: 53
+      NAME_IT: 53
+      NAME_JA: 53
+      NAME_KO: 53
+      NAME_NL: 53
+      NAME_PL: 53
+      NAME_PT: 53
+      NAME_RU: 53
+      NAME_SV: 53
+      NAME_TR: 53
+      NAME_VI: 53
+      NAME_ZH: 53
+      NE_ID: 53
+      NAME_FA: 52
+      NAME_HE: 53
+      NAME_UK: 53
+      NAME_UR: 53
+      NAME_ZHT: 53
+  ocean__Polygon:
+    file: downloads/regions/norway/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0.1
+    attributes:
+      NAME:
+      - Indian Ocean
+      - Mozambique Channel
+      - Laccadive Sea
+      - Bay of Bengal
+      - Arabian Sea
+      - Gulf of Aden
+      - Red Sea
+      - Gulf of Oman
+      - Persian Gulf
+      - Gulf of Aqaba
+      - Rio de La Plata
+      - Gulf of Guinea
+      - North Atlantic Ocean
+      - Alboran Sea
+      - Strait of Gibraltar
+      - Bay of Biscay
+      - Celtic Sea
+      - English Channel
+      - Mediterranean Sea - Eastern Basin
+      - Aegean Sea
+      - Ionian Sea
+      - Mediterranean Sea - Western Basin
+      - Balearic (Iberian Sea)
+      - Sea of Marmara
+      - Tyrrhenian Sea
+      - Adriatic Sea
+      - Ligurian Sea
+      - North Sea
+      - Gulf of Suez
+      - Black Sea
+      - Sea of Azov
+      - White Sea
+      - Barentsz Sea
+      - Bristol Channel
+      - Irish Sea and St. George's Channel
+      - Inner Seas off the West Coast of Scotland
+      - Davis Strait
+      - Greenland Sea
+      - Baltic Sea
+      - Kattegat
+      - Gulf of Riga
+      - Skagerrak
+      - Gulf of Finland
+      - Gulf of Bothnia
+      - Norwegian Sea
+      ID:
+      - '45'
+      - 45A
+      - '42'
+      - '43'
+      - '39'
+      - '38'
+      - '37'
+      - '40'
+      - '41'
+      - '36'
+      - '33'
+      - '34'
+      - '23'
+      - 28b
+      - 28a
+      - '22'
+      - 21A
+      - '21'
+      - 28B
+      - 28h
+      - 28f
+      - 28A
+      - 28c
+      - '29'
+      - 28e
+      - 28g
+      - 28d
+      - '4'
+      - '35'
+      - '30'
+      - '31'
+      - '8'
+      - '7'
+      - '20'
+      - '19'
+      - '18'
+      - '15'
+      - '5'
+      - '1'
+      - '2'
+      - 1c
+      - '3'
+      - 1b
+      - 1a
+      - '6'
+      Longitude:
+      - '79.20858601429'
+      - '40.87724446624'
+      - '75.18235087717'
+      - '87.45442549439'
+      - '63.99431793475'
+      - '47.6527871243'
+      - '38.73504211248'
+      - '58.91105531904'
+      - '52.04671763255'
+      - '34.67930528945'
+      - '-56.84247798667'
+      - '3.0508982376'
+      - '-37.62424445723'
+      - '-3.32409719195'
+      - '-5.68521917467'
+      - '-3.93513546256'
+      - '-7.68357444004'
+      - '-2.06339505792'
+      - '23.16774074437'
+      - '25.17461340306'
+      - '18.62902944017'
+      - '5.17693940631'
+      - '1.94994122114'
+      - '28.15292137482'
+      - '12.14189540681'
+      - '16.03558558981'
+      - '8.91394655986'
+      - '2.73786023593'
+      - '33.21991139699'
+      - '34.1751334089'
+      - '36.75425188453'
+      - '39.3148169263'
+      - '42.11782660718'
+      - '-4.01935441169'
+      - '-4.79817510558'
+      - '-6.43991071135'
+      - '-58.17611330843'
+      - '-8.303164223'
+      - '18.07523542985'
+      - '11.30411886559'
+      - '23.38102817126'
+      - '9.64191545629'
+      - '29.61939076744'
+      - '20.77188093442'
+      - '4.56651077422'
+      Latitude:
+      - '-32.72458381046'
+      - '-19.30409503319'
+      - '6.93369732161'
+      - '13.17322167025'
+      - '13.33512865951'
+      - '12.5205639199'
+      - '20.3157309608'
+      - '24.49666927478'
+      - '26.80330729914'
+      - '28.67600859434'
+      - '-35.11333788123'
+      - '3.25469544082'
+      - '29.4800342448'
+      - '35.91213990654'
+      - '35.97981274369'
+      - '45.2244285966'
+      - '49.589876844'
+      - '49.8612179473'
+      - '34.07506909285'
+      - '37.85235867512'
+      - '38.01785115746'
+      - '39.310519309'
+      - '40.0832079791'
+      - '40.67040224405'
+      - '40.11983476086'
+      - '42.7293839579'
+      - '43.7222954377'
+      - '56.4239952035'
+      - '28.54056389825'
+      - '43.2765240426'
+      - '46.1630494553'
+      - '66.22301256939'
+      - '74.7239250592'
+      - '51.39222851462'
+      - '53.4459472219'
+      - '56.40539933626'
+      - '64.71774818317'
+      - '74.2502716466'
+      - '56.66584337902'
+      - '56.3431976427'
+      - '57.93519159804'
+      - '58.1397547443'
+      - '60.53734872859'
+      - '62.63224634388'
+      - '68.2156500845'
+      min_X:
+      - '20.00261595272'
+      - '32.43062305431'
+      - '71.98242'
+      - '78.89822006251'
+      - '51.02230715795'
+      - '42.51346206652'
+      - '33.63937130978'
+      - '56.26802194086'
+      - '47.70244097687'
+      - '34.32734751727'
+      - '-59.76565611324'
+      - '-7.72633564497'
+      - '-83.01491415486'
+      - '-5.35376381835'
+      - '-6.03254911565'
+      - '-7.89681243874'
+      - '-11.5'
+      - '-5.70872848068'
+      - '10.01584875592'
+      - '22.53159654165'
+      - '15.0845692161'
+      - '-2.19338870053'
+      - '-0.36589491382'
+      - '26.17422051992'
+      - '8.64848077337'
+      - '12.06522584'
+      - '7.53899633911'
+      - '-4.44537067412'
+      - '32.34285390358'
+      - '27.44371211572'
+      - '34.51633667909'
+      - '32.13250935053'
+      - '16.58178101778'
+      - '-4.92431735966'
+      - '-6.56905257671'
+      - '-8.24960118869'
+      - '-70.14320135106'
+      - '-35.986789942'
+      - '9.52227815476'
+      - '9.36559641892'
+      - '21.72510475582'
+      - '6.99822115858'
+      - '22.91001232057'
+      - '17.03891694506'
+      - '-13.50065481697'
+      min_Y:
+      - '-60.0'
+      - '-26.84240232943'
+      - '-0.69315814984'
+      - '5.73397101601'
+      - '-0.70336914037'
+      - '10.37809920322'
+      - '12.45626235033'
+      - '22.4749455453'
+      - '23.95901381933'
+      - '27.9000855922'
+      - '-36.35885643997'
+      - '-0.93603257151'
+      - '-0.00256264235'
+      - '35.07066845868'
+      - '35.77597653839'
+      - '43.27442812915'
+      - '46.50056578772'
+      - '48.50002086187'
+      - '30.06808678052'
+      - '35.10948944128'
+      - '36.40896639521'
+      - '35.57231724235'
+      - '38.64731110912'
+      - '39.99890852001'
+      - '37.80146145778'
+      - '39.74309780157'
+      - '42.86442416387'
+      - '50.99536466555'
+      - '27.45'
+      - '40.90875351446'
+      - '45.10090956338'
+      - '60.95104753991'
+      - '65.88276755848'
+      - '50.98893535109'
+      - '51.90413734476'
+      - '54.33640234359'
+      - '59.89154183839'
+      - '65.00696182253'
+      - '52.65351867675'
+      - '54.63373190945'
+      - '56.80457985408'
+      - '57.09880185142'
+      - '59.21459424453'
+      - '59.72087454752'
+      - '60.86081802843'
+      max_X:
+      - '146.8982192222'
+      - '49.24198188587'
+      - '80.58879327819'
+      - '95.04884011645'
+      - '74.335017443'
+      - '51.28665992889'
+      - '43.50552117856'
+      - '61.78247284894'
+      - '57.3399815557'
+      - '35.00137317153'
+      - '-54.94302365272'
+      - '10.18268692506'
+      - '6.61996705678'
+      - '-1.18826270086'
+      - '-5.2787053648'
+      - '-0.14624464477'
+      - '-4.1380765434'
+      - '1.93090510399'
+      - '36.21572947504'
+      - '28.33056116127'
+      - '23.22467541714'
+      - '12.42424750352'
+      - '4.29021512693'
+      - '29.94218587848'
+      - '16.22312212029'
+      - '20.02082765078'
+      - '9.85205805284'
+      - '12.00594234456'
+      - '34.22776354528'
+      - '42.35496044187'
+      - '40.42968749968'
+      - '45.6715829374'
+      - '68.57826318668'
+      - '-2.34539175033'
+      - '-2.63917434252'
+      - '-4.45862984669'
+      - '-44.46176493201'
+      - '17.48220300686'
+      - '23.51168835184'
+      - '13.06291067639'
+      - '24.61678564584'
+      - '11.91655933884'
+      - '37.46891355552'
+      - '25.48657846422'
+      - '25.78865038513'
+      max_Y:
+      - '10.44499945636'
+      - '-10.4988721851'
+      - '14.79267025033'
+      - '24.37766897644'
+      - '25.5973770618'
+      - '15.21967667014'
+      - '28.13954293736'
+      - '25.94343067192'
+      - '31.18585503098'
+      - '29.54945516592'
+      - '-31.52343749974'
+      - '6.62269365749'
+      - '68.63871574364'
+      - '36.841517806'
+      - '36.18694186248'
+      - '47.98778772322'
+      - '52.39568984501'
+      - '51.16600370667'
+      - '37.80146145778'
+      - '41.09132552156'
+      - '40.52065920816'
+      - '43.92396748071'
+      - '41.87484551501'
+      - '41.23293495342'
+      - '44.10945737326'
+      - '45.8089137081'
+      - '44.42720294006'
+      - '61.01702284843'
+      - '30.06816749337'
+      - '47.31029641635'
+      - '47.37639510645'
+      - '68.65684270321'
+      - '81.85123443572'
+      - '51.81888794922'
+      - '55.00417602071'
+      - '58.62454384285'
+      - '70.07213914361'
+      - '82.78065447116'
+      - '59.93861675286'
+      - '58.07746934863'
+      - '59.21482083532'
+      - '59.91914391516'
+      - '62.91577494176'
+      - '67.08058834048'
+      - '76.56454739268'
+      area:
+      - '58230954'
+      - '1394283'
+      - '846351'
+      - '2207565'
+      - '4241184'
+      - '263754'
+      - '449811'
+      - '111892'
+      - '244657'
+      - '3555'
+      - '31797'
+      - '754844'
+      - '34507128'
+      - '54711'
+      - '1664'
+      - '174437'
+      - '215080'
+      - '81419'
+      - '1173640'
+      - '191305'
+      - '171778'
+      - '476707'
+      - '80078'
+      - '11675'
+      - '217465'
+      - '139454'
+      - '16949'
+      - '524493'
+      - '10438'
+      - '423026'
+      - '39547'
+      - '90531'
+      - '1408430'
+      - '5748'
+      - '45922'
+      - '44260'
+      - '749737'
+      - '1186456'
+      - '215863'
+      - '35447'
+      - '18692'
+      - '32040'
+      - '57077'
+      - '113419'
+      - '1437096'
+      MRGID:
+      - '1904'
+      - '4261'
+      - '4269'
+      - '4273'
+      - '4268'
+      - '4265'
+      - '4264'
+      - '4267'
+      - '4266'
+      - '4263'
+      - '4325'
+      - '4286'
+      - '1912'
+      - '3324'
+      - '3346'
+      - '2359'
+      - '2351'
+      - '2389'
+      - '4280'
+      - '3315'
+      - '3351'
+      - '4279'
+      - '3322'
+      - '3369'
+      - '3386'
+      - '3314'
+      - '3363'
+      - '2350'
+      - '4262'
+      - '3319'
+      - '3320'
+      - '4248'
+      - '4247'
+      - '3141'
+      - '2357'
+      - '4283'
+      - '4250'
+      - '2356'
+      - '2401'
+      - '2374'
+      - '2409'
+      - '2379'
+      - '2407'
+      - '2402'
+      - '2353'
+  ocean__MultiPolygon:
+    file: downloads/regions/norway/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0.1
+    attributes:
+      NAME:
+      - South Atlantic Ocean
+      - Gulf of St. Lawrence
+      - Kara Sea
+      - Labrador Sea
+      - Baffin Bay
+      - Lincoln Sea
+      - Arctic Ocean
+      ID:
+      - '32'
+      - '24'
+      - '9'
+      - 15A
+      - 14A
+      - 17A
+      - '17'
+      Longitude:
+      - '-18.80876715914'
+      - '-61.5665673821'
+      - '77.39237760245'
+      - '-53.47754799213'
+      - '-67.12170640601'
+      - '-53.19784428158'
+      - '-5.20258346295'
+      Latitude:
+      - '-33.73239551445'
+      - '48.380716031'
+      - '75.4298831796'
+      - '55.87120192359'
+      - '74.506107604'
+      - '82.83077860791'
+      - '84.8648860275'
+      min_X:
+      - '-69.60083675371'
+      - '-74.86481297044'
+      - '54.93053400524'
+      - '-64.30595421791'
+      - '-82.20379316792'
+      - '-70.19538038922'
+      - '-180.0'
+      min_Y:
+      - '-60.0'
+      - '44.95849871674'
+      - '64.43234801325'
+      - '47.38595855195'
+      - '69.61698794384'
+      - '81.49583387353'
+      - '71.38751180117'
+      max_X:
+      - '20.00904913827'
+      - '-54.70344650725'
+      - '107.60644340504'
+      - '-43.67489338154'
+      - '-50.52326631539'
+      - '-37.00547444819'
+      - '180.0'
+      max_Y:
+      - '0.07510554798'
+      - '52.22241842777'
+      - '81.26815920825'
+      - '60.39875495418'
+      - '82.44975286583'
+      - '83.56190926063'
+      - '90.0'
+      area:
+      - '40501812'
+      - '290874'
+      - '896938'
+      - '866470'
+      - '529960'
+      - '35262'
+      - '5120993'
+      MRGID:
+      - '1914'
+      - '4290'
+      - '4246'
+      - '4291'
+      - '4253'
+      - '4254'
+      - '1906'
+  road__LineString:
+    file: downloads/regions/norway/layers/road.gpkg
+    layer: road
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      scalerank:
+      - '10'
+      - '6'
+      - '9'
+      - '4'
+      - '7'
+      - '3'
+      - '5'
+      - '8'
+      featurecla:
+      - Road
+      - Ferry
+      type:
+      - Unknown
+      - Road
+      - Major Highway
+      - Ferry Route
+      - Secondary Highway
+      - Ferry, seasonal
+      - Track
+      sov_a3:
+      - CAN
+      note: []
+      edited:
+      - New in version 2.0.0
+      - 'Version 1.5: Changed alignment, a few adds in N.A.'
+      name: 222
+      namealt: 76
+      namealtt:
+      - A1
+      routeraw: 1642
+      question:
+      - '0'
+      - '1'
+      length_km: 471
+      toll:
+      - '0'
+      ne_part:
+      - global_basic
+      - global_adds_craig
+      - ne_europe_basic
+      - europe_extra
+      - ne_1d4_original
+      label: 748
+      label2: 322
+      local: 640
+      localtype:
+      - A483
+      - M18
+      localalt:
+      - '32'
+      - '3'
+      - S1
+      - N102
+      - A1
+      - RA8
+      - A22
+      - N260
+      - IC33
+      - N18
+      - A17
+      - N420
+      - A23
+      - A25
+      - S379
+      - S645
+      - M2
+      - '25'
+      - '16'
+      - '17'
+      - '8'
+      - '66'
+      - '22'
+      - 11 22
+      - '5'
+      - '21'
+      - '23'
+      - '24'
+      - '19'
+      - A9
+      - A31
+      - A7
+      - 13 63
+      - '12'
+      - '191'
+      - '11'
+      - '6'
+      - A5
+      - '63'
+      - '15'
+      - '13'
+      labelrank:
+      - '0'
+      - '5'
+      - '6'
+      - '7'
+      - '4'
+      - '8'
+      ignore:
+      - '0'
+      add:
+      - '0'
+      - '1'
+      rwdb_rd_id: 21364
+      orig_fid: 18959
+      prefix:
+      - E
+      uident: 60
+      continent:
+      - South America
+      - Africa
+      - Europe
+      - Asia
+      - North America
+      expressway:
+      - '0'
+      - '1'
+      level:
+      - E
+      - Ferry
+      - State
+      - Interstate
+      - Other
+      min_zoom:
+      - '7.7'
+      - '6.0'
+      - '7.6'
+      - '4.0'
+      - '7.0'
+      - '3.0'
+      - '5.0'
+      - '7.1'
+      - '7.5'
+      min_label:
+      - '10.2'
+      - '8.5'
+      - '10.1'
+      - '7.0'
+      - '9.5'
+      - '6.0'
+      - '8.0'
+      - '9.6'
+      - '10.0'
+  road__MultiLineString:
+    file: downloads/regions/norway/layers/road.gpkg
+    layer: road
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      scalerank:
+      - '7'
+      - '6'
+      - '4'
+      - '9'
+      - '8'
+      featurecla:
+      - Road
+      - Ferry
+      type:
+      - Unknown
+      - Road
+      - Ferry Route
+      - Secondary Highway
+      - Major Highway
+      sov_a3:
+      - CAN
+      note: []
+      edited:
+      - New in version 2.0.0
+      name:
+      - '20'
+      namealt: []
+      namealtt: []
+      routeraw:
+      - A2070
+      - E20 N7
+      - _untitled_62
+      question:
+      - '0'
+      length_km:
+      - '136'
+      - '72'
+      - '130'
+      - '517'
+      - '14'
+      - '216'
+      - '88'
+      - '119'
+      - '132'
+      - '179'
+      - '342'
+      toll:
+      - '0'
+      ne_part:
+      - global_basic
+      - ne_1d4_original
+      - ne_europe_basic
+      label:
+      - A2070
+      - E20
+      label2:
+      - N7
+      local:
+      - A2070
+      - N7
+      localtype: []
+      localalt: []
+      labelrank:
+      - '0'
+      - '6'
+      - '5'
+      ignore:
+      - '0'
+      add:
+      - '0'
+      rwdb_rd_id:
+      - '71315'
+      - '69835'
+      - '61188'
+      - '0'
+      - '12549'
+      orig_fid:
+      - '36995'
+      - '35820'
+      - '29542'
+      - '0'
+      - '4512'
+      prefix:
+      - E
+      uident:
+      - '0'
+      - '387205'
+      continent:
+      - South America
+      - North America
+      - Europe
+      - Asia
+      expressway:
+      - '0'
+      - '1'
+      level:
+      - Ferry
+      - E
+      min_zoom:
+      - '7.0'
+      - '6.0'
+      - '4.0'
+      - '7.6'
+      - '7.1'
+      - '7.5'
+      min_label:
+      - '9.5'
+      - '8.5'
+      - '7.0'
+      - '10.1'
+      - '9.6'
+      - '10.0'
+  water__Polygon:
+    file: downloads/regions/norway/layers/water.gpkg
+    layer: water
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      featurecla:
+      - Lake
+      - Reservoir
+      - Alkaline Lake
+      scalerank:
+      - '9'
+      - '7'
+      - '6'
+      - '4'
+      - '0'
+      - '8'
+      - '5'
+      - '2'
+      - '1'
+      - '3'
+      name: 282
+      name_abb: 278
+      name_alt: 94
+      note: 174
+      delta:
+      - New or modified in version 1.2
+      - New or modified in version 1.3
+      - Version 1.4
+      - New or modified in version 2.0
+      dam_name: 53
+      year:
+      - '-99'
+      - '1976'
+      - '1957'
+      - '1965'
+      - '1934'
+      - '1932'
+      - '1963'
+      - '1960'
+      - '1962'
+      - '1978'
+      - '1970'
+      - '1952'
+      - '1961'
+      - '1967'
+      - '1986'
+      - '1937'
+      - '1955'
+      - '1940'
+      - '1945'
+      - '1984'
+      - '1982'
+      - '1999'
+      - '1979'
+      - '1981'
+      - '1980'
+      - '1964'
+      - '1973'
+      - '1968'
+      - '1989'
+      - '1971'
+      - '1953'
+      - '1959'
+      - '1974'
+      - '1966'
+      - '1983'
+      - '1992'
+      - '1987'
+      - '1956'
+      - '1926'
+      - '1941'
+      - '1917'
+      - '1954'
+      - '1972'
+      - '1958'
+      - '1950'
+      admin:
+      - admin-0 more
+      - admin-0
+      min_zoom:
+      - '7.0'
+      - '5.7'
+      - '5.0'
+      - '4.0'
+      - '1.0'
+      - '6.0'
+      - '4.7'
+      - '2.0'
+      - '1.7'
+      - '3.0'
+      min_label:
+      - '8.0'
+      - '6.7'
+      - '6.5'
+      - '5.0'
+      - '3.0'
+      - '7.0'
+      - '6.0'
+      - '3.7'
+      - '3.6'
+      - '4.0'
+      label: 211
+      wikidataid: 213
+      name_ar: 282
+      name_bn: 282
+      name_de: 281
+      name_en: 281
+      name_es: 282
+      name_fr: 282
+      name_el: 281
+      name_hi: 280
+      name_hu: 282
+      name_id: 282
+      name_it: 282
+      name_ja: 282
+      name_ko: 282
+      name_nl: 281
+      name_pl: 282
+      name_pt: 281
+      name_ru: 282
+      name_sv: 281
+      name_tr: 282
+      name_vi: 282
+      name_zh: 281
+      ne_id: 479
+      name_fa: 282
+      name_he: 282
+      name_uk: 280
+      name_ur: 280
+      name_zht: 280
+  water__MultiPolygon:
+    file: downloads/regions/norway/layers/water.gpkg
+    layer: water
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      featurecla:
+      - Lake
+      - Reservoir
+      - Alkaline Lake
+      scalerank:
+      - '9'
+      - '3'
+      - '5'
+      - '0'
+      - '6'
+      name:
+      - Lake Zaysan
+      - Lake Rukwa
+      - Lake Hammar
+      - Lake Ladoga
+      - Lake Imandra
+      name_abb:
+      - L. Zaysan
+      - L. Rukwa
+      - L. Hammar
+      - L. Ladoga
+      - L. Imandra
+      name_alt: []
+      note:
+      - _untitled_243
+      - Largest lake in Europe
+      delta: []
+      dam_name:
+      - Bukhtarma
+      - Kumskaya
+      year:
+      - '-99'
+      - '1960'
+      - '1963'
+      admin: []
+      min_zoom:
+      - '7.0'
+      - '3.0'
+      - '4.7'
+      - '1.0'
+      - '5.0'
+      min_label:
+      - '8.0'
+      - '5.0'
+      - '6.0'
+      - '3.0'
+      - '6.5'
+      label:
+      - Lake Zaysan
+      - Lake Rukwa
+      - Lake Hammar
+      - Lake Ladoga
+      - Lake Imandra
+      wikidataid:
+      - Q216621
+      - Q1143935
+      - Q2668029
+      - Q15288
+      - Q265997
+      name_ar:
+      - "\u0628\u062D\u064A\u0631\u0629 \u0632\u064A\u0633\u0627\u0646"
+      - "\u0628\u062D\u064A\u0631\u0629 \u0631\u0648\u0643\u0648\u0627"
+      - "\u0647\u0648\u0631 \u0627\u0644\u062D\u0645\u0651\u0627\u0631"
+      - "\u0628\u062D\u064A\u0631\u0629 \u0644\u0627\u062F\u0648\u063A\u0627"
+      - "\u0628\u062D\u064A\u0631\u0629 \u0625\u064A\u0645\u0627\u0646\u062F\u0631\
+        \u0627"
+      name_bn:
+      - "\u09B2\u09C7\u0995 \u099C\u09C7\u09B8\u09BE\u09A8"
+      - "\u09B2\u09C7\u0995 \u09B0\u09C1\u0995\u09CB\u09DF\u09BE"
+      - "\u09B2\u09C7\u0995 \u09B9\u09CD\u09AF\u09BE\u09AE\u09BE\u09B0"
+      - "\u09B2\u09BE\u09A1\u09CB\u0997\u09BE \u09B9\u09CD\u09B0\u09A6"
+      - "\u09B2\u09C7\u0995 \u0987\u09AE\u09BE\u09A8\u09CD\u09A6\u09CD\u09B0\u09BE"
+      name_de:
+      - Saissansee
+      - Rukwasee
+      - Hammar-See
+      - Ladogasee
+      - Imandra
+      name_en:
+      - Zaysan
+      - Rukwa
+      - Hammar
+      - Ladoga
+      - Imandra
+      name_es:
+      - Zaysan
+      - Rukwa
+      - Hammar
+      - "L\xE1doga"
+      - Imandra
+      name_fr:
+      - "Za\xEFssan"
+      - Rukwa
+      - Al-hammar
+      - Ladoga
+      - Imandra
+      name_el:
+      - "\u039B\u03AF\u03BC\u03BD\u03B7 \u0396\u03B1\u03CA\u03C3\u03AC\u03BD"
+      - "\u039B\u03AF\u03BC\u03BD\u03B7 \u03A1\u03BF\u03CD\u03BA\u03BF\u03C5\u03B1"
+      - "\u039B\u03AF\u03BC\u03BD\u03B7 \u03A7\u03B1\u03BC\u03AC\u03C1"
+      - "\u039B\u03AC\u03BD\u03C4\u03BF\u03B3\u03BA\u03B1"
+      - "\u039B\u03AF\u03BC\u03BD\u03B7 \u0399\u03BC\u03AC\u03BD\u03C4\u03C1\u03B1"
+      name_hi:
+      - "\u091C\u093C\u093E\u092F\u0938\u093E\u0928 \u091D\u0940\u0932"
+      - "\u0930\u0941\u0915\u094D\u0935\u093E \u091D\u0940\u0932"
+      - "\u0939\u092E\u093E\u0930 \u091D\u0940\u0932"
+      - "\u0932\u093E\u0926\u094B\u0917\u093E \u091D\u0940\u0932"
+      - "\u0907\u092E\u0902\u0926\u094D\u0930\u093E \u091D\u0940\u0932"
+      name_hu:
+      - "Zaysan-t\xF3"
+      - "Rukwa-t\xF3"
+      - "Hammar-t\xF3"
+      - "Ladoga-t\xF3"
+      - "Imandra-t\xF3"
+      name_id:
+      - Zaysan
+      - Rukwa
+      - Danau Hammar
+      - Ladoga
+      - Danau Imandra
+      name_it:
+      - Zajsan
+      - Rukwa
+      - Lake Hammar
+      - Ladoga
+      - Imandra
+      name_ja:
+      - "\u30B6\u30A4\u30B5\u30F3\u6E56"
+      - "\u30EB\u30AF\u30EF\u6E56"
+      - "\u30CF\u30F3\u30DE\u30FC\u30EB\u6E56"
+      - "\u30E9\u30C9\u30AC\u6E56"
+      - "\u30A4\u30DE\u30F3\u30C9\u30E9\u6E56"
+      name_ko:
+      - "\uC790\uC774\uC0B0\uD638"
+      - "\uB808\uC774\uD06C \uB8E8\uD06C\uC640"
+      - "\uB808\uC774\uD06C \uD568\uB9C8\uB974"
+      - "\uB77C\uB3C4\uAC00\uD638"
+      - "\uC774\uB9CC\uD2B8\uB77C\uD638"
+      name_nl:
+      - Zaysanmeer
+      - Rukwa
+      - Lake Hammar
+      - Ladogameer
+      - Imandrameer
+      name_pl:
+      - Zajsan
+      - Rukwa
+      - Jezioro Hammar
+      - "\u0141adoga"
+      - Imandra
+      name_pt:
+      - Zaysan
+      - Rukwa
+      - Lago Hammar
+      - Ladoga
+      - Lago Imandra
+      name_ru:
+      - "\u0417\u0430\u0439\u0441\u0430\u043D"
+      - "\u0420\u0443\u043A\u0432\u0430"
+      - "\u042D\u043B\u044C-\u0425\u0430\u043C\u043C\u0430\u0440"
+      - "\u041B\u0430\u0434\u043E\u0436\u0441\u043A\u043E\u0435 \u043E\u0437\u0435\
+        \u0440\u043E"
+      - "\u0418\u043C\u0430\u043D\u0434\u0440\u0430"
+      name_sv:
+      - Zajsan
+      - Rukwa
+      - Hammar
+      - Ladoga
+      - Imandra
+      name_tr:
+      - Zaysan
+      - "Rukwa G\xF6l\xFC"
+      - Hamar
+      - Ladoga
+      - "\u0130mandra"
+      name_vi:
+      - Zaysan
+      - "H\u1ED3 Rukwa"
+      - "H\u1ED3 Hammar"
+      - Ladoga
+      - "H\u1ED3 Imandra"
+      name_zh:
+      - "\u658B\u6851\u6CCA"
+      - "\u9C81\u5938\u6E56"
+      - "\u54C8\u9A6C\u5C14\u6E56"
+      - "\u62C9\u591A\u52A0\u6E56"
+      - "\u4F0A\u66FC\u5FB7\u62C9\u6E56"
+      ne_id:
+      - '1159120365'
+      - '1159123091'
+      - '1159114299'
+      - '1159126873'
+      - '1159113095'
+      - '1159123217'
+      name_fa:
+      - "\u062F\u0631\u06CC\u0627\u0686\u0647 \u0632\u0627\u06CC\u0633\u0627\u0646"
+      - "\u062F\u0631\u06CC\u0627\u0686\u0647 \u0631\u0648\u06A9\u0648\u0627"
+      - "\u0647\u0648\u0631 \u062D\u0645\u0627\u0631"
+      - "\u062F\u0631\u06CC\u0627\u0686\u0647 \u0644\u0627\u062F\u0648\u06AF\u0627"
+      - "\u062F\u0631\u06CC\u0627\u0686\u0647 \u0627\u06CC\u0645\u0627\u0646\u062F\
+        \u0631\u0627"
+      name_he:
+      - "\u05D0\u05D2\u05DD \u05D6\u05D9\u05D9\u05E1\u05D0\u05DF"
+      - "\u05D0\u05D2\u05DD \u05E8\u05D5\u05E7\u05D0\u05D4"
+      - "\u05D0\u05D2\u05DD \u05D4\u05D0\u05DE\u05E8"
+      - "\u05D9\u05DE\u05EA \u05DC\u05D3\u05D5\u05D2\u05D4"
+      - "\u05D0\u05D2\u05DD \u05D0\u05D9\u05DE\u05E0\u05D3\u05E8\u05D4"
+      name_uk:
+      - "\u0417\u0430\u0439\u0441\u0430\u043D"
+      - "\u0420\u0443\u043A\u0432\u0430"
+      - "\u043E\u0437\u0435\u0440\u043E \u0413\u0430\u043C\u043C\u0430\u0440"
+      - "\u041B\u0430\u0434\u043E\u0437\u044C\u043A\u0435 \u043E\u0437\u0435\u0440\
+        \u043E"
+      - "\u0406\u043C\u0430\u043D\u0434\u0440\u0430"
+      name_ur:
+      - "\u062C\u06BE\u06CC\u0644 \u0632\u06CC\u0633\u0627\u0646"
+      - "\u062C\u06BE\u06CC\u0644 \u0631\u06A9\u0648\u0627"
+      - "\u062C\u06BE\u06CC\u0644 \u062D\u0645\u0627\u0631"
+      - "\u062C\u06BE\u06CC\u0644 \u0644\u0627\u0688\u0648\u06AF\u0627"
+      - "\u062C\u06BE\u06CC\u0644 \u0627\u0645\u0627\u0646\u062F\u0631\u0627"
+      name_zht:
+      - "\u9F4B\u6851\u6CCA"
+      - "\u9B6F\u8A87\u6E56"
+      - "\u54C8\u9A6C\u5C14\u6E56"
+      - "\u62C9\u591A\u52A0\u6E56"
+      - "\u4F0A\u66FC\u5FB7\u62C9\u6E56"
+    style_rules:
+      name:
+        Lake Zaysan: {}
+        Lake Rukwa: {}
+        Lake Hammar: {}
+        Lake Ladoga: {}
+        Lake Imandra: {}
+    style_order:
+    - name
+  waterway__LineString:
+    file: downloads/regions/norway/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      dissolve: 458
+      scalerank:
+      - '7'
+      - '8'
+      - '6'
+      - '9'
+      - '4'
+      - '5'
+      - '3'
+      - '1'
+      - '2'
+      - '12'
+      featurecla:
+      - River
+      - Lake Centerline
+      - River (Intermittent)
+      - Canal
+      name: 395
+      name_alt:
+      - Blue Nile
+      - Damqogkanbab
+      - Black Volta
+      - White Volta
+      - Tagus
+      - Tiber
+      - Rhein
+      - Steldt
+      - Meuse
+      - Mountain Nile
+      - White Nile
+      - Maritsa
+      - Truma
+      - Aliakmonas
+      - Buna
+      - Pivd. Buh
+      - Drava
+      - Vilija
+      - Nemunas
+      - Zapadnaya Dvina
+      - Atrak
+      - Glma
+      - Northern Dvina
+      - "Northern Sos\u2019va"
+      rivernum: 424
+      note:
+      - Changed in 2.0
+      - Version 1.2 edit in N. America and Europe
+      - Version 1.3
+      min_zoom:
+      - '6.0'
+      - '7.0'
+      - '5.0'
+      - '7.1'
+      - '4.0'
+      - '4.7'
+      - '3.0'
+      - '2.0'
+      - '2.1'
+      name_en: 386
+      min_label:
+      - '7.0'
+      - '8.0'
+      - '6.0'
+      - '8.1'
+      - '5.0'
+      - '5.7'
+      - '4.0'
+      - '3.0'
+      - '3.1'
+      ne_id: 457
+      label: 395
+      wikidataid: 358
+      name_ar: 387
+      name_bn: 391
+      name_de: 385
+      name_es: 386
+      name_fr: 384
+      name_el: 390
+      name_hi: 387
+      name_hu: 388
+      name_id: 392
+      name_it: 384
+      name_ja: 386
+      name_ko: 391
+      name_nl: 381
+      name_pl: 383
+      name_pt: 384
+      name_ru: 383
+      name_sv: 382
+      name_tr: 392
+      name_vi: 409
+      name_zh: 384
+      name_fa: 387
+      name_he: 399
+      name_uk: 388
+      name_ur: 390
+      name_zht: 387
+  waterway__MultiLineString:
+    file: downloads/regions/norway/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      dissolve: 197
+      scalerank:
+      - '8'
+      - '7'
+      - '2'
+      - '4'
+      - '5'
+      - '6'
+      - '1'
+      - '9'
+      - '3'
+      - '12'
+      - '10'
+      featurecla:
+      - River
+      - Lake Centerline
+      - Canal
+      name: 146
+      name_alt:
+      - Congo
+      - Blue Nile
+      - Danube
+      - Moldau
+      - Dnieper
+      - Pivd. Buh
+      - Belomorcanal
+      - Janisjoki
+      rivernum: 156
+      note:
+      - Version 1.2 edit in N. America and Europe
+      - Changed in 4.0
+      - Version 1.3
+      min_zoom:
+      - '7.0'
+      - '6.0'
+      - '2.1'
+      - '4.0'
+      - '4.7'
+      - '5.0'
+      - '2.0'
+      - '7.1'
+      - '3.0'
+      name_en: 143
+      min_label:
+      - '8.0'
+      - '7.0'
+      - '3.1'
+      - '5.0'
+      - '5.7'
+      - '6.0'
+      - '3.0'
+      - '8.1'
+      - '4.0'
+      ne_id: 197
+      label: 146
+      wikidataid: 138
+      name_ar: 143
+      name_bn: 143
+      name_de: 143
+      name_es: 142
+      name_fr: 142
+      name_el: 142
+      name_hi: 144
+      name_hu: 142
+      name_id: 142
+      name_it: 142
+      name_ja: 145
+      name_ko: 143
+      name_nl: 143
+      name_pl: 142
+      name_pt: 142
+      name_ru: 142
+      name_sv: 143
+      name_tr: 142
+      name_vi: 160
+      name_zh: 142
+      name_fa: 143
+      name_he: 150
+      name_uk: 141
+      name_ur: 143
+      name_zht: 144

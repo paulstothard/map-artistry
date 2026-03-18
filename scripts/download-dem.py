@@ -44,8 +44,10 @@ from rasterio.merge import merge
 from rasterio import warp
 from rasterio.enums import Resampling
 from rasterio.mask import mask
+from rasterio.transform import array_bounds
 from shapely.geometry import mapping
 import numpy as np
+from geojson_bounds import apply_primary_segment_clip
 
 
 def get_tile_prefixes(minx, miny, maxx, maxy):
@@ -122,22 +124,22 @@ def download_opentopography_globaldem(
     return rasterio.open(tile_path)
 
 
-def download_cop90(minx, miny, maxx, maxy, tmpdir):
+def download_cop90(minx, miny, maxx, maxy, tmpdir, output_name="cop90.tif"):
     """Download Copernicus Global DSM 90m via OpenTopography API."""
     return download_opentopography_globaldem(
-        "COP90", minx, miny, maxx, maxy, tmpdir, "cop90.tif"
+        "COP90", minx, miny, maxx, maxy, tmpdir, output_name
     )
 
 
-def download_gmted2010(minx, miny, maxx, maxy, tmpdir):
+def download_gmted2010(minx, miny, maxx, maxy, tmpdir, output_name="cop90.tif"):
     """Backward-compatible alias for the retired GMTED2010 source."""
     print(
         "    GMTED2010 is no longer available in OpenTopography; using COP90 instead..."
     )
-    return download_cop90(minx, miny, maxx, maxy, tmpdir)
+    return download_cop90(minx, miny, maxx, maxy, tmpdir, output_name=output_name)
 
 
-def download_etopo1(minx, miny, maxx, maxy, tmpdir):
+def download_etopo1(minx, miny, maxx, maxy, tmpdir, output_name="etopo2022.tif"):
     """Download ETOPO 2022 (successor to ETOPO1) as Cloud Optimized GeoTIFF subset."""
     print("    Requesting ETOPO 2022 global relief data...")
 
@@ -155,7 +157,7 @@ def download_etopo1(minx, miny, maxx, maxy, tmpdir):
         transform = src.window_transform(window)
 
         # Write to temp file
-        tile_path = Path(tmpdir) / "etopo2022.tif"
+        tile_path = Path(tmpdir) / output_name
         with rasterio.open(
             tile_path,
             "w",
@@ -196,36 +198,82 @@ def main():
     orig_crs = gdf.crs or "EPSG:4326"
     # Make a 4326 copy for tile logic
     gdf4326 = gdf.to_crs(epsg=4326)
-    minx, miny, maxx, maxy = gdf4326.total_bounds
+    gdf4326, primary_segment, antimeridian_clipped = apply_primary_segment_clip(gdf4326)
 
-    print(
-        f"[ ] Determining tiles for bounds: {minx:.4f},{miny:.4f} — {maxx:.4f},{maxy:.4f}"
-    )
+    if primary_segment is None:
+        raise ValueError("Could not determine processing bounds from boundary")
+
+    minx, miny, maxx, maxy = primary_segment
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected; "
+            f"using primary segment bounds: {primary_segment}"
+        )
+    else:
+        print(
+            f"[ ] Determining tiles for bounds: {minx:.4f},{miny:.4f} — {maxx:.4f},{maxy:.4f}"
+        )
+
+    bbox_segments = [primary_segment]
 
     if args.source == "cop90":
         print(f"[ ] Using Copernicus Global DSM 90m via OpenTopography")
         with tempfile.TemporaryDirectory() as tmpdir:
-            src = download_cop90(minx, miny, maxx, maxy, tmpdir)
-            srcs = [src]
+            srcs = []
+            for idx, (minx, miny, maxx, maxy) in enumerate(bbox_segments, start=1):
+                src = download_cop90(
+                    minx,
+                    miny,
+                    maxx,
+                    maxy,
+                    tmpdir,
+                    output_name=f"cop90_{idx}.tif",
+                )
+                srcs.append(src)
             mosaic, trans = merge(srcs)
             src_crs = srcs[0].crs
     elif args.source == "gmted2010":
         print(f"[ ] GMTED2010 retired upstream; using COP90 via OpenTopography")
         with tempfile.TemporaryDirectory() as tmpdir:
-            src = download_gmted2010(minx, miny, maxx, maxy, tmpdir)
-            srcs = [src]
+            srcs = []
+            for idx, (minx, miny, maxx, maxy) in enumerate(bbox_segments, start=1):
+                src = download_gmted2010(
+                    minx,
+                    miny,
+                    maxx,
+                    maxy,
+                    tmpdir,
+                    output_name=f"gmted2010_{idx}.tif",
+                )
+                srcs.append(src)
             mosaic, trans = merge(srcs)
             src_crs = srcs[0].crs
     elif args.source == "etopo1":
         print(f"[ ] Using ETOPO 2022 (~2km resolution)")
         with tempfile.TemporaryDirectory() as tmpdir:
-            src = download_etopo1(minx, miny, maxx, maxy, tmpdir)
-            srcs = [src]
+            srcs = []
+            for idx, (minx, miny, maxx, maxy) in enumerate(bbox_segments, start=1):
+                src = download_etopo1(
+                    minx,
+                    miny,
+                    maxx,
+                    maxy,
+                    tmpdir,
+                    output_name=f"etopo2022_{idx}.tif",
+                )
+                srcs.append(src)
             mosaic, trans = merge(srcs)
             src_crs = srcs[0].crs
     elif args.source == "copernicus":
         print(f"[ ] Using Copernicus DEM GLO-30 (30m resolution)")
-        tiles = get_copernicus_tile_names(minx, miny, maxx, maxy)
+        seen_tiles = set()
+        tiles = []
+        for minx, miny, maxx, maxy in bbox_segments:
+            for tile_name, lat, lon in get_copernicus_tile_names(minx, miny, maxx, maxy):
+                if tile_name in seen_tiles:
+                    continue
+                seen_tiles.add(tile_name)
+                tiles.append((tile_name, lat, lon))
         print(f"[ ] Downloading and opening {len(tiles)} tiles...")
         srcs = []
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -254,7 +302,14 @@ def main():
             src_crs = srcs[0].crs
     else:  # srtm
         print(f"[ ] Using SRTM 1-arc-second (~30m resolution)")
-        prefixes = get_tile_prefixes(minx, miny, maxx, maxy)
+        seen_prefixes = set()
+        prefixes = []
+        for minx, miny, maxx, maxy in bbox_segments:
+            for prefix in get_tile_prefixes(minx, miny, maxx, maxy):
+                if prefix in seen_prefixes:
+                    continue
+                seen_prefixes.add(prefix)
+                prefixes.append(prefix)
         print(f"[ ] Downloading and opening {len(prefixes)} tiles...")
         srcs = []
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -280,12 +335,27 @@ def main():
     # Reproject if needed
     if orig_crs != src_crs:
         print(f"[ ] Reprojecting DEM to {orig_crs}")
+
+        if mosaic.ndim == 3:
+            src_height = mosaic.shape[1]
+            src_width = mosaic.shape[2]
+        else:
+            src_height = mosaic.shape[0]
+            src_width = mosaic.shape[1]
+
+        src_left, src_bottom, src_right, src_top = array_bounds(
+            src_height, src_width, trans
+        )
+
         dst_transform, dst_width, dst_height = warp.calculate_default_transform(
             src_crs,
             orig_crs,
-            mosaic.shape[2],
-            mosaic.shape[1],
-            *(minx, miny, maxx, maxy),
+            src_width,
+            src_height,
+            src_left,
+            src_bottom,
+            src_right,
+            src_top,
         )
         with MemoryFile() as mem:
             with mem.open(
@@ -315,7 +385,7 @@ def main():
 
     # Clip to polygon
     print(f"[ ] Clipping DEM to boundary shape...")
-    shapes = [mapping(geom) for geom in gdf.to_crs(orig_crs).geometry]
+    shapes = [mapping(geom) for geom in gdf4326.to_crs(orig_crs).geometry]
     # Prepare in-memory dataset with correct dimensions
     height, width = mosaic.shape
     with MemoryFile() as mem2:

@@ -4,7 +4,7 @@ map:
     ec: '#05050d'
   scheme: satellite
   info:
-    text: ps
+    text: map-artistry
     show: false
     position: bottom-right
     font: Gill Sans

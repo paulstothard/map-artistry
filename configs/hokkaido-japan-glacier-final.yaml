@@ -1,0 +1,862 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#edf3f6'
+    fc: '#edf3f6'
+  debug_water_hillshade: false
+  hillshade:
+    alpha: 0
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gray
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 0.0
+    unsharp_amount: 1.0
+    unsharp_radius: 2.0
+    vert_exag: 2.0
+    weights:
+    - 1.3
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#3d4e57'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: false
+    text: map-artistry
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/hokkaido-japan/satellite.tif
+  scheme: glacier
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#5f7d6d'
+    - '#789381'
+    - '#93a995'
+    - '#afbbb0'
+    - '#c3c7c1'
+    - '#d1d1ce'
+    - '#ddd9d5'
+    - '#e8e4e0'
+    - '#f5f4f2'
+    - '#ffffff'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.55
+    visible: true
+    zorder: 0
+  water_hillshade:
+    bias: 0.0
+    blur_sigma: 5.0
+    contrast: 0.45
+  dem: downloads/regions/hokkaido-japan/dem.tif
+layers:
+  landuse:
+    file: downloads/regions/hokkaido-japan/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 0.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      scalerank:
+      - '8'
+      - '9'
+      - '5'
+      - '6'
+      - '4'
+      - '7'
+      - '3'
+      featurecla:
+      - Urban area
+      area_sqkm: 54
+      min_zoom:
+      - '7.6'
+      - '7.7'
+      - '5.0'
+      - '6.0'
+      - '4.0'
+      - '7.0'
+      - '3.7'
+  natural__Polygon:
+    file: downloads/regions/hokkaido-japan/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#8ea392'
+      ec: '#8ea392'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#8ea392'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Island
+      - Island group
+      - Range/mtn
+      NAME:
+      - "HONSH\xDC"
+      - JAPAN
+      - "HOKKAID\xD6"
+      - Kunashir
+      - KURIL ISLANDS
+      - "SIKHOTE-ALIN\u2019 RANGE"
+      NAMEALT: []
+      REGION:
+      - Asia
+      SUBREGION: []
+      MIN_LABEL:
+      - '4.0'
+      - '2.0'
+      - '6.0'
+      - '5.3'
+      - '5.0'
+      MAX_LABEL:
+      - '7.0'
+      - '5.0'
+      - '8.0'
+      - '11.0'
+      - '9.0'
+      SCALERANK:
+      - '2'
+      - '1'
+      - '3'
+      - '6'
+      - '4'
+      LABEL:
+      - "HONSH\xDC"
+      - "HOKKAID\xD6"
+      - Kunashir
+      - KURIL ISLANDS
+      - "SIKHOTE-ALIN\u2019 RANGE"
+      WIKIDATAID:
+      - Q13989
+      - Q17
+      - Q35581
+      - Q847285
+      - Q80389
+      - Q155322
+      NAME_AR:
+      - "\u0647\u0648\u0646\u0634\u0648"
+      - "\u0627\u0644\u064A\u0627\u0628\u0627\u0646"
+      - "\u0647\u0648\u0643\u0627\u064A\u062F\u0648"
+      - "\u062C\u0632\u064A\u0631\u0629 \u0643\u0648\u0646\u0627\u0634\u064A\u0631"
+      - "\u062C\u0632\u0631 \u0627\u0644\u0643\u0648\u0631\u064A\u0644"
+      - "\u0633\u064A\u062E\u0648\u062A \u0623\u0644\u064A\u0646"
+      NAME_BN:
+      - "\u09B9\u09CB\u09A8\u09B6\u09C1"
+      - "\u099C\u09BE\u09AA\u09BE\u09A8"
+      - "\u09B9\u09CB\u0995\u09CD\u0995\u09BE\u0987\u09A6\u09CB"
+      - "\u0995\u09C1\u09A8\u09BE\u09B6\u09BF\u09B0"
+      - "\u0995\u09C1\u09B0\u09BF\u09B2 \u09A6\u09CD\u09AC\u09C0\u09AA\u09AA\u09C1\
+        \u099E\u09CD\u099C"
+      - "\u09B6\u09BF\u0996\u09CB\u099F-\u0985\u09CD\u09AF\u09BE\u09B2\u09BF\u09A8\
+        \ \u09B0\u09C7\u099E\u09CD\u099C"
+      NAME_DE:
+      - "Honsh\u016B"
+      - Japan
+      - "Hokkaid\u014D"
+      - Kunaschir
+      - Kurilen
+      - Sichote-Alin
+      NAME_EN:
+      - Honshu
+      - Japan
+      - "Hokkaid\u014D"
+      - Kunashir Island
+      - Kuril Islands
+      - Sikhote-Alin
+      NAME_ES:
+      - "Honsh\u016B"
+      - "Jap\xF3n"
+      - "Hokkaid\u014D"
+      - Kunashir
+      - Islas Kuriles
+      - "Sijot\xE9-Al\xEDn"
+      NAME_FR:
+      - "Honsh\u016B"
+      - Japon
+      - "Hokkaid\u014D"
+      - Kounachir
+      - "\xEEles Kouriles"
+      - Sikhote-Aline
+      NAME_EL:
+      - "\u03A7\u03BF\u03BD\u03C3\u03BF\u03CD"
+      - "\u0399\u03B1\u03C0\u03C9\u03BD\u03AF\u03B1"
+      - "\u03A7\u03BF\u03BA\u03BA\u03AC\u03B9\u03BD\u03C4\u03BF"
+      - "\u039A\u03BF\u03C5\u03BD\u03B1\u03C3\u03AF\u03C1"
+      - "\u039A\u03BF\u03C5\u03C1\u03AF\u03BB\u03B5\u03C2"
+      - "\u039F\u03C1\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC \u03A3\u03B9\u03C7\u03BF\
+        \u03C4\u03AD-\u0391\u03BB\u03AF\u03BD"
+      NAME_HI:
+      - "\u0939\u094B\u0928\u094D\u0936\u0942"
+      - "\u091C\u093E\u092A\u093E\u0928"
+      - "\u0939\u094B\u0915\u094D\u0915\u093E\u0907\u0926\u094B"
+      - "\u0915\u0941\u0928\u093E\u0936\u0940\u0930"
+      - "\u0915\u0941\u0930\u0940\u0932 \u0926\u094D\u0935\u0940\u092A \u0938\u092E\
+        \u0942\u0939"
+      - "\u0938\u093F\u0916\u094B\u0924\u0947-\u090F\u0932\u093F\u0928"
+      NAME_HU:
+      - "Hons\xFA"
+      - "Jap\xE1n"
+      - "Hokkaid\xF3"
+      - Kunashir
+      - Kuril-szigetek
+      - Szihote-Aliny
+      NAME_ID:
+      - "Honsh\u016B"
+      - Jepang
+      - "Hokkaid\u014D"
+      - Kunashir
+      - Kepulauan Kuril
+      - PEGUNUNGAN SIKHOTE-ALIN
+      NAME_IT:
+      - "Honsh\u016B"
+      - Giappone
+      - "Hokkaid\u014D"
+      - Kunashir
+      - Isole Curili
+      - "Sichot\u0117-Alin'"
+      NAME_JA:
+      - "\u672C\u5DDE"
+      - "\u65E5\u672C"
+      - "\u5317\u6D77\u9053"
+      - "\u56FD\u5F8C\u5CF6"
+      - "\u5343\u5CF6\u5217\u5CF6"
+      - "\u30B7\u30DB\u30C6\u30A2\u30EA\u30CB\u5C71\u8108"
+      NAME_KO:
+      - "\uD63C\uC288"
+      - "\uC77C\uBCF8"
+      - "\uD64B\uCE74\uC774\uB3C4"
+      - "\uCFE0\uB098\uC2DC\uB974\uC12C"
+      - "\uCFE0\uB9B4 \uC5F4\uB3C4"
+      - "\uC2DC\uD638\uD14C\uC54C\uB9B0\uC0B0\uB9E5"
+      NAME_NL:
+      - Honshu
+      - Japan
+      - Hokkaido
+      - Koenasjir
+      - Koerilen
+      - Sichote-Alin
+      NAME_PL:
+      - Honsiu
+      - Japonia
+      - Hokkaido
+      - Kunaszyr
+      - Wyspy Kurylskie
+      - "Sichote-Ali\u0144"
+      NAME_PT:
+      - Honshu
+      - "Jap\xE3o"
+      - Hokkaido
+      - Kunashir
+      - Ilhas Curilas
+      - "Sijote-Al\xEDn"
+      NAME_RU:
+      - "\u0425\u043E\u043D\u0441\u044E"
+      - "\u042F\u043F\u043E\u043D\u0438\u044F"
+      - "\u0425\u043E\u043A\u043A\u0430\u0439\u0434\u043E"
+      - "\u041A\u0443\u043D\u0430\u0448\u0438\u0440"
+      - "\u041A\u0443\u0440\u0438\u043B\u044C\u0441\u043A\u0438\u0435 \u043E\u0441\
+        \u0442\u0440\u043E\u0432\u0430"
+      - "\u0421\u0438\u0445\u043E\u0442\u044D-\u0410\u043B\u0438\u043D\u044C"
+      NAME_SV:
+      - Honshu
+      - Japan
+      - Hokkaido
+      - Kunashir
+      - Kurilerna
+      - Sichote-Alin
+      NAME_TR:
+      - "Honsh\u016B"
+      - Japonya
+      - "Hokkaid\u014D"
+      - "Kuna\u015Fir Adas\u0131"
+      - "Kuril Adalar\u0131"
+      - Sihote-Alin
+      NAME_VI:
+      - "\u0110\u1EA3o Honshu"
+      - "Nh\u1EADt B\u1EA3n"
+      - "Hokkaid\u014D"
+      - Kunashir
+      - "Qu\u1EA7n \u0111\u1EA3o Kuril"
+      - Sikhote-Alin
+      NAME_ZH:
+      - "\u672C\u5DDE"
+      - "\u65E5\u672C"
+      - "\u5317\u6D77\u9053"
+      - "\u570B\u5F8C\u5CF6"
+      - "\u5343\u5CF6\u7FA4\u5CF6"
+      - "\u9521\u970D\u7279\u5C71\u8109"
+      NE_ID:
+      - '1159104129'
+      - '1159104291'
+      - '1159103801'
+      - '1159102529'
+      - '1159103431'
+      - '1159103897'
+      NAME_FA:
+      - "\u0647\u0648\u0646\u0634\u0648"
+      - "\u0698\u0627\u067E\u0646"
+      - "\u0647\u0648\u06A9\u0627\u06CC\u062F\u0648"
+      - "\u062C\u0632\u06CC\u0631\u0647 \u06A9\u0648\u0646\u0627\u0634\u06CC\u0631\
+        \u06CC"
+      - "\u062C\u0632\u0627\u06CC\u0631 \u06A9\u0648\u0631\u06CC\u0644"
+      - "\u0633\u06CC\u062E\u0648\u062A\u0647-\u0622\u0644\u06CC\u0646"
+      NAME_HE:
+      - "\u05D4\u05D5\u05E0\u05E9\u05D5"
+      - "\u05D9\u05E4\u05DF"
+      - "\u05D4\u05D5\u05E7\u05D0\u05D9\u05D3\u05D5"
+      - "\u05E7\u05D5\u05E0\u05E9\u05D9\u05E8"
+      - "\u05D4\u05D0\u05D9\u05D9\u05DD \u05D4\u05E7\u05D5\u05E8\u05D9\u05DC\u05D9\
+        \u05D9\u05DD"
+      - "\u05E1\u05D9\u05D7\u05D5\u05D8\u05D4-\u05D0\u05DC\u05D9\u05DF"
+      NAME_UK:
+      - "\u0425\u043E\u043D\u0441\u044E"
+      - "\u042F\u043F\u043E\u043D\u0456\u044F"
+      - "\u0425\u043E\u043A\u043A\u0430\u0439\u0434\u043E"
+      - "\u041A\u0443\u043D\u0430\u0448\u0438\u0440"
+      - "\u041A\u0443\u0440\u0438\u043B\u044C\u0441\u044C\u043A\u0456 \u043E\u0441\
+        \u0442\u0440\u043E\u0432\u0438"
+      - "\u0421\u0456\u0445\u043E\u0442\u0435-\u0410\u043B\u0456\u043D\u044C"
+      NAME_UR:
+      - "\u06C1\u0648\u0646\u0634\u0648"
+      - "\u062C\u0627\u067E\u0627\u0646"
+      - "\u06C1\u0648\u06A9\u0627\u0626\u06CC\u062F\u0648"
+      - "\u062C\u0632\u06CC\u0631\u06C1 \u06A9\u0646\u0627\u0634\u06CC\u0631"
+      - "\u06A9\u0648\u0631\u06CC\u0644 \u062C\u0632\u0627\u0626\u0631"
+      - "\u0633\u06CC\u06A9\u06BE\u0648\u062A\u06D2 \u0622\u0644\u0646 \u0631\u06CC\
+        \u0646\u062C"
+      NAME_ZHT:
+      - "\u672C\u5DDE"
+      - "\u65E5\u672C"
+      - "\u5317\u6D77\u9053"
+      - "\u570B\u5F8C\u5CF6"
+      - "\u5343\u5CF6\u7FA4\u5CF6"
+      - "\u9521\u970D\u7279\u5C71\u8109"
+  natural__MultiPolygon:
+    file: downloads/regions/hokkaido-japan/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#8ea392'
+      ec: '#8ea392'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#8ea392'
+      edge_width: 0
+    attributes:
+      FEATURECLA:
+      - Continent
+      - Island group
+      - Island
+      NAME:
+      - ASIA
+      - Iturup
+      - SAKHALIN
+      NAMEALT: []
+      REGION:
+      - Asia
+      SUBREGION: []
+      MIN_LABEL:
+      - '0.0'
+      - '5.4'
+      - '4.0'
+      MAX_LABEL:
+      - '4.0'
+      - '10.0'
+      - '8.0'
+      SCALERANK:
+      - '0'
+      - '5'
+      - '3'
+      LABEL:
+      - ASIA
+      - Iturup
+      - SAKHALIN
+      WIKIDATAID:
+      - Q48
+      - Q215727
+      - Q7792
+      NAME_AR:
+      - "\u0622\u0633\u064A\u0627"
+      - "\u0625\u064A\u062A\u0648\u0631\u0648\u0628"
+      - "\u0633\u062E\u0627\u0644\u064A\u0646"
+      NAME_BN:
+      - "\u098F\u09B6\u09BF\u09AF\u09BC\u09BE"
+      - "\u0987\u09A4\u09C1\u09B0\u09C1\u09AA"
+      - "\u09B8\u09BE\u0996\u09BE\u09B2\u09BF\u09A8 \u09A6\u09CD\u09AC\u09C0\u09AA"
+      NAME_DE:
+      - Asien
+      - Iturup
+      - Sachalin
+      NAME_EN:
+      - Asia
+      - Iturup Island
+      - Sakhalin
+      NAME_ES:
+      - Asia
+      - Iturup
+      - "Sajal\xEDn"
+      NAME_FR:
+      - Asie
+      - Itouroup
+      - Sakhaline
+      NAME_EL:
+      - "\u0391\u03C3\u03AF\u03B1"
+      - "\u0399\u03C4\u03BF\u03C5\u03C1\u03BF\u03CD\u03C0"
+      - "\u03A3\u03B1\u03C7\u03B1\u03BB\u03AF\u03BD\u03B7"
+      NAME_HI:
+      - "\u090F\u0936\u093F\u092F\u093E"
+      - "\u0907\u0924\u0941\u0930\u0941\u092A"
+      - "\u0938\u093E\u0916\u093C\u093E\u0932\u093F\u0928"
+      NAME_HU:
+      - "\xC1zsia"
+      - Iturup
+      - Szahalin
+      NAME_ID:
+      - Asia
+      - Pulau Iturup
+      - Sakhalin
+      NAME_IT:
+      - Asia
+      - Iturup
+      - Sachalin
+      NAME_JA:
+      - "\u30A2\u30B8\u30A2"
+      - "\u629E\u6349\u5CF6"
+      - "\u6A3A\u592A"
+      NAME_KO:
+      - "\uC544\uC2DC\uC544"
+      - "\uC774\uD22C\uB8E8\uD504\uC12C"
+      - "\uC0AC\uD560\uB9B0\uC12C"
+      NAME_NL:
+      - "Azi\xEB"
+      - Itoeroep
+      - Sachalin
+      NAME_PL:
+      - Azja
+      - Iturup
+      - Sachalin
+      NAME_PT:
+      - "\xC1sia"
+      - Iturup
+      - Sacalina
+      NAME_RU:
+      - "\u0410\u0437\u0438\u044F"
+      - "\u0418\u0442\u0443\u0440\u0443\u043F"
+      - "\u0421\u0430\u0445\u0430\u043B\u0438\u043D"
+      NAME_SV:
+      - Asien
+      - Iturup
+      - Sachalin
+      NAME_TR:
+      - Asya
+      - "\u0130turup Adas\u0131"
+      - Sahalin
+      NAME_VI:
+      - "ch\xE2u \xC1"
+      - Iturup
+      - Sakhalin
+      NAME_ZH:
+      - "\u4E9E\u6D32"
+      - "\u64C7\u6349\u5CF6"
+      - "\u5E93\u9875\u5C9B"
+      NE_ID:
+      - '1159104597'
+      - '1159102913'
+      - '1159103803'
+      NAME_FA:
+      - "\u0622\u0633\u06CC\u0627"
+      - "\u0627\u06CC\u062A\u0648\u0631\u0648\u067E"
+      - "\u0633\u0627\u062E\u0627\u0644\u06CC\u0646"
+      NAME_HE:
+      - "\u05D0\u05E1\u05D9\u05D4"
+      - "\u05D0\u05D9\u05D8\u05D5\u05E8\u05D5\u05E4"
+      - "\u05E1\u05D7\u05DC\u05D9\u05DF"
+      NAME_UK:
+      - "\u0410\u0437\u0456\u044F"
+      - "\u0406\u0442\u0443\u0440\u0443\u043F"
+      - "\u0421\u0430\u0445\u0430\u043B\u0456\u043D"
+      NAME_UR:
+      - "\u0627\u06CC\u0634\u06CC\u0627"
+      - "\u0622\u0626\u0679\u0648\u0631\u0648\u067E"
+      - "\u0633\u0627\u06A9\u06BE\u0627\u0644\u06CC\u0646"
+      NAME_ZHT:
+      - "\u4E9E\u6D32"
+      - "\u64C7\u6349\u5CF6"
+      - "\u5E93\u9875\u5C9B"
+  ocean__Polygon:
+    file: downloads/regions/hokkaido-japan/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#87a9bb'
+      ec: '#87a9bb'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.0
+        blur_sigma: 10.0
+        contrast: 0.14
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.07
+        visible: true
+      edge_color: '#87a9bb'
+      edge_width: 0
+    attributes:
+      NAME:
+      - North Pacific Ocean
+      ID:
+      - '57'
+      Longitude:
+      - '-40.1574405109'
+      Latitude:
+      - '23.9623940894'
+      min_X:
+      - '-76.9854403734'
+      min_Y:
+      - 2e-11
+      max_X:
+      - '128.686531125'
+      max_Y:
+      - '58.211545022'
+      area:
+      - '65154681'
+      MRGID:
+      - '1908'
+  ocean__MultiPolygon:
+    file: downloads/regions/hokkaido-japan/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#87a9bb'
+      ec: '#87a9bb'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.0
+        blur_sigma: 10.0
+        contrast: 0.14
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.07
+        visible: true
+      edge_color: '#87a9bb'
+      edge_width: 0
+    attributes:
+      NAME:
+      - Japan Sea
+      - Sea of Okhotsk
+      ID:
+      - '52'
+      - '54'
+      Longitude:
+      - '135.13274500727'
+      - '148.92540464929'
+      Latitude:
+      - '40.5084302428'
+      - '53.2338589852'
+      min_X:
+      - '125.8013889'
+      - '135.17187750324'
+      min_Y:
+      - '32.57501368363'
+      - '43.21659433816'
+      max_X:
+      - '142.2638347153'
+      - '167.16820895628'
+      max_Y:
+      - '51.74733316939'
+      - '62.9154825209'
+      area:
+      - '1066307'
+      - '1613208'
+      MRGID:
+      - '4307'
+      - '4309'
+  road:
+    file: downloads/regions/hokkaido-japan/layers/road.gpkg
+    layer: road
+    geometry_type: LineString
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 0.0
+      zorder: 6
+      visible: false
+      palette: []
+      linewidth: 0.15
+    attributes:
+      scalerank:
+      - '3'
+      - '4'
+      - '5'
+      - '9'
+      - '6'
+      featurecla:
+      - Road
+      type:
+      - Major Highway
+      - Unknown
+      - Road
+      - Ferry Route
+      sov_a3: []
+      note: []
+      edited:
+      - New in version 2.0.0
+      name: []
+      namealt: []
+      namealtt: []
+      routeraw: []
+      question:
+      - '0'
+      length_km:
+      - '43'
+      - '76'
+      - '54'
+      - '27'
+      - '39'
+      - '49'
+      - '110'
+      - '140'
+      - '35'
+      - '21'
+      - '47'
+      - '86'
+      - '17'
+      - '45'
+      - '103'
+      - '139'
+      - '52'
+      - '291'
+      - '51'
+      - '56'
+      - '97'
+      - '77'
+      - '138'
+      - '23'
+      - '119'
+      - '10'
+      - '146'
+      - '12'
+      - '99'
+      - '26'
+      - '5'
+      - '14'
+      - '24'
+      - '9'
+      - '124'
+      - '16'
+      - '6'
+      - '31'
+      - '53'
+      toll:
+      - '0'
+      ne_part:
+      - global_basic
+      label: []
+      label2: []
+      local: []
+      localtype: []
+      localalt: []
+      labelrank:
+      - '0'
+      ignore:
+      - '0'
+      add:
+      - '0'
+      rwdb_rd_id:
+      - '25309'
+      - '27431'
+      - '25308'
+      - '24838'
+      - '24614'
+      - '24603'
+      - '24839'
+      - '24209'
+      - '24060'
+      - '23660'
+      - '22204'
+      - '21397'
+      - '21201'
+      - '21202'
+      - '25533'
+      - '21893'
+      - '21038'
+      - '21039'
+      - '20527'
+      - '20730'
+      - '20384'
+      - '19842'
+      - '19490'
+      - '20923'
+      - '20651'
+      - '19649'
+      - '19699'
+      - '19497'
+      - '19325'
+      - '19124'
+      - '19089'
+      - '18430'
+      - '18326'
+      - '15722'
+      - '15445'
+      - '15367'
+      - '15307'
+      - '16311'
+      - '15577'
+      - '15524'
+      - '15384'
+      - '15368'
+      - '15382'
+      - '15300'
+      - '15299'
+      - '15282'
+      orig_fid: 55
+      prefix: []
+      uident:
+      - '0'
+      continent:
+      - Asia
+      expressway:
+      - '1'
+      - '0'
+      level: []
+      min_zoom:
+      - '3.0'
+      - '4.0'
+      - '5.0'
+      - '7.6'
+      - '6.0'
+      min_label:
+      - '6.0'
+      - '7.0'
+      - '8.0'
+      - '10.1'
+      - '8.5'
+  waterway:
+    file: downloads/regions/hokkaido-japan/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#6f97ad'
+      ec: '#6f97ad'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      dissolve:
+      - 214River
+      scalerank:
+      - '6'
+      featurecla:
+      - River
+      name:
+      - Ishikari
+      name_alt: []
+      rivernum:
+      - '214'
+      note: []
+      min_zoom:
+      - '5.0'
+      name_en:
+      - Ishikari
+      min_label:
+      - '6.0'
+      ne_id:
+      - '1159113981'
+      label:
+      - Ishikari
+      wikidataid:
+      - Q1061515
+      name_ar:
+      - "\u0646\u0647\u0631 \u0625\u0634\u064A\u0643\u0627\u0631\u064A"
+      name_bn:
+      - "\u0987\u09B6\u09BF\u0995\u09BE\u09B0\u09BF"
+      name_de:
+      - Ishikari
+      name_es:
+      - Ishikari
+      name_fr:
+      - Ishikari-gawa
+      name_el:
+      - "\u0399\u03C3\u03B9\u03BA\u03AC\u03C1\u03B9"
+      name_hi:
+      - "\u0907\u0936\u093F\u0915\u093E\u0930\u0940"
+      name_hu:
+      - Isikari
+      name_id:
+      - Ishikari
+      name_it:
+      - Ishikari
+      name_ja:
+      - "\u77F3\u72E9\u5DDD"
+      name_ko:
+      - "\uC774\uC2DC\uCE74\uB9AC\uAC15"
+      name_nl:
+      - Ishikari
+      name_pl:
+      - Ishikari
+      name_pt:
+      - Ishikari
+      name_ru:
+      - "\u0418\u0441\u0438\u043A\u0430\u0440\u0438"
+      name_sv:
+      - Ishikari
+      name_tr:
+      - Ishikari
+      name_vi:
+      - "S\xF4ng Ishikari"
+      name_zh:
+      - "\u77F3\u72E9\u5DDD"
+      name_fa:
+      - "\u0631\u0648\u062F \u0627\u06CC\u0634\u06CC\u06A9\u0627\u0631\u06CC"
+      name_he:
+      - "\u05D0\u05D9\u05E9\u05D9\u05E7\u05D0\u05E8\u05D9"
+      name_uk:
+      - "\u0406\u0441\u0456\u043A\u0430\u0440\u0456"
+      name_ur:
+      - "\u0627\u06CC\u0634\u06CC\u06A9\u0627\u0631\u06CC"
+      name_zht:
+      - "\u77F3\u72E9\u5DDD"

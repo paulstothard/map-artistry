@@ -24,8 +24,9 @@ import json
 import argparse
 import geopandas as gpd
 from shapely.ops import transform
-from shapely.geometry import box
+from shapely.geometry import MultiPolygon, box
 import pyproj
+from geojson_bounds import apply_primary_segment_clip
 
 
 def calculate_area_km2(gdf):
@@ -42,6 +43,61 @@ def calculate_area_km2(gdf):
     area_km2 = area_m2 / 1_000_000
 
     return area_km2
+
+
+def wrap_longitude(lon):
+    """Wrap longitude into [-180, 180] range."""
+    while lon < -180.0:
+        lon += 360.0
+    while lon > 180.0:
+        lon -= 360.0
+    return lon
+
+
+def shortest_longitude_interval(west, east):
+    """Return shortest unwrapped longitude interval for bbox operations."""
+    west = wrap_longitude(west)
+    east = wrap_longitude(east)
+
+    east_unwrapped = east
+    while east_unwrapped < west:
+        east_unwrapped += 360.0
+
+    direct_span = east_unwrapped - west
+
+    if direct_span >= 360.0 - 1e-9:
+        return -180.0, 180.0
+
+    if direct_span <= 180.0:
+        return west, east_unwrapped
+
+    return east_unwrapped, west + 360.0
+
+
+def bbox_geometry(min_lat, max_lat, min_lon, max_lon):
+    """Build bbox geometry and split across antimeridian when needed."""
+    if min_lat >= max_lat:
+        raise ValueError(f"Invalid latitude bounds: [{min_lat}, {max_lat}]")
+
+    west, east = shortest_longitude_interval(min_lon, max_lon)
+    span = east - west
+
+    if span >= 360.0 - 1e-9:
+        return box(-180.0, min_lat, 180.0, max_lat)
+
+    while west < -180.0:
+        west += 360.0
+        east += 360.0
+    while west > 180.0:
+        west -= 360.0
+        east -= 360.0
+
+    if east <= 180.0:
+        return box(west, min_lat, east, max_lat)
+
+    left = box(west, min_lat, 180.0, max_lat)
+    right = box(-180.0, min_lat, east - 360.0, max_lat)
+    return MultiPolygon([left, right])
 
 
 def estimate_area_from_place(place_name):
@@ -61,7 +117,7 @@ def estimate_area_from_place(place_name):
         min_lat, max_lat, min_lon, max_lon = map(float, bbox)
 
         # Create GeoDataFrame from bbox
-        geom = box(min_lon, min_lat, max_lon, max_lat)
+        geom = bbox_geometry(min_lat, max_lat, min_lon, max_lon)
         gdf = gpd.GeoDataFrame([{"geometry": geom}], crs="EPSG:4326")
 
         return calculate_area_km2(gdf)
@@ -159,6 +215,19 @@ def main():
     else:
         # Calculate from GeoJSON
         gdf = gpd.read_file(args.geojson, engine="pyogrio", use_arrow=True)
+        if gdf.crs is None:
+            gdf = gdf.set_crs("EPSG:4326")
+        else:
+            gdf = gdf.to_crs("EPSG:4326")
+
+        gdf, primary_segment, antimeridian_clipped = apply_primary_segment_clip(gdf)
+        if antimeridian_clipped:
+            print(
+                "[ ] Antimeridian boundary detected; "
+                f"using primary segment bounds: {primary_segment}",
+                file=sys.stderr,
+            )
+
         area_km2 = calculate_area_km2(gdf)
 
     # Determine strategy

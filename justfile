@@ -160,6 +160,8 @@ _build-map region scheme width height dpi format buffer:
         --aspect-ratio "$ASPECT" \
         --output "$DATA_DIR/area.geojson"
 
+    {{ python }} scripts/validate-geojson.py "$DATA_DIR/area.geojson"
+
     echo "   ✓ Boundary saved (aspect ratio: $ASPECT)"
     echo ""
 

@@ -29,6 +29,7 @@ import numpy as np
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 import os
 import osmnx as ox
+from geojson_bounds import apply_primary_segment_clip
 
 
 def main():
@@ -76,7 +77,19 @@ def main():
     if gdf.empty:
         print("No valid polygon features found.")
         return
-    poly = gdf.geometry.union_all()
+
+    gdf = gdf[gdf.geometry.notnull()]
+    gdf = gdf[~gdf.is_empty]
+    if gdf.empty:
+        print("No valid polygon features found.")
+        return
+
+    gdf, primary_segment, antimeridian_clipped = apply_primary_segment_clip(gdf)
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected; "
+            f"using primary segment bounds: {primary_segment}"
+        )
 
     # Project to Web Mercator
     gdf_web = gdf.to_crs(epsg=3857)

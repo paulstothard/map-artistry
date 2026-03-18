@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 import geopandas as gpd
+from geojson_bounds import apply_primary_segment_clip
 
 
 def read_boundary(boundary_path: Path) -> gpd.GeoDataFrame:
@@ -70,7 +71,17 @@ def main() -> None:
     args = parser.parse_args()
 
     boundary = read_boundary(args.boundary)
-    bbox = tuple(boundary.total_bounds)
+    boundary, primary_segment, antimeridian_clipped = apply_primary_segment_clip(
+        boundary
+    )
+
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected; "
+            f"using primary segment bounds: {primary_segment}"
+        )
+
+    bbox = tuple(primary_segment) if primary_segment is not None else tuple(boundary.total_bounds)
     ocean = read_ocean(args.ocean_boundaries, bbox)
 
     if ocean.empty:

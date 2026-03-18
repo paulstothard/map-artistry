@@ -5,8 +5,8 @@ map:
   scheme: lava
   debug_water_hillshade: false
   info:
-    text: ps
-    show: true
+    text: map-artistry
+    show: false
     position: bottom-right
     font: Gill Sans
     fontsize: 8

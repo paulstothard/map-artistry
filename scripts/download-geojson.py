@@ -14,13 +14,14 @@ import argparse
 import json
 import math
 from geopy.geocoders import Nominatim
-from shapely.geometry import box, mapping
+from shapely.geometry import MultiPolygon, box, mapping
+from shapely.validation import explain_validity
 
 
 def geocode_bbox(place):
     """
     Use Nominatim to geocode a place name or address and return its bounding box.
-    Returns (south, north, west, east) as floats.
+    Returns (south, north, west, east, center_lat, center_lon) as floats.
     """
     geolocator = Nominatim(user_agent="map-artistry-download")
     loc = geolocator.geocode(place, exactly_one=True)
@@ -28,7 +29,7 @@ def geocode_bbox(place):
         raise ValueError(f"Could not geocode '{place}'")
     # boundingbox = [south_lat, north_lat, west_lon, east_lon] as strings
     south, north, west, east = map(float, loc.raw["boundingbox"])
-    return south, north, west, east
+    return south, north, west, east, float(loc.latitude), float(loc.longitude)
 
 
 def buffer_bbox(south, north, west, east, buffer_km):
@@ -52,6 +53,87 @@ def buffer_bbox(south, north, west, east, buffer_km):
     )
 
 
+def wrap_longitude(lon):
+    """Wrap longitude into [-180, 180] range."""
+    while lon < -180.0:
+        lon += 360.0
+    while lon > 180.0:
+        lon -= 360.0
+    return lon
+
+
+def shortest_longitude_interval(west, east):
+    """
+    Convert longitude bounds to the shortest unwrapped interval.
+
+    Returns:
+        (lon_min, lon_max) where lon_max >= lon_min and span <= 360
+    """
+    west = wrap_longitude(west)
+    east = wrap_longitude(east)
+
+    east_unwrapped = east
+    while east_unwrapped < west:
+        east_unwrapped += 360.0
+
+    direct_span = east_unwrapped - west
+
+    if direct_span >= 360.0 - 1e-9:
+        return -180.0, 180.0
+
+    if direct_span <= 180.0:
+        return west, east_unwrapped
+
+    return east_unwrapped, west + 360.0
+
+
+def build_bbox_geometry(south, north, west, east):
+    """Build a valid bbox geometry, splitting across antimeridian when needed."""
+    if south >= north:
+        raise ValueError(
+            f"Invalid latitude bounds: south={south}, north={north}"
+        )
+
+    lon_span = east - west
+    if lon_span <= 0:
+        raise ValueError(f"Invalid longitude bounds: west={west}, east={east}")
+
+    if lon_span >= 360.0 - 1e-9:
+        return box(-180.0, south, 180.0, north)
+
+    while west < -180.0:
+        west += 360.0
+        east += 360.0
+    while west > 180.0:
+        west -= 360.0
+        east -= 360.0
+
+    if east <= 180.0:
+        return box(west, south, east, north)
+
+    left = box(west, south, 180.0, north)
+    right = box(-180.0, south, east - 360.0, north)
+    return MultiPolygon([left, right])
+
+
+def validate_geometry(geom):
+    """Validate geometry shape and coordinate ranges."""
+    if geom.is_empty:
+        raise ValueError("Generated geometry is empty")
+
+    if not geom.is_valid:
+        reason = explain_validity(geom)
+        raise ValueError(f"Generated geometry is invalid: {reason}")
+
+    minx, miny, maxx, maxy = geom.bounds
+    if minx < -180.0 - 1e-6 or maxx > 180.0 + 1e-6:
+        raise ValueError(
+            f"Generated longitude bounds out of range: [{minx}, {maxx}]"
+        )
+    if miny < -90.0 - 1e-6 or maxy > 90.0 + 1e-6:
+        raise ValueError(f"Generated latitude bounds out of range: [{miny}, {maxy}]")
+
+
 def adjust_bbox_aspect_ratio(south, north, west, east, aspect_ratio):
     """
     Adjust bounding box to match desired aspect ratio (width:height).
@@ -67,13 +149,14 @@ def adjust_bbox_aspect_ratio(south, north, west, east, aspect_ratio):
     if aspect_ratio <= 0:
         raise ValueError("Aspect ratio must be positive")
 
-    # Calculate center point
+    # Calculate center point (longitude uses shortest interval to handle antimeridian)
     center_lat = (south + north) / 2.0
-    center_lon = (west + east) / 2.0
+    lon_min, lon_max = shortest_longitude_interval(west, east)
+    center_lon = (lon_min + lon_max) / 2.0
 
     # Current dimensions in degrees
     height_deg = north - south
-    width_deg = east - west
+    width_deg = lon_max - lon_min
 
     # Approximate conversion to kilometers for aspect ratio calculation
     km_per_deg_lat = 111.32
@@ -99,12 +182,21 @@ def adjust_bbox_aspect_ratio(south, north, west, east, aspect_ratio):
     half_height = height_deg / 2.0
     half_width = width_deg / 2.0
 
-    return (
-        center_lat - half_height,  # south
-        center_lat + half_height,  # north
-        center_lon - half_width,  # west
-        center_lon + half_width,  # east
-    )
+    south = center_lat - half_height
+    north = center_lat + half_height
+    west = center_lon - half_width
+    east = center_lon + half_width
+
+    south = max(-90.0, south)
+    north = min(90.0, north)
+
+    if south >= north:
+        raise ValueError(
+            "Aspect-ratio adjustment produced invalid latitude bounds "
+            f"(south={south}, north={north})"
+        )
+
+    return (south, north, west, east)
 
 
 def write_geojson(south, north, west, east, output_path, properties=None):
@@ -112,7 +204,8 @@ def write_geojson(south, north, west, east, output_path, properties=None):
     Write a GeoJSON FeatureCollection containing one polygon feature
     representing the bounding box.
     """
-    geom = box(west, south, east, north)
+    geom = build_bbox_geometry(south, north, west, east)
+    validate_geometry(geom)
     feature = {
         "type": "Feature",
         "geometry": mapping(geom),
@@ -152,7 +245,7 @@ def main():
     )
     args = parser.parse_args()
 
-    south, north, west, east = geocode_bbox(args.place)
+    south, north, west, east, center_lat, center_lon = geocode_bbox(args.place)
     if args.buffer:
         south, north, west, east = buffer_bbox(south, north, west, east, args.buffer)
 
@@ -165,7 +258,10 @@ def main():
         "query": args.place,
         "buffer_km": args.buffer,
         "aspect_ratio": args.aspect_ratio,
-        "bbox": [south, north, west, east],
+        "bbox": [south, north, wrap_longitude(west), wrap_longitude(east)],
+        "crosses_antimeridian": west < -180.0 or east > 180.0,
+        "center_lat": center_lat,
+        "center_lon": wrap_longitude(center_lon),
     }
     write_geojson(south, north, west, east, args.output, props)
 

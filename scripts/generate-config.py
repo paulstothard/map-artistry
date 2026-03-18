@@ -16,6 +16,7 @@ class NoAliasDumper(yaml.SafeDumper):
 import geopandas as gpd
 import argparse
 import sys
+from geojson_bounds import apply_primary_segment_clip
 
 
 """
@@ -27,27 +28,29 @@ Returns a dictionary mapping scheme names to their configurations.
 def load_schemes():
     schemes_dir = Path(__file__).parent.parent / "schemes"
     schemes = {}
-    
+
     if not schemes_dir.exists():
         raise FileNotFoundError(
             f"Schemes directory not found: {schemes_dir}\n"
             f"Please ensure the 'schemes/' directory exists in the project root."
         )
-    
+
     for scheme_file in schemes_dir.glob("*.yaml"):
         scheme_name = scheme_file.stem
         try:
-            with open(scheme_file, 'r') as f:
+            with open(scheme_file, "r") as f:
                 schemes[scheme_name] = yaml.safe_load(f)
         except Exception as e:
-            print(f"Warning: Failed to load scheme '{scheme_name}': {e}", file=sys.stderr)
-    
+            print(
+                f"Warning: Failed to load scheme '{scheme_name}': {e}", file=sys.stderr
+            )
+
     if not schemes:
         raise ValueError(
             f"No valid color schemes found in {schemes_dir}\n"
             f"Please ensure YAML scheme files exist in the 'schemes/' directory."
         )
-    
+
     return schemes
 
 
@@ -134,6 +137,20 @@ def generate_yaml(
         raise ValueError("A geojson_path is required")
     # Load mask if provided
     mask_gdf = gpd.read_file(geojson_path, engine="pyogrio", use_arrow=True)
+    if mask_gdf.crs is None:
+        mask_gdf = mask_gdf.set_crs("EPSG:4326")
+    else:
+        mask_gdf = mask_gdf.to_crs("EPSG:4326")
+
+    mask_gdf, primary_segment, antimeridian_clipped = apply_primary_segment_clip(
+        mask_gdf
+    )
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected in config mask; "
+            f"using primary segment bounds: {primary_segment}"
+        )
+
     # Select the design scheme based on the provided scheme name
     design = DESIGN_SETTINGS[scheme_name]
 

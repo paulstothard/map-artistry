@@ -19,6 +19,7 @@ from scipy.ndimage import gaussian_filter
 import numpy as np
 from shapely.geometry import Polygon, Point
 import pandas as pd
+from geojson_bounds import apply_primary_segment_clip
 
 
 def _normalize_array(arr: np.ndarray) -> np.ndarray:
@@ -266,8 +267,6 @@ def _render_hillshade_textured_polygon_fill(
     return True
 
 
-
-
 def _compute_multidirectional_hillshade(
     dem: np.ndarray,
     dx: float,
@@ -430,6 +429,27 @@ def draw_map_from_config(
     except (FileNotFoundError, Exception) as e:
         print(f"Error: Could not read mask file '{geojson_path}': {e}")
         return
+
+    if mask_gdf.crs is None:
+        mask_gdf = mask_gdf.set_crs("EPSG:4326")
+    else:
+        mask_gdf = mask_gdf.to_crs("EPSG:4326")
+
+    mask_gdf = mask_gdf[mask_gdf.geometry.notnull()]
+    mask_gdf = mask_gdf[~mask_gdf.is_empty]
+    if mask_gdf.empty:
+        print(f"Error: Mask file '{geojson_path}' has no valid geometry")
+        return
+
+    mask_gdf, primary_segment, antimeridian_clipped = apply_primary_segment_clip(
+        mask_gdf
+    )
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected; "
+            f"using primary segment bounds: {primary_segment}"
+        )
+
     # Background
     bg = mcfg.get("background", {})
     face_fc = bg.get("fc", "#ffffff")

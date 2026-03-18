@@ -1,0 +1,1987 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#aa332e'
+    fc: '#aa332e'
+  hillshade:
+    alpha: 0
+    altitude: 45
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gist_heat
+    interpolation: bicubic
+    multidirectional: true
+    sigma: 1.0
+    vert_exag: 1.0
+    weights:
+    - 1.2
+    - 1.0
+    - 0.8
+    - 0.8
+    zorder: 0
+  info:
+    color: '#000000'
+    font: Gill Sans
+    fontsize: 8
+    position: bottom-right
+    show: true
+    text: ps
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/regions/banff-ab/satellite.tif
+  scheme: coral
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#6a0000'
+    - '#7e0000'
+    - '#920606'
+    - '#a81414'
+    - '#bc2424'
+    - '#ce3434'
+    - '#dd4a4a'
+    - '#ea6666'
+    - '#f18585'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.4
+    visible: false
+    zorder: 0
+  dem: downloads/regions/banff-ab/dem.tif
+layers:
+  building__Polygon:
+    file: downloads/regions/banff-ab/layers/building.gpkg
+    layer: building
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 2220
+      building:
+      - 'yes'
+      - detached
+      - roof
+      - hut
+      - museum
+      - retail
+      - house
+      - public
+      - church
+      - commercial
+      - garage
+      - residential
+      - shed
+      - hospital
+      - stable
+      - cabin
+      - hotel
+      - civic
+      - apartments
+      - parking
+      - fire_station
+      - office
+      - transportation
+      - school
+      - toilets
+      - semidetached_house
+      - dormitory
+      - bungalow
+      - terrace
+      - industrial
+      - kindergarten
+      - sports_centre
+      - train_station
+  building__MultiPolygon:
+    file: downloads/regions/banff-ab/layers/building.gpkg
+    layer: building
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 7
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '19511990'
+      - '15094469'
+      - '18153956'
+      building:
+      - hotel
+      - 'yes'
+  highway__LineString:
+    file: downloads/regions/banff-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 2366
+      highway:
+      - path
+      - tertiary
+      - residential
+      - service
+      - track
+      - tertiary_link
+      - footway
+      - cycleway
+      - steps
+      - secondary
+      - bridleway
+      - motorway
+      - corridor
+      - motorway_link
+      - unclassified
+      - living_street
+      - pedestrian
+      - busway
+      - secondary_link
+      noref: []
+      stop: []
+      crossing:
+      - traffic_signals
+      - marked
+      - uncontrolled
+      - zebra
+      crossing:island:
+      - 'yes'
+      crossing_ref: []
+      tactile_paving:
+      - 'no'
+      traffic_signals: []
+      crossing:markings:
+      - zebra
+      - lines
+      - 'yes'
+      - ladder
+      name: 196
+      traffic_signals:direction: []
+      crossing:signals:
+      - 'no'
+      source:
+      - GPS
+      - Marko Stravic
+      - survey
+      - Brendan Clark
+      - GPS trace
+      - Calgary Area Trail Mapping Project
+      - Geobase_Import_2009
+      - Yahoo
+      - Esri Maps
+      - traced loosely from previous route
+      - Bing;Calgary Area Trail Mapping Project
+      - gps
+      - NRN - Alberta V7.0
+      - Mapbox
+      - Geobase_Import_2010
+      - Bing
+      - Bob Spirko
+      - Soistheman
+      - NRCan-CanVec-10.0
+      - Steven Song
+      - Geobase_Import_2009;Bing
+      - Peakery
+      - GPS Tracklog
+      - bing
+      bench: []
+      bin: []
+      bus:
+      - 'yes'
+      - designated
+      lit:
+      - 'no'
+      - 'yes'
+      network: []
+      network:wikidata: []
+      operator: []
+      public_transport: []
+      ref:
+      - '1'
+      - 1A
+      - '58'
+      shelter: []
+      description: []
+      old_ref: []
+      direction: []
+      colour: []
+      button_operated:
+      - 'yes'
+      traffic_signals:sound:
+      - 'yes'
+      amenity: []
+      traffic_signals:vibration: []
+      kerb: []
+      ref:signed: []
+      line_attachment: []
+      material: []
+      power: []
+      lamp_type: []
+      support: []
+      bicycle:
+      - designated
+      - 'yes'
+      - 'no'
+      - permissive
+      maxspeed:
+      - '30'
+      - '90'
+      - '20'
+      - '60'
+      - '50'
+      - '10'
+      - '15'
+      - '70'
+      - '40'
+      name:en:
+      - Mountain Avenue
+      - Banff Avenue
+      - Trans-Canada Highway
+      - Bow Valley Parkway
+      - Cave Avenue
+      - Tunnel Mountain Road
+      - Tunnel Mountain Summit
+      - Mount Norquay Road
+      name:fr:
+      - Avenue de la Montagne
+      - Avenue de Banff
+      - Route Transcanadienne
+      - "Promenade de la Vall\xE9e-de-la-Bow"
+      - Avenue du Cave
+      - Route du Mont-Tunnel
+      - Sommet du mont Tunnel
+      - Route du Mont-Norquay
+      - Route du Lac-Minnewanka
+      oneway:
+      - 'yes'
+      - 'no'
+      smoothness:
+      - excellent
+      - horrible
+      - very_horrible
+      - good
+      - bad
+      - intermediate
+      - very_bad
+      surface:
+      - asphalt
+      - paved
+      - unpaved
+      - concrete
+      - fine_gravel
+      - compacted
+      - paving_stones
+      - wood
+      - gravel
+      - dirt
+      - sett
+      - grass
+      - compacted;wood
+      - ground
+      - wood; earth
+      - metal
+      - ine
+      lanes:
+      - '2'
+      - '1'
+      - '3'
+      - '4'
+      - '5'
+      parking:condition:right:
+      - free
+      parking:condition:right:maxstay:
+      - 2 h
+      parking:condition:right:time_interval:
+      - 08:00-19:00
+      parking:lane:right:
+      - no_parking
+      - parallel
+      sidewalk:left:
+      - 'no'
+      - separate
+      sidewalk:right:
+      - 'yes'
+      - 'no'
+      - separate
+      parking:condition:both:
+      - free
+      parking:condition:both:default:
+      - free
+      parking:condition:both:maxstay:
+      - 2 h
+      parking:condition:both:time_interval:
+      - 08:00-19:00
+      parking:lane:both:
+      - parallel
+      sidewalk:both:
+      - separate
+      cycleway:both:
+      - shoulder
+      - 'no'
+      parking:right:
+      - street_side
+      parking:right:orientation:
+      - parallel
+      toll:
+      - 'yes'
+      sidewalk:
+      - right
+      - both
+      - 'no'
+      - left
+      - separate
+      sidewalk:right:surface:
+      - concrete
+      service:
+      - alley
+      - parking_aisle
+      - driveway
+      - emergency_access
+      - drive-through
+      access:
+      - private
+      - 'yes'
+      - customers
+      - 'no'
+      - destination
+      - permissive
+      - delivery
+      - permit
+      lanes:backward:
+      - '2'
+      - '1'
+      - '3'
+      lanes:forward:
+      - '1'
+      - '2'
+      parking:condition:left:maxstay:
+      - 2 h
+      - 3 h
+      parking:condition:left:time_interval:
+      - 07:00-21:00
+      parking:lane:left:
+      - parallel
+      - perpendicular
+      destination:
+      - Lynx Street
+      - Norquay Road
+      - Banff
+      - Calgary
+      - Norquay Ski Area
+      - Lake Louise
+      - Banff;Lake Minnewanka;Tunnel Mountain
+      - Banff;Tunnel Mountain
+      - Lake Minnewanka;Cascade Pond;Two Jack
+      destination:street:
+      - Banff Avenue
+      destination:ref:
+      - 1A
+      - 1 East/Est
+      - 1 West/Ouest
+      destination:symbol:
+      - hospital;police
+      shoulder:
+      - right
+      - left
+      - both
+      maxheight:signed:
+      - 'no'
+      bridge:
+      - boardwalk
+      - 'yes'
+      check_date:
+      - '2025-07-01'
+      covered:
+      - 'no'
+      - 'yes'
+      dog:
+      - 'yes'
+      foot:
+      - designated
+      - 'yes'
+      - 'no'
+      - permissive
+      informal:
+      - 'no'
+      - 'yes'
+      stroller:
+      - 'no'
+      wheelchair:
+      - 'no'
+      - 'yes'
+      - designated
+      turn:lanes:
+      - left;right
+      - through|through
+      - left|through|through
+      - left|left;through
+      tracktype:
+      - grade1
+      - grade5
+      - grade2
+      - grade3
+      - grade4
+      segregated:
+      - 'no'
+      large_vehicles:
+      - discouraged
+      motor_vehicle:
+      - 'no'
+      - 'yes'
+      - private
+      layer:
+      - '-1'
+      - '1'
+      - '2'
+      handrail:
+      - 'yes'
+      - 'no'
+      incline:
+      - up
+      - down
+      ramp:
+      - 'no'
+      - 'yes'
+      step_count:
+      - '9'
+      - '23'
+      - '31'
+      - '4'
+      - '5'
+      - '10'
+      - '14'
+      - '3'
+      - '8'
+      - '2'
+      - '63'
+      - '34'
+      - '33'
+      - '42'
+      - '21'
+      - '59'
+      - '43'
+      - '6'
+      - '27'
+      visibility:
+      - good
+      catmp-RoadID:
+      - '1224'
+      - '1977'
+      - '2451'
+      - '1222'
+      - '1556'
+      - '1986'
+      - '1423'
+      - '1241'
+      - '1188'
+      emergency:
+      - 'no'
+      - 'yes'
+      goods:
+      - 'no'
+      hgv:
+      - 'no'
+      motorcar:
+      - 'no'
+      psv:
+      - 'no'
+      taxi:
+      - 'no'
+      alt_name:
+      - Banff Avenue
+      - Gondola Trail
+      - Range Road 115B
+      note:
+      - slight revisions from GPS Tracklogs
+      - Not a legal passage
+      sac_scale:
+      - mountain_hiking
+      - hiking
+      - alpine_hiking
+      - demanding_mountain_hiking
+      trail_visibility:
+      - good
+      - bad
+      - excellent
+      - horrible
+      - intermediate
+      survey:date:
+      - '2012-08-19'
+      bridge:structure:
+      - beam
+      cycleway:
+      - shared_lane
+      - separate
+      maxweight:signed:
+      - 'no'
+      official_name:
+      - Bow River Bridge
+      website:
+      - https://banff.ca/1003/Bow-River-Bridge
+      - https://www.banfflakelouise.com/experiences/tunnel-mountain-summit-trail
+      wikidata:
+      - Q55138661
+      wikipedia:
+      - en:Bow River Bridge
+      created_by:
+      - Potlatch 0.9c
+      junction:
+      - roundabout
+      piste:difficulty:
+      - easy
+      - intermediate
+      piste:grooming:
+      - classic+skating
+      piste:name:
+      - Spray River West Trail
+      - Spray Connector
+      piste:type:
+      - nordic
+      ski:
+      - 'yes'
+      horse:
+      - 'yes'
+      - designated
+      - 'no'
+      - permissive
+      ramp:bicycle:
+      - 'yes'
+      attribution:
+      - "GeoBase\xAE"
+      geobase:acquisitionTechnique:
+      - GPS
+      - Orthoimage
+      is_in:
+      - I.D. No. 9 Banff,Alberta
+      - I.D. No. 9 Banff
+      - Banff,Alberta
+      check_date:tracktype:
+      - '2022-05-22'
+      - '2022-05-21'
+      parking:condition:left:
+      - free
+      geobase:datasetName:
+      - NRN:Alberta
+      geobase:uuid:
+      - 676954150b1b42d3bef32064c6a6054f
+      - 16986ef799e8424ea862725579a2db24
+      - f81d56284e154be18d46badf4dccc676
+      - a4e4a0f116e94177910e5450db52c4f8
+      - 0cd0e481533b405da2a97c6c03ab8e32
+      - 5926fd69a4fa4b39adfc93b6ba7299b7
+      - d1aab24c407749108570cfb600673ef7
+      - 296c0ffbce4d4a7f8ab7357aebedd3bc
+      - 81549e0814634dbbbccb7433b733992e
+      - 7e0491faa1c04373be5085be8d9ebff9
+      - aafbe0c2c6784171ab8a1ef0d9536461
+      noexit:
+      - 'yes'
+      winter_service:
+      - 'no'
+      vehicle:
+      - customers
+      - private
+      - destination
+      cycleway:right:
+      - shared_lane
+      - shoulder
+      - lane
+      designation:
+      - wildlife bridge
+      electric_bicycle:
+      - 'no'
+      - 'yes'
+      motorcycle:
+      - 'no'
+      check_date:surface:
+      - '2022-08-06'
+      - '2025-08-05'
+      lane_markings:
+      - 'no'
+      mtb:scale:imba:
+      - '2'
+      - '3'
+      footway:
+      - crossing
+      - sidewalk
+      cycleway:left:
+      - lane
+      - separate
+      width:
+      - '3'
+      - '1'
+      - '2'
+      - '4'
+      maxheight:
+      - '2'
+      - '5'
+      - '6'
+      trailblazed:
+      - 'no'
+      fee:
+      - 'no'
+      - 'yes'
+      handrail:center:
+      - 'yes'
+      handrail:left:
+      - 'yes'
+      handrail:right:
+      - 'yes'
+      climbing:
+      - route
+      motor_vehicle:conditional:
+      - no @ (summer)
+      turn:lanes:backward:
+      - left|through;right
+      - left|right
+      - through|right
+      - left|through|through
+      change:lanes:backward:
+      - not_left|yes
+      - no|not_left|yes
+      - no|no
+      - 'no'
+      - not_left|yes|yes
+      change:lanes:forward:
+      - not_left|yes
+      - 'no'
+      - no|no
+      turn:lanes:forward:
+      - left;through|right
+      - left|through
+      - through|right
+      - '|merge_to_left'
+      toilets: []
+      mtb:scale:
+      - '3'
+      - '1'
+      - '2'
+      snowmobile:
+      - 'no'
+      golf:
+      - path
+      cartpath:
+      - crossing
+      tunnel:
+      - building_passage
+      - 'yes'
+      tourist_bus:
+      - designated
+      golf_cart:
+      - designated
+      area: []
+      indoor:
+      - 'no'
+      - 'yes'
+      noname:
+      - 'yes'
+      destination:backward:
+      - Bow Falls
+      destination:forward:
+      - Waldhaus Restaurant
+    style_rules:
+      highway:
+        path: {}
+        tertiary:
+          linewidth: 0.32
+        residential:
+          linewidth: 0.3
+        service:
+          linewidth: 0.15
+        track:
+          linewidth: 0.1
+        tertiary_link: {}
+        footway: {}
+        cycleway: {}
+        steps: {}
+        secondary:
+          linewidth: 0.35
+        bridleway: {}
+        motorway:
+          linewidth: 0.6
+        corridor: {}
+        motorway_link: {}
+        unclassified:
+          linewidth: 0.15
+        living_street:
+          linewidth: 0.1
+        pedestrian: {}
+        busway: {}
+        secondary_link: {}
+      maxspeed:
+        '30': {}
+        '90': {}
+        '20': {}
+        '60': {}
+        '50': {}
+        '10': {}
+        '15': {}
+        '70': {}
+        '40': {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Point:
+    file: downloads/regions/banff-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 850
+      highway:
+      - turning_circle
+      - bus_stop
+      - crossing
+      - street_lamp
+      - traffic_signals
+      - stop
+      - motorway_junction
+      - turning_loop
+      - elevator
+      - trailhead
+      - rest_area
+      noref:
+      - 'yes'
+      stop:
+      - minor
+      - all
+      crossing:
+      - uncontrolled
+      - traffic_signals
+      - marked
+      - unmarked
+      - zebra
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing_ref:
+      - zebra
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      traffic_signals:
+      - signal
+      - blink_mode
+      crossing:markings:
+      - lines
+      - zebra
+      - 'no'
+      - 'yes'
+      - ladder
+      name: 92
+      traffic_signals:direction:
+      - backward
+      - forward
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      source:
+      - local_knowledge
+      bench:
+      - 'yes'
+      - 'no'
+      bin:
+      - 'no'
+      - 'yes'
+      bus:
+      - 'yes'
+      lit:
+      - 'no'
+      - 'yes'
+      network:
+      - ROAM
+      - Flixbus
+      - Banff Explorer
+      - Rider Express
+      network:wikidata:
+      - Q7339725
+      - Q15712258
+      operator:
+      - Bow Valley Regional Transit Services Commission
+      - Roam Transit
+      - Banff Explorer
+      public_transport:
+      - platform
+      ref:
+      - '36'
+      - 15|39|65
+      - 8|35|53
+      - 10|60
+      - 9|59
+      - 14|64
+      - '56'
+      - '57'
+      - '58'
+      - '54'
+      - 16|40|66
+      - 7|34|52
+      - 17|41|67
+      - 12|62
+      - 11|61
+      - 13|63
+      - '37'
+      - '38'
+      - '42'
+      - '19'
+      - '4'
+      - 20|101
+      - '21'
+      - 3|111
+      - '43'
+      - '32'
+      - 22|102
+      - '2'
+      - '31'
+      - '33'
+      - 6|51
+      - 18|68|100
+      - '5'
+      - '30'
+      shelter:
+      - 'no'
+      - 'yes'
+      description:
+      - Free Shuttle to Banff City Center
+      old_ref:
+      - '19'
+      direction:
+      - forward
+      - backward
+      colour:
+      - black
+      button_operated:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound:
+      - 'yes'
+      - 'no'
+      amenity:
+      - shelter
+      traffic_signals:vibration:
+      - 'no'
+      kerb:
+      - lowered
+      ref:signed:
+      - 'no'
+      line_attachment:
+      - pin
+      material:
+      - wood
+      power:
+      - pole
+      lamp_type:
+      - electric
+      support:
+      - pole
+      bicycle: []
+      maxspeed: []
+      name:en: []
+      name:fr: []
+      oneway: []
+      smoothness: []
+      surface: []
+      lanes: []
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:lane:right: []
+      sidewalk:left: []
+      sidewalk:right: []
+      parking:condition:both: []
+      parking:condition:both:default: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane:both: []
+      sidewalk:both: []
+      cycleway:both: []
+      parking:right: []
+      parking:right:orientation: []
+      toll: []
+      sidewalk: []
+      sidewalk:right:surface: []
+      service: []
+      access: []
+      lanes:backward: []
+      lanes:forward: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      parking:lane:left: []
+      destination: []
+      destination:street: []
+      destination:ref: []
+      destination:symbol: []
+      shoulder: []
+      maxheight:signed: []
+      bridge: []
+      check_date: []
+      covered: []
+      dog: []
+      foot: []
+      informal: []
+      stroller: []
+      wheelchair: []
+      turn:lanes: []
+      tracktype: []
+      segregated: []
+      large_vehicles: []
+      motor_vehicle: []
+      layer: []
+      handrail: []
+      incline: []
+      ramp: []
+      step_count: []
+      visibility: []
+      catmp-RoadID: []
+      emergency: []
+      goods: []
+      hgv: []
+      motorcar: []
+      psv: []
+      taxi: []
+      alt_name: []
+      note: []
+      sac_scale: []
+      trail_visibility: []
+      survey:date: []
+      bridge:structure: []
+      cycleway: []
+      maxweight:signed: []
+      official_name: []
+      website: []
+      wikidata: []
+      wikipedia: []
+      created_by: []
+      junction: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      ski: []
+      horse: []
+      ramp:bicycle: []
+      attribution: []
+      geobase:acquisitionTechnique: []
+      is_in: []
+      check_date:tracktype: []
+      parking:condition:left: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      noexit: []
+      winter_service: []
+      vehicle: []
+      cycleway:right: []
+      designation: []
+      electric_bicycle: []
+      motorcycle: []
+      check_date:surface: []
+      lane_markings: []
+      mtb:scale:imba: []
+      footway: []
+      cycleway:left: []
+      width: []
+      maxheight: []
+      trailblazed: []
+      fee: []
+      handrail:center: []
+      handrail:left: []
+      handrail:right: []
+      climbing: []
+      motor_vehicle:conditional: []
+      turn:lanes:backward: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      turn:lanes:forward: []
+      toilets: []
+      mtb:scale: []
+      snowmobile: []
+      golf: []
+      cartpath: []
+      tunnel: []
+      tourist_bus: []
+      golf_cart: []
+      area: []
+      indoor: []
+      noname: []
+      destination:backward: []
+      destination:forward: []
+    style_rules:
+      highway:
+        turning_circle: {}
+        bus_stop: {}
+        crossing: {}
+        street_lamp: {}
+        traffic_signals: {}
+        stop: {}
+        motorway_junction: {}
+        turning_loop: {}
+        elevator: {}
+        trailhead: {}
+        rest_area: {}
+    style_order:
+    - highway
+  highway__Polygon:
+    file: downloads/regions/banff-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      id:
+      - '1323268584'
+      - '1323267505'
+      - '1323268583'
+      - '1323264800'
+      - '1323267500'
+      - '1323267508'
+      - '1162272954'
+      - '1162279435'
+      - '1323267511'
+      - '1323267510'
+      - '1323267509'
+      - '1323267512'
+      - '1127831541'
+      - '1174308384'
+      - '1175715267'
+      - '1285779867'
+      - '1174889915'
+      - '1180913387'
+      - '584166717'
+      - '1264237930'
+      - '1322979186'
+      highway:
+      - pedestrian
+      - footway
+      - rest_area
+      noref: []
+      stop: []
+      crossing: []
+      crossing:island: []
+      crossing_ref: []
+      tactile_paving: []
+      traffic_signals: []
+      crossing:markings: []
+      name:
+      - Entrance Plaza
+      - Vermilion Lake
+      traffic_signals:direction: []
+      crossing:signals: []
+      source: []
+      bench: []
+      bin: []
+      bus: []
+      lit:
+      - 'yes'
+      network: []
+      network:wikidata: []
+      operator: []
+      public_transport: []
+      ref: []
+      shelter: []
+      description: []
+      old_ref: []
+      direction: []
+      colour: []
+      button_operated: []
+      traffic_signals:sound: []
+      amenity: []
+      traffic_signals:vibration: []
+      kerb: []
+      ref:signed: []
+      line_attachment: []
+      material: []
+      power: []
+      lamp_type: []
+      support: []
+      bicycle:
+      - 'no'
+      maxspeed: []
+      name:en:
+      - Entrance Plaza
+      name:fr:
+      - Esplanande
+      oneway: []
+      smoothness: []
+      surface:
+      - wood
+      - paving_stones
+      - Plastic
+      - asphalt
+      - concrete
+      lanes: []
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:lane:right: []
+      sidewalk:left: []
+      sidewalk:right: []
+      parking:condition:both: []
+      parking:condition:both:default: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane:both: []
+      sidewalk:both: []
+      cycleway:both: []
+      parking:right: []
+      parking:right:orientation: []
+      toll: []
+      sidewalk: []
+      sidewalk:right:surface: []
+      service: []
+      access: []
+      lanes:backward: []
+      lanes:forward: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      parking:lane:left: []
+      destination: []
+      destination:street: []
+      destination:ref: []
+      destination:symbol: []
+      shoulder: []
+      maxheight:signed: []
+      bridge: []
+      check_date:
+      - '2025-07-01'
+      covered: []
+      dog: []
+      foot:
+      - 'yes'
+      - designated
+      informal: []
+      stroller: []
+      wheelchair: []
+      turn:lanes: []
+      tracktype: []
+      segregated: []
+      large_vehicles: []
+      motor_vehicle:
+      - 'no'
+      layer: []
+      handrail: []
+      incline: []
+      ramp: []
+      step_count: []
+      visibility: []
+      catmp-RoadID: []
+      emergency: []
+      goods: []
+      hgv: []
+      motorcar: []
+      psv: []
+      taxi: []
+      alt_name: []
+      note: []
+      sac_scale: []
+      trail_visibility: []
+      survey:date: []
+      bridge:structure: []
+      cycleway: []
+      maxweight:signed: []
+      official_name: []
+      website: []
+      wikidata: []
+      wikipedia: []
+      created_by: []
+      junction: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      ski: []
+      horse: []
+      ramp:bicycle: []
+      attribution: []
+      geobase:acquisitionTechnique: []
+      is_in: []
+      check_date:tracktype: []
+      parking:condition:left: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      noexit: []
+      winter_service: []
+      vehicle: []
+      cycleway:right: []
+      designation: []
+      electric_bicycle: []
+      motorcycle: []
+      check_date:surface: []
+      lane_markings: []
+      mtb:scale:imba: []
+      footway: []
+      cycleway:left: []
+      width: []
+      maxheight: []
+      trailblazed: []
+      fee: []
+      handrail:center: []
+      handrail:left: []
+      handrail:right: []
+      climbing: []
+      motor_vehicle:conditional: []
+      turn:lanes:backward: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      turn:lanes:forward: []
+      toilets:
+      - 'no'
+      mtb:scale: []
+      snowmobile: []
+      golf: []
+      cartpath: []
+      tunnel: []
+      tourist_bus: []
+      golf_cart: []
+      area:
+      - 'yes'
+      indoor: []
+      noname: []
+      destination:backward: []
+      destination:forward: []
+    style_rules:
+      highway:
+        pedestrian: {}
+        footway: {}
+        rest_area: {}
+    style_order:
+    - highway
+  highway__MultiLineString:
+    file: downloads/regions/banff-ab/layers/highway.gpkg
+    layer: highway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.15
+    attributes:
+      element:
+      - way
+      id: 68
+      highway:
+      - residential
+      - service
+      - path
+      - track
+      - footway
+      noref: []
+      stop: []
+      crossing: []
+      crossing:island: []
+      crossing_ref: []
+      tactile_paving: []
+      traffic_signals: []
+      crossing:markings: []
+      name:
+      - Sulphur Court
+      - Spring Crescent
+      - Lougheed Circle
+      - Loop B
+      - '38'
+      - '37'
+      - '41'
+      - '42'
+      - '39'
+      - '6'
+      - '43'
+      - '40'
+      - '5'
+      - '26'
+      - '1'
+      - '27'
+      - '25'
+      - '13'
+      - '12'
+      - '2'
+      - '8'
+      - '23'
+      - '32'
+      - '35'
+      - '36'
+      - '31'
+      - '33'
+      - '34'
+      - '7'
+      - '11'
+      - '22'
+      - '24'
+      - '3'
+      - '28'
+      - '29'
+      - '9'
+      - '30'
+      - '18'
+      - '10'
+      - '21'
+      - '19'
+      - '20'
+      - '14'
+      - '16'
+      - '15'
+      - '17'
+      traffic_signals:direction: []
+      crossing:signals: []
+      source:
+      - Geobase_Import_2009
+      bench: []
+      bin: []
+      bus: []
+      lit: []
+      network: []
+      network:wikidata: []
+      operator: []
+      public_transport: []
+      ref: []
+      shelter: []
+      description: []
+      old_ref: []
+      direction: []
+      colour: []
+      button_operated: []
+      traffic_signals:sound: []
+      amenity: []
+      traffic_signals:vibration: []
+      kerb: []
+      ref:signed: []
+      line_attachment: []
+      material: []
+      power: []
+      lamp_type: []
+      support: []
+      bicycle: []
+      maxspeed:
+      - '30'
+      name:en: []
+      name:fr: []
+      oneway: []
+      smoothness: []
+      surface:
+      - asphalt
+      - fine_gravel
+      - unpaved
+      - compacted
+      lanes:
+      - '2'
+      parking:condition:right: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      parking:lane:right: []
+      sidewalk:left: []
+      sidewalk:right: []
+      parking:condition:both: []
+      parking:condition:both:default: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane:both: []
+      sidewalk:both: []
+      cycleway:both: []
+      parking:right: []
+      parking:right:orientation: []
+      toll: []
+      sidewalk: []
+      sidewalk:right:surface: []
+      service:
+      - parking_aisle
+      - driveway
+      access:
+      - private
+      lanes:backward: []
+      lanes:forward: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      parking:lane:left: []
+      destination: []
+      destination:street: []
+      destination:ref: []
+      destination:symbol: []
+      shoulder: []
+      maxheight:signed: []
+      bridge: []
+      check_date: []
+      covered: []
+      dog: []
+      foot:
+      - designated
+      informal: []
+      stroller: []
+      wheelchair: []
+      turn:lanes: []
+      tracktype:
+      - grade2
+      segregated: []
+      large_vehicles: []
+      motor_vehicle: []
+      layer: []
+      handrail: []
+      incline: []
+      ramp: []
+      step_count: []
+      visibility: []
+      catmp-RoadID: []
+      emergency: []
+      goods: []
+      hgv: []
+      motorcar: []
+      psv: []
+      taxi: []
+      alt_name: []
+      note: []
+      sac_scale: []
+      trail_visibility: []
+      survey:date: []
+      bridge:structure: []
+      cycleway: []
+      maxweight:signed: []
+      official_name: []
+      website: []
+      wikidata: []
+      wikipedia: []
+      created_by: []
+      junction: []
+      piste:difficulty: []
+      piste:grooming: []
+      piste:name: []
+      piste:type: []
+      ski: []
+      horse: []
+      ramp:bicycle: []
+      attribution:
+      - "GeoBase\xAE"
+      geobase:acquisitionTechnique:
+      - GPS
+      is_in:
+      - I.D. No. 9 Banff,Alberta
+      check_date:tracktype:
+      - '2022-05-21'
+      parking:condition:left: []
+      geobase:datasetName: []
+      geobase:uuid: []
+      noexit: []
+      winter_service: []
+      vehicle:
+      - private
+      cycleway:right: []
+      designation: []
+      electric_bicycle: []
+      motorcycle: []
+      check_date:surface: []
+      lane_markings: []
+      mtb:scale:imba: []
+      footway: []
+      cycleway:left: []
+      width: []
+      maxheight: []
+      trailblazed: []
+      fee: []
+      handrail:center: []
+      handrail:left: []
+      handrail:right: []
+      climbing: []
+      motor_vehicle:conditional: []
+      turn:lanes:backward: []
+      change:lanes:backward: []
+      change:lanes:forward: []
+      turn:lanes:forward: []
+      toilets: []
+      mtb:scale: []
+      snowmobile: []
+      golf:
+      - path
+      cartpath: []
+      tunnel: []
+      tourist_bus: []
+      golf_cart: []
+      area: []
+      indoor: []
+      noname: []
+      destination:backward: []
+      destination:forward: []
+    style_rules:
+      highway:
+        residential:
+          linewidth: 0.3
+        service:
+          linewidth: 0.15
+        path: {}
+        track:
+          linewidth: 0.1
+        footway: {}
+      maxspeed:
+        '30': {}
+    style_order:
+    - highway
+    - maxspeed
+  landuse__Polygon:
+    file: downloads/regions/banff-ab/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#d9a57f'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 460
+      landuse:
+      - grass
+      - commercial
+      - residential
+      - retail
+      - recreation_ground
+      - cemetery
+      - greenfield
+      - animal_keeping
+      - farmyard
+      - religious
+      - flowerbed
+      - forest
+      - industrial
+      - brownfield
+      - quarry
+  landuse__Point:
+    file: downloads/regions/banff-ab/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#d9a57f'
+      ec: '#d9a57f'
+      alpha: 1.0
+      zorder: 2
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '4395661989'
+      - '4110488014'
+      landuse:
+      - industrial
+      - military
+  natural__MultiPolygon:
+    file: downloads/regions/banff-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '5420240'
+      - '6123717'
+      - '5420239'
+      - '6685575'
+      - '5306946'
+      - '8255968'
+      - '6123907'
+      - '6123862'
+      - '6123908'
+      natural:
+      - wood
+  natural__Polygon:
+    file: downloads/regions/banff-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#b36969'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 324
+      natural:
+      - wood
+      - wetland
+      - scrub
+  natural__Point:
+    file: downloads/regions/banff-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '12244949796'
+      - '12244949797'
+      - '2687647507'
+      - '4110397335'
+      - '4110397770'
+      - '2684623549'
+      - '2687647516'
+      - '269834601'
+      - '4110683455'
+      - '263425880'
+      - '2681581164'
+      - '2681596610'
+      - '3882687279'
+      - '6789535363'
+      - '613621790'
+      natural:
+      - peak
+      - rock
+  natural__LineString:
+    file: downloads/regions/banff-ab/layers/natural.gpkg
+    layer: natural
+    geometry_type: LineString
+    visible: false
+    default:
+      fc: '#b36969'
+      ec: '#b36969'
+      alpha: 1.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id:
+      - '1323255911'
+      - '1323255910'
+      - '1323255909'
+      - '1323255908'
+      - '360996538'
+      - '1322963682'
+      - '1137462913'
+      natural:
+      - cliff
+      - valley
+  pois__Point:
+    file: downloads/regions/banff-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 0.1
+    attributes:
+      element:
+      - node
+      id: 484
+      name: 162
+      amenity: 52
+  pois__Polygon:
+    file: downloads/regions/banff-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 252
+      name: 53
+      amenity:
+      - shelter
+      - waste_disposal
+      - events_venue
+      - parking_space
+      - bicycle_parking
+      - parking
+      - toilets
+      - library
+      - townhall
+      - public_bath
+      - convention_centre
+      - dormitory
+      - theatre
+      - social_facility
+      - fuel
+      - shower
+      - recycling
+      - cafe
+      - restaurant
+      - social_centre
+      - bank
+      - place_of_worship
+      - community_centre
+      - pub
+      - hospital
+      - bus_station
+      - charging_station
+      - school
+      - police
+      - kindergarten
+  pois__MultiPolygon:
+    file: downloads/regions/banff-ab/layers/pois.gpkg
+    layer: pois
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#a94040'
+      ec: '#a94040'
+      alpha: 1.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#a94040'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '15061801'
+      - '15062030'
+      name: []
+      amenity:
+      - parking
+  water__Polygon:
+    file: downloads/regions/banff-ab/layers/water.gpkg
+    layer: water
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id: 112
+      water:
+      - wastewater
+      - river
+      - reservoir
+      - lake
+      - canal
+      - pond
+      - stream
+  water__MultiPolygon:
+    file: downloads/regions/banff-ab/layers/water.gpkg
+    layer: water
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      edge_color: '#ffffff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '8271012'
+      water:
+      - river
+  waterway__LineString:
+    file: downloads/regions/banff-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id: 216
+      waterway:
+      - river
+      - stream
+      - canal
+      - dam
+      - flowline
+      - ditch
+      - waterfall
+    style_rules:
+      waterway:
+        river:
+          linewidth: 1.0
+        stream:
+          linewidth: 0.4
+        canal:
+          linewidth: 0.8
+        dam: {}
+        flowline: {}
+        ditch:
+          linewidth: 0.2
+        waterfall: {}
+    style_order:
+    - waterway
+  waterway__MultiLineString:
+    file: downloads/regions/banff-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id:
+      - '355358966'
+      waterway:
+      - stream
+    style_rules:
+      waterway:
+        stream:
+          linewidth: 0.4
+    style_order:
+    - waterway
+  waterway__Point:
+    file: downloads/regions/banff-ab/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffffff'
+      ec: '#ffffff'
+      alpha: 1.0
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '12968670925'
+      - '263386936'
+      - '301457845'
+      waterway:
+      - waterfall
+    style_rules:
+      waterway:
+        waterfall: {}
+    style_order:
+    - waterway

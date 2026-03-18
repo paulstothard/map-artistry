@@ -30,6 +30,7 @@ import requests
 from pathlib import Path
 from zipfile import ZipFile
 from io import BytesIO
+from geojson_bounds import apply_primary_segment_clip
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 
@@ -299,13 +300,34 @@ def main():
     args = p.parse_args()
 
     if args.place:
-        poly = ox.geocode_to_gdf(args.place).geometry.union_all()
+        boundary_gdf = ox.geocode_to_gdf(args.place)
     else:
-        gdf = gpd.read_file(args.geojson, engine="pyogrio", use_arrow=True)
-        if gdf.crs != "EPSG:4326":
-            gdf = gdf.to_crs("EPSG:4326")
-        gdf = gdf[gdf.geometry.type.isin(["Polygon", "MultiPolygon"])]
-        poly = gdf.geometry.union_all()
+        boundary_gdf = gpd.read_file(args.geojson, engine="pyogrio", use_arrow=True)
+
+    if boundary_gdf.crs is None:
+        boundary_gdf = boundary_gdf.set_crs("EPSG:4326")
+    else:
+        boundary_gdf = boundary_gdf.to_crs("EPSG:4326")
+
+    boundary_gdf = boundary_gdf[
+        boundary_gdf.geometry.type.isin(["Polygon", "MultiPolygon"])
+    ]
+    boundary_gdf = boundary_gdf[boundary_gdf.geometry.notnull()]
+    boundary_gdf = boundary_gdf[~boundary_gdf.is_empty]
+
+    if boundary_gdf.empty:
+        raise ValueError("No valid polygon features found in boundary input")
+
+    boundary_gdf, primary_segment, antimeridian_clipped = apply_primary_segment_clip(
+        boundary_gdf
+    )
+    if antimeridian_clipped:
+        print(
+            "[ ] Antimeridian boundary detected; "
+            f"using primary segment bounds: {primary_segment}"
+        )
+
+    poly = boundary_gdf.geometry.union_all()
 
     # sanity check
     print(f"Using bounding box: {poly.bounds}")

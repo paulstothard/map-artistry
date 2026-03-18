@@ -51,18 +51,60 @@ All settings (boundary padding, DEM source, satellite zoom, layer source) are ca
 automatically based on region size. Use `--buffer-km` to override the automatic extra distance added
 around the region boundary, in kilometers.
 
+### How Data Is Selected
+
+The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This
+controls DEM source, satellite zoom, and vector layer source.
+
+| Tier | Area (km²) | DEM source | Satellite zoom | Vector layer source |
+| --- | ---: | --- | ---: | --- |
+| city | `< 10,000` | `copernicus` | `12` | `osm` |
+| region | `10,000 - 100,000` | `srtm` | `9` | `osm` |
+| country | `100,000 - 1,000,000` | `cop90` | `8` | `natural-earth` |
+| continent | `>= 1,000,000` | `etopo1` | `6` | `natural-earth` |
+
+Default buffer size also scales by area (`5`, `50`, `100`, `200` km), unless you set
+`--buffer-km`.
+
+Color schemes also control layer visibility/opacity in `schemes/*.yaml`. The order below matches
+the example image order:
+
+- `coral` — hides natural and land use layers
+- `river_runs_red` — hides natural and land use layers
+- `natural` — hides roads, buildings, and land use layers
+- `lava` — hides roads, buildings, and land use layers
+- `glacier` — hides roads, buildings, and land use layers
+- `satellite` — enables a satellite underlay with overlay layers
+
+You can always override any of these defaults via per-location overlay configs.
+
 ## Color Schemes
 
-- `coral` — red-toned scheme with white water features (hides natural layer)
-- `river_runs_red` — dark red/black scheme with red water features (hides natural and land use layers)
-- `natural` — hypsometric tints (green → brown → grey → white), bluish water (hides roads, buildings, and land use layers)
-- `lava` — fiery elevation coloring, orange water (hides roads, buildings, and land use layers)
-- `glacier` — cool grey-green to white elevation palette, blue-grey water (hides roads, buildings, and land use layers)
-- `satellite` — satellite imagery base with vector/map layer overlays (hides natural and land use layers)
+Listed in the same order as each example image row.
 
-**Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street network), buildings (footprints), water/waterway (bodies of water and streams).
+- `coral` — red-toned terrain, white water; hides natural and land use layers
+- `river_runs_red` — dark red/black terrain, red water; hides natural and land use layers
+- `natural` — green→brown→grey→white terrain, blue water; hides roads, buildings, and land use
+  layers
+- `lava` — fiery terrain, orange water; hides roads, buildings, and land use layers
+- `glacier` — cool grey-green terrain, blue-grey water; hides roads, buildings, and land use
+  layers
+- `satellite` — satellite imagery base with vector/map overlays; hides natural and land use
+  layers
+
+**Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street
+network), buildings (footprints), water/waterway (bodies of water and streams).
 
 ## Examples
+
+### Banff, AB
+
+[![Banff - Coral](examples/thumbnails/banff-ab-coral.png)](examples/full/banff-ab-coral.png)
+[![Banff - River Runs Red](examples/thumbnails/banff-ab-river_runs_red.png)](examples/full/banff-ab-river_runs_red.png)
+[![Banff - Natural](examples/thumbnails/banff-ab-natural.png)](examples/full/banff-ab-natural.png)
+[![Banff - Lava](examples/thumbnails/banff-ab-lava.png)](examples/full/banff-ab-lava.png)
+[![Banff - Glacier](examples/thumbnails/banff-ab-glacier.png)](examples/full/banff-ab-glacier.png)
+[![Banff - Satellite](examples/thumbnails/banff-ab-satellite.png)](examples/full/banff-ab-satellite.png)
 
 ### British Columbia
 
@@ -73,6 +115,24 @@ around the region boundary, in kilometers.
 [![British Columbia - Glacier](examples/thumbnails/british-columbia-glacier.png)](examples/full/british-columbia-glacier.png)
 [![British Columbia - Satellite](examples/thumbnails/british-columbia-satellite.png)](examples/full/british-columbia-satellite.png)
 
+### Cape Town, South Africa
+
+[![Cape Town - Coral](examples/thumbnails/cape-town-south-africa-coral.png)](examples/full/cape-town-south-africa-coral.png)
+[![Cape Town - River Runs Red](examples/thumbnails/cape-town-south-africa-river_runs_red.png)](examples/full/cape-town-south-africa-river_runs_red.png)
+[![Cape Town - Natural](examples/thumbnails/cape-town-south-africa-natural.png)](examples/full/cape-town-south-africa-natural.png)
+[![Cape Town - Lava](examples/thumbnails/cape-town-south-africa-lava.png)](examples/full/cape-town-south-africa-lava.png)
+[![Cape Town - Glacier](examples/thumbnails/cape-town-south-africa-glacier.png)](examples/full/cape-town-south-africa-glacier.png)
+[![Cape Town - Satellite](examples/thumbnails/cape-town-south-africa-satellite.png)](examples/full/cape-town-south-africa-satellite.png)
+
+### Crete, Greece
+
+[![Crete - Coral](examples/thumbnails/crete-greece-coral.png)](examples/full/crete-greece-coral.png)
+[![Crete - River Runs Red](examples/thumbnails/crete-greece-river_runs_red.png)](examples/full/crete-greece-river_runs_red.png)
+[![Crete - Natural](examples/thumbnails/crete-greece-natural.png)](examples/full/crete-greece-natural.png)
+[![Crete - Lava](examples/thumbnails/crete-greece-lava.png)](examples/full/crete-greece-lava.png)
+[![Crete - Glacier](examples/thumbnails/crete-greece-glacier.png)](examples/full/crete-greece-glacier.png)
+[![Crete - Satellite](examples/thumbnails/crete-greece-satellite.png)](examples/full/crete-greece-satellite.png)
+
 ### Edmonton, AB
 
 [![Edmonton - Coral](examples/thumbnails/edmonton-ab-coral.png)](examples/full/edmonton-ab-coral.png)
@@ -82,6 +142,15 @@ around the region boundary, in kilometers.
 [![Edmonton - Glacier](examples/thumbnails/edmonton-ab-glacier.png)](examples/full/edmonton-ab-glacier.png)
 [![Edmonton - Satellite](examples/thumbnails/edmonton-ab-satellite.png)](examples/full/edmonton-ab-satellite.png)
 
+### Hokkaido, Japan
+
+[![Hokkaido - Coral](examples/thumbnails/hokkaido-japan-coral.png)](examples/full/hokkaido-japan-coral.png)
+[![Hokkaido - River Runs Red](examples/thumbnails/hokkaido-japan-river_runs_red.png)](examples/full/hokkaido-japan-river_runs_red.png)
+[![Hokkaido - Natural](examples/thumbnails/hokkaido-japan-natural.png)](examples/full/hokkaido-japan-natural.png)
+[![Hokkaido - Lava](examples/thumbnails/hokkaido-japan-lava.png)](examples/full/hokkaido-japan-lava.png)
+[![Hokkaido - Glacier](examples/thumbnails/hokkaido-japan-glacier.png)](examples/full/hokkaido-japan-glacier.png)
+[![Hokkaido - Satellite](examples/thumbnails/hokkaido-japan-satellite.png)](examples/full/hokkaido-japan-satellite.png)
+
 ### Iceland
 
 [![Iceland - Coral](examples/thumbnails/iceland-coral.png)](examples/full/iceland-coral.png)
@@ -90,6 +159,51 @@ around the region boundary, in kilometers.
 [![Iceland - Lava](examples/thumbnails/iceland-lava.png)](examples/full/iceland-lava.png)
 [![Iceland - Glacier](examples/thumbnails/iceland-glacier.png)](examples/full/iceland-glacier.png)
 [![Iceland - Satellite](examples/thumbnails/iceland-satellite.png)](examples/full/iceland-satellite.png)
+
+### New Zealand
+
+[![New Zealand - Coral](examples/thumbnails/new-zealand-coral.png)](examples/full/new-zealand-coral.png)
+[![New Zealand - River Runs Red](examples/thumbnails/new-zealand-river_runs_red.png)](examples/full/new-zealand-river_runs_red.png)
+[![New Zealand - Natural](examples/thumbnails/new-zealand-natural.png)](examples/full/new-zealand-natural.png)
+[![New Zealand - Lava](examples/thumbnails/new-zealand-lava.png)](examples/full/new-zealand-lava.png)
+[![New Zealand - Glacier](examples/thumbnails/new-zealand-glacier.png)](examples/full/new-zealand-glacier.png)
+[![New Zealand - Satellite](examples/thumbnails/new-zealand-satellite.png)](examples/full/new-zealand-satellite.png)
+
+### Oahu, HI
+
+[![Oahu - Coral](examples/thumbnails/oahu-hi-coral.png)](examples/full/oahu-hi-coral.png)
+[![Oahu - River Runs Red](examples/thumbnails/oahu-hi-river_runs_red.png)](examples/full/oahu-hi-river_runs_red.png)
+[![Oahu - Natural](examples/thumbnails/oahu-hi-natural.png)](examples/full/oahu-hi-natural.png)
+[![Oahu - Lava](examples/thumbnails/oahu-hi-lava.png)](examples/full/oahu-hi-lava.png)
+[![Oahu - Glacier](examples/thumbnails/oahu-hi-glacier.png)](examples/full/oahu-hi-glacier.png)
+[![Oahu - Satellite](examples/thumbnails/oahu-hi-satellite.png)](examples/full/oahu-hi-satellite.png)
+
+### Patagonia
+
+[![Patagonia - Coral](examples/thumbnails/patagonia-coral.png)](examples/full/patagonia-coral.png)
+[![Patagonia - River Runs Red](examples/thumbnails/patagonia-river_runs_red.png)](examples/full/patagonia-river_runs_red.png)
+[![Patagonia - Natural](examples/thumbnails/patagonia-natural.png)](examples/full/patagonia-natural.png)
+[![Patagonia - Lava](examples/thumbnails/patagonia-lava.png)](examples/full/patagonia-lava.png)
+[![Patagonia - Glacier](examples/thumbnails/patagonia-glacier.png)](examples/full/patagonia-glacier.png)
+[![Patagonia - Satellite](examples/thumbnails/patagonia-satellite.png)](examples/full/patagonia-satellite.png)
+
+### San Francisco, CA
+
+[![San Francisco - Coral](examples/thumbnails/san-francisco-ca-coral.png)](examples/full/san-francisco-ca-coral.png)
+[![San Francisco - River Runs Red](examples/thumbnails/san-francisco-ca-river_runs_red.png)](examples/full/san-francisco-ca-river_runs_red.png)
+[![San Francisco - Natural](examples/thumbnails/san-francisco-ca-natural.png)](examples/full/san-francisco-ca-natural.png)
+[![San Francisco - Lava](examples/thumbnails/san-francisco-ca-lava.png)](examples/full/san-francisco-ca-lava.png)
+[![San Francisco - Glacier](examples/thumbnails/san-francisco-ca-glacier.png)](examples/full/san-francisco-ca-glacier.png)
+[![San Francisco - Satellite](examples/thumbnails/san-francisco-ca-satellite.png)](examples/full/san-francisco-ca-satellite.png)
+
+### Scotland
+
+[![Scotland - Coral](examples/thumbnails/scotland-coral.png)](examples/full/scotland-coral.png)
+[![Scotland - River Runs Red](examples/thumbnails/scotland-river_runs_red.png)](examples/full/scotland-river_runs_red.png)
+[![Scotland - Natural](examples/thumbnails/scotland-natural.png)](examples/full/scotland-natural.png)
+[![Scotland - Lava](examples/thumbnails/scotland-lava.png)](examples/full/scotland-lava.png)
+[![Scotland - Glacier](examples/thumbnails/scotland-glacier.png)](examples/full/scotland-glacier.png)
+[![Scotland - Satellite](examples/thumbnails/scotland-satellite.png)](examples/full/scotland-satellite.png)
 
 ### Vancouver, BC
 
@@ -109,16 +223,27 @@ around the region boundary, in kilometers.
 [![Vancouver Island - Glacier](examples/thumbnails/vancouver-island-bc-glacier.png)](examples/full/vancouver-island-bc-glacier.png)
 [![Vancouver Island - Satellite](examples/thumbnails/vancouver-island-bc-satellite.png)](examples/full/vancouver-island-bc-satellite.png)
 
+### Vestland, Norway
+
+[![Vestland - Coral](examples/thumbnails/vestland-norway-coral.png)](examples/full/vestland-norway-coral.png)
+[![Vestland - River Runs Red](examples/thumbnails/vestland-norway-river_runs_red.png)](examples/full/vestland-norway-river_runs_red.png)
+[![Vestland - Natural](examples/thumbnails/vestland-norway-natural.png)](examples/full/vestland-norway-natural.png)
+[![Vestland - Lava](examples/thumbnails/vestland-norway-lava.png)](examples/full/vestland-norway-lava.png)
+[![Vestland - Glacier](examples/thumbnails/vestland-norway-glacier.png)](examples/full/vestland-norway-glacier.png)
+[![Vestland - Satellite](examples/thumbnails/vestland-norway-satellite.png)](examples/full/vestland-norway-satellite.png)
+
 ## Customizing a Map
 
 Each build produces two auto-generated files:
 
 - `configs/{location}-base.yaml` — full generated config
 - `configs/{location}-{scheme}-final.yaml` — final merged config (used for rendering)
-- `configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to auto-apply)
+- `configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to
+  auto-apply)
 
-Create an overlay file named `configs/{location}-{scheme}-overlay.yaml` and place it in `configs/`. The
-build detects it automatically and deep-merges it over the base config to produce the final config.
+Create an overlay file named `configs/{location}-{scheme}-overlay.yaml` and place it in `configs/`.
+The build detects it automatically and deep-merges it over the base config to produce the final
+config.
 
 ```bash
 # 1. Build the map first to generate the config files
@@ -165,13 +290,13 @@ The scheme file should contain a YAML structure with `map` and layer-specific se
 ```yaml
 map:
   background:
-    fc: '#ffffff'
-    ec: '#ffffff'
+    fc: "#ffffff"
+    ec: "#ffffff"
   scheme: my_scheme
   # ... terrain, hillshade, satellite settings
 water:
-  fc: '#0000ff'
-  ec: '#0000ff'
+  fc: "#0000ff"
+  ec: "#0000ff"
   alpha: 1.0
   # ... other water settings
 # ... other layers (waterway, road, building, etc.)
