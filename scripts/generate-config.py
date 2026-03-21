@@ -168,6 +168,36 @@ def generate_yaml(
     config["map"]["hillshade"].setdefault("vert_exag", 1.0)
     config["map"]["hillshade"].setdefault("interpolation", "bicubic")
     config["map"]["hillshade"].setdefault("zorder", 0)
+    config["map"]["hillshade"].setdefault("render_mode", "cmap")
+    config["map"]["hillshade"].setdefault(
+        "tone",
+        {
+            "clip_low": 0.0,
+            "clip_high": 1.0,
+            "contrast": 1.0,
+            "gamma": 1.0,
+            "bias": 0.0,
+            "ambient": 0.0,
+        },
+    )
+    config["map"]["hillshade"].setdefault(
+        "tint",
+        {
+            "shadow_color": "#0b0f14",
+            "mid_color": "#5f6368",
+            "highlight_color": "#f3f1eb",
+        },
+    )
+    config["map"]["hillshade"].setdefault(
+        "multiscale",
+        {
+            "enabled": False,
+            "scales": [
+                {"sigma": 8.0, "weight": 0.65},
+                {"sigma": 2.0, "weight": 0.35},
+            ],
+        },
+    )
 
     config["map"].setdefault(
         "terrain",

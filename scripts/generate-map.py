@@ -161,6 +161,132 @@ def _prepare_water_hillshade_texture(
     return water_tone.astype(np.float32)
 
 
+# --- New helper functions for advanced hillshade/tint/multiscale ---
+def _apply_hillshade_tone(
+    shade: np.ndarray,
+    clip_low: float = 0.0,
+    clip_high: float = 1.0,
+    contrast: float = 1.0,
+    gamma: float = 1.0,
+    bias: float = 0.0,
+    ambient: float = 0.0,
+) -> np.ndarray:
+    arr = np.asarray(shade, dtype=np.float32)
+    lo = float(np.clip(clip_low, 0.0, 1.0))
+    hi = float(np.clip(clip_high, 0.0, 1.0))
+    if hi <= lo:
+        hi = min(1.0, lo + 1e-3)
+
+    arr = np.clip(arr, lo, hi)
+    arr = (arr - lo) / (hi - lo)
+
+    ctr = max(float(contrast), 0.0)
+    arr = 0.5 + (arr - 0.5) * ctr
+    arr = np.clip(arr, 0.0, 1.0)
+
+    gam = max(float(gamma), 1e-6)
+    arr = np.power(arr, gam)
+
+    amb = float(np.clip(ambient, 0.0, 1.0))
+    if amb > 0:
+        arr = amb + (1.0 - amb) * arr
+
+    arr = np.clip(arr + float(bias), 0.0, 1.0)
+    return arr.astype(np.float32)
+
+
+def _hillshade_to_tinted_rgb(
+    shade: np.ndarray,
+    shadow_color: str,
+    mid_color: str,
+    highlight_color: str,
+) -> np.ndarray:
+    shade_arr = np.clip(np.asarray(shade, dtype=np.float32), 0.0, 1.0)
+    shadow = np.array(to_rgb(shadow_color), dtype=np.float32)
+    mid = np.array(to_rgb(mid_color), dtype=np.float32)
+    highlight = np.array(to_rgb(highlight_color), dtype=np.float32)
+
+    rgb = np.empty(shade_arr.shape + (3,), dtype=np.float32)
+    lower = shade_arr <= 0.5
+    upper = ~lower
+
+    if np.any(lower):
+        t = (shade_arr[lower] / 0.5).astype(np.float32)
+        rgb[lower] = shadow * (1.0 - t[:, np.newaxis]) + mid * t[:, np.newaxis]
+    if np.any(upper):
+        t = ((shade_arr[upper] - 0.5) / 0.5).astype(np.float32)
+        rgb[upper] = mid * (1.0 - t[:, np.newaxis]) + highlight * t[:, np.newaxis]
+
+    return np.clip(rgb, 0.0, 1.0)
+
+
+def _compute_multiscale_hillshade(
+    dem: np.ndarray,
+    dx: float,
+    dy: float,
+    altitude: float,
+    azimuths: list[float],
+    weights: list[float] | None = None,
+    vert_exag: float = 1.0,
+    multiscale_cfg: dict | None = None,
+) -> np.ndarray:
+    cfg = multiscale_cfg or {}
+    enabled = bool(cfg.get("enabled", False))
+    scales = cfg.get("scales") or []
+
+    if not enabled or not scales:
+        return _compute_multidirectional_hillshade(
+            dem=dem,
+            dx=dx,
+            dy=dy,
+            altitude=altitude,
+            azimuths=azimuths,
+            weights=weights,
+            vert_exag=vert_exag,
+        )
+
+    combined = np.zeros_like(dem, dtype=np.float32)
+    total_weight = 0.0
+
+    for scale in scales:
+        if not isinstance(scale, dict):
+            continue
+        sigma = float(scale.get("sigma", 0.0) or 0.0)
+        weight = float(scale.get("weight", 1.0) or 1.0)
+        if weight <= 0:
+            continue
+
+        if sigma > 0:
+            dem_scale = gaussian_filter(dem, sigma=sigma)
+        else:
+            dem_scale = dem
+
+        shade_scale = _compute_multidirectional_hillshade(
+            dem=dem_scale,
+            dx=dx,
+            dy=dy,
+            altitude=altitude,
+            azimuths=azimuths,
+            weights=weights,
+            vert_exag=vert_exag,
+        )
+        combined += shade_scale.astype(np.float32) * weight
+        total_weight += weight
+
+    if total_weight <= 0:
+        return _compute_multidirectional_hillshade(
+            dem=dem,
+            dx=dx,
+            dy=dy,
+            altitude=altitude,
+            azimuths=azimuths,
+            weights=weights,
+            vert_exag=vert_exag,
+        )
+
+    return _normalize_array(combined / total_weight)
+
+
 def _render_hillshade_textured_polygon_fill(
     ax,
     gdf: gpd.GeoDataFrame,
@@ -284,12 +410,21 @@ def _compute_multidirectional_hillshade(
         weights = [1.0] * len(azimuths)
 
     shades = []
+    valid_weights = []
     for az, weight in zip(azimuths, weights):
+        w = float(weight)
+        if w <= 0:
+            continue
         ls = LightSource(azdeg=az, altdeg=altitude)
         shade = ls.hillshade(dem, vert_exag=vert_exag, dx=dx, dy=dy)
-        shades.append(shade * weight)
+        shades.append(shade * w)
+        valid_weights.append(w)
 
-    combined = np.sum(shades, axis=0) / np.sum(weights)
+    if not shades:
+        ls = LightSource(azdeg=315, altdeg=altitude)
+        return _normalize_array(ls.hillshade(dem, vert_exag=vert_exag, dx=dx, dy=dy))
+
+    combined = np.sum(shades, axis=0) / np.sum(valid_weights)
     return _normalize_array(combined)
 
 
@@ -561,7 +696,8 @@ def draw_map_from_config(
                     azimuths = [315, 45, 270, 90] if multidirectional else [azimuth]
                 weights = hs_cfg.get("weights")
 
-                shade = _compute_multidirectional_hillshade(
+                multiscale_cfg = hs_cfg.get("multiscale", {})
+                shade = _compute_multiscale_hillshade(
                     dem=dem_smoothed,
                     dx=dx,
                     dy=dy,
@@ -569,6 +705,7 @@ def draw_map_from_config(
                     azimuths=azimuths,
                     weights=weights,
                     vert_exag=vert_exag,
+                    multiscale_cfg=multiscale_cfg,
                 )
 
                 # Apply unsharp masking to enhance detail
@@ -579,8 +716,37 @@ def draw_map_from_config(
                     shade = shade + unsharp_amount * (shade - shade_blurred)
                     shade = np.clip(shade, 0, 1)
 
+                tone_cfg = hs_cfg.get("tone", {})
+                shade = _apply_hillshade_tone(
+                    shade,
+                    clip_low=tone_cfg.get("clip_low", 0.0),
+                    clip_high=tone_cfg.get("clip_high", 1.0),
+                    contrast=tone_cfg.get("contrast", 1.0),
+                    gamma=tone_cfg.get("gamma", 1.0),
+                    bias=tone_cfg.get("bias", 0.0),
+                    ambient=tone_cfg.get("ambient", 0.0),
+                )
+
+                hillshade_render_mode = str(hs_cfg.get("render_mode", "cmap")).lower()
+                hillshade_rgb = None
+                if hillshade_render_mode == "tinted":
+                    tint_cfg = hs_cfg.get("tint", {})
+                    hillshade_rgb = _hillshade_to_tinted_rgb(
+                        shade,
+                        shadow_color=tint_cfg.get("shadow_color", "#0b0f14"),
+                        mid_color=tint_cfg.get("mid_color", "#5f6368"),
+                        highlight_color=tint_cfg.get("highlight_color", "#f3f1eb"),
+                    )
+
                 # keep invalid DEM cells transparent / background-colored for land rendering
                 shade = np.where(finite, shade, 1.0)
+                if hillshade_rgb is not None:
+                    bg_rgb = np.array(to_rgb(face_fc), dtype=np.float32)
+                    hillshade_rgb = np.where(
+                        finite[..., np.newaxis],
+                        hillshade_rgb,
+                        bg_rgb[np.newaxis, np.newaxis, :],
+                    )
 
                 # Build water tone from a finite-aware normalized blur so coastal hillshade
                 # can influence nearby ocean instead of nodata becoming flat white.
@@ -669,15 +835,30 @@ def draw_map_from_config(
                         aspect="auto",
                     )
                 else:
-                    ax.imshow(
-                        shade,
-                        cmap=hs_cfg.get("cmap", "gray"),
-                        alpha=hs_cfg.get("alpha", 0.5),
-                        extent=[left, right, bottom, top],
-                        zorder=hs_cfg.get("zorder", 0),
-                        interpolation=hs_cfg.get("interpolation", "bicubic"),
-                        aspect="auto",
-                    )
+                    hillshade_alpha = hs_cfg.get("alpha", 0.5)
+                    if hillshade_rgb is not None:
+                        rgba = np.empty(
+                            hillshade_rgb.shape[:2] + (4,), dtype=np.float32
+                        )
+                        rgba[..., :3] = hillshade_rgb
+                        rgba[..., 3] = float(hillshade_alpha)
+                        ax.imshow(
+                            rgba,
+                            extent=[left, right, bottom, top],
+                            zorder=hs_cfg.get("zorder", 0),
+                            interpolation=hs_cfg.get("interpolation", "bicubic"),
+                            aspect="auto",
+                        )
+                    else:
+                        ax.imshow(
+                            shade,
+                            cmap=hs_cfg.get("cmap", "gray"),
+                            alpha=hillshade_alpha,
+                            extent=[left, right, bottom, top],
+                            zorder=hs_cfg.get("zorder", 0),
+                            interpolation=hs_cfg.get("interpolation", "bicubic"),
+                            aspect="auto",
+                        )
         except (FileNotFoundError, rasterio.errors.RasterioIOError, ValueError) as e:
             print(f"Warning: Could not read DEM file '{dem_path}': {e}")
 

@@ -1,7 +1,7 @@
 map:
   background:
-    fc: '#05050d'
-    ec: '#05050d'
+    fc: "#05050d"
+    ec: "#05050d"
   scheme: satellite
   info:
     text: map-artistry
@@ -9,20 +9,20 @@ map:
     position: bottom-right
     font: Gill Sans
     fontsize: 8
-    color: '#000000'
+    color: "#000000"
   hillshade:
     azimuth: 315
     altitude: 45
     azimuths:
-    - 315
-    - 45
-    - 270
-    - 90
+      - 315
+      - 45
+      - 270
+      - 90
     weights:
-    - 1.2
-    - 1.0
-    - 0.8
-    - 0.8
+      - 1.2
+      - 1.0
+      - 0.8
+      - 0.8
     multidirectional: true
     vert_exag: 1.0
     cmap: gist_heat
@@ -35,27 +35,27 @@ map:
     alpha: 1.0
     zorder: 0
     percentiles:
-    - 2
-    - 98
+      - 2
+      - 98
     blend_mode: soft_light
     shade_strength: 0.6
     interpolation: bicubic
     colors:
-    - '#132B43'
-    - '#255D83'
-    - '#4D8DA6'
-    - '#7FAE7B'
-    - '#B8C98A'
-    - '#D7C29E'
-    - '#A9835A'
-    - '#7A5D45'
-    - '#F2F1ED'
+      - "#132B43"
+      - "#255D83"
+      - "#4D8DA6"
+      - "#7FAE7B"
+      - "#B8C98A"
+      - "#D7C29E"
+      - "#A9835A"
+      - "#7A5D45"
+      - "#F2F1ED"
   satellite:
     visible: true
     opacity: 1.0
 water:
-  fc: '#003f5c'
-  ec: '#003f5c'
+  fc: "#003f5c"
+  ec: "#003f5c"
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -69,8 +69,8 @@ water:
     MultiPolygon: true
   palette: []
 ocean:
-  fc: '#003f5c'
-  ec: '#003f5c'
+  fc: "#003f5c"
+  ec: "#003f5c"
   alpha: 1.0
   zorder: 4
   ew: 0.1
@@ -84,8 +84,8 @@ ocean:
     MultiPolygon: true
   palette: []
 waterway:
-  fc: '#003f5c'
-  ec: '#003f5c'
+  fc: "#003f5c"
+  ec: "#003f5c"
   alpha: 1.0
   ew: 0
   zorder: 3
@@ -108,8 +108,8 @@ waterway:
     rapids: 0.25
   default_lw: 0.3
 road:
-  fc: '#8a8a8a'
-  ec: '#8a8a8a'
+  fc: "#8a8a8a"
+  ec: "#8a8a8a"
   alpha: 0.9
   ew: 0
   zorder: 6
@@ -135,8 +135,8 @@ road:
     track: 0.1
   default_lw: 0.15
 building:
-  fc: '#a0a0a0'
-  ec: '#a0a0a0'
+  fc: "#a0a0a0"
+  ec: "#a0a0a0"
   alpha: 0.9
   zorder: 7
   ew: 0
@@ -149,12 +149,12 @@ building:
     Polygon: true
     MultiPolygon: true
   palette:
-  - '#a0a0a0'
-  - '#a0a0a0'
-  - '#a0a0a0'
+    - "#a0a0a0"
+    - "#a0a0a0"
+    - "#a0a0a0"
 natural:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 1
   ew: 0
@@ -168,8 +168,8 @@ natural:
     MultiPolygon: true
   palette: []
 landuse:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 2
   ew: 0
@@ -183,8 +183,8 @@ landuse:
     MultiPolygon: false
   palette: []
 railway:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 5
   ew: 0
@@ -199,8 +199,8 @@ railway:
   palette: []
   default_lw: 0.12
 transport:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 5
   ew: 0
@@ -215,8 +215,8 @@ transport:
   palette: []
   default_lw: 0.08
 places:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 5
   ew: 0
@@ -230,8 +230,8 @@ places:
     MultiPolygon: false
   palette: []
 poi:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 1
   ew: 0
@@ -247,8 +247,8 @@ poi:
   marker: o
   size: 0.1
 pofw:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 5
   ew: 0
@@ -262,8 +262,8 @@ pofw:
     MultiPolygon: false
   palette: []
 traffic:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 5
   ew: 0
@@ -278,8 +278,8 @@ traffic:
   palette: []
   default_lw: 0.15
 other:
-  fc: '#ffffff'
-  ec: '#ffffff'
+  fc: "#ffffff"
+  ec: "#ffffff"
   alpha: 1.0
   zorder: 0
   ew: 0
