@@ -31,3 +31,7 @@ deploy
 
 # Roadmap
 ROADMAP.md
+
+# Test output folders
+configs-text-tests/
+output-text-tests/
