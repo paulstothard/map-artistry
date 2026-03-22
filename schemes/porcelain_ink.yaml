@@ -2,6 +2,10 @@ map:
   background:
     fc: "#f9f9f6"
     ec: "#f9f9f6"
+  frame:
+    enabled: true
+    color: "#2a2a2a"
+    padding: 0.04
   scheme: porcelain_ink
   debug_water_hillshade: false
   info:
@@ -81,6 +85,73 @@ map:
   satellite:
     visible: false
     opacity: 1.0
+  info_panel:
+    enabled: false
+    position: bottom
+    height: 0.12
+    background:
+      color: "#ffffff"
+      alpha: 1.0
+    padding: 0.015
+    zorder: 1000
+    elements:
+      - type: title
+        id: title
+        content: ""
+        x: 0.03
+        y: 0.65
+        font: Inter
+        font_weight: bold
+        size: 0.42
+        color: "#000000"
+        alpha: 1.0
+        align: left
+        transform: uppercase
+        tracking: 0.10
+      - type: text
+        id: subtitle
+        content: ""
+        x: 0.03
+        y: 0.25
+        font: Inter
+        font_weight: normal
+        size: 0.14
+        color: "#666666"
+        alpha: 1.0
+        align: left
+        transform: uppercase
+        tracking: 0.06
+      - type: text
+        id: location
+        content: ""
+        x: 0.97
+        y: 0.65
+        font: Inter
+        font_weight: normal
+        size: 0.14
+        color: "#666666"
+        alpha: 1.0
+        align: right
+        transform: uppercase
+        tracking: 0.06
+      - type: stats
+        id: stats
+        items: []
+        x: 0.97
+        y: 0.30
+        align: right
+        layout: horizontal
+        spacing: 0.04
+        font: Inter
+        value_size: 0.22
+        value_weight: bold
+        value_color: "#000000"
+        value_alpha: 1.0
+        label_size: 0.10
+        label_weight: normal
+        label_color: "#666666"
+        label_alpha: 1.0
+        transform: uppercase
 
 water:
   fc: "#c8d9de"

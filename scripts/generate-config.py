@@ -132,6 +132,11 @@ def generate_yaml(
     scheme_name="coral",
     dem_path=None,
     satellite=None,
+    text_title=None,
+    text_subtitle=None,
+    text_location=None,
+    text_stats=None,
+    enable_text=False,
 ):
     if not geojson_path:
         raise ValueError("A geojson_path is required")
@@ -351,6 +356,34 @@ def generate_yaml(
             )
             config["map"]["satellite"]["path"] = str(satellite)
 
+    # Handle info panel configuration
+    if enable_text and "info_panel" in config["map"]:
+        config["map"]["info_panel"]["enabled"] = True
+
+        # Update panel elements with provided content
+        if config["map"]["info_panel"].get("elements"):
+            for element in config["map"]["info_panel"]["elements"]:
+                element_id = element.get("id")
+
+                if element_id == "title" and text_title:
+                    element["content"] = text_title
+                elif element_id == "subtitle" and text_subtitle:
+                    element["content"] = text_subtitle
+                elif element_id == "location" and text_location:
+                    element["content"] = text_location
+                elif element_id == "stats" and text_stats:
+                    # Parse stats format: "value:label"
+                    stats_list = []
+                    for stat in text_stats:
+                        if ":" in stat:
+                            value, label = stat.split(":", 1)
+                            stats_list.append(
+                                {"value": value.strip(), "label": label.strip()}
+                            )
+                        else:
+                            stats_list.append({"value": stat.strip(), "label": ""})
+                    element["items"] = stats_list
+
     # Write YAML
     with open(output_path, "w") as f:
         f.write("\n".join(header))
@@ -402,6 +435,41 @@ if __name__ == "__main__":
         action="store_true",
         help="List all available color schemes and exit",
     )
+    parser.add_argument(
+        "--text-title",
+        dest="text_title",
+        type=str,
+        default=None,
+        help="Title text to display on map",
+    )
+    parser.add_argument(
+        "--text-subtitle",
+        dest="text_subtitle",
+        type=str,
+        default=None,
+        help="Subtitle text to display on map",
+    )
+    parser.add_argument(
+        "--text-location",
+        dest="text_location",
+        type=str,
+        default=None,
+        help="Location text to display on map",
+    )
+    parser.add_argument(
+        "--text-stats",
+        dest="text_stats",
+        type=str,
+        action="append",
+        default=None,
+        help="Stats to display (can be used multiple times, format: 'value:label')",
+    )
+    parser.add_argument(
+        "--enable-text",
+        dest="enable_text",
+        action="store_true",
+        help="Enable text rendering on the map",
+    )
     args = parser.parse_args()
 
     # Handle --list-schemes
@@ -445,4 +513,9 @@ if __name__ == "__main__":
         scheme_name=args.scheme_name,
         dem_path=Path(args.dem_path) if args.dem_path else None,
         satellite=Path(args.satellite) if args.satellite else None,
+        text_title=args.text_title,
+        text_subtitle=args.text_subtitle,
+        text_location=args.text_location,
+        text_stats=args.text_stats,
+        enable_text=args.enable_text,
     )

@@ -10,6 +10,7 @@ import argparse
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import rasterio
 from rasterio.warp import reproject, Resampling
 from rasterio.transform import from_bounds
@@ -20,6 +21,11 @@ import numpy as np
 from shapely.geometry import Polygon, Point
 import pandas as pd
 from geojson_bounds import apply_primary_segment_clip
+
+# Configure matplotlib for high-quality PDF output with embedded fonts
+plt.rcParams["pdf.fonttype"] = 42  # TrueType fonts (not Type 3 bitmapped)
+plt.rcParams["ps.fonttype"] = 42  # Also for PostScript
+plt.rcParams["font.family"] = "sans-serif"
 
 
 def _normalize_array(arr: np.ndarray) -> np.ndarray:
@@ -521,6 +527,306 @@ def _get_layer_fill_color(
     return fallback
 
 
+def _render_info_panel(fig, ax, panel_cfg, config, use_separate_axes=False):
+    """
+    Render an info panel (footer/header) with text, stats, and future graph support.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure
+        The figure object
+    ax : matplotlib.axes.Axes
+        The axes object (either panel axes or map axes)
+    panel_cfg : dict
+        Info panel configuration from YAML
+    config : dict
+        Full configuration dict
+    use_separate_axes : bool
+        If True, ax is a dedicated panel axes; if False, panel overlays on map axes
+    """
+    if not panel_cfg or not panel_cfg.get("enabled", False):
+        return
+
+    # Panel parameters
+    bg_config = panel_cfg.get("background", {})
+    bg_color = bg_config.get("color", "#ffffff")
+    bg_alpha = bg_config.get("alpha", 1.0)
+    zorder = panel_cfg.get("zorder", 1000)
+
+    if use_separate_axes:
+        # Dedicated panel axes - set background and remove ticks/spines
+        ax.set_facecolor(bg_color)
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+
+        # Panel coordinates are just 0-1 in this axes
+        panel_y0 = 0.0
+        panel_y1 = 1.0
+    else:
+        # Overlay on map axes - draw rectangle
+        position = panel_cfg.get("position", "bottom")
+        height_frac = panel_cfg.get("height", 0.12)
+
+        if position == "bottom":
+            panel_y0 = 0.0
+            panel_y1 = height_frac
+        elif position == "top":
+            panel_y0 = 1.0 - height_frac
+            panel_y1 = 1.0
+        else:
+            panel_y0 = 0.0
+            panel_y1 = height_frac
+
+        # Draw panel background
+        from matplotlib.patches import Rectangle
+
+        panel_rect = Rectangle(
+            (0, panel_y0),
+            1.0,
+            panel_y1 - panel_y0,
+            transform=ax.transAxes,
+            facecolor=bg_color,
+            edgecolor="none",
+            alpha=bg_alpha,
+            zorder=zorder,
+        )
+        ax.add_patch(panel_rect)
+
+    # Get panel dimensions in points for font sizing
+    fig_width, fig_height = fig.get_size_inches()
+    fig_dpi = fig.dpi
+
+    if use_separate_axes:
+        # Panel axes height is the full axes height
+        panel_height_frac = panel_cfg.get("height", 0.12)
+        panel_height_inches = fig_height * panel_height_frac
+    else:
+        # Panel overlays part of the map axes
+        height_frac = panel_cfg.get("height", 0.12)
+        panel_height_inches = fig_height * height_frac
+
+    panel_height_pts = panel_height_inches * 72  # points
+
+    # Render elements
+    elements = panel_cfg.get("elements", [])
+    for element in elements:
+        elem_type = element.get("type")
+
+        if elem_type in ["title", "text"]:
+            _render_panel_text_element(
+                ax, element, panel_y0, panel_y1, panel_height_pts, zorder + 1
+            )
+        elif elem_type == "stats":
+            _render_panel_stats_element(
+                ax, element, panel_y0, panel_y1, panel_height_pts, zorder + 1
+            )
+
+
+def _render_panel_text_element(
+    ax, element, panel_y0, panel_y1, panel_height_pts, zorder
+):
+    """Render a text element within the info panel."""
+    # Get element properties
+    content = element.get("content", "")
+    if not content:
+        return
+
+    # Transform settings
+    transform_type = element.get("transform", "none")
+    if transform_type == "uppercase":
+        content = content.upper()
+    elif transform_type == "lowercase":
+        content = content.lower()
+
+    # Position (relative to panel: 0-1)
+    x_rel = element.get("x", 0.5)
+    y_rel = element.get("y", 0.5)
+
+    # Convert to axes coordinates
+    panel_height = panel_y1 - panel_y0
+    y_axes = panel_y0 + (y_rel * panel_height)
+
+    # Font properties
+    font_family = element.get("font", "Inter")
+    font_weight = element.get("font_weight", "normal")
+    size_frac = element.get("size", 0.2)  # fraction of panel height
+    fontsize = size_frac * panel_height_pts
+
+    color = element.get("color", "#000000")
+    alpha = element.get("alpha", 1.0)
+    align = element.get("align", "left")
+    tracking = element.get("tracking", 0.0)
+
+    # Apply letter spacing if needed
+    text = content
+    if tracking > 0:
+        spaced_text = text[0] if text else ""
+        for char in text[1:]:
+            spaced_text += "\u200a" * max(1, int(tracking * 10)) + char
+        text = spaced_text
+
+    # Render text
+    ax.text(
+        x_rel,
+        y_axes,
+        text,
+        transform=ax.transAxes,
+        fontsize=fontsize,
+        fontfamily=font_family,
+        fontweight=font_weight,
+        color=color,
+        alpha=alpha,
+        ha=align,
+        va="center",
+        zorder=zorder,
+    )
+
+
+def _render_panel_stats_element(
+    ax, element, panel_y0, panel_y1, panel_height_pts, zorder
+):
+    """Render stats within the info panel."""
+    items = element.get("items", [])
+    if not items:
+        return
+
+    # Position and layout
+    x_rel = element.get("x", 0.5)
+    y_rel = element.get("y", 0.5)
+    align = element.get("align", "center")
+    layout = element.get("layout", "horizontal")
+    spacing = element.get("spacing", 0.05)
+
+    # Convert to axes coordinates
+    panel_height = panel_y1 - panel_y0
+    y_axes = panel_y0 + (y_rel * panel_height)
+
+    # Font properties
+    font_family = element.get("font", "Inter")
+    transform_type = element.get("transform", "none")
+
+    # Value properties
+    value_size_frac = element.get("value_size", 0.25)
+    value_fontsize = value_size_frac * panel_height_pts
+    value_weight = element.get("value_weight", "bold")
+    value_color = element.get("value_color", "#000000")
+    value_alpha = element.get("value_alpha", 1.0)
+
+    # Label properties
+    label_size_frac = element.get("label_size", 0.12)
+    label_fontsize = label_size_frac * panel_height_pts
+    label_weight = element.get("label_weight", "normal")
+    label_color = element.get("label_color", "#666666")
+    label_alpha = element.get("label_alpha", 1.0)
+
+    if layout == "horizontal":
+        # Measure all stats to calculate total width
+        stat_data = []
+        for item in items:
+            value = str(item.get("value", ""))
+            label = str(item.get("label", ""))
+
+            if transform_type == "uppercase":
+                value = value.upper()
+                label = label.upper()
+
+            # Create temp text to measure
+            temp_value = ax.text(
+                0,
+                0,
+                value,
+                fontsize=value_fontsize,
+                fontfamily=font_family,
+                fontweight=value_weight,
+                transform=ax.transAxes,
+                alpha=0,
+            )
+            temp_label = ax.text(
+                0,
+                0,
+                label,
+                fontsize=label_fontsize,
+                fontfamily=font_family,
+                fontweight=label_weight,
+                transform=ax.transAxes,
+                alpha=0,
+            )
+
+            ax.figure.canvas.draw()
+
+            value_bbox = temp_value.get_window_extent()
+            label_bbox = temp_label.get_window_extent()
+
+            # Convert to axes coordinates
+            fig_width_px = ax.figure.get_size_inches()[0] * ax.figure.dpi
+            value_width = value_bbox.width / fig_width_px
+            label_width = label_bbox.width / fig_width_px
+
+            temp_value.remove()
+            temp_label.remove()
+
+            stat_width = max(value_width, label_width)
+            stat_data.append({"value": value, "label": label, "width": stat_width})
+
+        # Calculate positions
+        total_width = sum(s["width"] for s in stat_data) + spacing * max(
+            0, len(stat_data) - 1
+        )
+
+        if align == "right":
+            current_x = x_rel - total_width
+        elif align == "center":
+            current_x = x_rel - total_width / 2
+        else:  # left
+            current_x = x_rel
+
+        # Render each stat
+        label_offset = 0.20  # fraction of panel height between value and label
+        label_y_axes = y_axes - (label_offset * panel_height)
+
+        for stat in stat_data:
+            stat_center_x = current_x + stat["width"] / 2
+
+            # Render value
+            ax.text(
+                stat_center_x,
+                y_axes,
+                stat["value"],
+                transform=ax.transAxes,
+                fontsize=value_fontsize,
+                fontfamily=font_family,
+                fontweight=value_weight,
+                color=value_color,
+                alpha=value_alpha,
+                ha="center",
+                va="center",
+                zorder=zorder,
+            )
+
+            # Render label below
+            if stat["label"]:
+                ax.text(
+                    stat_center_x,
+                    label_y_axes,
+                    stat["label"],
+                    transform=ax.transAxes,
+                    fontsize=label_fontsize,
+                    fontfamily=font_family,
+                    fontweight=label_weight,
+                    color=label_color,
+                    alpha=label_alpha,
+                    ha="center",
+                    va="center",
+                    zorder=zorder,
+                )
+
+            current_x += stat["width"] + spacing
+
+
 def draw_map_from_config(
     config_path: Path,
     geojson_path: Path,
@@ -549,11 +855,64 @@ def draw_map_from_config(
 
     # Prepare figure and axis
     mcfg = cfg["map"]
-    fig, ax = plt.subplots(figsize=(width, height), dpi=dpi)
-    # remove default margins so axes fill the canvas
-    fig.patch.set_facecolor("black")
+
+    # Check for frame and panel configuration
+    frame_cfg = mcfg.get("frame", {})
+    panel_cfg = mcfg.get("info_panel", {})
+    panel_enabled = panel_cfg and panel_cfg.get("enabled", False)
+
+    # Frame is only enabled when panel is enabled
+    frame_enabled = frame_cfg.get("enabled", False) and panel_enabled
+    frame_color = frame_cfg.get("color", "#2a2a2a")
+    frame_padding = frame_cfg.get("padding", 0.04)  # fraction of figure size
+
+    panel_height = panel_cfg.get("height", 0.12) if panel_enabled else 0.0
+
+    # Create figure
+    fig = plt.figure(figsize=(width, height), dpi=dpi)
+
+    # Set frame background color if enabled
+    if frame_enabled:
+        fig.patch.set_facecolor(frame_color)
+    else:
+        fig.patch.set_facecolor("black")
+
+    # Calculate axes positions
+    # Uniform borders on all sides, panel sits directly above bottom border
+    if panel_enabled and frame_enabled:
+        # Map axes: uniform borders, panel directly below map with no gap
+        map_left = frame_padding
+        map_bottom = frame_padding + panel_height  # bottom border + panel (no gap)
+        map_width = 1.0 - (2 * frame_padding)
+        map_height = (
+            1.0 - frame_padding - (frame_padding + panel_height)
+        )  # top border and (bottom border + panel)
+
+        # Panel axes: sits directly above bottom border
+        panel_left = frame_padding
+        panel_bottom = frame_padding
+        panel_width = 1.0 - (2 * frame_padding)
+        panel_height_axes = panel_height
+    elif frame_enabled:
+        # Just map with frame padding
+        map_left = frame_padding
+        map_bottom = frame_padding
+        map_width = 1.0 - (2 * frame_padding)
+        map_height = 1.0 - (2 * frame_padding)
+    else:
+        # Full figure
+        map_left = 0
+        map_bottom = 0
+        map_width = 1.0
+        map_height = 1.0
+
+    # Create map axes
+    ax = fig.add_axes([map_left, map_bottom, map_width, map_height])
     ax.set_facecolor("black")
-    fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+
+    # Store axes dimensions for later use in cropping calculations
+    map_axes_aspect = (width * map_width) / (height * map_height)
+
     canvas_width_px = int(width * dpi)
     canvas_height_px = int(height * dpi)
     water_tone = None
@@ -1087,8 +1446,8 @@ def draw_map_from_config(
         ax.set_xlim(minx, maxx)
         ax.set_ylim(miny, maxy)
     else:
-        # crop view to fill requested dimensions, chopping edges as needed
-        target = (width / height) * aspect
+        # crop view to fill map axes dimensions (accounts for panel if present)
+        target = map_axes_aspect * aspect
         dx = maxx - minx
         dy = maxy - miny
         if dx / dy < target:
@@ -1129,6 +1488,25 @@ def draw_map_from_config(
             fontsize=info.get("fontsize", 10),
             color=info.get("color", "#000000"),
             zorder=100,
+        )
+
+    # Render info panel if configured
+    panel_cfg = mcfg.get("info_panel")
+    if panel_cfg and panel_cfg.get("enabled", False):
+        # Create separate axes for panel
+        if frame_enabled:
+            panel_ax = fig.add_axes(
+                [panel_left, panel_bottom, panel_width, panel_height_axes]
+            )
+        else:
+            # Panel without frame - use transAxes on main ax
+            panel_ax = None
+        _render_info_panel(
+            fig,
+            panel_ax if panel_ax else ax,
+            panel_cfg,
+            cfg,
+            use_separate_axes=(panel_ax is not None),
         )
 
     # always save to file

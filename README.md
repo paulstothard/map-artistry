@@ -8,6 +8,7 @@ models. Generates high-resolution, stylized maps via a customizable pipeline.
 - [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on
   macOS)
 - Python 3
+- **Inter font** — required for text rendering on maps
 
 ## Getting Started
 
@@ -21,6 +22,39 @@ cd map-artistry
 Then proceed with the setup steps below.
 
 ## Setup
+
+### 1. Install Inter Font
+
+**macOS:**
+
+```bash
+brew install --cask font-inter
+```
+
+**Linux:**
+
+```bash
+# Download from Google Fonts
+wget https://fonts.google.com/download?family=Inter -O inter.zip
+unzip inter.zip -d inter
+sudo mkdir -p /usr/share/fonts/truetype/inter
+sudo cp inter/*.ttf /usr/share/fonts/truetype/inter/
+fc-cache -f -v
+```
+
+**Windows:**
+
+1. Download Inter from [Google Fonts](https://fonts.google.com/specimen/Inter)
+2. Extract the zip file
+3. Right-click on each `.ttf` file and select "Install"
+
+**Verify installation:**
+
+```bash
+fc-list | grep -i inter
+```
+
+### 2. Install Python Dependencies
 
 ```bash
 python3 -m venv venv
