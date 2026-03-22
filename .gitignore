@@ -28,3 +28,6 @@ publish/
 
 # Deploy folder (symlink)
 deploy
+
+# Roadmap
+ROADMAP.md
