@@ -1,5 +1,7 @@
 # Next Steps
 
+- [ ] Update distances and elevation changes for example maps
+
 ## Add Simple Map Helper Script (Wizard)
 
 - [ ] Create `scripts/map-helper.py` as an interactive prompt flow
@@ -60,6 +62,10 @@
   - `metric`
   - `imperial`
 - [ ] Validate all paths/options before execution
+- [ ] Add region-name autocomplete:
+  - Provide tab-completion or fuzzy-match suggestions as the user types a region name
+  - Source completions from a local cache of previously used region names
+  - Fall back to live geocoder suggestions if the local cache has no matches
 - [ ] Add region-name typo/spelling safeguards:
   - Detect likely misspellings in region input before build starts
   - Suggest closest matches and ask user to confirm/correct

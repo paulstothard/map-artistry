@@ -338,7 +338,7 @@ _build-map region scheme width height dpi format buffer:
     # Step 6: Generate configuration
     # ========================================================================
     echo "⚙️  Step 6: Generating map configuration..."
-    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-base.yaml"
+    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-${SCHEME}-base.yaml"
     CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-${SCHEME}-overlay.yaml"
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-${SCHEME}-final.yaml"
 
@@ -552,7 +552,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo ""
 
     echo "⚙️  Step 7: Generating map configuration..."
-    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-route-${ROUTE_NAME}-base.yaml"
+    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}-base.yaml"
     CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}-overlay.yaml"
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}-final.yaml"
 
@@ -701,7 +701,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     echo ""
 
     echo "⚙️  Step 5: Generating map configuration..."
-    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-base.yaml"
+    CONFIG_BASE="$CONFIG_DIR/${LOCATION}-${SCHEME}-base.yaml"
     CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-${SCHEME}-overlay.yaml"
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-${SCHEME}-final.yaml"
 
