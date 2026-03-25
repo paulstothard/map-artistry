@@ -3,6 +3,47 @@ map:
     ec: '#000000'
     fc: '#000000'
   debug_water_hillshade: false
+  elevation_profile:
+    alpha: 1.0
+    color: '#000000'
+    enabled: true
+    height: 0.04
+    route:
+      alpha: 0.85
+      color: '#ffb300'
+      enabled: true
+      end_marker:
+        color: '#ff5252'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#0a0000'
+        ring_color: '#ff5252'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+      linewidth: 3.2
+      outline:
+        color: '#1a1a1a'
+        enabled: true
+        linewidth: 0.7
+      sampling:
+        interval_m: 300
+        max_points: 500
+        min_points: 40
+        mode: distance_interval
+      start_marker:
+        color: '#ffd54f'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#0a0000'
+        ring_color: '#ffd54f'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+  frame:
+    color: '#000000'
+    enabled: true
+    padding: 0.04
   hillshade:
     alpha: 0
     altitude: 45
@@ -16,8 +57,8 @@ map:
     interpolation: bicubic
     multidirectional: true
     sigma: 0.0
-    unsharp_amount: 1.0
-    unsharp_radius: 2.0
+    unsharp_amount: 0.0
+    unsharp_radius: 0.0
     vert_exag: 2.5
     weights:
     - 1.3
@@ -25,13 +66,99 @@ map:
     - 0.8
     - 0.8
     zorder: 0
+    render_mode: cmap
+    tone:
+      clip_low: 0.0
+      clip_high: 1.0
+      contrast: 1.0
+      gamma: 1.0
+      bias: 0.0
+      ambient: 0.0
+    tint:
+      shadow_color: '#0b0f14'
+      mid_color: '#5f6368'
+      highlight_color: '#f3f1eb'
+    multiscale:
+      enabled: false
+      scales:
+      - sigma: 8.0
+        weight: 0.65
+      - sigma: 2.0
+        weight: 0.35
   info:
     color: '#808080'
     font: Gill Sans
     fontsize: 8
     position: bottom-right
-    show: true
-    text: ps
+    show: false
+    text: map-artistry
+  info_panel:
+    background:
+      alpha: 1.0
+      color: '#000000'
+    elements:
+    - align: left
+      alpha: 1.0
+      color: '#ffb74d'
+      content: ''
+      font: Inter
+      font_weight: bold
+      id: title
+      size: 0.42
+      tracking: 0.1
+      transform: uppercase
+      type: title
+      x: 0.03
+      y: 0.65
+    - align: left
+      alpha: 1.0
+      color: '#ff8a50'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: subtitle
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.03
+      y: 0.25
+    - align: right
+      alpha: 1.0
+      color: '#ff8a50'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: location
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.97
+      y: 0.65
+    - align: right
+      font: Inter
+      id: stats
+      items: []
+      label_alpha: 1.0
+      label_color: '#ff8a50'
+      label_size: 0.1
+      label_weight: normal
+      layout: horizontal
+      spacing: 0.04
+      transform: uppercase
+      type: stats
+      value_alpha: 1.0
+      value_color: '#ffcc80'
+      value_size: 0.22
+      value_weight: bold
+      x: 0.97
+      y: 0.3
+    enabled: false
+    height: 0.12
+    padding: 0.015
+    position: bottom
+    zorder: 1000
   satellite:
     opacity: 1.0
     visible: false
@@ -54,7 +181,7 @@ map:
     - '#1f0d0d'
     - '#120808'
     - '#0a0000'
-    interpolation: bicubic
+    interpolation: nearest
     percentiles:
     - 1
     - 99.7
@@ -2242,7 +2369,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.3
+      linewidth: 0.25
     attributes:
       dissolve:
       - 333River
@@ -3129,7 +3256,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.3
+      linewidth: 0.25
     attributes:
       dissolve:
       - 103River

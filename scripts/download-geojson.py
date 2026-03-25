@@ -13,6 +13,8 @@ Dependencies:
 import argparse
 import json
 import math
+import xml.etree.ElementTree as ET
+from pathlib import Path
 from geopy.geocoders import Nominatim
 from shapely.geometry import MultiPolygon, box, mapping
 from shapely.validation import explain_validity
@@ -30,6 +32,84 @@ def geocode_bbox(place):
     # boundingbox = [south_lat, north_lat, west_lon, east_lon] as strings
     south, north, west, east = map(float, loc.raw["boundingbox"])
     return south, north, west, east, float(loc.latitude), float(loc.longitude)
+
+
+def _local_name(tag):
+    """Return local XML tag name without namespace."""
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _longitude_interval_from_points(longitudes):
+    """
+    Compute the shortest longitude interval that contains all points.
+
+    Returns
+    -------
+    (west, east)
+        Unwrapped longitude bounds with east > west and span <= 360.
+    """
+    wrapped = [wrap_longitude(float(lon)) for lon in longitudes]
+    if not wrapped:
+        raise ValueError("No longitudes provided")
+
+    direct_west = min(wrapped)
+    direct_east = max(wrapped)
+    direct_span = direct_east - direct_west
+
+    shifted = [lon if lon >= 0 else lon + 360.0 for lon in wrapped]
+    shifted_west = min(shifted)
+    shifted_east = max(shifted)
+    shifted_span = shifted_east - shifted_west
+
+    if shifted_span < direct_span:
+        west = shifted_west if shifted_west <= 180.0 else shifted_west - 360.0
+        east = west + shifted_span
+        return west, east
+
+    return direct_west, direct_east
+
+
+def gpx_bbox(gpx_path):
+    """
+    Read a GPX file and return bounding box and center.
+
+    Returns (south, north, west, east, center_lat, center_lon) as floats.
+    """
+    gpx_file = Path(gpx_path)
+    if not gpx_file.exists():
+        raise FileNotFoundError(f"GPX file not found: {gpx_file}")
+
+    tree = ET.parse(gpx_file)
+    root = tree.getroot()
+
+    points = []
+    for elem in root.iter():
+        name = _local_name(elem.tag)
+        if name not in {"trkpt", "rtept", "wpt"}:
+            continue
+        lat = elem.attrib.get("lat")
+        lon = elem.attrib.get("lon")
+        if lat is None or lon is None:
+            continue
+        try:
+            points.append((float(lat), float(lon)))
+        except ValueError:
+            continue
+
+    if not points:
+        raise ValueError(f"No route points found in GPX file: {gpx_file}")
+
+    lats = [pt[0] for pt in points]
+    lons = [pt[1] for pt in points]
+
+    south = min(lats)
+    north = max(lats)
+    west, east = _longitude_interval_from_points(lons)
+
+    center_lat = (south + north) / 2.0
+    center_lon = wrap_longitude((west + east) / 2.0)
+
+    return south, north, west, east, center_lat, center_lon
 
 
 def buffer_bbox(south, north, west, east, buffer_km):
@@ -216,9 +296,19 @@ def write_geojson(south, north, west, east, output_path, properties=None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Download (and buffer) a GeoJSON bbox for a place name or address"
+        description="Build a buffered GeoJSON bbox from either a place name or a GPX route"
     )
-    parser.add_argument("place", help="City name or full address to geocode")
+    parser.add_argument(
+        "place",
+        nargs="?",
+        help="City name or full address to geocode (omit when using --gpx)",
+    )
+    parser.add_argument(
+        "--gpx",
+        type=str,
+        default=None,
+        help="Path to a GPX file to use as boundary source",
+    )
     parser.add_argument(
         "-b",
         "--buffer",
@@ -241,7 +331,17 @@ def main():
     )
     args = parser.parse_args()
 
-    south, north, west, east, center_lat, center_lon = geocode_bbox(args.place)
+    if bool(args.place) == bool(args.gpx):
+        parser.error("Provide exactly one boundary source: either PLACE or --gpx")
+
+    source_label = None
+    if args.gpx:
+        south, north, west, east, center_lat, center_lon = gpx_bbox(args.gpx)
+        source_label = str(Path(args.gpx))
+    else:
+        south, north, west, east, center_lat, center_lon = geocode_bbox(args.place)
+        source_label = args.place
+
     if args.buffer:
         south, north, west, east = buffer_bbox(south, north, west, east, args.buffer)
 
@@ -251,7 +351,8 @@ def main():
     )
 
     props = {
-        "query": args.place,
+        "query": source_label,
+        "source_type": "gpx" if args.gpx else "place",
         "buffer_km": args.buffer,
         "aspect_ratio": args.aspect_ratio,
         "bbox": [south, north, wrap_longitude(west), wrap_longitude(east)],

@@ -2,6 +2,10 @@ map:
   background:
     fc: "#000000"
     ec: "#000000"
+  frame:
+    enabled: true
+    color: "#ff6666"
+    padding: 0.04
   scheme: river_runs_red
   info:
     text: map-artistry
@@ -53,6 +57,110 @@ map:
   satellite:
     visible: false
     opacity: 1.0
+  info_panel:
+    enabled: false
+    position: bottom
+    height: 0.12
+    background:
+      color: "#ffffff"
+      alpha: 1.0
+    padding: 0.015
+    zorder: 1000
+    elements:
+      - type: title
+        id: title
+        content: ""
+        x: 0.03
+        y: 0.65
+        font: Inter
+        font_weight: bold
+        size: 0.42
+        color: "#120001"
+        alpha: 1.0
+        align: left
+        transform: uppercase
+        tracking: 0.10
+      - type: text
+        id: subtitle
+        content: ""
+        x: 0.03
+        y: 0.25
+        font: Inter
+        font_weight: normal
+        size: 0.14
+        color: "#5d1010"
+        alpha: 1.0
+        align: left
+        transform: uppercase
+        tracking: 0.06
+      - type: text
+        id: location
+        content: ""
+        x: 0.97
+        y: 0.65
+        font: Inter
+        font_weight: normal
+        size: 0.14
+        color: "#5d1010"
+        alpha: 1.0
+        align: right
+        transform: uppercase
+        tracking: 0.06
+      - type: stats
+        id: stats
+        items: []
+        x: 0.97
+        y: 0.30
+        align: right
+        layout: horizontal
+        spacing: 0.04
+        font: Inter
+        value_size: 0.22
+        value_weight: bold
+        value_color: "#120001"
+        value_alpha: 1.0
+        label_size: 0.10
+        label_weight: normal
+        label_color: "#5d1010"
+        label_alpha: 1.0
+        transform: uppercase
+  elevation_profile:
+    enabled: true
+    height: 0.04
+    color: "#ffffff"
+    alpha: 0.9
+    route:
+      enabled: true
+      color: "#ffffff"
+      linewidth: 4.0
+      alpha: 0.85
+      sampling:
+        mode: distance_interval
+        interval_m: 300
+        min_points: 40
+        max_points: 500
+      outline:
+        enabled: true
+        color: "#5d1010"
+        linewidth: 0.9
+      start_marker:
+        style: concentric_circles
+        color: "#5a9a63"
+        ring_color: "#5a9a63"
+        fill_color: "#120001"
+        size: 8.0
+        ring_width_scale: 0.14
+        core_radius_scale: 0.17
+        core_edge_width_scale: 0.035
+      end_marker:
+        style: concentric_circles
+        color: "#ffe082"
+        ring_color: "#ffe082"
+        fill_color: "#120001"
+        size: 8.0
+        ring_width_scale: 0.14
+        core_radius_scale: 0.17
+        core_edge_width_scale: 0.035
 water:
   fc: "#ff6666"
   ec: "#ff6666"
@@ -73,7 +181,7 @@ ocean:
   ec: "#ff2400"
   alpha: 1.0
   zorder: 4
-  ew: 0.1
+  ew: 0.15
   visible: true
   geometry_visibility:
     Point: false
@@ -102,11 +210,11 @@ waterway:
     river: 0.8
     canal: 0.7
     stream: 0.4
-    drain: 0.3
+    drain: 0.25
     ditch: 0.2
     moat: 0.2
     rapids: 0.25
-  default_lw: 0.3
+  default_lw: 0.25
 road:
   fc: "#ffffff"
   ec: "#ffffff"
@@ -124,15 +232,15 @@ road:
   palette: []
   lw:
     motorway: 0.6
-    trunk: 0.52
-    primary: 0.45
-    secondary: 0.38
-    tertiary: 0.32
-    residential: 0.3
+    trunk: 0.5
+    primary: 0.4
+    secondary: 0.4
+    tertiary: 0.25
+    residential: 0.25
     unclassified: 0.15
     service: 0.15
-    living_street: 0.1
-    track: 0.1
+    living_street: 0.15
+    track: 0.15
   default_lw: 0.15
 building:
   fc: "#ffffff"
@@ -194,7 +302,7 @@ railway:
     Polygon: false
     MultiPolygon: false
   palette: []
-  default_lw: 0.12
+  default_lw: 0.15
 transport:
   fc: "#ffa07a"
   ec: "#ffa07a"
@@ -210,7 +318,7 @@ transport:
     Polygon: false
     MultiPolygon: false
   palette: []
-  default_lw: 0.08
+  default_lw: 0.15
 places:
   fc: "#ffa500"
   ec: "#ffa500"
@@ -289,4 +397,4 @@ other:
     Polygon: false
     MultiPolygon: false
   palette: []
-  default_lw: 0.1
+  default_lw: 0.15

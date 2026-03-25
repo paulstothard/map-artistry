@@ -1,0 +1,5 @@
+# Overlay config for Vancouver Island, BC - Neon Cyber scheme
+# Disables ferry routes
+layers:
+  road__LineString:
+    visible: false

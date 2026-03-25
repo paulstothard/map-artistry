@@ -64,21 +64,55 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Standard Maps
+
 ```bash
-# Build a map with default settings (24" × 24" @ 600 DPI, PNG format) - "coral" is the color scheme
+# Build a map with default settings (24" × 24" @ 600 DPI, PNG format)
 just build "Edmonton, AB" coral
 
-# Build with a different location and use the "natural" color scheme
+# Build with a different location and color scheme
 just build "Vancouver Island, BC" natural
 
-# Build with custom dimensions using the "river_runs_red" color scheme
+# Build with custom dimensions
 just build --width 36 --height 24 "Iceland" river_runs_red
 
-# Build with custom dimensions, DPI, format, boundary buffer, and "natural" color scheme
+# Build with custom dimensions, DPI, format, and boundary buffer
 just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
 
 # List available color schemes
 just schemes
+```
+
+### Route Maps
+
+Route maps overlay a GPX track on the map and optionally display a stats panel with title, subtitle,
+and custom metrics.
+
+**Region + GPX route** — the map region is defined by a place name, with the GPX track drawn on top:
+
+```bash
+just build-route "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
+
+# With a stats panel
+just build-route \
+  --text-title "EDMONTON LOOP" \
+  --text-subtitle "SUMMER TRAINING RIDE" \
+  --text-stats "94 KM||DISTANCE;;800 M||ELEV GAIN" \
+  "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
+```
+
+**GPX-derived route** — the map region is derived automatically from the GPX track bounding box, no
+place name required:
+
+```bash
+just build-gpx downloads/cycling-routes/my-ride.gpx coral
+
+# With a stats panel
+just build-gpx \
+  --text-title "RIVER VALLEY LOOP" \
+  --text-subtitle "GPX-DERIVED REGION" \
+  --text-stats "64 KM||DISTANCE;;530 M||ELEV GAIN" \
+  downloads/cycling-routes/my-ride.gpx coral
 ```
 
 All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated
@@ -134,17 +168,13 @@ network), buildings (footprints), water/waterway (bodies of water and streams).
 
 ## Examples
 
-These README examples are reduced-resolution previews (`400×400` thumbnails linking to `1200×1200`
-images); for full-detail output, increase build settings (default `24" × 24" @ 600 DPI` is about
-`14400×14400`) and use `--format pdf` if needed.
+These README examples are `400×400` thumbnails linking to `1200×1200` full previews, rendered at
+`24" × 24" @ 150 DPI`. Full-resolution builds (default `600 DPI`) produce approximately
+`14400×14400` pixel images; use `--format pdf` for print-quality output.
 
-### Resolution Example (Edmonton, River Runs Red)
+### Resolution Sample (Edmonton, River Runs Red)
 
-Left: standard full-map preview thumbnail. Right: crop-first detail preview thumbnail from the same
-render, used to highlight local detail.
-
-[![Edmonton - River Runs Red (Full Map)](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
-[![Edmonton - River Runs Red (Detail View)](examples/thumbnails/edmonton-ab-river_runs_red-detail.png)](examples/full/edmonton-ab-river_runs_red-detail.png)
+[![Edmonton - River Runs Red](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
 
 ### Banff, AB
 
@@ -322,6 +352,45 @@ render, used to highlight local detail.
 [![Vestland - Satellite](examples/thumbnails/vestland-norway-satellite.png)](examples/full/vestland-norway-satellite.png)
 [![Vestland - Sepia Vintage](examples/thumbnails/vestland-norway-sepia_vintage.png)](examples/full/vestland-norway-sepia_vintage.png)
 
+### Route Map Examples
+
+Route maps overlay a GPX track onto the map and include a stats panel with ride title, subtitle, and
+custom metrics. Two variants are supported: a region-bounded map (the map region is defined by a
+place name, with the GPX track drawn on top) and a GPX-derived map (the map region is derived
+directly from the GPX track bounding box, with no separate region argument required).
+
+#### Edmonton Loop — Region + GPX Route
+
+[![Edmonton Loop - Blueprint](examples/thumbnails/edmonton-ab-route-edmonton-110km-blueprint.png)](examples/full/edmonton-ab-route-edmonton-110km-blueprint.png)
+[![Edmonton Loop - Coral](examples/thumbnails/edmonton-ab-route-edmonton-110km-coral.png)](examples/full/edmonton-ab-route-edmonton-110km-coral.png)
+[![Edmonton Loop - Dark Relief](examples/thumbnails/edmonton-ab-route-edmonton-110km-dark_relief.png)](examples/full/edmonton-ab-route-edmonton-110km-dark_relief.png)
+[![Edmonton Loop - Etched](examples/thumbnails/edmonton-ab-route-edmonton-110km-etched.png)](examples/full/edmonton-ab-route-edmonton-110km-etched.png)
+[![Edmonton Loop - Glacier](examples/thumbnails/edmonton-ab-route-edmonton-110km-glacier.png)](examples/full/edmonton-ab-route-edmonton-110km-glacier.png)
+[![Edmonton Loop - Lava](examples/thumbnails/edmonton-ab-route-edmonton-110km-lava.png)](examples/full/edmonton-ab-route-edmonton-110km-lava.png)
+[![Edmonton Loop - Minimal White](examples/thumbnails/edmonton-ab-route-edmonton-110km-minimal_white.png)](examples/full/edmonton-ab-route-edmonton-110km-minimal_white.png)
+[![Edmonton Loop - Natural](examples/thumbnails/edmonton-ab-route-edmonton-110km-natural.png)](examples/full/edmonton-ab-route-edmonton-110km-natural.png)
+[![Edmonton Loop - Neon Cyber](examples/thumbnails/edmonton-ab-route-edmonton-110km-neon_cyber.png)](examples/full/edmonton-ab-route-edmonton-110km-neon_cyber.png)
+[![Edmonton Loop - Porcelain Ink](examples/thumbnails/edmonton-ab-route-edmonton-110km-porcelain_ink.png)](examples/full/edmonton-ab-route-edmonton-110km-porcelain_ink.png)
+[![Edmonton Loop - River Runs Red](examples/thumbnails/edmonton-ab-route-edmonton-110km-river_runs_red.png)](examples/full/edmonton-ab-route-edmonton-110km-river_runs_red.png)
+[![Edmonton Loop - Satellite](examples/thumbnails/edmonton-ab-route-edmonton-110km-satellite.png)](examples/full/edmonton-ab-route-edmonton-110km-satellite.png)
+[![Edmonton Loop - Sepia Vintage](examples/thumbnails/edmonton-ab-route-edmonton-110km-sepia_vintage.png)](examples/full/edmonton-ab-route-edmonton-110km-sepia_vintage.png)
+
+#### River Valley Loop — GPX-Derived Route
+
+[![River Valley Loop - Blueprint](examples/thumbnails/edmonton-75km-blueprint.png)](examples/full/edmonton-75km-blueprint.png)
+[![River Valley Loop - Coral](examples/thumbnails/edmonton-75km-coral.png)](examples/full/edmonton-75km-coral.png)
+[![River Valley Loop - Dark Relief](examples/thumbnails/edmonton-75km-dark_relief.png)](examples/full/edmonton-75km-dark_relief.png)
+[![River Valley Loop - Etched](examples/thumbnails/edmonton-75km-etched.png)](examples/full/edmonton-75km-etched.png)
+[![River Valley Loop - Glacier](examples/thumbnails/edmonton-75km-glacier.png)](examples/full/edmonton-75km-glacier.png)
+[![River Valley Loop - Lava](examples/thumbnails/edmonton-75km-lava.png)](examples/full/edmonton-75km-lava.png)
+[![River Valley Loop - Minimal White](examples/thumbnails/edmonton-75km-minimal_white.png)](examples/full/edmonton-75km-minimal_white.png)
+[![River Valley Loop - Natural](examples/thumbnails/edmonton-75km-natural.png)](examples/full/edmonton-75km-natural.png)
+[![River Valley Loop - Neon Cyber](examples/thumbnails/edmonton-75km-neon_cyber.png)](examples/full/edmonton-75km-neon_cyber.png)
+[![River Valley Loop - Porcelain Ink](examples/thumbnails/edmonton-75km-porcelain_ink.png)](examples/full/edmonton-75km-porcelain_ink.png)
+[![River Valley Loop - River Runs Red](examples/thumbnails/edmonton-75km-river_runs_red.png)](examples/full/edmonton-75km-river_runs_red.png)
+[![River Valley Loop - Satellite](examples/thumbnails/edmonton-75km-satellite.png)](examples/full/edmonton-75km-satellite.png)
+[![River Valley Loop - Sepia Vintage](examples/thumbnails/edmonton-75km-sepia_vintage.png)](examples/full/edmonton-75km-sepia_vintage.png)
+
 ## Customizing a Map
 
 Each build produces two auto-generated files:
@@ -412,12 +481,18 @@ schemes/                     # Color scheme definitions (YAML files)
   # ... other schemes
 
 downloads/
-  regions/                  # Per-region data (auto-downloaded)
+  regions/                  # Per-region data (auto-downloaded by build / build-route)
     edmonton-ab/
       area.geojson           # Boundary polygon
       dem.tif                # Digital elevation model
       satellite.tif          # Satellite imagery
       layers/*.gpkg          # Vector layers (roads, water, etc.)
+  routes/                   # Per-GPX data (auto-downloaded by build-gpx)
+    edmonton-75km/
+      area.geojson
+      dem.tif
+      satellite.tif
+      layers/*.gpkg
   ocean-boundaries/          # IHO World Seas source (manual download)
 
 configs/                     # Base configs and optional overlays

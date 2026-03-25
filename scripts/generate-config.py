@@ -118,6 +118,37 @@ def preferred_attributes_for_layer(layer_name):
     return ["fclass", "type", "name"]
 
 
+def _parse_text_stats(text_stats):
+    """
+    Parse text stats into [{"value": ..., "label": ...}] entries.
+
+    Supported formats:
+      - Preferred: "VALUE||LABEL"
+      - Backward compatible: "VALUE:LABEL"
+      - Multiple stats in one arg: "VALUE||LABEL;;VALUE||LABEL"
+    """
+    if not text_stats:
+        return []
+
+    parsed = []
+    for raw_stat in text_stats:
+        if raw_stat is None:
+            continue
+
+        chunks = [chunk.strip() for chunk in str(raw_stat).split(";;") if chunk.strip()]
+        for chunk in chunks:
+            if "||" in chunk:
+                value, label = chunk.split("||", 1)
+                parsed.append({"value": value.strip(), "label": label.strip()})
+            elif ":" in chunk:
+                value, label = chunk.split(":", 1)
+                parsed.append({"value": value.strip(), "label": label.strip()})
+            else:
+                parsed.append({"value": chunk.strip(), "label": ""})
+
+    return parsed
+
+
 """
 Generate a YAML configuration file for map rendering using OSM layers in GeoPackage format.
 For each layer and geometry type, a style entry is created based on the selected design scheme.
@@ -137,6 +168,7 @@ def generate_yaml(
     text_location=None,
     text_stats=None,
     enable_text=False,
+    route_gpx=None,
 ):
     if not geojson_path:
         raise ValueError("A geojson_path is required")
@@ -163,6 +195,9 @@ def generate_yaml(
         "map": yaml.safe_load(yaml.safe_dump(design["map"])),
         "layers": {},
     }
+
+    if route_gpx is not None:
+        config["map"]["route_gpx"] = str(route_gpx)
 
     # Include DEM path in map section if specified
     config["map"]["dem"] = str(dem_path) if dem_path is not None else None
@@ -372,17 +407,7 @@ def generate_yaml(
                 elif element_id == "location" and text_location:
                     element["content"] = text_location
                 elif element_id == "stats" and text_stats:
-                    # Parse stats format: "value:label"
-                    stats_list = []
-                    for stat in text_stats:
-                        if ":" in stat:
-                            value, label = stat.split(":", 1)
-                            stats_list.append(
-                                {"value": value.strip(), "label": label.strip()}
-                            )
-                        else:
-                            stats_list.append({"value": stat.strip(), "label": ""})
-                    element["items"] = stats_list
+                    element["items"] = _parse_text_stats(text_stats)
 
     # Write YAML
     with open(output_path, "w") as f:
@@ -424,6 +449,13 @@ if __name__ == "__main__":
         help="Path to a DEM GeoTIFF file (optional)",
     )
     parser.add_argument(
+        "--gpx",
+        dest="route_gpx",
+        type=str,
+        default=None,
+        help="Path to GPX route file for route/profile rendering and optional distance derivation",
+    )
+    parser.add_argument(
         "--satellite",
         dest="satellite",
         type=str,
@@ -462,7 +494,10 @@ if __name__ == "__main__":
         type=str,
         action="append",
         default=None,
-        help="Stats to display (can be used multiple times, format: 'value:label')",
+        help=(
+            "Stats to display. Supports 'VALUE||LABEL' (preferred), "
+            "'VALUE:LABEL' (backward compatible), and ';;' as multi-stat separator"
+        ),
     )
     parser.add_argument(
         "--enable-text",
@@ -518,4 +553,5 @@ if __name__ == "__main__":
         text_location=args.text_location,
         text_stats=args.text_stats,
         enable_text=args.enable_text,
+        route_gpx=Path(args.route_gpx) if args.route_gpx else None,
     )

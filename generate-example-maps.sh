@@ -17,15 +17,22 @@ REGIONS=(
 
 WIDTH=24
 HEIGHT=24
-DPI=600
+DPI=150
 FORMAT="png"
 FULL_WIDTH=1200
 THUMBNAIL_WIDTH=400
-DETAIL_WIDTH=1200
-DETAIL_THUMB_WIDTH=400
 FORCE=false
-DETAIL_REGION="Edmonton, AB"
-DETAIL_SCHEME="river_runs_red"
+EDMONTON_ROUTE_REGION="Edmonton, AB"
+EDMONTON_ROUTE_GPX="downloads/cycling-routes/edmonton-110km.gpx"
+GPX_ONLY_ROUTE_GPX="downloads/cycling-routes/edmonton-75km.gpx"
+
+EDMONTON_ROUTE_TEXT_TITLE="EDMONTON LOOP"
+EDMONTON_ROUTE_TEXT_SUBTITLE="SUMMER TRAINING RIDE"
+EDMONTON_ROUTE_TEXT_STATS="94 KM||DISTANCE;;800 M||ELEV GAIN"
+
+GPX_ONLY_TEXT_TITLE="RIVER VALLEY LOOP"
+GPX_ONLY_TEXT_SUBTITLE="GPX-DERIVED REGION"
+GPX_ONLY_TEXT_STATS="64 KM||DISTANCE;;530 M||ELEV GAIN"
 
 usage() {
   cat <<'EOF'
@@ -63,6 +70,28 @@ PYTHON_BIN="python3"
 # Get schemes dynamically
 SCHEMES=$(just schemes 2>/dev/null)
 
+slugify_region() {
+  echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g'
+}
+
+slugify_route() {
+  basename "$1" .gpx | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g'
+}
+
+if [ ! -f "$EDMONTON_ROUTE_GPX" ]; then
+  echo "❌ Missing GPX for Edmonton route examples: $EDMONTON_ROUTE_GPX"
+  exit 1
+fi
+
+if [ ! -f "$GPX_ONLY_ROUTE_GPX" ]; then
+  echo "❌ Missing GPX for GPX-only examples: $GPX_ONLY_ROUTE_GPX"
+  exit 1
+fi
+
+EDMONTON_ROUTE_REGION_SLUG=$(slugify_region "$EDMONTON_ROUTE_REGION")
+EDMONTON_ROUTE_SLUG=$(slugify_route "$EDMONTON_ROUTE_GPX")
+GPX_ONLY_ROUTE_SLUG=$(slugify_route "$GPX_ONLY_ROUTE_GPX")
+
 echo "Checking existing maps..."
 echo ""
 
@@ -72,8 +101,9 @@ EXISTING=0
 NEEDED=0
 declare -a NEEDED_MAPS
 
+# 1) Standard region examples
 for region in "${REGIONS[@]}"; do
-  location=$(echo "$region" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g')
+  location=$(slugify_region "$region")
   for scheme in $SCHEMES; do
     TOTAL=$((TOTAL + 1))
     output_file="output/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
@@ -82,13 +112,47 @@ for region in "${REGIONS[@]}"; do
       EXISTING=$((EXISTING + 1))
       if [ "$FORCE" = true ]; then
         NEEDED=$((NEEDED + 1))
-        NEEDED_MAPS+=("$region|$scheme")
+        NEEDED_MAPS+=("region|$region|$scheme")
       fi
     else
       NEEDED=$((NEEDED + 1))
-      NEEDED_MAPS+=("$region|$scheme")
+      NEEDED_MAPS+=("region|$region|$scheme")
     fi
   done
+done
+
+# 2) Edmonton + longest GPX route examples (all schemes)
+for scheme in $SCHEMES; do
+  TOTAL=$((TOTAL + 1))
+  output_file="output/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+  if [ -f "$output_file" ]; then
+    EXISTING=$((EXISTING + 1))
+    if [ "$FORCE" = true ]; then
+      NEEDED=$((NEEDED + 1))
+      NEEDED_MAPS+=("route-region|$EDMONTON_ROUTE_REGION|$EDMONTON_ROUTE_GPX|$scheme")
+    fi
+  else
+    NEEDED=$((NEEDED + 1))
+    NEEDED_MAPS+=("route-region|$EDMONTON_ROUTE_REGION|$EDMONTON_ROUTE_GPX|$scheme")
+  fi
+done
+
+# 3) GPX-only route examples (all schemes)
+for scheme in $SCHEMES; do
+  TOTAL=$((TOTAL + 1))
+  output_file="output/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+  if [ -f "$output_file" ]; then
+    EXISTING=$((EXISTING + 1))
+    if [ "$FORCE" = true ]; then
+      NEEDED=$((NEEDED + 1))
+      NEEDED_MAPS+=("route-gpx-only|$GPX_ONLY_ROUTE_GPX|$scheme")
+    fi
+  else
+    NEEDED=$((NEEDED + 1))
+    NEEDED_MAPS+=("route-gpx-only|$GPX_ONLY_ROUTE_GPX|$scheme")
+  fi
 done
 
 echo "📊 Map Generation Summary:"
@@ -101,14 +165,24 @@ echo ""
 if [ $NEEDED -gt 0 ]; then
   echo "Maps to generate:"
   for entry in "${NEEDED_MAPS[@]}"; do
-    IFS='|' read -r region scheme <<<"$entry"
-    echo "  • $region — $scheme"
+    IFS='|' read -r mode a b c <<<"$entry"
+    case "$mode" in
+      region)
+        echo "  • $a — $b"
+        ;;
+      route-region)
+        echo "  • $a + $(basename "$b") — $c"
+        ;;
+      route-gpx-only)
+        echo "  • GPX-only $(basename "$a") — $b"
+        ;;
+    esac
   done
 
   echo ""
   echo "  Settings: ${WIDTH}x${HEIGHT} inches @ ${DPI} DPI, format: $FORMAT"
   echo "  Force assets : $FORCE"
-  echo "  Data downloads : downloads/regions/"
+  echo "  Data downloads : downloads/regions/ + downloads/routes/"
   echo "  Configs        : configs/"
   echo "  Maps           : output/"
   echo ""
@@ -120,8 +194,9 @@ if [ $NEEDED -gt 0 ]; then
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo ""
 
+    # 1) Standard region examples
     for region in "${REGIONS[@]}"; do
-      location=$(echo "$region" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g')
+      location=$(slugify_region "$region")
       for scheme in $SCHEMES; do
         output_file="output/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
 
@@ -136,6 +211,46 @@ if [ $NEEDED -gt 0 ]; then
         build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
         just build "${build_args[@]}" "$region" "$scheme"
       done
+    done
+
+    # 2) Edmonton + longest GPX route examples
+    for scheme in $SCHEMES; do
+      output_file="output/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+      if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
+        echo "⏭ ${EDMONTON_ROUTE_REGION} + $(basename "$EDMONTON_ROUTE_GPX") — $scheme"
+        echo "   Skipping existing output: $output_file"
+        continue
+      fi
+
+      echo "▶ ${EDMONTON_ROUTE_REGION} + $(basename "$EDMONTON_ROUTE_GPX") — $scheme"
+      build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
+      just build-route "${build_args[@]}" \
+        --text-title "$EDMONTON_ROUTE_TEXT_TITLE" \
+        --text-subtitle "$EDMONTON_ROUTE_TEXT_SUBTITLE" \
+        --text-location "$EDMONTON_ROUTE_REGION" \
+        --text-stats "$EDMONTON_ROUTE_TEXT_STATS" \
+        "$EDMONTON_ROUTE_REGION" "$EDMONTON_ROUTE_GPX" "$scheme"
+    done
+
+    # 3) GPX-only route examples
+    for scheme in $SCHEMES; do
+      output_file="output/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+      if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
+        echo "⏭ GPX-only $(basename "$GPX_ONLY_ROUTE_GPX") — $scheme"
+        echo "   Skipping existing output: $output_file"
+        continue
+      fi
+
+      echo "▶ GPX-only $(basename "$GPX_ONLY_ROUTE_GPX") — $scheme"
+      build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
+      just build-gpx "${build_args[@]}" \
+        --buffer-km 5 \
+        --text-title "$GPX_ONLY_TEXT_TITLE" \
+        --text-subtitle "$GPX_ONLY_TEXT_SUBTITLE" \
+        --text-stats "$GPX_ONLY_TEXT_STATS" \
+        "$GPX_ONLY_ROUTE_GPX" "$scheme"
     done
 
     echo ""
@@ -207,18 +322,14 @@ while IFS= read -r publish_png; do
     "$PYTHON_BIN" scripts/resize-images.py \
       --input "$temp_input_dir" \
       --output examples/full \
-      --width "$FULL_WIDTH" \
-      --crop-pattern "*" \
-      --crop-bottom 2.5 >/dev/null
+      --width "$FULL_WIDTH" >/dev/null
   fi
 
   if [ "$need_thumb" = true ]; then
     "$PYTHON_BIN" scripts/resize-images.py \
       --input "$temp_input_dir" \
       --output examples/thumbnails \
-      --width "$THUMBNAIL_WIDTH" \
-      --crop-pattern "*" \
-      --crop-bottom 2.5 >/dev/null
+      --width "$THUMBNAIL_WIDTH" >/dev/null
   fi
 
   rm -rf "$temp_input_dir"
@@ -229,88 +340,6 @@ done < <(find publish -maxdepth 1 -type f -name "*.png" | sort)
 
 echo "  Updated: $EXAMPLES_UPDATED"
 echo "  Skipped existing: $EXAMPLES_SKIPPED"
-
-echo ""
-echo "🔎 Creating detail view (crop-first)..."
-
-DETAIL_UPDATED=0
-DETAIL_SKIPPED=0
-
-detail_location=$(echo "$DETAIL_REGION" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g')
-detail_publish_png="publish/${detail_location}-${DETAIL_SCHEME}.png"
-
-if [ ! -f "$detail_publish_png" ]; then
-  echo "  ⚠ Detail source missing: $detail_publish_png"
-  echo "    Skipping detail-view generation"
-else
-  basename_file=$(basename "$detail_publish_png")
-  detail_name="${basename_file%.png}-detail.png"
-  full_detail_target="examples/full/$detail_name"
-  thumb_detail_target="examples/thumbnails/$detail_name"
-
-  need_full_detail=false
-  need_thumb_detail=false
-
-  if [ "$FORCE" = true ] || [ ! -f "$full_detail_target" ]; then
-    need_full_detail=true
-  fi
-  if [ "$FORCE" = true ] || [ ! -f "$thumb_detail_target" ]; then
-    need_thumb_detail=true
-  fi
-
-  if [ "$need_full_detail" = false ] && [ "$need_thumb_detail" = false ]; then
-    DETAIL_SKIPPED=$((DETAIL_SKIPPED + 1))
-  else
-    "$PYTHON_BIN" - "$detail_publish_png" "$full_detail_target" "$thumb_detail_target" "$need_full_detail" "$need_thumb_detail" "$DETAIL_WIDTH" "$DETAIL_THUMB_WIDTH" <<'PY'
-import sys
-from pathlib import Path
-from PIL import Image
-
-Image.MAX_IMAGE_PIXELS = None
-
-source_png = Path(sys.argv[1])
-full_target = Path(sys.argv[2])
-thumb_target = Path(sys.argv[3])
-need_full = sys.argv[4].lower() == "true"
-need_thumb = sys.argv[5].lower() == "true"
-detail_width = int(sys.argv[6])
-thumb_width = int(sys.argv[7])
-
-full_target.parent.mkdir(parents=True, exist_ok=True)
-thumb_target.parent.mkdir(parents=True, exist_ok=True)
-
-with Image.open(source_png) as source_img:
-    src_w, src_h = source_img.size
-    crop_side = min(src_w, src_h, detail_width)
-    left = (src_w - crop_side) // 2
-    top = (src_h - crop_side) // 2
-    right = left + crop_side
-    bottom = top + crop_side
-
-    detail_img = source_img.crop((left, top, right, bottom))
-
-    if need_full:
-        detail_img.save(full_target, optimize=True)
-
-if need_thumb:
-    if need_full:
-        with Image.open(full_target) as full_img:
-            thumb_img = full_img.resize((thumb_width, thumb_width), Image.LANCZOS)
-            thumb_img.save(thumb_target, optimize=True)
-    else:
-        with Image.open(full_target) as full_img:
-            thumb_img = full_img.resize((thumb_width, thumb_width), Image.LANCZOS)
-            thumb_img.save(thumb_target, optimize=True)
-
-print(f"  detail: {source_png.name} -> {full_target.name}, {thumb_target.name}")
-PY
-
-    DETAIL_UPDATED=$((DETAIL_UPDATED + 1))
-  fi
-fi
-
-echo "  Updated: $DETAIL_UPDATED"
-echo "  Skipped existing: $DETAIL_SKIPPED"
 
 echo ""
 echo "✅ All steps complete"

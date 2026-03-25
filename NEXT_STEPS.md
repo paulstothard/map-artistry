@@ -1,126 +1,96 @@
 # Next Steps
 
-## Recently Completed
+## Add Simple Map Helper Script (Wizard)
 
-✅ **Text System Refactor** (March 22, 2026)
+- [ ] Create `scripts/map-helper.py` as an interactive prompt flow
+- [ ] Add an early preflight check phase (before asking full map inputs):
+  - Verify Python executable and version
+  - Verify required Python packages/imports
+  - Verify `just` is installed and callable
+  - Verify required repo assets exist (scripts, schemes, justfile)
+  - Verify writable project folders (`downloads`, `configs`, `output`, cache)
+  - Verify network availability for downloads (or warn and continue)
+  - Fail fast with actionable fix instructions when checks fail
+- [ ] Support running the wizard from outside the repo:
+  - Allow invocation from any working directory
+  - Auto-detect repo root when possible
+  - If detection fails, prompt user for repo path
+  - Validate required repo assets exist (justfile, scripts, schemes)
+  - Persist the resolved repo path in wizard settings for future runs
+- [ ] Add a helper project workspace model (outside default repo folders):
+  - Ask for a `project_root` path (or create one)
+  - Create and use project-local folders for `downloads/`, `configs/`, `output/`, and cache
+  - Keep helper-generated artifacts isolated from the repo's primary folders
+  - Allow reusing the same project root across runs to reuse downloaded data/layers
+- [ ] Ask user to choose map intent:
+  - Region only
+  - GPX only
+  - Region + GPX
+- [ ] Improve GPX input UX:
+  - Auto-scan the active project/work folder for `.gpx` files
+  - Present discovered GPX files as selectable options
+  - Still allow manual GPX path entry
+  - Remember recently used GPX files in settings/profile history
+- [ ] Add stateful prompt behavior for every question:
+  - Show a recommended default value
+  - Show previous value from last run (when available)
+  - Allow quick choice: keep previous / use default / enter new value
+- [ ] Ask for required rendering settings:
+  - Scheme selection mode:
+    - Single scheme
+    - Multiple schemes
+    - All schemes
+  - Output format (`png`/`pdf`/`svg`)
+  - Width/height
+  - DPI
+- [ ] Ask how to handle existing project data:
+  - Reuse existing downloads/configs/cache
+  - Refresh only missing assets
+  - Force refresh selected assets
+- [ ] Ask for optional panel text fields:
+  - Title
+  - Subtitle
+  - Location
+- [ ] Ask for optional route stats strategy (for GPX modes):
+  - Provide manually (distance/time/elevation)
+  - Auto-fill distance/elevation only
+  - Mixed (manual overrides + auto for missing)
+- [ ] Ask for units mode when GPX route stats are involved:
+  - `auto`
+  - `metric`
+  - `imperial`
+- [ ] Validate all paths/options before execution
+- [ ] Add region-name typo/spelling safeguards:
+  - Detect likely misspellings in region input before build starts
+  - Suggest closest matches and ask user to confirm/correct
+  - Allow continue with exact user input when explicitly confirmed
+- [ ] Show a final command preview and ask for confirmation
+- [ ] Execute the matching `just` command(s)
+- [ ] Save the generated command in a small history file for reuse
+- [ ] Persist a lightweight project manifest (last settings + selected schemes + paths)
+- [ ] Persist wizard settings to YAML:
+  - Save `last-used` answers after each successful run
+  - Support loading from a named settings profile
+  - Store settings under the helper project root (not repo defaults)
+  - Include version field for forward-compatible schema updates
 
-- Replaced complex halo/overlay text system with clean bordered info panel
-- Implemented new layout: uniform thin borders + integrated footer panel
-- Fixed map aspect ratio calculations for proper alignment
-- Panel and map content now same width with exact mathematical precision
-- Removed ~420 lines of obsolete code
+## Add Client Proofing Pack Output
 
----
-
-## Immediate Next Steps
-
-### 1. Test & Validate Text System
-
-- [ ] Generate multiple maps with different dimensions to verify border/panel flexibility
-- [ ] Test with various title lengths and stat combinations
-- [ ] Confirm proper rendering at different DPI settings (300, 600)
-- [ ] Verify consistent appearance across different aspect ratios
-
-### 2. Apply Panel System to Other Styles
-
-- [ ] Update remaining color schemes to use `info_panel` structure
-- [ ] Test bordered layout with dark styles (dark_relief, lava)
-- [ ] Adjust frame colors per style (e.g., lighter frame for dark backgrounds)
-- [ ] Consider frameless option for styles that don't need borders
-
-### 3. Physical Line Weights (High Priority)
-
-- [ ] Implement point-based (pt) width system for all features
-- [ ] Convert: `px = (pt / 72) * DPI`
-- [ ] Update roads, buildings, waterways, borders to use physical units
-- [ ] Test line weight consistency across print sizes (12x12, 18x18, 24x24)
-
----
-
-## Medium-Term Goals
-
-### 4. GPX Route System
-
-- [ ] Implement GPX-first workflow (derive bbox from route bounds)
-- [ ] Add configurable padding around route
-- [ ] Create route rendering with hillshade-aware shading
-- [ ] Design `porcelain_ink_route` as first curated route style
-- [ ] **Start/end point markers**
-  - Start: concentric circles
-  - End: checkered flag circle pattern
-  - Implement using matplotlib patches for clean, scalable rendering
-  - Style-aware colors (adapt to map background and frame)
-  - Handle overlap detection for loop routes (merge or offset when too close)
-  - Ensure markers scale properly with map size and DPI
-- [ ] **Elevation profile as integrated border element**
-  - Filled silhouette that replaces/becomes bottom border (0.03-0.05 height)
-  - Sits between map area and text panel
-  - Width matches map (aligned like panel)
-  - Style-aware coloring (matches frame aesthetic)
-  - Acts as visual separator, not traditional chart
-  - No axes or gridlines - pure compositional element
-
-### 5. Export System Refinement
-
-- [ ] Validate 300 DPI output for all standard sizes
-- [ ] Add PDF export option
-- [ ] Implement safe margin calculations
-- [ ] Test deterministic output (same inputs = same output)
-
-### 6. Style Locking & Presets
-
-- [ ] Finalize 4-5 core styles for initial Etsy launch
-- [ ] Lock internal parameters (no user tweaking)
-- [ ] Document each style's visual identity
-- [ ] Create style comparison images for listings
-
----
-
-## Long-Term Considerations
-
-### 7. Location Framing Intelligence
-
-- [ ] Automatic bbox derivation from place names
-- [ ] Square-first framing with smart padding
-- [ ] Consistent visual centering across locations
-
-### 8. Smart Text Placement
-
-- [ ] Terrain-aware positioning (avoid placing text over mountains)
-- [ ] Dynamic position adjustment based on map features
-
-### 9. Etsy Listing Preparation
-
-- [ ] Generate hero images for initial listings (Banff, Vancouver Island, Iceland)
-- [ ] Create style comparison mockups
-- [ ] Prepare room mockups and detail shots
-- [ ] Draft personalization examples
-
----
-
-## Technical Debt / Cleanup
-
-- [ ] Review and consolidate DEM caching strategy
-- [ ] Optimize memory usage for large maps (24x24 at 600 DPI)
-- [ ] Add comprehensive error handling for missing data
-- [ ] Document configuration file structure and options
-- [ ] Create example configs for common use cases
-
----
-
-## Questions to Resolve
-
-1. Should frame be optional per style, or always present when panel enabled?
-2. What's the minimum panel height before text becomes unreadable?
-3. Should stats support more than 3 items? Auto-wrap or fixed layout?
-4. Border thickness: should it scale with canvas size or stay constant in physical units?
-5. Route rendering: single universal approach or style-specific rendering modes?
-
----
-
-## Notes
-
-- Focus on **consistency** and **repeatability** first
-- Avoid feature creep - stick to curated preset approach
-- Test each change across multiple styles and sizes
-- Document what works before moving to next feature
+- [ ] Add a proofing mode for generating client-shareable previews across schemes
+- [ ] Support two proofing output formats:
+  - Labeled contact sheet / montage (grid of schemes)
+  - Lightweight PDF booklet (one scheme per page)
+- [ ] Ensure each preview clearly shows the scheme name on-image and/or as page title
+- [ ] Add low-resolution proof settings to keep files small:
+  - Reduced DPI
+  - Optional max image dimensions
+  - JPEG compression for proofs where appropriate
+- [ ] Add wizard prompts for proofing workflow:
+  - Choose proofing format (contact sheet, PDF booklet, or both)
+  - Choose scheme set (single, selected list, all)
+  - Choose label style and metadata to show (scheme name, location, date)
+- [ ] Save a proofing manifest (which schemes were included + generation settings)
+- [ ] Add a “finalize from approved scheme” step:
+  - Select approved scheme from proofing run
+  - Re-run at full production quality (target DPI/format)
+  - Preserve all other settings from the proofing profile

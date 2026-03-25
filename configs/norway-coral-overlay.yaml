@@ -1,0 +1,7 @@
+# Overlay config for Norway - Coral scheme
+# Disables ferry routes
+layers:
+  road__LineString:
+    visible: false
+  road__MultiLineString:
+    visible: false

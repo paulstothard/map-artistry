@@ -152,6 +152,43 @@ map:
         label_color: "#666666"
         label_alpha: 1.0
         transform: uppercase
+  elevation_profile:
+    enabled: true
+    height: 0.04 # Fraction of map height (overlay at bottom)
+    color: "#d32f2f"
+    alpha: 0.9
+    route:
+      enabled: true
+      color: "#d32f2f"
+      linewidth: 4.0 # Points
+      alpha: 0.8
+      sampling:
+        mode: distance_interval
+        interval_m: 300
+        min_points: 40
+        max_points: 500
+      outline:
+        enabled: true
+        color: "#ffffff"
+        linewidth: 0.9 # Points
+      start_marker:
+        style: concentric_circles
+        color: "#6f8a7a"
+        ring_color: "#6f8a7a"
+        fill_color: "#ffffff"
+        size: 8.0 # Points
+        ring_width_scale: 0.14
+        core_radius_scale: 0.17
+        core_edge_width_scale: 0.035
+      end_marker:
+        style: concentric_circles
+        color: "#9a6f64"
+        ring_color: "#9a6f64"
+        fill_color: "#ffffff"
+        size: 8.0 # Points
+        ring_width_scale: 0.14
+        core_radius_scale: 0.17
+        core_edge_width_scale: 0.035
 
 water:
   fc: "#c8d9de"
@@ -216,15 +253,17 @@ waterway:
     Polygon: true
     MultiPolygon: true
   palette: []
+  # Line weights in points (pt): 1 pt = 1/72 inch physical
+  # At 300 DPI: 0.6 pt = 0.008" physical, 0.2 pt = 0.003" physical
   lw:
-    river: 0.55
+    river: 0.6
     canal: 0.0
-    stream: 0.18
+    stream: 0.2
     drain: 0.0
     ditch: 0.0
     moat: 0.0
     rapids: 0.0
-  default_lw: 0.18
+  default_lw: 0.2
 
 road:
   fc: "#111111"
@@ -241,25 +280,28 @@ road:
     Polygon: false
     MultiPolygon: false
   palette: []
+  # Line weights in points (pt): 1 pt = 1/72 inch physical
+  # Physical widths remain constant regardless of canvas size or DPI
+  # Minimum 0.15 pt to ensure visibility on all prints
   lw:
-    motorway: 0.80
-    trunk: 0.68
-    primary: 0.56
-    secondary: 0.46
-    tertiary: 0.36
-    residential: 0.26
-    unclassified: 0.22
-    service: 0.16
-    living_street: 0.14
-    track: 0.10
-  default_lw: 0.14
+    motorway: 0.8 # 0.011" physical
+    trunk: 0.7 # 0.010" physical
+    primary: 0.6 # 0.008" physical
+    secondary: 0.5 # 0.007" physical
+    tertiary: 0.4 # 0.006" physical
+    residential: 0.25 # 0.003" physical
+    unclassified: 0.25 # 0.003" physical
+    service: 0.15 # 0.002" physical (minimum)
+    living_street: 0.15
+    track: 0.15
+  default_lw: 0.15
 
 building:
   fc: "#111111"
   ec: "#111111"
   alpha: 0.62
   zorder: 7
-  ew: 0.10
+  ew: 0.15 # Edge width in points (0.002" physical)
   visible: true
   geometry_visibility:
     Point: false
@@ -317,7 +359,7 @@ railway:
     Polygon: false
     MultiPolygon: false
   palette: []
-  default_lw: 0.12
+  default_lw: 0.15 # Line width in points (minimum for visibility)
 
 transport:
   fc: "#111111"
@@ -334,7 +376,7 @@ transport:
     Polygon: false
     MultiPolygon: false
   palette: []
-  default_lw: 0.08
+  default_lw: 0.15
 
 places:
   fc: "#6f6f69"

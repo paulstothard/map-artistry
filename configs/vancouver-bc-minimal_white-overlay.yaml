@@ -1,0 +1,5 @@
+# Overlay config for Vancouver, BC - Minimal White scheme
+# Disables ferry routes
+layers:
+  highway__LineString:
+    visible: false

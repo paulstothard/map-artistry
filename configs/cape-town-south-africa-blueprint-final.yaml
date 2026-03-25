@@ -6,6 +6,47 @@ map:
     ec: '#071724'
     fc: '#071724'
   debug_water_hillshade: false
+  elevation_profile:
+    alpha: 1.0
+    color: '#123d57'
+    enabled: true
+    height: 0.04
+    route:
+      alpha: 0.85
+      color: '#67f8ff'
+      enabled: true
+      end_marker:
+        color: '#ff7b7b'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#071724'
+        ring_color: '#ff7b7b'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+      linewidth: 3.2
+      outline:
+        color: '#123042'
+        enabled: true
+        linewidth: 0.7
+      sampling:
+        interval_m: 300
+        max_points: 500
+        min_points: 40
+        mode: distance_interval
+      start_marker:
+        color: '#5fbf9b'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#071724'
+        ring_color: '#5fbf9b'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+  frame:
+    color: '#123d57'
+    enabled: true
+    padding: 0.04
   hillshade:
     alpha: 0.72
     altitude: 35
@@ -54,6 +95,73 @@ map:
     position: bottom-right
     show: false
     text: map-artistry
+  info_panel:
+    background:
+      alpha: 1.0
+      color: '#123d57'
+    elements:
+    - align: left
+      alpha: 1.0
+      color: '#e6fbff'
+      content: ''
+      font: Inter
+      font_weight: bold
+      id: title
+      size: 0.42
+      tracking: 0.1
+      transform: uppercase
+      type: title
+      x: 0.03
+      y: 0.65
+    - align: left
+      alpha: 1.0
+      color: '#b8e7f5'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: subtitle
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.03
+      y: 0.25
+    - align: right
+      alpha: 1.0
+      color: '#b8e7f5'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: location
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.97
+      y: 0.65
+    - align: right
+      font: Inter
+      id: stats
+      items: []
+      label_alpha: 1.0
+      label_color: '#b8e7f5'
+      label_size: 0.1
+      label_weight: normal
+      layout: horizontal
+      spacing: 0.04
+      transform: uppercase
+      type: stats
+      value_alpha: 1.0
+      value_color: '#e6fbff'
+      value_size: 0.22
+      value_weight: bold
+      x: 0.97
+      y: 0.3
+    enabled: false
+    height: 0.12
+    padding: 0.015
+    position: bottom
+    zorder: 1000
   satellite:
     opacity: 1.0
     visible: false
@@ -100,7 +208,7 @@ layers:
       visible: true
       palette: []
       edge_color: '#d8f8ff'
-      edge_width: 0.14
+      edge_width: 0.15
     attributes:
       element:
       - way
@@ -153,7 +261,7 @@ layers:
       visible: true
       palette: []
       edge_color: '#d8f8ff'
-      edge_width: 0.14
+      edge_width: 0.15
     attributes:
       element:
       - way
@@ -242,7 +350,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.18
+      linewidth: 0.2
     attributes:
       element:
       - way
@@ -1883,30 +1991,30 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.3
+          linewidth: 0.25
         service:
-          linewidth: 0.18
+          linewidth: 0.2
         path: {}
         footway: {}
         secondary:
-          linewidth: 0.54
+          linewidth: 0.5
         primary:
-          linewidth: 0.66
+          linewidth: 0.7
         track:
-          linewidth: 0.1
+          linewidth: 0.15
         living_street:
-          linewidth: 0.16
+          linewidth: 0.15
         steps: {}
         primary_link: {}
         secondary_link: {}
         tertiary:
-          linewidth: 0.42
+          linewidth: 0.4
         bridleway: {}
         cycleway: {}
         motorway_link: {}
         corridor: {}
         motorway:
-          linewidth: 0.95
+          linewidth: 0.8
         tertiary_link: {}
         pedestrian: {}
         proposed: {}
@@ -1915,7 +2023,7 @@ layers:
         trunk_link: {}
         construction: {}
         unclassified:
-          linewidth: 0.24
+          linewidth: 0.25
         ramp: {}
         busway: {}
         bus_stop: {}
@@ -1952,7 +2060,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.18
+      linewidth: 0.2
       marker: o
       size: 3
     attributes:
@@ -2655,7 +2763,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.18
+      linewidth: 0.2
     attributes:
       element:
       - way
@@ -3177,18 +3285,18 @@ layers:
       highway:
         footway: {}
         service:
-          linewidth: 0.18
+          linewidth: 0.2
         residential:
-          linewidth: 0.3
+          linewidth: 0.25
         path: {}
         track:
-          linewidth: 0.1
+          linewidth: 0.15
         raceway: {}
         cycleway: {}
         tertiary:
-          linewidth: 0.42
+          linewidth: 0.4
         unclassified:
-          linewidth: 0.24
+          linewidth: 0.25
       maxspeed:
         '20': {}
         '60': {}
@@ -3688,7 +3796,7 @@ layers:
         services: {}
         pedestrian: {}
         service:
-          linewidth: 0.18
+          linewidth: 0.2
         elevator: {}
         footway: {}
         bus_stop: {}
@@ -4596,7 +4704,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.26
+      linewidth: 0.25
     attributes:
       element:
       - way
@@ -4612,17 +4720,17 @@ layers:
     style_rules:
       waterway:
         river:
-          linewidth: 0.85
+          linewidth: 0.8
         weir: {}
         stream:
-          linewidth: 0.34
+          linewidth: 0.4
         dam: {}
         drain:
-          linewidth: 0.16
+          linewidth: 0.15
         ditch:
-          linewidth: 0.12
+          linewidth: 0.15
         canal:
-          linewidth: 0.26
+          linewidth: 0.25
     style_order:
     - waterway
   waterway__Point:
@@ -4637,7 +4745,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.26
+      linewidth: 0.25
       marker: o
       size: 3
     attributes:
@@ -4738,7 +4846,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.26
+      linewidth: 0.25
     attributes:
       element:
       - way
@@ -4754,10 +4862,10 @@ layers:
     style_rules:
       waterway:
         drain:
-          linewidth: 0.16
+          linewidth: 0.15
         river:
-          linewidth: 0.85
+          linewidth: 0.8
         stream:
-          linewidth: 0.34
+          linewidth: 0.4
     style_order:
     - waterway

@@ -1,0 +1,5 @@
+# Overlay config for San Francisco, CA - Etched scheme
+# Disables ferry routes
+layers:
+  highway__LineString:
+    visible: false

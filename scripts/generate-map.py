@@ -7,15 +7,19 @@ from pathlib import Path
 import math
 
 import argparse
+import xml.etree.ElementTree as ET
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import matplotlib.patches as mpatches
+from matplotlib.path import Path as MplPath
 import rasterio
 from rasterio.warp import reproject, Resampling
 from rasterio.transform import from_bounds
 from rasterio.features import rasterize
 from matplotlib.colors import LightSource, LinearSegmentedColormap, to_rgb
+from matplotlib.offsetbox import AnnotationBbox, DrawingArea
 from scipy.ndimage import gaussian_filter
 import numpy as np
 from shapely.geometry import Polygon, Point
@@ -26,6 +30,36 @@ from geojson_bounds import apply_primary_segment_clip
 plt.rcParams["pdf.fonttype"] = 42  # TrueType fonts (not Type 3 bitmapped)
 plt.rcParams["ps.fonttype"] = 42  # Also for PostScript
 plt.rcParams["font.family"] = "sans-serif"
+
+IMPERIAL_COUNTRY_CODES = {"US", "LR", "MM"}
+
+
+def _boundary_clip_patch(mask_gdf, ax):
+    """Build an invisible PathPatch from the map boundary for raster clipping."""
+    boundary = mask_gdf.union_all()
+    if boundary is None or boundary.is_empty:
+        return None
+    if boundary.geom_type == "MultiPolygon":
+        polys = list(boundary.geoms)
+    elif boundary.geom_type == "Polygon":
+        polys = [boundary]
+    else:
+        return None
+    vertices, codes = [], []
+    for poly in polys:
+        for ring in [poly.exterior] + list(poly.interiors):
+            coords = np.array(ring.coords)
+            n = len(coords)
+            codes += [MplPath.MOVETO] + [MplPath.LINETO] * (n - 2) + [MplPath.CLOSEPOLY]
+            vertices.append(coords)
+    if not vertices:
+        return None
+    path = MplPath(np.concatenate(vertices, axis=0), codes)
+    patch = mpatches.PathPatch(
+        path, facecolor="none", edgecolor="none", transform=ax.transData
+    )
+    ax.add_patch(patch)
+    return patch
 
 
 def _normalize_array(arr: np.ndarray) -> np.ndarray:
@@ -547,6 +581,27 @@ def _render_info_panel(fig, ax, panel_cfg, config, use_separate_axes=False):
     if not panel_cfg or not panel_cfg.get("enabled", False):
         return
 
+    elements = panel_cfg.get("elements", [])
+
+    def _panel_has_content(panel_elements):
+        for element in panel_elements:
+            elem_type = element.get("type")
+            if elem_type in ["title", "text"]:
+                if str(element.get("content", "")).strip():
+                    return True
+            elif elem_type == "stats":
+                items = element.get("items", [])
+                for item in items:
+                    if (
+                        str(item.get("value", "")).strip()
+                        or str(item.get("label", "")).strip()
+                    ):
+                        return True
+        return False
+
+    if not _panel_has_content(elements):
+        return
+
     # Panel parameters
     bg_config = panel_cfg.get("background", {})
     bg_color = bg_config.get("color", "#ffffff")
@@ -612,7 +667,6 @@ def _render_info_panel(fig, ax, panel_cfg, config, use_separate_axes=False):
     panel_height_pts = panel_height_inches * 72  # points
 
     # Render elements
-    elements = panel_cfg.get("elements", [])
     for element in elements:
         elem_type = element.get("type")
 
@@ -827,6 +881,784 @@ def _render_panel_stats_element(
             current_x += stat["width"] + spacing
 
 
+def _local_name(tag):
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _dedupe_route_coords(route_coords):
+    if not route_coords:
+        return []
+    deduped = [route_coords[0]]
+    for lon, lat in route_coords[1:]:
+        prev_lon, prev_lat = deduped[-1]
+        if not (math.isclose(lon, prev_lon) and math.isclose(lat, prev_lat)):
+            deduped.append((lon, lat))
+    return deduped
+
+
+def _route_cumulative_distance_m(route_coords):
+    if len(route_coords) < 2:
+        return np.array([0.0], dtype=np.float64)
+
+    points = np.asarray(route_coords, dtype=np.float64)
+    lons = points[:, 0]
+    lats = points[:, 1]
+
+    r = 6371008.8
+    phi = np.radians(lats)
+    dphi = np.radians(np.diff(lats))
+    dlambda = np.radians(np.diff(lons))
+    a = (
+        np.sin(dphi / 2.0) ** 2
+        + np.cos(phi[:-1]) * np.cos(phi[1:]) * np.sin(dlambda / 2.0) ** 2
+    )
+    c = 2.0 * np.arctan2(np.sqrt(a), np.sqrt(np.maximum(0.0, 1.0 - a)))
+    seg_m = r * c
+    return np.concatenate([[0.0], np.cumsum(seg_m)])
+
+
+def _route_distance_km(route_coords):
+    cum_m = _route_cumulative_distance_m(route_coords)
+    if cum_m.size == 0:
+        return 0.0
+    return float(cum_m[-1]) / 1000.0
+
+
+def _elevation_gain_m(elevation_data):
+    elev = np.asarray(elevation_data, dtype=np.float64)
+    if elev.size < 2:
+        return 0.0
+    diff = np.diff(elev)
+    return float(np.sum(diff[diff > 0]))
+
+
+def _extract_supplied_stats(cfg):
+    panel = cfg.get("map", {}).get("info_panel", {})
+    elements = panel.get("elements", []) if isinstance(panel, dict) else []
+
+    supplied_distance = None
+    supplied_elev_gain = None
+
+    for element in elements:
+        if element.get("type") != "stats" and element.get("id") != "stats":
+            continue
+        for item in element.get("items", []):
+            label = str(item.get("label", "")).strip().lower()
+            value = str(item.get("value", "")).strip()
+            if label in {"distance", "dist"} and value:
+                supplied_distance = value
+            if label in {"elev gain", "elevation gain", "gain"} and value:
+                supplied_elev_gain = value
+
+    return supplied_distance, supplied_elev_gain
+
+
+def _select_route_units(units_mode, country_code=None):
+    mode = str(units_mode or "auto").strip().lower()
+    if mode in {"metric", "imperial"}:
+        return mode, "explicit"
+
+    code = (country_code or "").strip().upper()
+    if code:
+        if code in IMPERIAL_COUNTRY_CODES:
+            return "imperial", f"auto-country:{code}"
+        return "metric", f"auto-country:{code}"
+
+    return "metric", "auto-fallback"
+
+
+def _format_route_distance(derived_distance_km, units):
+    if units == "imperial":
+        miles = derived_distance_km * 0.6213711922
+        return f"{int(round(miles))} mi"
+    return f"{int(round(derived_distance_km))} km"
+
+
+def _format_route_elev_gain(derived_gain_m, units):
+    if units == "imperial":
+        feet = derived_gain_m * 3.280839895
+        rounded_ft = int(round(feet / 50.0) * 50)
+        return f"{rounded_ft} ft"
+    rounded_m = int(round(derived_gain_m / 10.0) * 10)
+    return f"{rounded_m} m"
+
+
+def _ensure_route_stats_in_panel(cfg, distance_value, elev_gain_value):
+    panel = cfg.get("map", {}).get("info_panel", {})
+    if not isinstance(panel, dict):
+        return
+
+    elements = panel.get("elements")
+    if not isinstance(elements, list):
+        return
+
+    stats_element = None
+    for element in elements:
+        if element.get("type") == "stats" or element.get("id") == "stats":
+            stats_element = element
+            break
+
+    if stats_element is None:
+        stats_element = {"id": "stats", "type": "stats", "items": []}
+        elements.append(stats_element)
+
+    items = stats_element.get("items")
+    if not isinstance(items, list):
+        items = []
+        stats_element["items"] = items
+
+    def upsert(label_candidates, canonical_label, value):
+        if not value:
+            return
+        found = None
+        for item in items:
+            label = str(item.get("label", "")).strip().lower()
+            if label in label_candidates:
+                found = item
+                break
+        if found is not None:
+            if not str(found.get("value", "")).strip():
+                found["value"] = value
+            return
+        items.append({"value": value, "label": canonical_label})
+
+    upsert({"distance", "dist"}, "DISTANCE", distance_value)
+    upsert({"elev gain", "elevation gain", "gain"}, "ELEV GAIN", elev_gain_value)
+
+
+def _resample_route_coords(
+    route_coords,
+    mode="fixed_count",
+    num_points=160,
+    interval_m=300.0,
+    min_points=40,
+    max_points=500,
+):
+    if len(route_coords) < 2:
+        return route_coords
+
+    points = np.asarray(route_coords, dtype=np.float64)
+    cum = _route_cumulative_distance_m(route_coords)
+    total = float(cum[-1])
+    if total <= 0:
+        return route_coords
+
+    sampling_mode = str(mode or "fixed_count").lower()
+    if sampling_mode == "distance_interval":
+        interval = max(float(interval_m), 1.0)
+        target_points = int(total / interval) + 1
+        target_points = max(int(min_points), min(int(max_points), target_points))
+    else:
+        target_points = int(num_points)
+        target_points = max(int(min_points), min(int(max_points), target_points))
+
+    if target_points <= 2:
+        return [tuple(points[0]), tuple(points[-1])]
+
+    if len(route_coords) == target_points:
+        return route_coords
+
+    sample_d = np.linspace(0.0, total, target_points)
+    sample_x = np.interp(sample_d, cum, points[:, 0])
+    sample_y = np.interp(sample_d, cum, points[:, 1])
+    return list(zip(sample_x, sample_y))
+
+
+def _load_gpx_route_coords(gpx_path: Path, sampling_cfg=None):
+    tree = ET.parse(gpx_path)
+    root = tree.getroot()
+
+    route_coords = []
+    gpx_elevation = []
+
+    def _parse_ele(pt):
+        for child in pt:
+            if _local_name(child.tag) == "ele":
+                try:
+                    return float(child.text)
+                except (TypeError, ValueError):
+                    pass
+        return None
+
+    # Prefer ordered track points (trk -> trkseg -> trkpt)
+    for trk in [e for e in root.iter() if _local_name(e.tag) == "trk"]:
+        for trkseg in [e for e in trk if _local_name(e.tag) == "trkseg"]:
+            for trkpt in [e for e in trkseg if _local_name(e.tag) == "trkpt"]:
+                lat = trkpt.attrib.get("lat")
+                lon = trkpt.attrib.get("lon")
+                if lat is None or lon is None:
+                    continue
+                try:
+                    route_coords.append((float(lon), float(lat)))
+                    gpx_elevation.append(_parse_ele(trkpt))
+                except ValueError:
+                    continue
+
+    # Fallback to route points (rte -> rtept)
+    if len(route_coords) < 2:
+        route_coords = []
+        gpx_elevation = []
+        for rte in [e for e in root.iter() if _local_name(e.tag) == "rte"]:
+            for rtept in [e for e in rte if _local_name(e.tag) == "rtept"]:
+                lat = rtept.attrib.get("lat")
+                lon = rtept.attrib.get("lon")
+                if lat is None or lon is None:
+                    continue
+                try:
+                    route_coords.append((float(lon), float(lat)))
+                    gpx_elevation.append(_parse_ele(rtept))
+                except ValueError:
+                    continue
+
+    route_coords = _dedupe_route_coords(route_coords)
+    if len(route_coords) < 2:
+        raise ValueError(f"No valid route points found in GPX file: {gpx_path}")
+
+    # Check if we have usable elevation data from GPX
+    valid_ele = [e for e in gpx_elevation if e is not None]
+    if len(valid_ele) >= 2:
+        ele_array = np.array(
+            [e if e is not None else np.nan for e in gpx_elevation], dtype=np.float64
+        )
+        # Interpolate any missing values
+        idx = np.arange(len(ele_array))
+        finite = np.isfinite(ele_array)
+        if not finite.all() and finite.any():
+            ele_array = np.interp(idx, idx[finite], ele_array[finite])
+        parsed_elevation = ele_array
+    else:
+        parsed_elevation = None
+
+    sampling_cfg = sampling_cfg or {}
+    resampled_coords = _resample_route_coords(
+        route_coords,
+        mode=sampling_cfg.get("mode", "fixed_count"),
+        num_points=int(sampling_cfg.get("num_points", 160)),
+        interval_m=float(sampling_cfg.get("interval_m", 300.0)),
+        min_points=int(sampling_cfg.get("min_points", 40)),
+        max_points=int(sampling_cfg.get("max_points", 500)),
+    )
+
+    # Resample elevation to match resampled coords
+    if parsed_elevation is not None:
+        orig_idx = np.linspace(0, 1, len(parsed_elevation))
+        new_idx = np.linspace(0, 1, len(resampled_coords))
+        parsed_elevation = np.interp(new_idx, orig_idx, parsed_elevation)
+
+    return resampled_coords, parsed_elevation
+
+
+def _sample_dem_elevation(route_coords, dem_path):
+    if not dem_path:
+        return None
+
+    with rasterio.open(dem_path) as dem_ds:
+        if len(route_coords) < 2:
+            return None
+
+        coords = np.asarray(route_coords, dtype=np.float64)
+        lons = coords[:, 0]
+        lats = coords[:, 1]
+
+        if dem_ds.crs and str(dem_ds.crs).upper() != "EPSG:4326":
+            from rasterio.warp import transform as rio_transform
+
+            xs, ys = rio_transform(
+                "EPSG:4326", dem_ds.crs, lons.tolist(), lats.tolist()
+            )
+        else:
+            xs, ys = lons.tolist(), lats.tolist()
+
+        samples = list(dem_ds.sample(list(zip(xs, ys))))
+        elevation = np.array(
+            [s[0] if len(s) else np.nan for s in samples], dtype=np.float64
+        )
+
+        nodata = dem_ds.nodata
+        if nodata is not None:
+            elevation = np.where(np.isclose(elevation, nodata), np.nan, elevation)
+
+        finite = np.isfinite(elevation)
+        if not finite.any():
+            return None
+
+        if not finite.all():
+            idx = np.arange(elevation.size)
+            valid_idx = idx[finite]
+            valid_vals = elevation[finite]
+            if valid_idx.size >= 2:
+                elevation = np.interp(idx, valid_idx, valid_vals)
+            else:
+                elevation = np.full_like(elevation, valid_vals[0])
+
+    return elevation
+
+
+def _trim_route_for_markers(ax, route_coords, trim_start_px, trim_end_px):
+    if len(route_coords) < 2:
+        return route_coords
+
+    points = np.asarray(route_coords, dtype=np.float64)
+    points_px = ax.transData.transform(points)
+
+    seg = points_px[1:] - points_px[:-1]
+    seg_len = np.linalg.norm(seg, axis=1)
+    cum = np.concatenate([[0.0], np.cumsum(seg_len)])
+    total = float(cum[-1])
+    if total <= 0:
+        return route_coords
+
+    d0 = max(0.0, float(trim_start_px))
+    d1 = max(d0, total - max(0.0, float(trim_end_px)))
+    if d1 - d0 <= 1e-6:
+        return route_coords
+
+    def interpolate_at(distance):
+        idx = int(np.searchsorted(cum, distance, side="right") - 1)
+        idx = max(0, min(idx, len(seg_len) - 1))
+        length = seg_len[idx]
+        if length <= 1e-9:
+            return points_px[idx]
+        t = (distance - cum[idx]) / length
+        return points_px[idx] + t * seg[idx]
+
+    trimmed_px = [interpolate_at(d0)]
+    for i in range(1, len(points_px) - 1):
+        if d0 < cum[i] < d1:
+            trimmed_px.append(points_px[i])
+    trimmed_px.append(interpolate_at(d1))
+
+    trimmed_px = np.asarray(trimmed_px, dtype=np.float64)
+    trimmed_data = ax.transData.inverted().transform(trimmed_px)
+    return [tuple(pt) for pt in trimmed_data]
+
+
+def _render_route_on_map(ax, route_coords, route_cfg, dpi):
+    """
+    Render a route on the map axes.
+
+    Parameters
+    ----------
+    ax : matplotlib axes
+        The map axes
+    route_coords : list of (lon, lat) tuples
+        The route coordinates
+    route_cfg : dict
+        Route configuration (color, linewidth, alpha)
+    """
+    if not route_coords or not route_cfg.get("enabled", False):
+        return
+
+    route_color = route_cfg.get("color", "#444444")
+    route_width = float(route_cfg.get("linewidth", 2.5))
+    route_alpha = float(route_cfg.get("alpha", 0.8))
+
+    start_cfg = route_cfg.get("start_marker", {})
+    end_cfg = route_cfg.get("end_marker", {})
+    start_size_pts = float(start_cfg.get("size", 12))
+    end_size_pts = float(end_cfg.get("size", 12))
+    start_radius_px = (start_size_pts * dpi / 72.0) * 0.52
+    end_radius_px = (end_size_pts * dpi / 72.0) * 0.52
+
+    trimmed_coords = _trim_route_for_markers(
+        ax,
+        route_coords,
+        trim_start_px=start_radius_px,
+        trim_end_px=end_radius_px,
+    )
+    if len(trimmed_coords) < 2:
+        trimmed_coords = route_coords
+
+    lons, lats = zip(*trimmed_coords)
+
+    outline_cfg = route_cfg.get("outline", {})
+    outline_enabled = bool(outline_cfg.get("enabled", False))
+    outline_color = outline_cfg.get("color", _mix_colors(route_color, "#000000", 0.35))
+    outline_width = float(outline_cfg.get("linewidth", max(0.6, route_width * 0.35)))
+
+    if outline_enabled and outline_width > 0:
+        ax.plot(
+            lons,
+            lats,
+            color=outline_color,
+            linewidth=route_width + (2.0 * outline_width),
+            alpha=route_alpha,
+            zorder=999,
+            solid_capstyle="round",
+            solid_joinstyle="round",
+        )
+
+    ax.plot(
+        lons,
+        lats,
+        color=route_color,
+        linewidth=route_width,
+        alpha=route_alpha,
+        zorder=1000,
+        solid_capstyle="round",
+        solid_joinstyle="round",
+    )
+
+
+def _mix_colors(color_a, color_b, ratio):
+    a = np.array(to_rgb(color_a), dtype=np.float32)
+    b = np.array(to_rgb(color_b), dtype=np.float32)
+    t = float(max(0.0, min(1.0, ratio)))
+    return tuple((1.0 - t) * a + t * b)
+
+
+def _resolve_marker_colors(route_cfg):
+    route_color = route_cfg.get("color", "#444444")
+    start_cfg = route_cfg.get("start_marker", {})
+    end_cfg = route_cfg.get("end_marker", {})
+
+    start_color = start_cfg.get("color")
+    if not start_color or str(start_color).lower() == "auto":
+        start_color = _mix_colors(route_color, "#000000", 0.15)
+
+    end_color = end_cfg.get("color")
+    if not end_color or str(end_color).lower() == "auto":
+        end_color = _mix_colors(route_color, "#000000", 0.30)
+
+    return route_color, start_color, end_color
+
+
+def _offset_point_in_pixels(ax, point, dx_px, dy_px):
+    display_xy = ax.transData.transform(point)
+    shifted_display = (display_xy[0] + dx_px, display_xy[1] + dy_px)
+    shifted_data = ax.transData.inverted().transform(shifted_display)
+    return (float(shifted_data[0]), float(shifted_data[1]))
+
+
+def _resolve_marker_positions(ax, route_coords, start_size_pts, end_size_pts, dpi):
+    start = np.array(route_coords[0], dtype=np.float64)
+    end = np.array(route_coords[-1], dtype=np.float64)
+
+    start_px = ax.transData.transform(start)
+    end_px = ax.transData.transform(end)
+    delta = end_px - start_px
+    distance_px = float(np.linalg.norm(delta))
+
+    start_radius_px = (start_size_pts * dpi / 72.0) * 0.6
+    end_radius_px = (end_size_pts * dpi / 72.0) * 0.6
+    min_separation_px = start_radius_px + end_radius_px + 10.0
+
+    if distance_px >= min_separation_px:
+        return tuple(start), tuple(end)
+
+    if distance_px > 1e-6:
+        direction = delta / distance_px
+    elif len(route_coords) > 1:
+        alt = ax.transData.transform(route_coords[1]) - start_px
+        alt_norm = float(np.linalg.norm(alt))
+        direction = alt / alt_norm if alt_norm > 1e-6 else np.array([1.0, 0.0])
+    else:
+        direction = np.array([1.0, 0.0])
+
+    normal = np.array([-direction[1], direction[0]])
+    extra_offset_px = (min_separation_px - distance_px) / 2.0
+    offset_px = max(extra_offset_px, 6.0)
+
+    start_shifted = _offset_point_in_pixels(
+        ax, tuple(start), -normal[0] * offset_px, -normal[1] * offset_px
+    )
+    end_shifted = _offset_point_in_pixels(
+        ax, tuple(end), normal[0] * offset_px, normal[1] * offset_px
+    )
+    return start_shifted, end_shifted
+
+
+def _draw_start_marker(
+    ax,
+    lon,
+    lat,
+    color,
+    size_pts,
+    dpi,
+    zorder,
+    marker_cfg=None,
+    outline_color=None,
+):
+    marker_cfg = marker_cfg or {}
+    size_px = max(10.0, size_pts * dpi / 72.0)
+    canvas = size_px * 2.0
+    center = canvas / 2.0
+
+    fill_color = marker_cfg.get("fill_color", "white")
+    core_color = marker_cfg.get("core_color", color)
+    edge_color = marker_cfg.get("ring_color", outline_color or color)
+    ring_width_scale = float(marker_cfg.get("ring_width_scale", 0.12))
+    core_radius_scale = float(marker_cfg.get("core_radius_scale", 0.24))
+    core_edge_scale = float(marker_cfg.get("core_edge_width_scale", 0.06))
+
+    da = DrawingArea(canvas, canvas, clip=False)
+    da.add_artist(
+        mpatches.Circle(
+            (center, center),
+            radius=size_px * 0.48,
+            facecolor=fill_color,
+            edgecolor=edge_color,
+            linewidth=max(0.8, size_px * ring_width_scale),
+        )
+    )
+    da.add_artist(
+        mpatches.Circle(
+            (center, center),
+            radius=size_px * max(0.05, core_radius_scale),
+            facecolor=core_color,
+            edgecolor=fill_color,
+            linewidth=max(0.6, size_px * core_edge_scale),
+        )
+    )
+
+    ax.add_artist(
+        AnnotationBbox(
+            da,
+            (lon, lat),
+            xycoords="data",
+            frameon=False,
+            pad=0,
+            box_alignment=(0.5, 0.5),
+            zorder=zorder,
+        )
+    )
+
+
+def _draw_concentric_circle_marker(
+    ax,
+    lon,
+    lat,
+    color,
+    size_pts,
+    dpi,
+    zorder,
+    marker_cfg=None,
+    outline_color=None,
+):
+    _draw_start_marker(
+        ax,
+        lon,
+        lat,
+        color,
+        size_pts,
+        dpi,
+        zorder,
+        marker_cfg=marker_cfg,
+        outline_color=outline_color,
+    )
+
+
+def _draw_end_marker(ax, lon, lat, color, size_pts, dpi, zorder):
+    size_px = max(10.0, size_pts * dpi / 72.0)
+    canvas = size_px * 2.0
+    center = canvas / 2.0
+    ring_radius = size_px * 0.48
+    ring_lw = max(1.0, size_px * 0.12)
+
+    # Centered 4x4 checker field sized so the square's corner points
+    # exactly touch the inner edge of the circular ring.
+    inner_ring_radius = ring_radius - (ring_lw / 2.0)
+    checker_span = inner_ring_radius * math.sqrt(2.0)
+    cell = checker_span / 4.0
+
+    da = DrawingArea(canvas, canvas, clip=False)
+
+    # White base disk
+    da.add_artist(
+        mpatches.Circle(
+            (center, center),
+            radius=ring_radius,
+            facecolor="white",
+            edgecolor="none",
+        )
+    )
+
+    # 4x4 checker motif (centered; ring trims edges visually)
+    x0 = center - checker_span / 2.0
+    y0 = center - checker_span / 2.0
+    for row in range(4):
+        for col in range(4):
+            square_color = color if (row + col) % 2 == 0 else "white"
+            square = mpatches.Rectangle(
+                (x0 + col * cell, y0 + row * cell),
+                cell,
+                cell,
+                facecolor=square_color,
+                edgecolor="none",
+            )
+            da.add_artist(square)
+
+    # Ring drawn on top of checker field
+    da.add_artist(
+        mpatches.Circle(
+            (center, center),
+            radius=ring_radius,
+            facecolor="none",
+            edgecolor=color,
+            linewidth=ring_lw,
+        )
+    )
+
+    ax.add_artist(
+        AnnotationBbox(
+            da,
+            (lon, lat),
+            xycoords="data",
+            frameon=False,
+            pad=0,
+            box_alignment=(0.5, 0.5),
+            zorder=zorder,
+        )
+    )
+
+
+def _render_route_markers(ax, route_coords, route_cfg, dpi):
+    """
+    Render start and end markers for a route.
+
+    Parameters
+    ----------
+    ax : matplotlib axes
+        The map axes
+    route_coords : list of (lon, lat) tuples
+        The route coordinates
+    route_cfg : dict
+        Route configuration with marker settings
+    dpi : int
+        DPI for size calculations
+    """
+    if not route_coords or not route_cfg.get("enabled", False):
+        return
+
+    start_cfg = route_cfg.get("start_marker", {})
+    end_cfg = route_cfg.get("end_marker", {})
+
+    route_color, start_color, end_color = _resolve_marker_colors(route_cfg)
+    route_outline_cfg = route_cfg.get("outline", {})
+    marker_outline_color = route_outline_cfg.get(
+        "color", _mix_colors(route_color, "#000000", 0.35)
+    )
+
+    start_size_pts = float(start_cfg.get("size", 12))
+    end_size_pts = float(end_cfg.get("size", 12))
+
+    (start_lon, start_lat), (end_lon, end_lat) = _resolve_marker_positions(
+        ax,
+        route_coords,
+        start_size_pts,
+        end_size_pts,
+        dpi,
+    )
+
+    if start_cfg.get("style", "concentric_circles") == "concentric_circles":
+        _draw_concentric_circle_marker(
+            ax,
+            start_lon,
+            start_lat,
+            start_color,
+            start_size_pts,
+            dpi,
+            zorder=1006,
+            marker_cfg=start_cfg,
+            outline_color=marker_outline_color,
+        )
+
+    end_style = end_cfg.get("style", "concentric_circles")
+    if end_style == "checkered_flag":
+        _draw_end_marker(
+            ax,
+            end_lon,
+            end_lat,
+            end_color,
+            end_size_pts,
+            dpi,
+            zorder=1007,
+        )
+    elif end_style == "concentric_circles":
+        _draw_concentric_circle_marker(
+            ax,
+            end_lon,
+            end_lat,
+            end_color,
+            end_size_pts,
+            dpi,
+            zorder=1007,
+            marker_cfg=end_cfg,
+            outline_color=marker_outline_color,
+        )
+
+
+def _render_elevation_profile(ax, route_coords, elevation_data, profile_cfg, mask_gdf):
+    """
+    Render elevation profile as an overlay at the bottom of the map axes.
+
+    Parameters
+    ----------
+    ax : matplotlib axes
+        The map axes
+    route_coords : list of (lon, lat) tuples
+        The route coordinates
+    elevation_data : numpy array
+        Elevation values
+    profile_cfg : dict
+        Profile configuration (height, color, alpha)
+    mask_gdf : GeoDataFrame
+        Map bounds for positioning
+    """
+    if not profile_cfg.get("enabled", False) or len(route_coords) == 0:
+        return
+
+    import numpy as np
+
+    if elevation_data is None or len(elevation_data) == 0:
+        return
+
+    # Draw in axes coordinates, not map data coordinates.
+    # The footer/profile is a layout element and must span the visible map width
+    # exactly, regardless of aspect correction or datalim adjustments.
+    profile_height_fraction = float(profile_cfg.get("height", 0.04))
+    profile_height_fraction = max(0.0, min(profile_height_fraction, 1.0))
+
+    elev = np.asarray(elevation_data, dtype=np.float64)
+    finite = np.isfinite(elev)
+    if not finite.any():
+        return
+
+    if not finite.all():
+        idx = np.arange(elev.size)
+        valid_idx = idx[finite]
+        valid_vals = elev[finite]
+        if valid_idx.size >= 2:
+            elev = np.interp(idx, valid_idx, valid_vals)
+        else:
+            elev = np.full_like(elev, valid_vals[0])
+
+    elev_min = float(np.min(elev))
+    elev_max = float(np.max(elev))
+    if elev_max > elev_min:
+        elev_normalized = (elev - elev_min) / (elev_max - elev_min)
+    else:
+        elev_normalized = np.zeros_like(elev)
+
+    x_coords = np.linspace(0.0, 1.0, len(elev_normalized))
+    y_coords = elev_normalized * profile_height_fraction
+
+    x_fill = np.concatenate([x_coords, [1.0, 0.0]])
+    y_fill = np.concatenate([y_coords, [0.0, 0.0]])
+
+    ax.fill(
+        x_fill,
+        y_fill,
+        transform=ax.transAxes,
+        facecolor=profile_cfg.get("color", "#2a2a2a"),
+        edgecolor="none",
+        linewidth=0,
+        alpha=profile_cfg.get("alpha", 0.9),
+        zorder=1100,  # Above route and features
+        antialiased=False,
+    )
+
+
 def draw_map_from_config(
     config_path: Path,
     geojson_path: Path,
@@ -836,6 +1668,8 @@ def draw_map_from_config(
     dpi: int = 300,
     fmt: str = "png",
     fit_content: bool = False,
+    route_units: str = "auto",
+    route_country_code: str = "",
 ):
     """
     Draws a map based on a YAML config, a GeoJSON mask, and referenced GeoPackage (.gpkg) layers.
@@ -864,7 +1698,17 @@ def draw_map_from_config(
     # Frame is only enabled when panel is enabled
     frame_enabled = frame_cfg.get("enabled", False) and panel_enabled
     frame_color = frame_cfg.get("color", "#2a2a2a")
-    frame_padding = frame_cfg.get("padding", 0.04)  # fraction of figure size
+    frame_padding_fraction = frame_cfg.get(
+        "padding", 0.04
+    )  # fraction of smaller dimension
+
+    # Calculate uniform frame padding in inches (based on smaller dimension)
+    min_dimension = min(width, height)
+    frame_padding_inches = frame_padding_fraction * min_dimension
+
+    # Convert to fractions of each dimension for uniform physical borders
+    frame_padding_horizontal = frame_padding_inches / width
+    frame_padding_vertical = frame_padding_inches / height
 
     panel_height = panel_cfg.get("height", 0.12) if panel_enabled else 0.0
 
@@ -881,24 +1725,26 @@ def draw_map_from_config(
     # Uniform borders on all sides, panel sits directly above bottom border
     if panel_enabled and frame_enabled:
         # Map axes: uniform borders, panel directly below map with no gap
-        map_left = frame_padding
-        map_bottom = frame_padding + panel_height  # bottom border + panel (no gap)
-        map_width = 1.0 - (2 * frame_padding)
+        map_left = frame_padding_horizontal
+        map_bottom = (
+            frame_padding_vertical + panel_height
+        )  # bottom border + panel (no gap)
+        map_width = 1.0 - (2 * frame_padding_horizontal)
         map_height = (
-            1.0 - frame_padding - (frame_padding + panel_height)
+            1.0 - frame_padding_vertical - (frame_padding_vertical + panel_height)
         )  # top border and (bottom border + panel)
 
         # Panel axes: sits directly above bottom border
-        panel_left = frame_padding
-        panel_bottom = frame_padding
-        panel_width = 1.0 - (2 * frame_padding)
+        panel_left = frame_padding_horizontal
+        panel_bottom = frame_padding_vertical
+        panel_width = 1.0 - (2 * frame_padding_horizontal)
         panel_height_axes = panel_height
     elif frame_enabled:
         # Just map with frame padding
-        map_left = frame_padding
-        map_bottom = frame_padding
-        map_width = 1.0 - (2 * frame_padding)
-        map_height = 1.0 - (2 * frame_padding)
+        map_left = frame_padding_horizontal
+        map_bottom = frame_padding_vertical
+        map_width = 1.0 - (2 * frame_padding_horizontal)
+        map_height = 1.0 - (2 * frame_padding_vertical)
     else:
         # Full figure
         map_left = 0
@@ -947,9 +1793,24 @@ def draw_map_from_config(
     # Background
     bg = mcfg.get("background", {})
     face_fc = bg.get("fc", "#ffffff")
-    fig.patch.set_facecolor(face_fc)
+    if not frame_enabled:
+        fig.patch.set_facecolor(face_fc)
     ax.set_facecolor(face_fc)
     ax.set_axis_off()
+    ax.add_patch(
+        mpatches.Rectangle(
+            (0, 0),
+            1,
+            1,
+            transform=ax.transAxes,
+            facecolor=face_fc,
+            edgecolor="none",
+            zorder=-1000,
+        )
+    )
+
+    # Clip patch in data coordinates — applied to all raster layers so nothing bleeds beyond the boundary
+    raster_clip_patch = _boundary_clip_patch(mask_gdf, ax)
 
     # --- Render satellite image underlay if configured (drawn immediately after background) ---
     satellite_cfg = cfg.get("map", {}).get("satellite")
@@ -960,7 +1821,7 @@ def draw_map_from_config(
                 img_rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
                 img_rgb = np.clip(img_rgb, 0, 255).astype(np.uint8)
 
-                ax.imshow(
+                _im = ax.imshow(
                     img_rgb,
                     extent=[
                         src.bounds.left,
@@ -972,6 +1833,8 @@ def draw_map_from_config(
                     alpha=satellite_cfg.get("opacity", 1.0),
                     aspect="auto",
                 )
+                if raster_clip_patch is not None:
+                    _im.set_clip_path(raster_clip_patch)
         except (FileNotFoundError, rasterio.errors.RasterioIOError) as e:
             print(
                 f"Warning: Could not read satellite image '{satellite_cfg['path']}': {e}"
@@ -1006,7 +1869,7 @@ def draw_map_from_config(
                 )
 
                 # prepare destination array
-                dem_resampled = np.empty((height_px, width_px), dtype=np.float32)
+                dem_resampled = np.full((height_px, width_px), np.nan, dtype=np.float32)
 
                 # reproject/resample DEM into target grid
                 reproject(
@@ -1016,7 +1879,9 @@ def draw_map_from_config(
                     src_crs=dem_ds.crs,
                     dst_transform=target_transform,
                     dst_crs=dem_ds.crs,
-                    resampling=Resampling.cubic,
+                    src_nodata=dem_ds.nodata,
+                    dst_nodata=np.nan,
+                    resampling=Resampling.bilinear,
                 )
 
                 # mask nodata values if present
@@ -1185,7 +2050,7 @@ def draw_map_from_config(
                             terrain_rgb, shade, shade_strength
                         )
 
-                    ax.imshow(
+                    _im = ax.imshow(
                         terrain_img,
                         extent=[left, right, bottom, top],
                         zorder=terrain_cfg.get("zorder", hs_cfg.get("zorder", 0)),
@@ -1193,6 +2058,8 @@ def draw_map_from_config(
                         interpolation=terrain_cfg.get("interpolation", "bicubic"),
                         aspect="auto",
                     )
+                    if raster_clip_patch is not None:
+                        _im.set_clip_path(raster_clip_patch)
                 else:
                     hillshade_alpha = hs_cfg.get("alpha", 0.5)
                     if hillshade_rgb is not None:
@@ -1201,15 +2068,17 @@ def draw_map_from_config(
                         )
                         rgba[..., :3] = hillshade_rgb
                         rgba[..., 3] = float(hillshade_alpha)
-                        ax.imshow(
+                        _im = ax.imshow(
                             rgba,
                             extent=[left, right, bottom, top],
                             zorder=hs_cfg.get("zorder", 0),
                             interpolation=hs_cfg.get("interpolation", "bicubic"),
                             aspect="auto",
                         )
+                        if raster_clip_patch is not None:
+                            _im.set_clip_path(raster_clip_patch)
                     else:
-                        ax.imshow(
+                        _im = ax.imshow(
                             shade,
                             cmap=hs_cfg.get("cmap", "gray"),
                             alpha=hillshade_alpha,
@@ -1218,6 +2087,8 @@ def draw_map_from_config(
                             interpolation=hs_cfg.get("interpolation", "bicubic"),
                             aspect="auto",
                         )
+                        if raster_clip_patch is not None:
+                            _im.set_clip_path(raster_clip_patch)
         except (FileNotFoundError, rasterio.errors.RasterioIOError, ValueError) as e:
             print(f"Warning: Could not read DEM file '{dem_path}': {e}")
 
@@ -1439,8 +2310,8 @@ def draw_map_from_config(
     minx, miny, maxx, maxy = mask_gdf.total_bounds
     # compute center latitude
     avg_lat = (miny + maxy) / 2.0
-    # adjust aspect so degrees are equal distances
     aspect = 1 / math.cos(math.radians(avg_lat))
+    # adjust aspect so degrees are equal distances
     ax.set_aspect(aspect)
     if fit_content:
         ax.set_xlim(minx, maxx)
@@ -1466,6 +2337,94 @@ def draw_map_from_config(
             x1 = center_x + new_dx / 2
             ax.set_xlim(x0, x1)
             ax.set_ylim(miny, maxy)
+
+    # Inset axes limits to hide boundary artifacts and satellite attribution text.
+    _xl, _xr = ax.get_xlim()
+    _yb, _yt = ax.get_ylim()
+    _xi = (_xr - _xl) * 0.02
+    _yi = (_yt - _yb) * 0.02
+    ax.set_xlim(_xl + _xi, _xr - _xi)
+    ax.set_ylim(_yb + _yi, _yt - _yi)
+
+    # Render elevation profile and route if configured
+    elevation_cfg = mcfg.get("elevation_profile", {})
+    route_gpx_path = mcfg.get("route_gpx")
+    if elevation_cfg.get("enabled", False) and route_gpx_path:
+        route_coords = None
+        route_cfg = elevation_cfg.get("route", {})
+        sampling_cfg = route_cfg.get("sampling", {})
+
+        gpx_elevation = None
+        try:
+            route_coords, gpx_elevation = _load_gpx_route_coords(
+                Path(route_gpx_path),
+                sampling_cfg=sampling_cfg,
+            )
+        except (FileNotFoundError, ET.ParseError, OSError, ValueError) as e:
+            print(f"Warning: Could not load GPX route '{route_gpx_path}': {e}")
+
+        if route_coords:
+            elevation_data = None
+            if dem_path:
+                try:
+                    elevation_data = _sample_dem_elevation(route_coords, dem_path)
+                except (
+                    FileNotFoundError,
+                    rasterio.errors.RasterioIOError,
+                    ValueError,
+                ) as e:
+                    print(
+                        f"Warning: Could not sample DEM elevations for GPX route: {e}"
+                    )
+
+            if elevation_data is None:
+                elevation_data = gpx_elevation
+
+            derived_distance_km = _route_distance_km(route_coords)
+            derived_gain_m = _elevation_gain_m(elevation_data)
+            supplied_distance, supplied_elev_gain = _extract_supplied_stats(cfg)
+            resolved_units, units_reason = _select_route_units(
+                route_units,
+                country_code=route_country_code,
+            )
+            derived_distance_display = _format_route_distance(
+                derived_distance_km,
+                resolved_units,
+            )
+            derived_gain_display = _format_route_elev_gain(
+                derived_gain_m, resolved_units
+            )
+
+            effective_distance = supplied_distance or derived_distance_display
+            effective_elev_gain = supplied_elev_gain or derived_gain_display
+            _ensure_route_stats_in_panel(cfg, effective_distance, effective_elev_gain)
+
+            print("📊 Route Profile Stats")
+            print(f"📏 Distance (derived): {derived_distance_km:.1f} km")
+            print(f"⛰️  Elevation gain (derived): {derived_gain_m:.0f} m")
+            print(
+                "⚖️  Units: "
+                f"{resolved_units} "
+                f"(mode={route_units}, reason={units_reason})"
+            )
+            if supplied_distance:
+                print(f"📝 Distance (supplied): {supplied_distance}")
+            else:
+                print(f"📝 Distance (auto): {derived_distance_display}")
+            if supplied_elev_gain:
+                print(f"📝 Elevation gain (supplied): {supplied_elev_gain}")
+            else:
+                print(f"📝 Elevation gain (auto): {derived_gain_display}")
+
+            # Render route on map if enabled
+            if route_cfg.get("enabled", False):
+                _render_route_on_map(ax, route_coords, route_cfg, dpi)
+                _render_route_markers(ax, route_coords, route_cfg, dpi)
+
+            # Render elevation profile overlay
+            _render_elevation_profile(
+                ax, route_coords, elevation_data, elevation_cfg, mask_gdf
+            )
 
     # Draw info text if enabled
     info = mcfg.get("info", {})
@@ -1569,6 +2528,17 @@ if __name__ == "__main__":
         action="store_true",
         help="Maintain map content fit within requested dimensions without cropping (current behavior)",
     )
+    parser.add_argument(
+        "--route-units",
+        choices=["auto", "metric", "imperial"],
+        default="auto",
+        help="Route stat units for auto-filled distance/elevation (default: auto)",
+    )
+    parser.add_argument(
+        "--route-country-code",
+        default="",
+        help="Optional 2-letter country code used when --route-units=auto",
+    )
     args = parser.parse_args()
 
     # Determine output format
@@ -1589,4 +2559,6 @@ if __name__ == "__main__":
         dpi=args.dpi,
         fmt=fmt_use,
         fit_content=args.fit_content,
+        route_units=args.route_units,
+        route_country_code=args.route_country_code,
     )

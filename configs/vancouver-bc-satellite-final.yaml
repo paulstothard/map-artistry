@@ -1,10 +1,48 @@
-# YAML configuration for map rendering
-# zorder controls drawing order: higher values are drawn on top
-# You can override default styles per feature type by editing the style_rules section
 map:
   background:
     ec: '#05050d'
     fc: '#05050d'
+  elevation_profile:
+    alpha: 0.9
+    color: '#ffd54f'
+    enabled: true
+    height: 0.04
+    route:
+      alpha: 0.85
+      color: '#ffd54f'
+      enabled: true
+      end_marker:
+        color: '#ff6b6b'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#ffffff'
+        ring_color: '#ff6b6b'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+      linewidth: 3.2
+      outline:
+        color: '#1a1a1a'
+        enabled: true
+        linewidth: 0.7
+      sampling:
+        interval_m: 300
+        max_points: 500
+        min_points: 40
+        mode: distance_interval
+      start_marker:
+        color: '#72c78b'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#ffffff'
+        ring_color: '#72c78b'
+        ring_width_scale: 0.08
+        size: 4.8
+        style: concentric_circles
+  frame:
+    color: '#f2f1ed'
+    enabled: true
+    padding: 0.04
   hillshade:
     alpha: 0
     altitude: 45
@@ -25,13 +63,99 @@ map:
     - 0.8
     - 0.8
     zorder: 0
+    render_mode: cmap
+    tone:
+      clip_low: 0.0
+      clip_high: 1.0
+      contrast: 1.0
+      gamma: 1.0
+      bias: 0.0
+      ambient: 0.0
+    tint:
+      shadow_color: '#0b0f14'
+      mid_color: '#5f6368'
+      highlight_color: '#f3f1eb'
+    multiscale:
+      enabled: false
+      scales:
+      - sigma: 8.0
+        weight: 0.65
+      - sigma: 2.0
+        weight: 0.35
   info:
     color: '#000000'
     font: Gill Sans
     fontsize: 8
     position: bottom-right
     show: false
-    text: ps
+    text: map-artistry
+  info_panel:
+    background:
+      alpha: 1.0
+      color: '#ffd54f'
+    elements:
+    - align: left
+      alpha: 1.0
+      color: '#1a1a1a'
+      content: ''
+      font: Inter
+      font_weight: bold
+      id: title
+      size: 0.42
+      tracking: 0.1
+      transform: uppercase
+      type: title
+      x: 0.03
+      y: 0.65
+    - align: left
+      alpha: 1.0
+      color: '#2d2d2d'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: subtitle
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.03
+      y: 0.25
+    - align: right
+      alpha: 1.0
+      color: '#2d2d2d'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: location
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.97
+      y: 0.65
+    - align: right
+      font: Inter
+      id: stats
+      items: []
+      label_alpha: 1.0
+      label_color: '#2d2d2d'
+      label_size: 0.1
+      label_weight: normal
+      layout: horizontal
+      spacing: 0.04
+      transform: uppercase
+      type: stats
+      value_alpha: 1.0
+      value_color: '#1a1a1a'
+      value_size: 0.22
+      value_weight: bold
+      x: 0.97
+      y: 0.3
+    enabled: false
+    height: 0.12
+    padding: 0.015
+    position: bottom
+    zorder: 1000
   satellite:
     opacity: 1.0
     visible: true
@@ -169,7 +293,7 @@ layers:
     file: downloads/regions/vancouver-bc/layers/highway.gpkg
     layer: highway
     geometry_type: LineString
-    visible: true
+    visible: false
     default:
       fc: '#8a8a8a'
       ec: '#8a8a8a'
@@ -2610,24 +2734,24 @@ layers:
     style_rules:
       highway:
         tertiary:
-          linewidth: 0.32
+          linewidth: 0.25
         cycleway: {}
         footway: {}
         service:
           linewidth: 0.15
         residential:
-          linewidth: 0.3
+          linewidth: 0.25
         path: {}
         secondary:
-          linewidth: 0.38
+          linewidth: 0.4
         living_street:
-          linewidth: 0.1
+          linewidth: 0.15
         secondary_link: {}
         steps: {}
         unclassified:
           linewidth: 0.15
         track:
-          linewidth: 0.1
+          linewidth: 0.15
         motorway_link: {}
         motorway:
           linewidth: 0.6
@@ -2637,10 +2761,10 @@ layers:
         pedestrian: {}
         tertiary_link: {}
         primary:
-          linewidth: 0.45
+          linewidth: 0.4
         primary_link: {}
         trunk:
-          linewidth: 0.52
+          linewidth: 0.5
         bridleway: {}
         trunk_link: {}
         proposed: {}
@@ -4770,20 +4894,20 @@ layers:
       highway:
         footway: {}
         residential:
-          linewidth: 0.3
+          linewidth: 0.25
         service:
           linewidth: 0.15
         track:
-          linewidth: 0.1
+          linewidth: 0.15
         path: {}
         construction: {}
         unclassified:
           linewidth: 0.15
         living_street:
-          linewidth: 0.1
+          linewidth: 0.15
         corridor: {}
         tertiary:
-          linewidth: 0.32
+          linewidth: 0.25
       maxspeed:
         '50': {}
         '15': {}
@@ -5666,7 +5790,7 @@ layers:
         platform: {}
         services: {}
         residential:
-          linewidth: 0.3
+          linewidth: 0.25
         path: {}
         service:
           linewidth: 0.15
@@ -5997,7 +6121,7 @@ layers:
       visible: true
       palette: []
       edge_color: '#003f5c'
-      edge_width: 0.1
+      edge_width: 0.15
     attributes:
       NAME:
       - The Coastal Waters of Southeast Alaska and British Columbia
@@ -6220,7 +6344,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.3
+      linewidth: 0.25
     attributes:
       element:
       - way
@@ -6240,7 +6364,7 @@ layers:
     style_rules:
       waterway:
         river:
-          linewidth: 1.0
+          linewidth: 0.8
         ditch:
           linewidth: 0.2
         stream:
@@ -6248,7 +6372,7 @@ layers:
         canal:
           linewidth: 0.8
         drain:
-          linewidth: 0.3
+          linewidth: 0.25
         tidal_channel: {}
         weir: {}
         boat_lift: {}
@@ -6269,7 +6393,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.3
+      linewidth: 0.25
       marker: o
       size: 3
     attributes:
