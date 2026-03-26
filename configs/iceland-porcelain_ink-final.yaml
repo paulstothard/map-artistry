@@ -5,12 +5,12 @@ map:
   debug_water_hillshade: false
   elevation_profile:
     alpha: 0.9
-    color: '#d32f2f'
+    color: '#4f6078'
     enabled: true
     height: 0.04
     route:
-      alpha: 0.8
-      color: '#d32f2f'
+      alpha: 0.95
+      color: '#4f6078'
       enabled: true
       end_marker:
         color: '#9a6f64'
@@ -18,14 +18,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#ffffff'
         ring_color: '#9a6f64'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 3.2
+      linewidth: 4.0
       outline:
         color: '#ffffff'
         enabled: true
-        linewidth: 0.7
+        linewidth: 0.9
       sampling:
         interval_m: 300
         max_points: 500
@@ -37,11 +37,11 @@ map:
         core_radius_scale: 0.17
         fill_color: '#ffffff'
         ring_color: '#6f8a7a'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
-    color: '#2a2a2a'
+    color: '#3a4048'
     enabled: true
     padding: 0.04
   hillshade:
@@ -95,11 +95,11 @@ map:
   info_panel:
     background:
       alpha: 1.0
-      color: '#ffffff'
+      color: '#f1efe8'
     elements:
     - align: left
       alpha: 1.0
-      color: '#000000'
+      color: '#232a31'
       content: ''
       font: Inter
       font_weight: bold
@@ -112,7 +112,7 @@ map:
       y: 0.65
     - align: left
       alpha: 1.0
-      color: '#666666'
+      color: '#56606b'
       content: ''
       font: Inter
       font_weight: normal
@@ -125,7 +125,7 @@ map:
       y: 0.25
     - align: right
       alpha: 1.0
-      color: '#666666'
+      color: '#56606b'
       content: ''
       font: Inter
       font_weight: normal
@@ -141,7 +141,7 @@ map:
       id: stats
       items: []
       label_alpha: 1.0
-      label_color: '#666666'
+      label_color: '#56606b'
       label_size: 0.1
       label_weight: normal
       layout: horizontal
@@ -149,7 +149,7 @@ map:
       transform: uppercase
       type: stats
       value_alpha: 1.0
-      value_color: '#000000'
+      value_color: '#232a31'
       value_size: 0.22
       value_weight: bold
       x: 0.97

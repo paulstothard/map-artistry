@@ -4,7 +4,7 @@ map:
     ec: "#f9f9f6"
   frame:
     enabled: true
-    color: "#2a2a2a"
+    color: "#3a4048"
     padding: 0.04
   scheme: porcelain_ink
   debug_water_hillshade: false
@@ -90,7 +90,7 @@ map:
     position: bottom
     height: 0.12
     background:
-      color: "#ffffff"
+      color: "#f1efe8"
       alpha: 1.0
     padding: 0.015
     zorder: 1000
@@ -103,7 +103,7 @@ map:
         font: Inter
         font_weight: bold
         size: 0.42
-        color: "#000000"
+        color: "#232a31"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -116,7 +116,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#666666"
+        color: "#56606b"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -129,7 +129,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#666666"
+        color: "#56606b"
         alpha: 1.0
         align: right
         transform: uppercase
@@ -145,23 +145,23 @@ map:
         font: Inter
         value_size: 0.22
         value_weight: bold
-        value_color: "#000000"
+        value_color: "#232a31"
         value_alpha: 1.0
         label_size: 0.10
         label_weight: normal
-        label_color: "#666666"
+        label_color: "#56606b"
         label_alpha: 1.0
         transform: uppercase
   elevation_profile:
     enabled: true
     height: 0.04 # Fraction of map height (overlay at bottom)
-    color: "#d32f2f"
+    color: "#4f6078"
     alpha: 0.9
     route:
       enabled: true
-      color: "#d32f2f"
+      color: "#4f6078"
       linewidth: 4.0 # Points
-      alpha: 0.8
+      alpha: 0.95
       sampling:
         mode: distance_interval
         interval_m: 300

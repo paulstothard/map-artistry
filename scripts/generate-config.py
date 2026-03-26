@@ -25,9 +25,18 @@ Returns a dictionary mapping scheme names to their configurations.
 """
 
 
-def load_schemes():
-    schemes_dir = Path(__file__).parent.parent / "schemes"
+def load_schemes(schemes_dir=None):
+    if schemes_dir is None:
+        env_schemes_dir = os.environ.get("MAP_ARTISTRY_SCHEMES_DIR")
+        if env_schemes_dir:
+            schemes_dir = Path(env_schemes_dir)
+        else:
+            schemes_dir = Path(__file__).parent.parent / "schemes"
+    else:
+        schemes_dir = Path(schemes_dir)
+
     schemes = {}
+    failed_schemes = []
 
     if not schemes_dir.exists():
         raise FileNotFoundError(
@@ -41,9 +50,27 @@ def load_schemes():
             with open(scheme_file, "r") as f:
                 schemes[scheme_name] = yaml.safe_load(f)
         except Exception as e:
+            failed_schemes.append((scheme_name, scheme_file, e))
             print(
                 f"Warning: Failed to load scheme '{scheme_name}': {e}", file=sys.stderr
             )
+
+    if failed_schemes:
+        print(
+            "\n⚠️  Some schemes failed validation and were skipped:",
+            file=sys.stderr,
+        )
+        for scheme_name, scheme_file, err in sorted(
+            failed_schemes, key=lambda item: item[0]
+        ):
+            print(
+                f"   - {scheme_name} ({scheme_file}): {err}",
+                file=sys.stderr,
+            )
+        print(
+            "   These skipped schemes will not appear in --list-schemes and cannot be used for builds.\n",
+            file=sys.stderr,
+        )
 
     if not schemes:
         raise ValueError(
@@ -54,8 +81,8 @@ def load_schemes():
     return schemes
 
 
-# Load color schemes from external files on module initialization
-DESIGN_SETTINGS = load_schemes()
+# Color schemes loaded at runtime (defaults to project schemes/ if not overridden)
+DESIGN_SETTINGS = None
 
 """
 Determine the styling category key for a given layer name, used to select design parameters.
@@ -170,6 +197,10 @@ def generate_yaml(
     enable_text=False,
     route_gpx=None,
 ):
+    global DESIGN_SETTINGS
+    if DESIGN_SETTINGS is None:
+        DESIGN_SETTINGS = load_schemes()
+
     if not geojson_path:
         raise ValueError("A geojson_path is required")
     # Load mask if provided
@@ -463,6 +494,13 @@ if __name__ == "__main__":
         help="Path to a satellite image file (optional)",
     )
     parser.add_argument(
+        "--schemes-dir",
+        dest="schemes_dir",
+        type=str,
+        default=None,
+        help="Directory containing scheme YAML files (default: schemes/)",
+    )
+    parser.add_argument(
         "--list-schemes",
         action="store_true",
         help="List all available color schemes and exit",
@@ -506,6 +544,8 @@ if __name__ == "__main__":
         help="Enable text rendering on the map",
     )
     args = parser.parse_args()
+
+    DESIGN_SETTINGS = load_schemes(args.schemes_dir)
 
     # Handle --list-schemes
     if args.list_schemes:

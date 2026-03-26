@@ -1,7 +1,8 @@
 # map-artistry
 
-Artistic topographic map generator using OpenStreetMap, satellite imagery, and digital elevation
-models. Generates high-resolution, stylized maps via a customizable pipeline.
+Artistic topographic and GPX route map generator using OpenStreetMap, satellite imagery, and digital
+elevation models. Generates high-resolution, stylized region maps and route-overlay maps via a
+customizable pipeline.
 
 ## Dependencies
 
@@ -62,6 +63,20 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### 3. Optional: Override Project Paths
+
+All major project paths are centralized as globals at the top of [justfile](justfile), including:
+
+- `scripts_dir`
+- `schemes_dir`
+- `downloads_dir` / `regions_dir` / `routes_dir`
+- `natural_earth_cache_dir` / `ocean_boundaries_dir`
+- `configs_dir`
+- `output_dir`
+- `cache_dir`
+
+Edit those values once to relocate folders; all `just` build flows use them automatically.
+
 ## Usage
 
 ### Standard Maps
@@ -91,28 +106,28 @@ and custom metrics.
 **Region + GPX route** — the map region is defined by a place name, with the GPX track drawn on top:
 
 ```bash
-just build-route "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
+just build-route "Edmonton, AB" ./my-ride.gpx coral
 
 # With a stats panel
 just build-route \
   --text-title "EDMONTON LOOP" \
   --text-subtitle "SUMMER TRAINING RIDE" \
   --text-stats "94 KM||DISTANCE;;800 M||ELEV GAIN" \
-  "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
+  "Edmonton, AB" ./my-ride.gpx coral
 ```
 
 **GPX-derived route** — the map region is derived automatically from the GPX track bounding box, no
 place name required:
 
 ```bash
-just build-gpx downloads/cycling-routes/my-ride.gpx coral
+just build-gpx ./my-ride.gpx coral
 
 # With a stats panel
 just build-gpx \
   --text-title "RIVER VALLEY LOOP" \
   --text-subtitle "GPX-DERIVED REGION" \
   --text-stats "64 KM||DISTANCE;;530 M||ELEV GAIN" \
-  downloads/cycling-routes/my-ride.gpx coral
+  ./my-ride.gpx coral
 ```
 
 All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated
@@ -144,16 +159,17 @@ Listed in the same order as each example image row.
 - `blueprint` — blue-tinted terrain with dark blue water; shows roads, buildings, railways, with
   subtle natural/land use layers
 - `coral` — red-toned terrain, white water; hides natural and land use layers
-- `dark_relief` — dramatic grayscale relief with black background/water; shows waterways only, hides
-  roads, buildings, natural, and land use layers
+- `dark_relief` — dramatic grayscale relief with black background/water; shows waterways only,
+  hides roads, buildings, natural, and land use layers
 - `etched` — high-contrast engraved style with cream background/water; shows waterways only, hides
   roads, buildings, natural, and land use layers
-- `glacier` — cool grey-green terrain, blue-grey water; hides roads, buildings, and land use layers
+- `glacier` — cool grey-green terrain, blue-grey water; shows roads and buildings with a cool slate
+  hierarchy; hides land use layers
 - `lava` — fiery terrain, orange water; hides roads, buildings, and land use layers
-- `minimal_white` — minimalist light style with white/cream background/water; shows waterways only,
-  hides roads, buildings, natural, and land use layers
-- `natural` — green→brown→grey→white terrain, blue water; hides roads, buildings, and land use
-  layers
+- `minimal_white` — minimalist light style with white/cream background/water; shows waterways,
+  subtle roads, and light building footprints; hides natural and land use layers
+- `natural` — green→brown→grey→white terrain, blue water; shows roads and buildings in muted earth
+  tones; hides land use layers
 - `neon_cyber` — sci-fi cyan/neon blue with black background; shows waterways only, hides roads,
   buildings, natural, and land use layers
 - `porcelain_ink` — delicate Chinese porcelain style with subtle blue water; shows roads, buildings,
@@ -166,191 +182,763 @@ Listed in the same order as each example image row.
 **Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street
 network), buildings (footprints), water/waterway (bodies of water and streams).
 
+Road and building visibility depends on source detail: when large areas use lower-detail Natural
+Earth layers (see area/source table above), these layers can be sparse or absent compared with
+OSM-backed city/region renders.
+
 ## Examples
 
 These README examples are `400×400` thumbnails linking to `1200×1200` full previews, rendered at
 `24" × 24" @ 150 DPI`. Full-resolution builds (default `600 DPI`) produce approximately
 `14400×14400` pixel images; use `--format pdf` for print-quality output.
 
-### Resolution Sample (Edmonton, River Runs Red)
-
-[![Edmonton - River Runs Red](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
-
 ### Banff, AB
 
-[![Banff - Blueprint](examples/thumbnails/banff-ab-blueprint.png)](examples/full/banff-ab-blueprint.png)
-[![Banff - Coral](examples/thumbnails/banff-ab-coral.png)](examples/full/banff-ab-coral.png)
-[![Banff - Dark Relief](examples/thumbnails/banff-ab-dark_relief.png)](examples/full/banff-ab-dark_relief.png)
-[![Banff - Etched](examples/thumbnails/banff-ab-etched.png)](examples/full/banff-ab-etched.png)
-[![Banff - Glacier](examples/thumbnails/banff-ab-glacier.png)](examples/full/banff-ab-glacier.png)
-[![Banff - Lava](examples/thumbnails/banff-ab-lava.png)](examples/full/banff-ab-lava.png)
-[![Banff - Minimal White](examples/thumbnails/banff-ab-minimal_white.png)](examples/full/banff-ab-minimal_white.png)
-[![Banff - Natural](examples/thumbnails/banff-ab-natural.png)](examples/full/banff-ab-natural.png)
-[![Banff - Neon Cyber](examples/thumbnails/banff-ab-neon_cyber.png)](examples/full/banff-ab-neon_cyber.png)
-[![Banff - Porcelain Ink](examples/thumbnails/banff-ab-porcelain_ink.png)](examples/full/banff-ab-porcelain_ink.png)
-[![Banff - River Runs Red](examples/thumbnails/banff-ab-river_runs_red.png)](examples/full/banff-ab-river_runs_red.png)
-[![Banff - Satellite](examples/thumbnails/banff-ab-satellite.png)](examples/full/banff-ab-satellite.png)
-[![Banff - Sepia Vintage](examples/thumbnails/banff-ab-sepia_vintage.png)](examples/full/banff-ab-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/banff-ab-blueprint.png"><img src="examples/thumbnails/banff-ab-blueprint.png" alt="Banff - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-coral.png"><img src="examples/thumbnails/banff-ab-coral.png" alt="Banff - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-dark_relief.png"><img src="examples/thumbnails/banff-ab-dark_relief.png" alt="Banff - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-etched.png"><img src="examples/thumbnails/banff-ab-etched.png" alt="Banff - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/banff-ab-glacier.png"><img src="examples/thumbnails/banff-ab-glacier.png" alt="Banff - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-lava.png"><img src="examples/thumbnails/banff-ab-lava.png" alt="Banff - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-minimal_white.png"><img src="examples/thumbnails/banff-ab-minimal_white.png" alt="Banff - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-natural.png"><img src="examples/thumbnails/banff-ab-natural.png" alt="Banff - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/banff-ab-neon_cyber.png"><img src="examples/thumbnails/banff-ab-neon_cyber.png" alt="Banff - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-porcelain_ink.png"><img src="examples/thumbnails/banff-ab-porcelain_ink.png" alt="Banff - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-river_runs_red.png"><img src="examples/thumbnails/banff-ab-river_runs_red.png" alt="Banff - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-satellite.png"><img src="examples/thumbnails/banff-ab-satellite.png" alt="Banff - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/banff-ab-sepia_vintage.png"><img src="examples/thumbnails/banff-ab-sepia_vintage.png" alt="Banff - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### British Columbia
 
-[![British Columbia - Blueprint](examples/thumbnails/british-columbia-blueprint.png)](examples/full/british-columbia-blueprint.png)
-[![British Columbia - Coral](examples/thumbnails/british-columbia-coral.png)](examples/full/british-columbia-coral.png)
-[![British Columbia - Dark Relief](examples/thumbnails/british-columbia-dark_relief.png)](examples/full/british-columbia-dark_relief.png)
-[![British Columbia - Etched](examples/thumbnails/british-columbia-etched.png)](examples/full/british-columbia-etched.png)
-[![British Columbia - Glacier](examples/thumbnails/british-columbia-glacier.png)](examples/full/british-columbia-glacier.png)
-[![British Columbia - Lava](examples/thumbnails/british-columbia-lava.png)](examples/full/british-columbia-lava.png)
-[![British Columbia - Minimal White](examples/thumbnails/british-columbia-minimal_white.png)](examples/full/british-columbia-minimal_white.png)
-[![British Columbia - Natural](examples/thumbnails/british-columbia-natural.png)](examples/full/british-columbia-natural.png)
-[![British Columbia - Neon Cyber](examples/thumbnails/british-columbia-neon_cyber.png)](examples/full/british-columbia-neon_cyber.png)
-[![British Columbia - Porcelain Ink](examples/thumbnails/british-columbia-porcelain_ink.png)](examples/full/british-columbia-porcelain_ink.png)
-[![British Columbia - River Runs Red](examples/thumbnails/british-columbia-river_runs_red.png)](examples/full/british-columbia-river_runs_red.png)
-[![British Columbia - Satellite](examples/thumbnails/british-columbia-satellite.png)](examples/full/british-columbia-satellite.png)
-[![British Columbia - Sepia Vintage](examples/thumbnails/british-columbia-sepia_vintage.png)](examples/full/british-columbia-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/british-columbia-blueprint.png"><img src="examples/thumbnails/british-columbia-blueprint.png" alt="British Columbia - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-coral.png"><img src="examples/thumbnails/british-columbia-coral.png" alt="British Columbia - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-dark_relief.png"><img src="examples/thumbnails/british-columbia-dark_relief.png" alt="British Columbia - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-etched.png"><img src="examples/thumbnails/british-columbia-etched.png" alt="British Columbia - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/british-columbia-glacier.png"><img src="examples/thumbnails/british-columbia-glacier.png" alt="British Columbia - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-lava.png"><img src="examples/thumbnails/british-columbia-lava.png" alt="British Columbia - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-minimal_white.png"><img src="examples/thumbnails/british-columbia-minimal_white.png" alt="British Columbia - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-natural.png"><img src="examples/thumbnails/british-columbia-natural.png" alt="British Columbia - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/british-columbia-neon_cyber.png"><img src="examples/thumbnails/british-columbia-neon_cyber.png" alt="British Columbia - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-porcelain_ink.png"><img src="examples/thumbnails/british-columbia-porcelain_ink.png" alt="British Columbia - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-river_runs_red.png"><img src="examples/thumbnails/british-columbia-river_runs_red.png" alt="British Columbia - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-satellite.png"><img src="examples/thumbnails/british-columbia-satellite.png" alt="British Columbia - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/british-columbia-sepia_vintage.png"><img src="examples/thumbnails/british-columbia-sepia_vintage.png" alt="British Columbia - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Cape Town, South Africa
 
-[![Cape Town - Blueprint](examples/thumbnails/cape-town-south-africa-blueprint.png)](examples/full/cape-town-south-africa-blueprint.png)
-[![Cape Town - Coral](examples/thumbnails/cape-town-south-africa-coral.png)](examples/full/cape-town-south-africa-coral.png)
-[![Cape Town - Dark Relief](examples/thumbnails/cape-town-south-africa-dark_relief.png)](examples/full/cape-town-south-africa-dark_relief.png)
-[![Cape Town - Etched](examples/thumbnails/cape-town-south-africa-etched.png)](examples/full/cape-town-south-africa-etched.png)
-[![Cape Town - Glacier](examples/thumbnails/cape-town-south-africa-glacier.png)](examples/full/cape-town-south-africa-glacier.png)
-[![Cape Town - Lava](examples/thumbnails/cape-town-south-africa-lava.png)](examples/full/cape-town-south-africa-lava.png)
-[![Cape Town - Minimal White](examples/thumbnails/cape-town-south-africa-minimal_white.png)](examples/full/cape-town-south-africa-minimal_white.png)
-[![Cape Town - Natural](examples/thumbnails/cape-town-south-africa-natural.png)](examples/full/cape-town-south-africa-natural.png)
-[![Cape Town - Neon Cyber](examples/thumbnails/cape-town-south-africa-neon_cyber.png)](examples/full/cape-town-south-africa-neon_cyber.png)
-[![Cape Town - Porcelain Ink](examples/thumbnails/cape-town-south-africa-porcelain_ink.png)](examples/full/cape-town-south-africa-porcelain_ink.png)
-[![Cape Town - River Runs Red](examples/thumbnails/cape-town-south-africa-river_runs_red.png)](examples/full/cape-town-south-africa-river_runs_red.png)
-[![Cape Town - Satellite](examples/thumbnails/cape-town-south-africa-satellite.png)](examples/full/cape-town-south-africa-satellite.png)
-[![Cape Town - Sepia Vintage](examples/thumbnails/cape-town-south-africa-sepia_vintage.png)](examples/full/cape-town-south-africa-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-blueprint.png"><img src="examples/thumbnails/cape-town-south-africa-blueprint.png" alt="Cape Town - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-coral.png"><img src="examples/thumbnails/cape-town-south-africa-coral.png" alt="Cape Town - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-dark_relief.png"><img src="examples/thumbnails/cape-town-south-africa-dark_relief.png" alt="Cape Town - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-etched.png"><img src="examples/thumbnails/cape-town-south-africa-etched.png" alt="Cape Town - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-glacier.png"><img src="examples/thumbnails/cape-town-south-africa-glacier.png" alt="Cape Town - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-lava.png"><img src="examples/thumbnails/cape-town-south-africa-lava.png" alt="Cape Town - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-minimal_white.png"><img src="examples/thumbnails/cape-town-south-africa-minimal_white.png" alt="Cape Town - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-natural.png"><img src="examples/thumbnails/cape-town-south-africa-natural.png" alt="Cape Town - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-neon_cyber.png"><img src="examples/thumbnails/cape-town-south-africa-neon_cyber.png" alt="Cape Town - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-porcelain_ink.png"><img src="examples/thumbnails/cape-town-south-africa-porcelain_ink.png" alt="Cape Town - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-river_runs_red.png"><img src="examples/thumbnails/cape-town-south-africa-river_runs_red.png" alt="Cape Town - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-satellite.png"><img src="examples/thumbnails/cape-town-south-africa-satellite.png" alt="Cape Town - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/cape-town-south-africa-sepia_vintage.png"><img src="examples/thumbnails/cape-town-south-africa-sepia_vintage.png" alt="Cape Town - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Edmonton, AB
 
-[![Edmonton - Blueprint](examples/thumbnails/edmonton-ab-blueprint.png)](examples/full/edmonton-ab-blueprint.png)
-[![Edmonton - Coral](examples/thumbnails/edmonton-ab-coral.png)](examples/full/edmonton-ab-coral.png)
-[![Edmonton - Dark Relief](examples/thumbnails/edmonton-ab-dark_relief.png)](examples/full/edmonton-ab-dark_relief.png)
-[![Edmonton - Etched](examples/thumbnails/edmonton-ab-etched.png)](examples/full/edmonton-ab-etched.png)
-[![Edmonton - Glacier](examples/thumbnails/edmonton-ab-glacier.png)](examples/full/edmonton-ab-glacier.png)
-[![Edmonton - Lava](examples/thumbnails/edmonton-ab-lava.png)](examples/full/edmonton-ab-lava.png)
-[![Edmonton - Minimal White](examples/thumbnails/edmonton-ab-minimal_white.png)](examples/full/edmonton-ab-minimal_white.png)
-[![Edmonton - Natural](examples/thumbnails/edmonton-ab-natural.png)](examples/full/edmonton-ab-natural.png)
-[![Edmonton - Neon Cyber](examples/thumbnails/edmonton-ab-neon_cyber.png)](examples/full/edmonton-ab-neon_cyber.png)
-[![Edmonton - Porcelain Ink](examples/thumbnails/edmonton-ab-porcelain_ink.png)](examples/full/edmonton-ab-porcelain_ink.png)
-[![Edmonton - River Runs Red](examples/thumbnails/edmonton-ab-river_runs_red.png)](examples/full/edmonton-ab-river_runs_red.png)
-[![Edmonton - Satellite](examples/thumbnails/edmonton-ab-satellite.png)](examples/full/edmonton-ab-satellite.png)
-[![Edmonton - Sepia Vintage](examples/thumbnails/edmonton-ab-sepia_vintage.png)](examples/full/edmonton-ab-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-blueprint.png"><img src="examples/thumbnails/edmonton-ab-blueprint.png" alt="Edmonton - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-coral.png"><img src="examples/thumbnails/edmonton-ab-coral.png" alt="Edmonton - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-dark_relief.png"><img src="examples/thumbnails/edmonton-ab-dark_relief.png" alt="Edmonton - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-etched.png"><img src="examples/thumbnails/edmonton-ab-etched.png" alt="Edmonton - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-glacier.png"><img src="examples/thumbnails/edmonton-ab-glacier.png" alt="Edmonton - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-lava.png"><img src="examples/thumbnails/edmonton-ab-lava.png" alt="Edmonton - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-minimal_white.png"><img src="examples/thumbnails/edmonton-ab-minimal_white.png" alt="Edmonton - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-natural.png"><img src="examples/thumbnails/edmonton-ab-natural.png" alt="Edmonton - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-neon_cyber.png"><img src="examples/thumbnails/edmonton-ab-neon_cyber.png" alt="Edmonton - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-porcelain_ink.png"><img src="examples/thumbnails/edmonton-ab-porcelain_ink.png" alt="Edmonton - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-river_runs_red.png"><img src="examples/thumbnails/edmonton-ab-river_runs_red.png" alt="Edmonton - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-satellite.png"><img src="examples/thumbnails/edmonton-ab-satellite.png" alt="Edmonton - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-sepia_vintage.png"><img src="examples/thumbnails/edmonton-ab-sepia_vintage.png" alt="Edmonton - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Iceland
 
-[![Iceland - Blueprint](examples/thumbnails/iceland-blueprint.png)](examples/full/iceland-blueprint.png)
-[![Iceland - Coral](examples/thumbnails/iceland-coral.png)](examples/full/iceland-coral.png)
-[![Iceland - Dark Relief](examples/thumbnails/iceland-dark_relief.png)](examples/full/iceland-dark_relief.png)
-[![Iceland - Etched](examples/thumbnails/iceland-etched.png)](examples/full/iceland-etched.png)
-[![Iceland - Glacier](examples/thumbnails/iceland-glacier.png)](examples/full/iceland-glacier.png)
-[![Iceland - Lava](examples/thumbnails/iceland-lava.png)](examples/full/iceland-lava.png)
-[![Iceland - Minimal White](examples/thumbnails/iceland-minimal_white.png)](examples/full/iceland-minimal_white.png)
-[![Iceland - Natural](examples/thumbnails/iceland-natural.png)](examples/full/iceland-natural.png)
-[![Iceland - Neon Cyber](examples/thumbnails/iceland-neon_cyber.png)](examples/full/iceland-neon_cyber.png)
-[![Iceland - Porcelain Ink](examples/thumbnails/iceland-porcelain_ink.png)](examples/full/iceland-porcelain_ink.png)
-[![Iceland - River Runs Red](examples/thumbnails/iceland-river_runs_red.png)](examples/full/iceland-river_runs_red.png)
-[![Iceland - Satellite](examples/thumbnails/iceland-satellite.png)](examples/full/iceland-satellite.png)
-[![Iceland - Sepia Vintage](examples/thumbnails/iceland-sepia_vintage.png)](examples/full/iceland-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/iceland-blueprint.png"><img src="examples/thumbnails/iceland-blueprint.png" alt="Iceland - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-coral.png"><img src="examples/thumbnails/iceland-coral.png" alt="Iceland - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-dark_relief.png"><img src="examples/thumbnails/iceland-dark_relief.png" alt="Iceland - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-etched.png"><img src="examples/thumbnails/iceland-etched.png" alt="Iceland - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/iceland-glacier.png"><img src="examples/thumbnails/iceland-glacier.png" alt="Iceland - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-lava.png"><img src="examples/thumbnails/iceland-lava.png" alt="Iceland - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-minimal_white.png"><img src="examples/thumbnails/iceland-minimal_white.png" alt="Iceland - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-natural.png"><img src="examples/thumbnails/iceland-natural.png" alt="Iceland - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/iceland-neon_cyber.png"><img src="examples/thumbnails/iceland-neon_cyber.png" alt="Iceland - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-porcelain_ink.png"><img src="examples/thumbnails/iceland-porcelain_ink.png" alt="Iceland - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-river_runs_red.png"><img src="examples/thumbnails/iceland-river_runs_red.png" alt="Iceland - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/iceland-satellite.png"><img src="examples/thumbnails/iceland-satellite.png" alt="Iceland - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/iceland-sepia_vintage.png"><img src="examples/thumbnails/iceland-sepia_vintage.png" alt="Iceland - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Oahu, HI
 
-[![Oahu - Blueprint](examples/thumbnails/oahu-hi-blueprint.png)](examples/full/oahu-hi-blueprint.png)
-[![Oahu - Coral](examples/thumbnails/oahu-hi-coral.png)](examples/full/oahu-hi-coral.png)
-[![Oahu - Dark Relief](examples/thumbnails/oahu-hi-dark_relief.png)](examples/full/oahu-hi-dark_relief.png)
-[![Oahu - Etched](examples/thumbnails/oahu-hi-etched.png)](examples/full/oahu-hi-etched.png)
-[![Oahu - Glacier](examples/thumbnails/oahu-hi-glacier.png)](examples/full/oahu-hi-glacier.png)
-[![Oahu - Lava](examples/thumbnails/oahu-hi-lava.png)](examples/full/oahu-hi-lava.png)
-[![Oahu - Minimal White](examples/thumbnails/oahu-hi-minimal_white.png)](examples/full/oahu-hi-minimal_white.png)
-[![Oahu - Natural](examples/thumbnails/oahu-hi-natural.png)](examples/full/oahu-hi-natural.png)
-[![Oahu - Neon Cyber](examples/thumbnails/oahu-hi-neon_cyber.png)](examples/full/oahu-hi-neon_cyber.png)
-[![Oahu - Porcelain Ink](examples/thumbnails/oahu-hi-porcelain_ink.png)](examples/full/oahu-hi-porcelain_ink.png)
-[![Oahu - River Runs Red](examples/thumbnails/oahu-hi-river_runs_red.png)](examples/full/oahu-hi-river_runs_red.png)
-[![Oahu - Satellite](examples/thumbnails/oahu-hi-satellite.png)](examples/full/oahu-hi-satellite.png)
-[![Oahu - Sepia Vintage](examples/thumbnails/oahu-hi-sepia_vintage.png)](examples/full/oahu-hi-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/oahu-hi-blueprint.png"><img src="examples/thumbnails/oahu-hi-blueprint.png" alt="Oahu - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-coral.png"><img src="examples/thumbnails/oahu-hi-coral.png" alt="Oahu - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-dark_relief.png"><img src="examples/thumbnails/oahu-hi-dark_relief.png" alt="Oahu - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-etched.png"><img src="examples/thumbnails/oahu-hi-etched.png" alt="Oahu - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/oahu-hi-glacier.png"><img src="examples/thumbnails/oahu-hi-glacier.png" alt="Oahu - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-lava.png"><img src="examples/thumbnails/oahu-hi-lava.png" alt="Oahu - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-minimal_white.png"><img src="examples/thumbnails/oahu-hi-minimal_white.png" alt="Oahu - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-natural.png"><img src="examples/thumbnails/oahu-hi-natural.png" alt="Oahu - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/oahu-hi-neon_cyber.png"><img src="examples/thumbnails/oahu-hi-neon_cyber.png" alt="Oahu - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-porcelain_ink.png"><img src="examples/thumbnails/oahu-hi-porcelain_ink.png" alt="Oahu - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-river_runs_red.png"><img src="examples/thumbnails/oahu-hi-river_runs_red.png" alt="Oahu - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/oahu-hi-satellite.png"><img src="examples/thumbnails/oahu-hi-satellite.png" alt="Oahu - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/oahu-hi-sepia_vintage.png"><img src="examples/thumbnails/oahu-hi-sepia_vintage.png" alt="Oahu - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Patagonia
 
-[![Patagonia - Blueprint](examples/thumbnails/patagonia-blueprint.png)](examples/full/patagonia-blueprint.png)
-[![Patagonia - Coral](examples/thumbnails/patagonia-coral.png)](examples/full/patagonia-coral.png)
-[![Patagonia - Dark Relief](examples/thumbnails/patagonia-dark_relief.png)](examples/full/patagonia-dark_relief.png)
-[![Patagonia - Etched](examples/thumbnails/patagonia-etched.png)](examples/full/patagonia-etched.png)
-[![Patagonia - Glacier](examples/thumbnails/patagonia-glacier.png)](examples/full/patagonia-glacier.png)
-[![Patagonia - Lava](examples/thumbnails/patagonia-lava.png)](examples/full/patagonia-lava.png)
-[![Patagonia - Minimal White](examples/thumbnails/patagonia-minimal_white.png)](examples/full/patagonia-minimal_white.png)
-[![Patagonia - Natural](examples/thumbnails/patagonia-natural.png)](examples/full/patagonia-natural.png)
-[![Patagonia - Neon Cyber](examples/thumbnails/patagonia-neon_cyber.png)](examples/full/patagonia-neon_cyber.png)
-[![Patagonia - Porcelain Ink](examples/thumbnails/patagonia-porcelain_ink.png)](examples/full/patagonia-porcelain_ink.png)
-[![Patagonia - River Runs Red](examples/thumbnails/patagonia-river_runs_red.png)](examples/full/patagonia-river_runs_red.png)
-[![Patagonia - Satellite](examples/thumbnails/patagonia-satellite.png)](examples/full/patagonia-satellite.png)
-[![Patagonia - Sepia Vintage](examples/thumbnails/patagonia-sepia_vintage.png)](examples/full/patagonia-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/patagonia-blueprint.png"><img src="examples/thumbnails/patagonia-blueprint.png" alt="Patagonia - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-coral.png"><img src="examples/thumbnails/patagonia-coral.png" alt="Patagonia - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-dark_relief.png"><img src="examples/thumbnails/patagonia-dark_relief.png" alt="Patagonia - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-etched.png"><img src="examples/thumbnails/patagonia-etched.png" alt="Patagonia - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/patagonia-glacier.png"><img src="examples/thumbnails/patagonia-glacier.png" alt="Patagonia - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-lava.png"><img src="examples/thumbnails/patagonia-lava.png" alt="Patagonia - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-minimal_white.png"><img src="examples/thumbnails/patagonia-minimal_white.png" alt="Patagonia - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-natural.png"><img src="examples/thumbnails/patagonia-natural.png" alt="Patagonia - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/patagonia-neon_cyber.png"><img src="examples/thumbnails/patagonia-neon_cyber.png" alt="Patagonia - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-porcelain_ink.png"><img src="examples/thumbnails/patagonia-porcelain_ink.png" alt="Patagonia - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-river_runs_red.png"><img src="examples/thumbnails/patagonia-river_runs_red.png" alt="Patagonia - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/patagonia-satellite.png"><img src="examples/thumbnails/patagonia-satellite.png" alt="Patagonia - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/patagonia-sepia_vintage.png"><img src="examples/thumbnails/patagonia-sepia_vintage.png" alt="Patagonia - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### San Francisco, CA
 
-[![San Francisco - Blueprint](examples/thumbnails/san-francisco-ca-blueprint.png)](examples/full/san-francisco-ca-blueprint.png)
-[![San Francisco - Coral](examples/thumbnails/san-francisco-ca-coral.png)](examples/full/san-francisco-ca-coral.png)
-[![San Francisco - Dark Relief](examples/thumbnails/san-francisco-ca-dark_relief.png)](examples/full/san-francisco-ca-dark_relief.png)
-[![San Francisco - Etched](examples/thumbnails/san-francisco-ca-etched.png)](examples/full/san-francisco-ca-etched.png)
-[![San Francisco - Glacier](examples/thumbnails/san-francisco-ca-glacier.png)](examples/full/san-francisco-ca-glacier.png)
-[![San Francisco - Lava](examples/thumbnails/san-francisco-ca-lava.png)](examples/full/san-francisco-ca-lava.png)
-[![San Francisco - Minimal White](examples/thumbnails/san-francisco-ca-minimal_white.png)](examples/full/san-francisco-ca-minimal_white.png)
-[![San Francisco - Natural](examples/thumbnails/san-francisco-ca-natural.png)](examples/full/san-francisco-ca-natural.png)
-[![San Francisco - Neon Cyber](examples/thumbnails/san-francisco-ca-neon_cyber.png)](examples/full/san-francisco-ca-neon_cyber.png)
-[![San Francisco - Porcelain Ink](examples/thumbnails/san-francisco-ca-porcelain_ink.png)](examples/full/san-francisco-ca-porcelain_ink.png)
-[![San Francisco - River Runs Red](examples/thumbnails/san-francisco-ca-river_runs_red.png)](examples/full/san-francisco-ca-river_runs_red.png)
-[![San Francisco - Satellite](examples/thumbnails/san-francisco-ca-satellite.png)](examples/full/san-francisco-ca-satellite.png)
-[![San Francisco - Sepia Vintage](examples/thumbnails/san-francisco-ca-sepia_vintage.png)](examples/full/san-francisco-ca-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-blueprint.png"><img src="examples/thumbnails/san-francisco-ca-blueprint.png" alt="San Francisco - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-coral.png"><img src="examples/thumbnails/san-francisco-ca-coral.png" alt="San Francisco - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-dark_relief.png"><img src="examples/thumbnails/san-francisco-ca-dark_relief.png" alt="San Francisco - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-etched.png"><img src="examples/thumbnails/san-francisco-ca-etched.png" alt="San Francisco - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-glacier.png"><img src="examples/thumbnails/san-francisco-ca-glacier.png" alt="San Francisco - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-lava.png"><img src="examples/thumbnails/san-francisco-ca-lava.png" alt="San Francisco - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-minimal_white.png"><img src="examples/thumbnails/san-francisco-ca-minimal_white.png" alt="San Francisco - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-natural.png"><img src="examples/thumbnails/san-francisco-ca-natural.png" alt="San Francisco - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-neon_cyber.png"><img src="examples/thumbnails/san-francisco-ca-neon_cyber.png" alt="San Francisco - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-porcelain_ink.png"><img src="examples/thumbnails/san-francisco-ca-porcelain_ink.png" alt="San Francisco - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-river_runs_red.png"><img src="examples/thumbnails/san-francisco-ca-river_runs_red.png" alt="San Francisco - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-satellite.png"><img src="examples/thumbnails/san-francisco-ca-satellite.png" alt="San Francisco - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/san-francisco-ca-sepia_vintage.png"><img src="examples/thumbnails/san-francisco-ca-sepia_vintage.png" alt="San Francisco - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Vancouver, BC
 
-[![Vancouver - Blueprint](examples/thumbnails/vancouver-bc-blueprint.png)](examples/full/vancouver-bc-blueprint.png)
-[![Vancouver - Coral](examples/thumbnails/vancouver-bc-coral.png)](examples/full/vancouver-bc-coral.png)
-[![Vancouver - Dark Relief](examples/thumbnails/vancouver-bc-dark_relief.png)](examples/full/vancouver-bc-dark_relief.png)
-[![Vancouver - Etched](examples/thumbnails/vancouver-bc-etched.png)](examples/full/vancouver-bc-etched.png)
-[![Vancouver - Glacier](examples/thumbnails/vancouver-bc-glacier.png)](examples/full/vancouver-bc-glacier.png)
-[![Vancouver - Lava](examples/thumbnails/vancouver-bc-lava.png)](examples/full/vancouver-bc-lava.png)
-[![Vancouver - Minimal White](examples/thumbnails/vancouver-bc-minimal_white.png)](examples/full/vancouver-bc-minimal_white.png)
-[![Vancouver - Natural](examples/thumbnails/vancouver-bc-natural.png)](examples/full/vancouver-bc-natural.png)
-[![Vancouver - Neon Cyber](examples/thumbnails/vancouver-bc-neon_cyber.png)](examples/full/vancouver-bc-neon_cyber.png)
-[![Vancouver - Porcelain Ink](examples/thumbnails/vancouver-bc-porcelain_ink.png)](examples/full/vancouver-bc-porcelain_ink.png)
-[![Vancouver - River Runs Red](examples/thumbnails/vancouver-bc-river_runs_red.png)](examples/full/vancouver-bc-river_runs_red.png)
-[![Vancouver - Satellite](examples/thumbnails/vancouver-bc-satellite.png)](examples/full/vancouver-bc-satellite.png)
-[![Vancouver - Sepia Vintage](examples/thumbnails/vancouver-bc-sepia_vintage.png)](examples/full/vancouver-bc-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-blueprint.png"><img src="examples/thumbnails/vancouver-bc-blueprint.png" alt="Vancouver - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-coral.png"><img src="examples/thumbnails/vancouver-bc-coral.png" alt="Vancouver - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-dark_relief.png"><img src="examples/thumbnails/vancouver-bc-dark_relief.png" alt="Vancouver - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-etched.png"><img src="examples/thumbnails/vancouver-bc-etched.png" alt="Vancouver - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-glacier.png"><img src="examples/thumbnails/vancouver-bc-glacier.png" alt="Vancouver - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-lava.png"><img src="examples/thumbnails/vancouver-bc-lava.png" alt="Vancouver - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-minimal_white.png"><img src="examples/thumbnails/vancouver-bc-minimal_white.png" alt="Vancouver - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-natural.png"><img src="examples/thumbnails/vancouver-bc-natural.png" alt="Vancouver - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-neon_cyber.png"><img src="examples/thumbnails/vancouver-bc-neon_cyber.png" alt="Vancouver - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-porcelain_ink.png"><img src="examples/thumbnails/vancouver-bc-porcelain_ink.png" alt="Vancouver - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-river_runs_red.png"><img src="examples/thumbnails/vancouver-bc-river_runs_red.png" alt="Vancouver - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-satellite.png"><img src="examples/thumbnails/vancouver-bc-satellite.png" alt="Vancouver - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-bc-sepia_vintage.png"><img src="examples/thumbnails/vancouver-bc-sepia_vintage.png" alt="Vancouver - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Vancouver Island, BC
 
-[![Vancouver Island - Blueprint](examples/thumbnails/vancouver-island-bc-blueprint.png)](examples/full/vancouver-island-bc-blueprint.png)
-[![Vancouver Island - Coral](examples/thumbnails/vancouver-island-bc-coral.png)](examples/full/vancouver-island-bc-coral.png)
-[![Vancouver Island - Dark Relief](examples/thumbnails/vancouver-island-bc-dark_relief.png)](examples/full/vancouver-island-bc-dark_relief.png)
-[![Vancouver Island - Etched](examples/thumbnails/vancouver-island-bc-etched.png)](examples/full/vancouver-island-bc-etched.png)
-[![Vancouver Island - Glacier](examples/thumbnails/vancouver-island-bc-glacier.png)](examples/full/vancouver-island-bc-glacier.png)
-[![Vancouver Island - Lava](examples/thumbnails/vancouver-island-bc-lava.png)](examples/full/vancouver-island-bc-lava.png)
-[![Vancouver Island - Minimal White](examples/thumbnails/vancouver-island-bc-minimal_white.png)](examples/full/vancouver-island-bc-minimal_white.png)
-[![Vancouver Island - Natural](examples/thumbnails/vancouver-island-bc-natural.png)](examples/full/vancouver-island-bc-natural.png)
-[![Vancouver Island - Neon Cyber](examples/thumbnails/vancouver-island-bc-neon_cyber.png)](examples/full/vancouver-island-bc-neon_cyber.png)
-[![Vancouver Island - Porcelain Ink](examples/thumbnails/vancouver-island-bc-porcelain_ink.png)](examples/full/vancouver-island-bc-porcelain_ink.png)
-[![Vancouver Island - River Runs Red](examples/thumbnails/vancouver-island-bc-river_runs_red.png)](examples/full/vancouver-island-bc-river_runs_red.png)
-[![Vancouver Island - Satellite](examples/thumbnails/vancouver-island-bc-satellite.png)](examples/full/vancouver-island-bc-satellite.png)
-[![Vancouver Island - Sepia Vintage](examples/thumbnails/vancouver-island-bc-sepia_vintage.png)](examples/full/vancouver-island-bc-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-blueprint.png"><img src="examples/thumbnails/vancouver-island-bc-blueprint.png" alt="Vancouver Island - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-coral.png"><img src="examples/thumbnails/vancouver-island-bc-coral.png" alt="Vancouver Island - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-dark_relief.png"><img src="examples/thumbnails/vancouver-island-bc-dark_relief.png" alt="Vancouver Island - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-etched.png"><img src="examples/thumbnails/vancouver-island-bc-etched.png" alt="Vancouver Island - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-glacier.png"><img src="examples/thumbnails/vancouver-island-bc-glacier.png" alt="Vancouver Island - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-lava.png"><img src="examples/thumbnails/vancouver-island-bc-lava.png" alt="Vancouver Island - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-minimal_white.png"><img src="examples/thumbnails/vancouver-island-bc-minimal_white.png" alt="Vancouver Island - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-natural.png"><img src="examples/thumbnails/vancouver-island-bc-natural.png" alt="Vancouver Island - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-neon_cyber.png"><img src="examples/thumbnails/vancouver-island-bc-neon_cyber.png" alt="Vancouver Island - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-porcelain_ink.png"><img src="examples/thumbnails/vancouver-island-bc-porcelain_ink.png" alt="Vancouver Island - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-river_runs_red.png"><img src="examples/thumbnails/vancouver-island-bc-river_runs_red.png" alt="Vancouver Island - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-satellite.png"><img src="examples/thumbnails/vancouver-island-bc-satellite.png" alt="Vancouver Island - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vancouver-island-bc-sepia_vintage.png"><img src="examples/thumbnails/vancouver-island-bc-sepia_vintage.png" alt="Vancouver Island - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Vestland, Norway
 
-[![Vestland - Blueprint](examples/thumbnails/vestland-norway-blueprint.png)](examples/full/vestland-norway-blueprint.png)
-[![Vestland - Coral](examples/thumbnails/vestland-norway-coral.png)](examples/full/vestland-norway-coral.png)
-[![Vestland - Dark Relief](examples/thumbnails/vestland-norway-dark_relief.png)](examples/full/vestland-norway-dark_relief.png)
-[![Vestland - Etched](examples/thumbnails/vestland-norway-etched.png)](examples/full/vestland-norway-etched.png)
-[![Vestland - Glacier](examples/thumbnails/vestland-norway-glacier.png)](examples/full/vestland-norway-glacier.png)
-[![Vestland - Lava](examples/thumbnails/vestland-norway-lava.png)](examples/full/vestland-norway-lava.png)
-[![Vestland - Minimal White](examples/thumbnails/vestland-norway-minimal_white.png)](examples/full/vestland-norway-minimal_white.png)
-[![Vestland - Natural](examples/thumbnails/vestland-norway-natural.png)](examples/full/vestland-norway-natural.png)
-[![Vestland - Neon Cyber](examples/thumbnails/vestland-norway-neon_cyber.png)](examples/full/vestland-norway-neon_cyber.png)
-[![Vestland - Porcelain Ink](examples/thumbnails/vestland-norway-porcelain_ink.png)](examples/full/vestland-norway-porcelain_ink.png)
-[![Vestland - River Runs Red](examples/thumbnails/vestland-norway-river_runs_red.png)](examples/full/vestland-norway-river_runs_red.png)
-[![Vestland - Satellite](examples/thumbnails/vestland-norway-satellite.png)](examples/full/vestland-norway-satellite.png)
-[![Vestland - Sepia Vintage](examples/thumbnails/vestland-norway-sepia_vintage.png)](examples/full/vestland-norway-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vestland-norway-blueprint.png"><img src="examples/thumbnails/vestland-norway-blueprint.png" alt="Vestland - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-coral.png"><img src="examples/thumbnails/vestland-norway-coral.png" alt="Vestland - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-dark_relief.png"><img src="examples/thumbnails/vestland-norway-dark_relief.png" alt="Vestland - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-etched.png"><img src="examples/thumbnails/vestland-norway-etched.png" alt="Vestland - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vestland-norway-glacier.png"><img src="examples/thumbnails/vestland-norway-glacier.png" alt="Vestland - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-lava.png"><img src="examples/thumbnails/vestland-norway-lava.png" alt="Vestland - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-minimal_white.png"><img src="examples/thumbnails/vestland-norway-minimal_white.png" alt="Vestland - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-natural.png"><img src="examples/thumbnails/vestland-norway-natural.png" alt="Vestland - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vestland-norway-neon_cyber.png"><img src="examples/thumbnails/vestland-norway-neon_cyber.png" alt="Vestland - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-porcelain_ink.png"><img src="examples/thumbnails/vestland-norway-porcelain_ink.png" alt="Vestland - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-river_runs_red.png"><img src="examples/thumbnails/vestland-norway-river_runs_red.png" alt="Vestland - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/vestland-norway-satellite.png"><img src="examples/thumbnails/vestland-norway-satellite.png" alt="Vestland - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/vestland-norway-sepia_vintage.png"><img src="examples/thumbnails/vestland-norway-sepia_vintage.png" alt="Vestland - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Route Map Examples
 
@@ -361,36 +949,139 @@ directly from the GPX track bounding box, with no separate region argument requi
 
 #### Edmonton Loop — Region + GPX Route
 
-[![Edmonton Loop - Blueprint](examples/thumbnails/edmonton-ab-route-edmonton-110km-blueprint.png)](examples/full/edmonton-ab-route-edmonton-110km-blueprint.png)
-[![Edmonton Loop - Coral](examples/thumbnails/edmonton-ab-route-edmonton-110km-coral.png)](examples/full/edmonton-ab-route-edmonton-110km-coral.png)
-[![Edmonton Loop - Dark Relief](examples/thumbnails/edmonton-ab-route-edmonton-110km-dark_relief.png)](examples/full/edmonton-ab-route-edmonton-110km-dark_relief.png)
-[![Edmonton Loop - Etched](examples/thumbnails/edmonton-ab-route-edmonton-110km-etched.png)](examples/full/edmonton-ab-route-edmonton-110km-etched.png)
-[![Edmonton Loop - Glacier](examples/thumbnails/edmonton-ab-route-edmonton-110km-glacier.png)](examples/full/edmonton-ab-route-edmonton-110km-glacier.png)
-[![Edmonton Loop - Lava](examples/thumbnails/edmonton-ab-route-edmonton-110km-lava.png)](examples/full/edmonton-ab-route-edmonton-110km-lava.png)
-[![Edmonton Loop - Minimal White](examples/thumbnails/edmonton-ab-route-edmonton-110km-minimal_white.png)](examples/full/edmonton-ab-route-edmonton-110km-minimal_white.png)
-[![Edmonton Loop - Natural](examples/thumbnails/edmonton-ab-route-edmonton-110km-natural.png)](examples/full/edmonton-ab-route-edmonton-110km-natural.png)
-[![Edmonton Loop - Neon Cyber](examples/thumbnails/edmonton-ab-route-edmonton-110km-neon_cyber.png)](examples/full/edmonton-ab-route-edmonton-110km-neon_cyber.png)
-[![Edmonton Loop - Porcelain Ink](examples/thumbnails/edmonton-ab-route-edmonton-110km-porcelain_ink.png)](examples/full/edmonton-ab-route-edmonton-110km-porcelain_ink.png)
-[![Edmonton Loop - River Runs Red](examples/thumbnails/edmonton-ab-route-edmonton-110km-river_runs_red.png)](examples/full/edmonton-ab-route-edmonton-110km-river_runs_red.png)
-[![Edmonton Loop - Satellite](examples/thumbnails/edmonton-ab-route-edmonton-110km-satellite.png)](examples/full/edmonton-ab-route-edmonton-110km-satellite.png)
-[![Edmonton Loop - Sepia Vintage](examples/thumbnails/edmonton-ab-route-edmonton-110km-sepia_vintage.png)](examples/full/edmonton-ab-route-edmonton-110km-sepia_vintage.png)
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-blueprint.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-blueprint.png" alt="Edmonton Loop - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-coral.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-coral.png" alt="Edmonton Loop - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-dark_relief.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-dark_relief.png" alt="Edmonton Loop - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-etched.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-etched.png" alt="Edmonton Loop - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-glacier.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-glacier.png" alt="Edmonton Loop - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-lava.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-lava.png" alt="Edmonton Loop - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-minimal_white.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-minimal_white.png" alt="Edmonton Loop - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-natural.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-natural.png" alt="Edmonton Loop - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-neon_cyber.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-neon_cyber.png" alt="Edmonton Loop - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-porcelain_ink.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-porcelain_ink.png" alt="Edmonton Loop - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-river_runs_red.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-river_runs_red.png" alt="Edmonton Loop - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-satellite.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-satellite.png" alt="Edmonton Loop - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-sepia_vintage.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-sepia_vintage.png" alt="Edmonton Loop - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 #### River Valley Loop — GPX-Derived Route
 
-[![River Valley Loop - Blueprint](examples/thumbnails/edmonton-75km-blueprint.png)](examples/full/edmonton-75km-blueprint.png)
-[![River Valley Loop - Coral](examples/thumbnails/edmonton-75km-coral.png)](examples/full/edmonton-75km-coral.png)
-[![River Valley Loop - Dark Relief](examples/thumbnails/edmonton-75km-dark_relief.png)](examples/full/edmonton-75km-dark_relief.png)
-[![River Valley Loop - Etched](examples/thumbnails/edmonton-75km-etched.png)](examples/full/edmonton-75km-etched.png)
-[![River Valley Loop - Glacier](examples/thumbnails/edmonton-75km-glacier.png)](examples/full/edmonton-75km-glacier.png)
-[![River Valley Loop - Lava](examples/thumbnails/edmonton-75km-lava.png)](examples/full/edmonton-75km-lava.png)
-[![River Valley Loop - Minimal White](examples/thumbnails/edmonton-75km-minimal_white.png)](examples/full/edmonton-75km-minimal_white.png)
-[![River Valley Loop - Natural](examples/thumbnails/edmonton-75km-natural.png)](examples/full/edmonton-75km-natural.png)
-[![River Valley Loop - Neon Cyber](examples/thumbnails/edmonton-75km-neon_cyber.png)](examples/full/edmonton-75km-neon_cyber.png)
-[![River Valley Loop - Porcelain Ink](examples/thumbnails/edmonton-75km-porcelain_ink.png)](examples/full/edmonton-75km-porcelain_ink.png)
-[![River Valley Loop - River Runs Red](examples/thumbnails/edmonton-75km-river_runs_red.png)](examples/full/edmonton-75km-river_runs_red.png)
-[![River Valley Loop - Satellite](examples/thumbnails/edmonton-75km-satellite.png)](examples/full/edmonton-75km-satellite.png)
-[![River Valley Loop - Sepia Vintage](examples/thumbnails/edmonton-75km-sepia_vintage.png)](examples/full/edmonton-75km-sepia_vintage.png)
-
+<table>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-blueprint.png"><img src="examples/thumbnails/edmonton-50km-blueprint.png" alt="River Valley Loop - Blueprint" width="200"></a><br>
+      <sub>blueprint</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-coral.png"><img src="examples/thumbnails/edmonton-50km-coral.png" alt="River Valley Loop - Coral" width="200"></a><br>
+      <sub>coral</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-dark_relief.png"><img src="examples/thumbnails/edmonton-50km-dark_relief.png" alt="River Valley Loop - Dark Relief" width="200"></a><br>
+      <sub>dark_relief</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-etched.png"><img src="examples/thumbnails/edmonton-50km-etched.png" alt="River Valley Loop - Etched" width="200"></a><br>
+      <sub>etched</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-glacier.png"><img src="examples/thumbnails/edmonton-50km-glacier.png" alt="River Valley Loop - Glacier" width="200"></a><br>
+      <sub>glacier</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-lava.png"><img src="examples/thumbnails/edmonton-50km-lava.png" alt="River Valley Loop - Lava" width="200"></a><br>
+      <sub>lava</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-minimal_white.png"><img src="examples/thumbnails/edmonton-50km-minimal_white.png" alt="River Valley Loop - Minimal White" width="200"></a><br>
+      <sub>minimal_white</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-natural.png"><img src="examples/thumbnails/edmonton-50km-natural.png" alt="River Valley Loop - Natural" width="200"></a><br>
+      <sub>natural</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-neon_cyber.png"><img src="examples/thumbnails/edmonton-50km-neon_cyber.png" alt="River Valley Loop - Neon Cyber" width="200"></a><br>
+      <sub>neon_cyber</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-porcelain_ink.png"><img src="examples/thumbnails/edmonton-50km-porcelain_ink.png" alt="River Valley Loop - Porcelain Ink" width="200"></a><br>
+      <sub>porcelain_ink</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-river_runs_red.png"><img src="examples/thumbnails/edmonton-50km-river_runs_red.png" alt="River Valley Loop - River Runs Red" width="200"></a><br>
+      <sub>river_runs_red</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-satellite.png"><img src="examples/thumbnails/edmonton-50km-satellite.png" alt="River Valley Loop - Satellite" width="200"></a><br>
+      <sub>satellite</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="examples/full/edmonton-50km-sepia_vintage.png"><img src="examples/thumbnails/edmonton-50km-sepia_vintage.png" alt="River Valley Loop - Sepia Vintage" width="200"></a><br>
+      <sub>sepia_vintage</sub>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 ## Customizing a Map
 
 Each build produces two auto-generated files:
@@ -488,7 +1179,7 @@ downloads/
       satellite.tif          # Satellite imagery
       layers/*.gpkg          # Vector layers (roads, water, etc.)
   routes/                   # Per-GPX data (auto-downloaded by build-gpx)
-    edmonton-75km/
+    edmonton-50km/
       area.geojson
       dem.tif
       satellite.tif

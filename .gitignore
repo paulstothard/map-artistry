@@ -3,7 +3,21 @@
 .vscode/
 
 # Downloaded data (DEMs, satellite imagery, OSM layers)
-downloads/
+downloads/*
+!downloads/cycling-routes/
+!downloads/cycling-routes/**
+!downloads/natural-earth/
+!downloads/ocean-boundaries/
+!downloads/regions/
+!downloads/routes/
+downloads/natural-earth/*
+!downloads/natural-earth/.gitkeep
+downloads/ocean-boundaries/*
+!downloads/ocean-boundaries/.gitkeep
+downloads/regions/*
+!downloads/regions/.gitkeep
+downloads/routes/*
+!downloads/routes/.gitkeep
 
 # Output files
 output/

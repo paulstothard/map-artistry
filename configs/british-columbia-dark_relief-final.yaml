@@ -18,14 +18,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#0d1117'
         ring_color: '#ff8a80'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 3.2
+      linewidth: 4.8
       outline:
-        color: '#1b1f24'
+        color: '#ffffff'
         enabled: true
-        linewidth: 0.7
+        linewidth: 0.9
       sampling:
         interval_m: 300
         max_points: 500
@@ -37,8 +37,8 @@ map:
         core_radius_scale: 0.17
         fill_color: '#0d1117'
         ring_color: '#69b89a'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
     color: '#2a2e33'
@@ -1265,8 +1265,8 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
+      fc: '#d8cdbd'
+      ec: '#d8cdbd'
       alpha: 0.0
       zorder: 6
       visible: false
@@ -1377,8 +1377,8 @@ layers:
     geometry_type: MultiLineString
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
+      fc: '#d8cdbd'
+      ec: '#d8cdbd'
       alpha: 0.0
       zorder: 6
       visible: false

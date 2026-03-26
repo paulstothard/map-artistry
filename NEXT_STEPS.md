@@ -1,102 +1,113 @@
 # Next Steps
 
-- [ ] Update distances and elevation changes for example maps
+## Multi-Route GPX Support (Single Region)
 
-## Add Simple Map Helper Script (Wizard)
+### Goal
+Allow a map build for one region to render multiple GPX rides in the same output, with clear visual differentiation on both the map and the elevation profile.
 
-- [ ] Create `scripts/map-helper.py` as an interactive prompt flow
-- [ ] Add an early preflight check phase (before asking full map inputs):
-  - Verify Python executable and version
-  - Verify required Python packages/imports
-  - Verify `just` is installed and callable
-  - Verify required repo assets exist (scripts, schemes, justfile)
-  - Verify writable project folders (`downloads`, `configs`, `output`, cache)
-  - Verify network availability for downloads (or warn and continue)
-  - Fail fast with actionable fix instructions when checks fail
-- [ ] Support running the wizard from outside the repo:
-  - Allow invocation from any working directory
-  - Auto-detect repo root when possible
-  - If detection fails, prompt user for repo path
-  - Validate required repo assets exist (justfile, scripts, schemes)
-  - Persist the resolved repo path in wizard settings for future runs
-- [ ] Add a helper project workspace model (outside default repo folders):
-  - Ask for a `project_root` path (or create one)
-  - Create and use project-local folders for `downloads/`, `configs/`, `output/`, and cache
-  - Keep helper-generated artifacts isolated from the repo's primary folders
-  - Allow reusing the same project root across runs to reuse downloaded data/layers
-- [ ] Ask user to choose map intent:
-  - Region only
-  - GPX only
-  - Region + GPX
-- [ ] Improve GPX input UX:
-  - Auto-scan the active project/work folder for `.gpx` files
-  - Present discovered GPX files as selectable options
-  - Still allow manual GPX path entry
-  - Remember recently used GPX files in settings/profile history
-- [ ] Add stateful prompt behavior for every question:
-  - Show a recommended default value
-  - Show previous value from last run (when available)
-  - Allow quick choice: keep previous / use default / enter new value
-- [ ] Ask for required rendering settings:
-  - Scheme selection mode:
-    - Single scheme
-    - Multiple schemes
-    - All schemes
-  - Output format (`png`/`pdf`/`svg`)
-  - Width/height
-  - DPI
-- [ ] Ask how to handle existing project data:
-  - Reuse existing downloads/configs/cache
-  - Refresh only missing assets
-  - Force refresh selected assets
-- [ ] Ask for optional panel text fields:
-  - Title
-  - Subtitle
-  - Location
-- [ ] Ask for optional route stats strategy (for GPX modes):
-  - Provide manually (distance/time/elevation)
-  - Auto-fill distance/elevation only
-  - Mixed (manual overrides + auto for missing)
-- [ ] Ask for units mode when GPX route stats are involved:
-  - `auto`
-  - `metric`
-  - `imperial`
-- [ ] Validate all paths/options before execution
-- [ ] Add region-name autocomplete:
-  - Provide tab-completion or fuzzy-match suggestions as the user types a region name
-  - Source completions from a local cache of previously used region names
-  - Fall back to live geocoder suggestions if the local cache has no matches
-- [ ] Add region-name typo/spelling safeguards:
-  - Detect likely misspellings in region input before build starts
-  - Suggest closest matches and ask user to confirm/correct
-  - Allow continue with exact user input when explicitly confirmed
-- [ ] Show a final command preview and ask for confirmation
-- [ ] Execute the matching `just` command(s)
-- [ ] Save the generated command in a small history file for reuse
-- [ ] Persist a lightweight project manifest (last settings + selected schemes + paths)
-- [ ] Persist wizard settings to YAML:
-  - Save `last-used` answers after each successful run
-  - Support loading from a named settings profile
-  - Store settings under the helper project root (not repo defaults)
-  - Include version field for forward-compatible schema updates
+### Primary Use Case
+For a city (example: Edmonton), render a single map that shows a rider's favorite routes together so they can compare coverage, overlap, and terrain context at a glance.
 
-## Add Client Proofing Pack Output
+### Why
+Current route workflows support one GPX track per render. For route collections (e.g., training blocks, event variants, comparison rides), we need to visualize several rides together while keeping each ride identifiable.
 
-- [ ] Add a proofing mode for generating client-shareable previews across schemes
-- [ ] Support two proofing output formats:
-  - Labeled contact sheet / montage (grid of schemes)
-  - Lightweight PDF booklet (one scheme per page)
-- [ ] Ensure each preview clearly shows the scheme name on-image and/or as page title
-- [ ] Add low-resolution proof settings to keep files small:
-  - Reduced DPI
-  - Optional max image dimensions
-  - JPEG compression for proofs where appropriate
-- [ ] Add wizard prompts for proofing workflow:
-  - Choose proofing format (contact sheet, PDF booklet, or both)
-  - Choose scheme set (single, selected list, all)
-  - Choose label style and metadata to show (scheme name, location, date)
-- [ ] Save a proofing manifest (which schemes were included + generation settings)
-- [ ] Add a “finalize from approved scheme” step:
-  - Select approved scheme from proofing run
-  - Re-run at full production quality (target DPI/format)
-  - Preserve all other settings from the proofing profile
+### Product Requirements
+- Accept multiple GPX inputs for region-based route builds.
+- Draw all routes on the map in distinct styles (at minimum: distinct colors).
+- Represent all included routes in the elevation profile in a way that preserves route identity.
+- Provide a clear legend/key that links route identity across map lines and elevation profile lines.
+- Support user-controlled route metadata display (e.g., custom labels, total distance, elevation gain), rather than hard-coding one format.
+- Preserve existing single-GPX behavior as a backward-compatible path.
+
+### UX / Visualization Options
+- **Map layer:** assign each route a color from a route palette, with optional per-route outline.
+- **Elevation profile:**
+  - Option A: overlay all profiles with matching route colors.
+  - Option B: stacked/small-multiple profiles (one mini-profile per route).
+  - Option C: combined profile with route-segment coloring and explicit ordering markers.
+- **Legend:** route name + color swatch + optional distance/elevation stats per route.
+
+### Technical Scope
+- `justfile`
+  - Add/extend route build commands to accept multiple GPX files (repeatable arg or delimiter format).
+- `scripts/generate-config.py`
+  - Support route arrays in config output.
+  - Emit per-route style metadata (color, label, ordering).
+- `scripts/generate-map.py`
+  - Render multiple route geometries.
+  - Render multi-route elevation profile and legend.
+- Route context/stats scripts
+  - Support per-route and aggregate metrics where relevant.
+- `README.md`
+  - Document new CLI usage and examples.
+  - Explain profile rendering mode(s) and legend behavior.
+
+### Data / Config Design Notes
+- Add a `routes` collection in config (instead of single `route_gpx` only), for example:
+  - route id
+  - source gpx path
+  - display name
+  - color / outline
+  - enabled flag
+- Add route metadata display settings (global and per-route), for example:
+  - `show_metadata` toggle
+  - metadata fields to include (`distance`, `elev_gain`, custom text)
+  - aggregate summary option (e.g., total distance across all routes)
+- Keep support for existing `route_gpx` and auto-upgrade to one-item `routes` internally.
+
+### Phased Implementation Plan
+
+#### Phase 0 — Design Finalization (No Code)
+- Lock CLI shape for multi-GPX input.
+- Choose default elevation profile mode (overlay vs stacked).
+- Define metadata model: per-route fields vs aggregate summary vs both.
+- Define visual rules for color assignment (auto palette + optional user overrides).
+
+#### Phase 1 — Config & CLI Foundation
+- Extend `justfile` route command interface to accept multiple GPX sources.
+- Extend `scripts/generate-config.py` to emit `routes[]` while preserving `route_gpx` compatibility.
+- Add validation rules for duplicate/invalid GPX paths and empty route lists.
+- Keep rendering behavior unchanged for single-route calls.
+
+#### Phase 2 — Multi-Route Map Rendering
+- Update `scripts/generate-map.py` to draw all routes in deterministic order.
+- Apply per-route styles (color/outline) with readable defaults.
+- Add map legend entries mapping route name ↔ color.
+- Handle overlap/readability cases (alpha, z-order, optional outlines).
+
+#### Phase 3 — Elevation Profile for Multiple Routes
+- Implement selected profile mode:
+  - Overlay profiles with route-matched colors, or
+  - Stacked mini-profiles for readability.
+- Add route identity markers so users can distinguish lines unambiguously.
+- Validate behavior for short/long and heavily overlapping routes.
+
+#### Phase 4 — Metadata Display System
+- Add configurable metadata block(s) for multi-route outputs.
+- Support both user-defined text and computed metrics (distance/elevation).
+- Add optional aggregate metrics (e.g., total distance) for route collections.
+
+#### Phase 5 — Docs, Examples, and Hardening
+- Update `README.md` with multi-GPX command patterns and screenshots.
+- Add at least one Edmonton multi-route example set.
+- Add regression checks to ensure single-route outputs are unchanged.
+- Validate performance and visual clarity with larger route counts.
+
+### Open Questions
+- Preferred CLI shape for multiple GPX files:
+  - repeated flag (e.g., `--gpx file1 --gpx file2`)
+  - list arg (e.g., comma-separated)
+  - glob/folder input
+- Default profile mode: overlay vs stacked?
+- How to handle route ordering semantics (input order vs distance/date sorting)?
+- How many routes should be supported before readability degrades?
+- What metadata should be default-visible (none, per-route metrics, aggregate totals)?
+- Should metadata prioritize user-entered values, computed values, or both when present?
+
+### Acceptance Criteria
+- A region build with 3+ GPX files renders successfully.
+- Each route is visually distinguishable on-map and in-profile.
+- Legend clearly maps route names to colors.
+- Metadata display is user-configurable and supports both per-route and aggregate summaries.
+- Single-route builds render identically to today.
+- Docs include at least one multi-route command example.

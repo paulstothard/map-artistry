@@ -3,13 +3,13 @@ map:
     ec: '#000000'
     fc: '#000000'
   elevation_profile:
-    alpha: 0.9
-    color: '#ffffff'
+    alpha: 0.92
+    color: '#3a0d10'
     enabled: true
     height: 0.04
     route:
-      alpha: 0.85
-      color: '#ffffff'
+      alpha: 0.9
+      color: '#ff7a7a'
       enabled: true
       end_marker:
         color: '#ffe082'
@@ -17,14 +17,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#120001'
         ring_color: '#ffe082'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 3.2
+      linewidth: 4.0
       outline:
         color: '#5d1010'
         enabled: true
-        linewidth: 0.7
+        linewidth: 0.9
       sampling:
         interval_m: 300
         max_points: 500
@@ -36,8 +36,8 @@ map:
         core_radius_scale: 0.17
         fill_color: '#120001'
         ring_color: '#5a9a63'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
     color: '#ff6666'
@@ -92,11 +92,11 @@ map:
   info_panel:
     background:
       alpha: 1.0
-      color: '#ffffff'
+      color: '#1b0708'
     elements:
     - align: left
       alpha: 1.0
-      color: '#120001'
+      color: '#f0d6d6'
       content: ''
       font: Inter
       font_weight: bold
@@ -109,7 +109,7 @@ map:
       y: 0.65
     - align: left
       alpha: 1.0
-      color: '#5d1010'
+      color: '#c78f8f'
       content: ''
       font: Inter
       font_weight: normal
@@ -122,7 +122,7 @@ map:
       y: 0.25
     - align: right
       alpha: 1.0
-      color: '#5d1010'
+      color: '#c78f8f'
       content: ''
       font: Inter
       font_weight: normal
@@ -138,7 +138,7 @@ map:
       id: stats
       items: []
       label_alpha: 1.0
-      label_color: '#5d1010'
+      label_color: '#c78f8f'
       label_size: 0.1
       label_weight: normal
       layout: horizontal
@@ -146,7 +146,7 @@ map:
       transform: uppercase
       type: stats
       value_alpha: 1.0
-      value_color: '#120001'
+      value_color: '#f0d6d6'
       value_size: 0.22
       value_weight: bold
       x: 0.97

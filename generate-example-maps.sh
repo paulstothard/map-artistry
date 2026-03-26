@@ -22,17 +22,18 @@ FORMAT="png"
 FULL_WIDTH=1200
 THUMBNAIL_WIDTH=400
 FORCE=false
-EDMONTON_ROUTE_REGION="Edmonton, AB"
-EDMONTON_ROUTE_GPX="downloads/cycling-routes/edmonton-110km.gpx"
-GPX_ONLY_ROUTE_GPX="downloads/cycling-routes/edmonton-75km.gpx"
 
+# Route example definitions (grouped for readability)
+EDMONTON_ROUTE_REGION="Edmonton, AB"
+EDMONTON_ROUTE_GPX_FILE="edmonton-110km.gpx"
 EDMONTON_ROUTE_TEXT_TITLE="EDMONTON LOOP"
 EDMONTON_ROUTE_TEXT_SUBTITLE="SUMMER TRAINING RIDE"
-EDMONTON_ROUTE_TEXT_STATS="94 KM||DISTANCE;;800 M||ELEV GAIN"
+EDMONTON_ROUTE_TEXT_STATS="108 KM||DISTANCE;;715 M||ELEV GAIN"
 
+GPX_ONLY_ROUTE_GPX_FILE="edmonton-50km.gpx"
 GPX_ONLY_TEXT_TITLE="RIVER VALLEY LOOP"
 GPX_ONLY_TEXT_SUBTITLE="GPX-DERIVED REGION"
-GPX_ONLY_TEXT_STATS="64 KM||DISTANCE;;530 M||ELEV GAIN"
+GPX_ONLY_TEXT_STATS="48 KM||DISTANCE;;326 M||ELEV GAIN"
 
 usage() {
   cat <<'EOF'
@@ -66,6 +67,35 @@ done
 
 PYTHON_BIN="python3"
 [ -x "venv/bin/python" ] && PYTHON_BIN="venv/bin/python"
+
+get_just_var() {
+  local var_name="$1"
+  local fallback="$2"
+  local value
+
+  value=$(just --evaluate "$var_name" 2>/dev/null || true)
+  if [ -z "${value//[[:space:]]/}" ]; then
+    echo "$fallback"
+  else
+    echo "$value"
+  fi
+}
+
+SCRIPTS_DIR=$(get_just_var "scripts_dir" "scripts")
+DOWNLOADS_DIR=$(get_just_var "downloads_dir" "downloads")
+REGIONS_DIR=$(get_just_var "regions_dir" "$DOWNLOADS_DIR/regions")
+ROUTES_DIR=$(get_just_var "routes_dir" "$DOWNLOADS_DIR/routes")
+CONFIGS_DIR=$(get_just_var "configs_dir" "configs")
+OUTPUT_DIR=$(get_just_var "output_dir" "output")
+
+PUBLISH_DIR="publish"
+EXAMPLES_DIR="examples"
+EXAMPLES_FULL_DIR="$EXAMPLES_DIR/full"
+EXAMPLES_THUMB_DIR="$EXAMPLES_DIR/thumbnails"
+CYCLING_ROUTES_DIR="$DOWNLOADS_DIR/cycling-routes"
+
+EDMONTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$EDMONTON_ROUTE_GPX_FILE"
+GPX_ONLY_ROUTE_GPX="$CYCLING_ROUTES_DIR/$GPX_ONLY_ROUTE_GPX_FILE"
 
 # Get schemes dynamically
 SCHEMES=$(just schemes 2>/dev/null)
@@ -106,7 +136,7 @@ for region in "${REGIONS[@]}"; do
   location=$(slugify_region "$region")
   for scheme in $SCHEMES; do
     TOTAL=$((TOTAL + 1))
-    output_file="output/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
+    output_file="$OUTPUT_DIR/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
 
     if [ -f "$output_file" ]; then
       EXISTING=$((EXISTING + 1))
@@ -124,7 +154,7 @@ done
 # 2) Edmonton + longest GPX route examples (all schemes)
 for scheme in $SCHEMES; do
   TOTAL=$((TOTAL + 1))
-  output_file="output/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+  output_file="$OUTPUT_DIR/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
 
   if [ -f "$output_file" ]; then
     EXISTING=$((EXISTING + 1))
@@ -141,7 +171,7 @@ done
 # 3) GPX-only route examples (all schemes)
 for scheme in $SCHEMES; do
   TOTAL=$((TOTAL + 1))
-  output_file="output/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
+  output_file="$OUTPUT_DIR/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
 
   if [ -f "$output_file" ]; then
     EXISTING=$((EXISTING + 1))
@@ -182,9 +212,9 @@ if [ $NEEDED -gt 0 ]; then
   echo ""
   echo "  Settings: ${WIDTH}x${HEIGHT} inches @ ${DPI} DPI, format: $FORMAT"
   echo "  Force assets : $FORCE"
-  echo "  Data downloads : downloads/regions/ + downloads/routes/"
-  echo "  Configs        : configs/"
-  echo "  Maps           : output/"
+  echo "  Data downloads : $REGIONS_DIR + $ROUTES_DIR"
+  echo "  Configs        : $CONFIGS_DIR/"
+  echo "  Maps           : $OUTPUT_DIR/"
   echo ""
   echo "See README.md for more information."
   echo ""
@@ -198,7 +228,7 @@ if [ $NEEDED -gt 0 ]; then
     for region in "${REGIONS[@]}"; do
       location=$(slugify_region "$region")
       for scheme in $SCHEMES; do
-        output_file="output/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
+        output_file="$OUTPUT_DIR/${location}-${scheme}/${location}-${scheme}.${FORMAT}"
 
         if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
           echo "⏭ $region — $scheme"
@@ -215,7 +245,7 @@ if [ $NEEDED -gt 0 ]; then
 
     # 2) Edmonton + longest GPX route examples
     for scheme in $SCHEMES; do
-      output_file="output/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+      output_file="$OUTPUT_DIR/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}/${EDMONTON_ROUTE_REGION_SLUG}-route-${EDMONTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
 
       if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
         echo "⏭ ${EDMONTON_ROUTE_REGION} + $(basename "$EDMONTON_ROUTE_GPX") — $scheme"
@@ -235,7 +265,7 @@ if [ $NEEDED -gt 0 ]; then
 
     # 3) GPX-only route examples
     for scheme in $SCHEMES; do
-      output_file="output/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
+      output_file="$OUTPUT_DIR/${GPX_ONLY_ROUTE_SLUG}-${scheme}/${GPX_ONLY_ROUTE_SLUG}-${scheme}.${FORMAT}"
 
       if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
         echo "⏭ GPX-only $(basename "$GPX_ONLY_ROUTE_GPX") — $scheme"
@@ -246,7 +276,7 @@ if [ $NEEDED -gt 0 ]; then
       echo "▶ GPX-only $(basename "$GPX_ONLY_ROUTE_GPX") — $scheme"
       build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
       just build-gpx "${build_args[@]}" \
-        --buffer-km 5 \
+        --buffer-km 1 \
         --text-title "$GPX_ONLY_TEXT_TITLE" \
         --text-subtitle "$GPX_ONLY_TEXT_SUBTITLE" \
         --text-stats "$GPX_ONLY_TEXT_STATS" \
@@ -265,7 +295,7 @@ fi
 
 echo ""
 echo "📤 Publishing maps to publish/ (incremental)..."
-mkdir -p publish
+mkdir -p "$PUBLISH_DIR"
 
 PUBLISH_COPIED=0
 PUBLISH_SKIPPED=0
@@ -273,7 +303,7 @@ PUBLISH_SKIPPED=0
 while IFS= read -r map_file; do
   [ -f "$map_file" ] || continue
   basename_file=$(basename "$map_file")
-  publish_target="publish/$basename_file"
+  publish_target="$PUBLISH_DIR/$basename_file"
 
   if [ "$FORCE" = true ] || [ ! -f "$publish_target" ]; then
     cp "$map_file" "$publish_target"
@@ -282,14 +312,14 @@ while IFS= read -r map_file; do
   else
     PUBLISH_SKIPPED=$((PUBLISH_SKIPPED + 1))
   fi
-done < <(find output -type f \( -name "*.png" -o -name "*.pdf" \) | sort)
+done < <(find "$OUTPUT_DIR" -type f \( -name "*.png" -o -name "*.pdf" \) | sort)
 
 echo "  Copied: $PUBLISH_COPIED"
 echo "  Skipped existing: $PUBLISH_SKIPPED"
 
 echo ""
 echo "📸 Creating examples for GitHub README (incremental)..."
-mkdir -p examples/full examples/thumbnails
+mkdir -p "$EXAMPLES_FULL_DIR" "$EXAMPLES_THUMB_DIR"
 
 EXAMPLES_UPDATED=0
 EXAMPLES_SKIPPED=0
@@ -297,8 +327,8 @@ EXAMPLES_SKIPPED=0
 while IFS= read -r publish_png; do
   [ -f "$publish_png" ] || continue
   basename_file=$(basename "$publish_png")
-  full_target="examples/full/$basename_file"
-  thumb_target="examples/thumbnails/$basename_file"
+  full_target="$EXAMPLES_FULL_DIR/$basename_file"
+  thumb_target="$EXAMPLES_THUMB_DIR/$basename_file"
 
   need_full=false
   need_thumb=false
@@ -319,16 +349,16 @@ while IFS= read -r publish_png; do
   cp "$publish_png" "$temp_input_dir/$basename_file"
 
   if [ "$need_full" = true ]; then
-    "$PYTHON_BIN" scripts/resize-images.py \
+    "$PYTHON_BIN" "$SCRIPTS_DIR/resize-images.py" \
       --input "$temp_input_dir" \
-      --output examples/full \
+      --output "$EXAMPLES_FULL_DIR" \
       --width "$FULL_WIDTH" >/dev/null
   fi
 
   if [ "$need_thumb" = true ]; then
-    "$PYTHON_BIN" scripts/resize-images.py \
+    "$PYTHON_BIN" "$SCRIPTS_DIR/resize-images.py" \
       --input "$temp_input_dir" \
-      --output examples/thumbnails \
+      --output "$EXAMPLES_THUMB_DIR" \
       --width "$THUMBNAIL_WIDTH" >/dev/null
   fi
 
@@ -336,13 +366,13 @@ while IFS= read -r publish_png; do
 
   echo "  ✓ $basename_file"
   EXAMPLES_UPDATED=$((EXAMPLES_UPDATED + 1))
-done < <(find publish -maxdepth 1 -type f -name "*.png" | sort)
+done < <(find "$PUBLISH_DIR" -maxdepth 1 -type f -name "*.png" | sort)
 
 echo "  Updated: $EXAMPLES_UPDATED"
 echo "  Skipped existing: $EXAMPLES_SKIPPED"
 
 echo ""
 echo "✅ All steps complete"
-echo "  Publish folder      : publish/"
-echo "  Full examples       : examples/full/"
-echo "  Thumbnail examples  : examples/thumbnails/"
+echo "  Publish folder      : $PUBLISH_DIR/"
+echo "  Full examples       : $EXAMPLES_FULL_DIR/"
+echo "  Thumbnail examples  : $EXAMPLES_THUMB_DIR/"

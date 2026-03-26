@@ -35,7 +35,6 @@ from geojson_bounds import apply_primary_segment_clip
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="pyogrio.raw")
 
 ox.settings.use_cache = True
-ox.settings.cache_folder = "cache"
 ox.settings.log_console = True
 
 NATURAL_EARTH_CDN_BASE = "https://naciscdn.org/naturalearth/10m"
@@ -110,7 +109,7 @@ NATURAL_EARTH_DATASETS = {
 }
 
 
-def download_and_cache_natural_earth(dataset_info, cache_dir="downloads/natural-earth"):
+def download_and_cache_natural_earth(dataset_info, cache_dir):
     """Download and cache Natural Earth dataset."""
     os.makedirs(cache_dir, exist_ok=True)
 
@@ -155,7 +154,7 @@ def download_and_cache_natural_earth(dataset_info, cache_dir="downloads/natural-
         return gdf
 
 
-def download_natural_earth_layer(poly, key, outdir):
+def download_natural_earth_layer(poly, key, outdir, natural_earth_cache_dir):
     """Download and clip Natural Earth layer to polygon boundary.
     Returns True if successful, False if no features found."""
     print(f"> Downloading Natural Earth layer '{key}' …")
@@ -168,7 +167,7 @@ def download_natural_earth_layer(poly, key, outdir):
 
     try:
         # Download/load Natural Earth data
-        gdf = download_and_cache_natural_earth(dataset_info)
+        gdf = download_and_cache_natural_earth(dataset_info, natural_earth_cache_dir)
 
         # Ensure same CRS
         if gdf.crs != "EPSG:4326":
@@ -297,7 +296,22 @@ def main():
         action="store_true",
         help="When using natural-earth source, fallback to OSM for layers with no features",
     )
+    p.add_argument(
+        "--cache-dir",
+        type=str,
+        default="cache",
+        help="Cache directory for OSMnx/Overpass requests",
+    )
+    p.add_argument(
+        "--natural-earth-cache-dir",
+        type=str,
+        default="downloads/natural-earth",
+        help="Cache directory for downloaded Natural Earth datasets",
+    )
     args = p.parse_args()
+
+    ox.settings.cache_folder = args.cache_dir
+    os.makedirs(args.cache_dir, exist_ok=True)
 
     if args.place:
         boundary_gdf = ox.geocode_to_gdf(args.place)
@@ -343,7 +357,9 @@ def main():
             start = time.time()
             success = False
             try:
-                success = download_natural_earth_layer(poly, key, args.output_dir)
+                success = download_natural_earth_layer(
+                    poly, key, args.output_dir, args.natural_earth_cache_dir
+                )
                 if success:
                     elapsed = time.time() - start
                     print(

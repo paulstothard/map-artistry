@@ -140,8 +140,8 @@ map:
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#000000"
-    alpha: 1.0
+    color: "#4a0a0a"
+    alpha: 0.92
     route:
       enabled: true
       color: "#ffb300"
@@ -158,8 +158,8 @@ map:
         linewidth: 0.9
       start_marker:
         style: concentric_circles
-        color: "#ffd54f"
-        ring_color: "#ffd54f"
+        color: "#00c853"
+        ring_color: "#00c853"
         fill_color: "#0a0000"
         size: 8.0
         ring_width_scale: 0.14

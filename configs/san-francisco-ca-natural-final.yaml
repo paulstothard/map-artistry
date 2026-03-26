@@ -18,14 +18,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#dfe7d6'
         ring_color: '#8c3b2a'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 3.2
+      linewidth: 4.0
       outline:
         color: '#284932'
         enabled: true
-        linewidth: 0.7
+        linewidth: 0.9
       sampling:
         interval_m: 300
         max_points: 500
@@ -37,8 +37,8 @@ map:
         core_radius_scale: 0.17
         fill_color: '#dfe7d6'
         ring_color: '#3f7c4c'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
     color: '#2f3b2f'
@@ -198,15 +198,15 @@ layers:
     file: downloads/regions/san-francisco-ca/layers/building.gpkg
     layer: building
     geometry_type: Polygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#9a947f'
+      ec: '#9a947f'
+      alpha: 0.22
       zorder: 7
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
+      edge_color: '#9a947f'
       edge_width: 0
     attributes:
       element:
@@ -220,11 +220,11 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#9a947f'
+      ec: '#9a947f'
+      alpha: 0.22
       zorder: 7
-      visible: false
+      visible: true
       palette: []
       linewidth: 1.0
       marker: o
@@ -259,15 +259,15 @@ layers:
     file: downloads/regions/san-francisco-ca/layers/building.gpkg
     layer: building
     geometry_type: MultiPolygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#9a947f'
+      ec: '#9a947f'
+      alpha: 0.22
       zorder: 7
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
+      edge_color: '#9a947f'
       edge_width: 0
     attributes:
       element:
@@ -294,13 +294,13 @@ layers:
     file: downloads/regions/san-francisco-ca/layers/highway.gpkg
     layer: highway
     geometry_type: MultiLineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#8a826d'
+      ec: '#8a826d'
+      alpha: 0.42
       zorder: 6
-      visible: false
+      visible: true
       palette: []
       linewidth: 0.15
     attributes:
@@ -1391,11 +1391,11 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#8a826d'
+      ec: '#8a826d'
+      alpha: 0.42
       zorder: 6
-      visible: false
+      visible: true
       palette: []
       linewidth: 0.15
     attributes:
@@ -4704,11 +4704,11 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#8a826d'
+      ec: '#8a826d'
+      alpha: 0.42
       zorder: 6
-      visible: false
+      visible: true
       palette: []
       linewidth: 0.15
       marker: o
@@ -6535,13 +6535,13 @@ layers:
     geometry_type: Polygon
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#8a826d'
+      ec: '#8a826d'
+      alpha: 0.42
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
+      edge_color: '#8a826d'
       edge_width: 0
     attributes:
       element:
@@ -7812,13 +7812,13 @@ layers:
     geometry_type: MultiPolygon
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#8a826d'
+      ec: '#8a826d'
+      alpha: 0.42
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
+      edge_color: '#8a826d'
       edge_width: 0
     attributes:
       element:

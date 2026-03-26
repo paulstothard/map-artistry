@@ -10,7 +10,7 @@ map:
     height: 0.04
     route:
       alpha: 0.85
-      color: '#c23b22'
+      color: '#ff5a3a'
       enabled: true
       end_marker:
         color: '#8c4f39'
@@ -18,14 +18,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#f2efe8'
         ring_color: '#8c4f39'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 4.5
+      linewidth: 5.5
       outline:
-        color: '#2f2a25'
+        color: '#ffffff'
         enabled: true
-        linewidth: 1.2
+        linewidth: 1.5
       sampling:
         interval_m: 300
         max_points: 500
@@ -37,13 +37,13 @@ map:
         core_radius_scale: 0.17
         fill_color: '#f2efe8'
         ring_color: '#3b7f59'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
-    color: '#5a5550'
-    enabled: true
-    padding: 0.04
+    alpha: 0.45
+    ec: '#c9beb0'
+    fc: '#c9beb0'
   hillshade:
     alpha: 1.0
     altitude: 34
@@ -295,8 +295,8 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#8e877e'
-      ec: '#8e877e'
+      fc: '#7f766c'
+      ec: '#7f766c'
       alpha: 0.0
       zorder: 6
       visible: false
@@ -2734,16 +2734,16 @@ layers:
     style_rules:
       highway:
         tertiary:
-          linewidth: 0.2
+          linewidth: 0.25
         cycleway: {}
         footway: {}
         service:
           linewidth: 0.15
         residential:
-          linewidth: 0.2
+          linewidth: 0.25
         path: {}
         secondary:
-          linewidth: 0.25
+          linewidth: 0.4
         living_street:
           linewidth: 0.15
         secondary_link: {}
@@ -2754,7 +2754,7 @@ layers:
           linewidth: 0.15
         motorway_link: {}
         motorway:
-          linewidth: 0.4
+          linewidth: 0.6
         busway: {}
         construction: {}
         corridor: {}
@@ -2764,7 +2764,7 @@ layers:
           linewidth: 0.4
         primary_link: {}
         trunk:
-          linewidth: 0.4
+          linewidth: 0.5
         bridleway: {}
         trunk_link: {}
         proposed: {}
@@ -2795,8 +2795,8 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#8e877e'
-      ec: '#8e877e'
+      fc: '#7f766c'
+      ec: '#7f766c'
       alpha: 0.0
       zorder: 6
       visible: false
@@ -4132,8 +4132,8 @@ layers:
     geometry_type: MultiLineString
     visible: false
     default:
-      fc: '#8e877e'
-      ec: '#8e877e'
+      fc: '#7f766c'
+      ec: '#7f766c'
       alpha: 0.0
       zorder: 6
       visible: false
@@ -4894,7 +4894,7 @@ layers:
       highway:
         footway: {}
         residential:
-          linewidth: 0.2
+          linewidth: 0.25
         service:
           linewidth: 0.15
         track:
@@ -4907,7 +4907,7 @@ layers:
           linewidth: 0.15
         corridor: {}
         tertiary:
-          linewidth: 0.2
+          linewidth: 0.25
       maxspeed:
         '50': {}
         '15': {}
@@ -4921,13 +4921,13 @@ layers:
     geometry_type: Polygon
     visible: false
     default:
-      fc: '#8e877e'
-      ec: '#8e877e'
+      fc: '#7f766c'
+      ec: '#7f766c'
       alpha: 0.0
       zorder: 6
       visible: false
       palette: []
-      edge_color: '#8e877e'
+      edge_color: '#7f766c'
       edge_width: 0
     attributes:
       element:
@@ -5790,7 +5790,7 @@ layers:
         platform: {}
         services: {}
         residential:
-          linewidth: 0.2
+          linewidth: 0.25
         path: {}
         service:
           linewidth: 0.15

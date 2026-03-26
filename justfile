@@ -22,6 +22,21 @@
 python := if path_exists("venv/bin/python") == "true" { "venv/bin/python" } else { "python3" }
 
 # ============================================================================
+# Global Paths (edit these to relocate project folders)
+# ============================================================================
+
+scripts_dir := "scripts"
+schemes_dir := "schemes"
+downloads_dir := "downloads"
+regions_dir := "downloads/regions"
+routes_dir := "downloads/routes"
+natural_earth_cache_dir := "downloads/natural-earth"
+ocean_boundaries_dir := "downloads/ocean-boundaries"
+configs_dir := "configs"
+output_dir := "output"
+cache_dir := "cache"
+
+# ============================================================================
 # Main Commands
 # ============================================================================
 
@@ -64,7 +79,7 @@ build-gpx gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="5"
 
 # List available color schemes
 schemes:
-    {{ python }} scripts/generate-config.py --list-schemes
+    @{{ python }} "{{ scripts_dir }}/generate-config.py" --list-schemes --schemes-dir "{{ schemes_dir }}"
 
 # Show help
 help:
@@ -113,39 +128,6 @@ help:
 @list:
     just --list
 
-# Publish generated maps to publish/ folder
-publish:
-    @echo "📤 Publishing maps to publish/ folder..."
-    @mkdir -p publish
-    @find output -name "*.png" -o -name "*.pdf" | while read f; do \
-        bn=$(basename "$f"); \
-        cp "$f" "publish/$bn"; \
-        echo "  ✓ $bn"; \
-    done
-    @echo "✅ Published $(find publish -type f | wc -l | tr -d ' ') maps"
-
-# Create resized examples for GitHub README from published maps
-publish-examples width="1200" thumbnail_width="400":
-    @echo "📸 Creating examples for GitHub README..."
-    @echo "  Full size: {{ width }}px → examples/full/"
-    @echo "  Thumbnails: {{ thumbnail_width }}px → examples/thumbnails/"
-    @echo "  Cropping 2.5% from all sides of all images"
-    {{ python }} scripts/resize-images.py \
-        --input publish/ \
-        --output examples/full/ \
-        --width {{ width }} \
-        --crop-pattern "*" \
-        --crop-bottom 2.5
-    {{ python }} scripts/resize-images.py \
-        --input publish/ \
-        --output examples/thumbnails/ \
-        --width {{ thumbnail_width }} \
-        --crop-pattern "*" \
-        --crop-bottom 2.5
-    @echo "✅ Examples ready:"
-    @echo "   Full: examples/full/"
-    @echo "   Thumbnails: examples/thumbnails/"
-
 # ============================================================================
 # Internal Recipes (prefixed with _)
 # ============================================================================
@@ -163,11 +145,17 @@ _build-map region scheme width height dpi format buffer:
     FORMAT={{ format }}
     USER_BUFFER="{{ buffer }}"
 
+    if [ -z "${SCHEME//[[:space:]]/}" ]; then
+        echo "❌ Color scheme is required and cannot be empty"
+        echo "   Usage: just build \"Region\" <scheme>"
+        exit 1
+    fi
+
     # Sanitize region name for filesystem (replace spaces, slashes, etc.)
     LOCATION=$(echo "$REGION" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g')
-    DATA_DIR="downloads/regions/$LOCATION"
-    OUTPUT_DIR="output/${LOCATION}-${SCHEME}"
-    CONFIG_DIR="configs"
+    DATA_DIR="{{ regions_dir }}/$LOCATION"
+    OUTPUT_DIR="{{ output_dir }}/${LOCATION}-${SCHEME}"
+    CONFIG_DIR="{{ configs_dir }}"
 
     echo "🗺️  Building map: $REGION ($SCHEME scheme)"
     echo "   Output: $OUTPUT_DIR"
@@ -185,7 +173,7 @@ _build-map region scheme width height dpi format buffer:
         echo "📍 Step 1: Using user-supplied buffer: ${BUFFER}km"
     else
         echo "📍 Step 1: Analyzing region and calculating settings..."
-        ESTIMATE_JSON=$({{ python }} scripts/calculate-area.py --place "$REGION")
+        ESTIMATE_JSON=$({{ python }} "{{ scripts_dir }}/calculate-area.py" --place "$REGION")
         BUFFER=$(echo "$ESTIMATE_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['buffer_km'])")
         echo "   Recommended buffer: ${BUFFER}km"
     fi
@@ -199,12 +187,12 @@ _build-map region scheme width height dpi format buffer:
     # Calculate aspect ratio from width/height
     ASPECT=$({{ python }} -c "print(round(${WIDTH} / ${HEIGHT}, 3))")
 
-    {{ python }} scripts/download-geojson.py "$REGION" \
+    {{ python }} "{{ scripts_dir }}/download-geojson.py" "$REGION" \
         --buffer "$BUFFER" \
         --aspect-ratio "$ASPECT" \
         --output "$DATA_DIR/area.geojson"
 
-    {{ python }} scripts/validate-geojson.py "$DATA_DIR/area.geojson"
+    {{ python }} "{{ scripts_dir }}/validate-geojson.py" "$DATA_DIR/area.geojson"
 
     echo "   ✓ Boundary saved (aspect ratio: $ASPECT)"
     echo ""
@@ -213,7 +201,7 @@ _build-map region scheme width height dpi format buffer:
     # Step 3: Calculate strategy from actual buffered area
     # ========================================================================
     echo "🧠 Step 3: Calculating resource strategy..."
-    STRATEGY_JSON=$({{ python }} scripts/calculate-area.py "$DATA_DIR/area.geojson")
+    STRATEGY_JSON=$({{ python }} "{{ scripts_dir }}/calculate-area.py" "$DATA_DIR/area.geojson")
     AREA_KM2=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['area_km2'])")
     TIER=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['tier'])")
     DEM_SOURCE=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['recommendations']['dem_source'])")
@@ -231,7 +219,7 @@ _build-map region scheme width height dpi format buffer:
     # Step 4: Optional ocean layer prep
     # ========================================================================
     echo "🌊 Step 4: Preparing optional ocean layer..."
-    OCEAN_SHP="downloads/ocean-boundaries/World_Seas_IHO_v3.shp"
+    OCEAN_SHP="{{ ocean_boundaries_dir }}/World_Seas_IHO_v3.shp"
     if [ -f "$OCEAN_SHP" ]; then
         echo "   ✓ Ocean boundary source available"
     else
@@ -264,7 +252,7 @@ _build-map region scheme width height dpi format buffer:
     # Download DEM
     if [ ! -f "$DATA_DIR/dem.tif" ]; then
         echo "   ⛰️  Downloading DEM (${DEM_SOURCE})..."
-        if ! {{ python }} scripts/download-dem.py \
+        if ! {{ python }} "{{ scripts_dir }}/download-dem.py" \
             --boundary "$DATA_DIR/area.geojson" \
             --output "$DATA_DIR/dem.tif" \
             --source "$DEM_SOURCE"; then
@@ -273,14 +261,14 @@ _build-map region scheme width height dpi format buffer:
             if [ "$DEM_SOURCE" = "cop90" ] || [ "$DEM_SOURCE" = "gmted2010" ]; then
                 echo "   ⚠️  COP90 failed, falling back to SRTM..."
                 DEM_SOURCE="srtm"
-                {{ python }} scripts/download-dem.py \
+                {{ python }} "{{ scripts_dir }}/download-dem.py" \
                     --boundary "$DATA_DIR/area.geojson" \
                     --output "$DATA_DIR/dem.tif" \
                     --source "$DEM_SOURCE"
             elif [ "$DEM_SOURCE" = "srtm" ]; then
                 echo "   ⚠️  SRTM failed, falling back to ETOPO1..."
                 DEM_SOURCE="etopo1"
-                {{ python }} scripts/download-dem.py \
+                {{ python }} "{{ scripts_dir }}/download-dem.py" \
                     --boundary "$DATA_DIR/area.geojson" \
                     --output "$DATA_DIR/dem.tif" \
                     --source "$DEM_SOURCE"
@@ -296,9 +284,11 @@ _build-map region scheme width height dpi format buffer:
     # Download layers
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
-        {{ python }} scripts/download-osm-layers.py \
+        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" \
             --geojson "$DATA_DIR/area.geojson" \
             --output-dir "$DATA_DIR/layers" \
+            --cache-dir "{{ cache_dir }}" \
+            --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" \
             --source "$OSM_SOURCE"
     else
         echo "   ✓ Layers exist"
@@ -307,7 +297,7 @@ _build-map region scheme width height dpi format buffer:
     # Download satellite imagery
     if [ ! -f "$DATA_DIR/satellite.tif" ]; then
         echo "   🛰️  Downloading satellite imagery (zoom ${SAT_ZOOM})..."
-        {{ python }} scripts/download-satellite-image.py \
+        {{ python }} "{{ scripts_dir }}/download-satellite-image.py" \
             --geojson "$DATA_DIR/area.geojson" \
             --output "$DATA_DIR/satellite.tif" \
             --zoom "$SAT_ZOOM" \
@@ -319,7 +309,7 @@ _build-map region scheme width height dpi format buffer:
     # Derive a local ocean layer whenever the source dataset is installed.
     if [ -f "$OCEAN_SHP" ] && [ ! -f "$DATA_DIR/layers/ocean.gpkg" ]; then
         echo "   🌊 Preparing ocean layer..."
-        {{ python }} scripts/prepare-ocean-layer.py \
+        {{ python }} "{{ scripts_dir }}/prepare-ocean-layer.py" \
             --boundary "$DATA_DIR/area.geojson" \
             --ocean-boundaries "$OCEAN_SHP" \
             --output "$DATA_DIR/layers/ocean.gpkg"
@@ -343,10 +333,11 @@ _build-map region scheme width height dpi format buffer:
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-${SCHEME}-final.yaml"
 
     # Generate base config
-    {{ python }} scripts/generate-config.py \
+    {{ python }} "{{ scripts_dir }}/generate-config.py" \
         "$DATA_DIR/layers"/*.gpkg \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$CONFIG_BASE" \
+        --schemes-dir "{{ schemes_dir }}" \
         --scheme "$SCHEME" \
         --dem "$DATA_DIR/dem.tif" \
         --satellite "$DATA_DIR/satellite.tif"
@@ -354,12 +345,12 @@ _build-map region scheme width height dpi format buffer:
     # Apply overlay if exists
     if [ -f "$CONFIG_OVERLAY" ]; then
         echo "   ✓ Applying overlay: $CONFIG_OVERLAY"
-        {{ python }} scripts/merge-config.py \
+        {{ python }} "{{ scripts_dir }}/merge-config.py" \
             "$CONFIG_BASE" \
             "$CONFIG_OVERLAY" \
             "$CONFIG_FINAL"
     else
-        echo "   ℹ️  No overlay found (create with: configs/${LOCATION}-${SCHEME}-overlay.yaml)"
+        echo "   ℹ️  No overlay found (create with: {{ configs_dir }}/${LOCATION}-${SCHEME}-overlay.yaml)"
         cp "$CONFIG_BASE" "$CONFIG_FINAL"
     fi
 
@@ -372,7 +363,7 @@ _build-map region scheme width height dpi format buffer:
     echo "🎨 Step 7: Rendering map..."
     OUTPUT_FILE="$OUTPUT_DIR/${LOCATION}-${SCHEME}.${FORMAT}"
 
-    {{ python }} scripts/generate-map.py \
+    {{ python }} "{{ scripts_dir }}/generate-map.py" \
         "$CONFIG_FINAL" \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$OUTPUT_FILE" \
@@ -411,6 +402,12 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     TEXT_STATS="{{ text_stats }}"
     TEXT_UNITS="{{ text_units }}"
 
+    if [ -z "${SCHEME//[[:space:]]/}" ]; then
+        echo "❌ Color scheme is required and cannot be empty"
+        echo "   Usage: just build-route \"Region\" path/to/route.gpx <scheme>"
+        exit 1
+    fi
+
     if [ ! -f "$GPX_PATH" ]; then
         echo "❌ GPX file not found: $GPX_PATH"
         exit 1
@@ -418,9 +415,9 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
 
     LOCATION=$(echo "$REGION" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g')
     ROUTE_NAME=$(basename "$GPX_PATH" .gpx | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g')
-    DATA_DIR="downloads/regions/$LOCATION"
-    OUTPUT_DIR="output/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}"
-    CONFIG_DIR="configs"
+    DATA_DIR="{{ regions_dir }}/$LOCATION"
+    OUTPUT_DIR="{{ output_dir }}/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}"
+    CONFIG_DIR="{{ configs_dir }}"
 
     echo "🗺️  Building route map: $REGION ($SCHEME scheme)"
     echo "   GPX: $GPX_PATH"
@@ -436,7 +433,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
         echo "📍 Step 1: Using user-supplied buffer: ${BUFFER}km"
     else
         echo "📍 Step 1: Analyzing region and calculating settings..."
-        ESTIMATE_JSON=$({{ python }} scripts/calculate-area.py --place "$REGION")
+        ESTIMATE_JSON=$({{ python }} "{{ scripts_dir }}/calculate-area.py" --place "$REGION")
         BUFFER=$(echo "$ESTIMATE_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['buffer_km'])")
         echo "   Recommended buffer: ${BUFFER}km"
     fi
@@ -445,17 +442,17 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo "📍 Step 2: Downloading boundary..."
     ASPECT=$({{ python }} -c "print(round(${WIDTH} / ${HEIGHT}, 3))")
 
-    {{ python }} scripts/download-geojson.py "$REGION" \
+    {{ python }} "{{ scripts_dir }}/download-geojson.py" "$REGION" \
         --buffer "$BUFFER" \
         --aspect-ratio "$ASPECT" \
         --output "$DATA_DIR/area.geojson"
 
-    {{ python }} scripts/validate-geojson.py "$DATA_DIR/area.geojson"
+    {{ python }} "{{ scripts_dir }}/validate-geojson.py" "$DATA_DIR/area.geojson"
     echo "   ✓ Boundary saved (aspect ratio: $ASPECT)"
     echo ""
 
     echo "🧭 Step 3: Route context diagnostics..."
-    CONTEXT_JSON=$({{ python }} scripts/analyze-route-context.py \
+    CONTEXT_JSON=$({{ python }} "{{ scripts_dir }}/analyze-route-context.py" \
         --gpx "$GPX_PATH" \
         --boundary "$DATA_DIR/area.geojson" \
         --samples 15 \
@@ -467,7 +464,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo ""
 
     echo "🧠 Step 4: Calculating resource strategy..."
-    STRATEGY_JSON=$({{ python }} scripts/calculate-area.py "$DATA_DIR/area.geojson")
+    STRATEGY_JSON=$({{ python }} "{{ scripts_dir }}/calculate-area.py" "$DATA_DIR/area.geojson")
     AREA_KM2=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['area_km2'])")
     TIER=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['tier'])")
     DEM_SOURCE=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['recommendations']['dem_source'])")
@@ -482,7 +479,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo ""
 
     echo "🌊 Step 5: Preparing optional ocean layer..."
-    OCEAN_SHP="downloads/ocean-boundaries/World_Seas_IHO_v3.shp"
+    OCEAN_SHP="{{ ocean_boundaries_dir }}/World_Seas_IHO_v3.shp"
     if [ -f "$OCEAN_SHP" ]; then
         echo "   ✓ Ocean boundary source available"
     else
@@ -507,15 +504,15 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
 
     if [ ! -f "$DATA_DIR/dem.tif" ]; then
         echo "   ⛰️  Downloading DEM (${DEM_SOURCE})..."
-        if ! {{ python }} scripts/download-dem.py --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"; then
+        if ! {{ python }} "{{ scripts_dir }}/download-dem.py" --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"; then
             if [ "$DEM_SOURCE" = "cop90" ] || [ "$DEM_SOURCE" = "gmted2010" ]; then
                 echo "   ⚠️  COP90 failed, falling back to SRTM..."
                 DEM_SOURCE="srtm"
-                {{ python }} scripts/download-dem.py --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
+                {{ python }} "{{ scripts_dir }}/download-dem.py" --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
             elif [ "$DEM_SOURCE" = "srtm" ]; then
                 echo "   ⚠️  SRTM failed, falling back to ETOPO1..."
                 DEM_SOURCE="etopo1"
-                {{ python }} scripts/download-dem.py --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
+                {{ python }} "{{ scripts_dir }}/download-dem.py" --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
             else
                 echo "   ❌ DEM download failed"
                 exit 1
@@ -527,21 +524,21 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
 
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
-        {{ python }} scripts/download-osm-layers.py --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --source "$OSM_SOURCE"
+        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE"
     else
         echo "   ✓ Layers exist"
     fi
 
     if [ ! -f "$DATA_DIR/satellite.tif" ]; then
         echo "   🛰️  Downloading satellite imagery (zoom ${SAT_ZOOM})..."
-        {{ python }} scripts/download-satellite-image.py --geojson "$DATA_DIR/area.geojson" --output "$DATA_DIR/satellite.tif" --zoom "$SAT_ZOOM" --dpi "$DPI"
+        {{ python }} "{{ scripts_dir }}/download-satellite-image.py" --geojson "$DATA_DIR/area.geojson" --output "$DATA_DIR/satellite.tif" --zoom "$SAT_ZOOM" --dpi "$DPI"
     else
         echo "   ✓ Satellite imagery exists"
     fi
 
     if [ -f "$OCEAN_SHP" ] && [ ! -f "$DATA_DIR/layers/ocean.gpkg" ]; then
         echo "   🌊 Preparing ocean layer..."
-        {{ python }} scripts/prepare-ocean-layer.py --boundary "$DATA_DIR/area.geojson" --ocean-boundaries "$OCEAN_SHP" --output "$DATA_DIR/layers/ocean.gpkg"
+        {{ python }} "{{ scripts_dir }}/prepare-ocean-layer.py" --boundary "$DATA_DIR/area.geojson" --ocean-boundaries "$OCEAN_SHP" --output "$DATA_DIR/layers/ocean.gpkg"
     fi
 
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
@@ -566,10 +563,11 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     if [ -n "$TEXT_LOCATION" ]; then CONFIG_ARGS+=("--text-location" "$TEXT_LOCATION"); fi
     if [ -n "$TEXT_STATS" ]; then CONFIG_ARGS+=("--text-stats" "$TEXT_STATS"); fi
 
-    {{ python }} scripts/generate-config.py \
+    {{ python }} "{{ scripts_dir }}/generate-config.py" \
         "$DATA_DIR/layers"/*.gpkg \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$CONFIG_BASE" \
+        --schemes-dir "{{ schemes_dir }}" \
         --scheme "$SCHEME" \
         --dem "$DATA_DIR/dem.tif" \
         --satellite "$DATA_DIR/satellite.tif" \
@@ -577,16 +575,16 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
 
     if [ -f "$CONFIG_OVERLAY" ]; then
         echo "   ✓ Applying overlay: $CONFIG_OVERLAY"
-        {{ python }} scripts/merge-config.py "$CONFIG_BASE" "$CONFIG_OVERLAY" "$CONFIG_FINAL"
+        {{ python }} "{{ scripts_dir }}/merge-config.py" "$CONFIG_BASE" "$CONFIG_OVERLAY" "$CONFIG_FINAL"
     else
-        echo "   ℹ️  No overlay found (create with: configs/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}-overlay.yaml)"
+        echo "   ℹ️  No overlay found (create with: {{ configs_dir }}/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}-overlay.yaml)"
         cp "$CONFIG_BASE" "$CONFIG_FINAL"
     fi
 
     echo "🎨 Step 8: Rendering map..."
     OUTPUT_FILE="$OUTPUT_DIR/${LOCATION}-route-${ROUTE_NAME}-${SCHEME}.${FORMAT}"
 
-    {{ python }} scripts/generate-map.py \
+    {{ python }} "{{ scripts_dir }}/generate-map.py" \
         "$CONFIG_FINAL" \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$OUTPUT_FILE" \
@@ -618,6 +616,12 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     TEXT_STATS="{{ text_stats }}"
     TEXT_UNITS="{{ text_units }}"
 
+    if [ -z "${SCHEME//[[:space:]]/}" ]; then
+        echo "❌ Color scheme is required and cannot be empty"
+        echo "   Usage: just build-gpx path/to/route.gpx <scheme>"
+        exit 1
+    fi
+
     if [ ! -f "$GPX_PATH" ]; then
         echo "❌ GPX file not found: $GPX_PATH"
         exit 1
@@ -625,9 +629,9 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 
     ROUTE_NAME=$(basename "$GPX_PATH" .gpx | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g')
     LOCATION="route-${ROUTE_NAME}"
-    DATA_DIR="downloads/routes/$ROUTE_NAME"
-    OUTPUT_DIR="output/${ROUTE_NAME}-${SCHEME}"
-    CONFIG_DIR="configs"
+    DATA_DIR="{{ routes_dir }}/$ROUTE_NAME"
+    OUTPUT_DIR="{{ output_dir }}/${ROUTE_NAME}-${SCHEME}"
+    CONFIG_DIR="{{ configs_dir }}"
 
     echo "🗺️  Building GPX-derived route map ($SCHEME scheme)"
     echo "   GPX: $GPX_PATH"
@@ -640,18 +644,18 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 
     echo "📍 Step 1: Deriving boundary from GPX..."
     ASPECT=$({{ python }} -c "print(round(${WIDTH} / ${HEIGHT}, 3))")
-    {{ python }} scripts/download-geojson.py \
+    {{ python }} "{{ scripts_dir }}/download-geojson.py" \
         --gpx "$GPX_PATH" \
         --buffer "$BUFFER" \
         --aspect-ratio "$ASPECT" \
         --output "$DATA_DIR/area.geojson"
 
-    {{ python }} scripts/validate-geojson.py "$DATA_DIR/area.geojson"
+    {{ python }} "{{ scripts_dir }}/validate-geojson.py" "$DATA_DIR/area.geojson"
     echo "   ✓ Boundary saved (aspect ratio: $ASPECT, buffer: ${BUFFER}km)"
     echo ""
 
     echo "🧭 Step 2: Route context diagnostics..."
-    CONTEXT_JSON=$({{ python }} scripts/analyze-route-context.py \
+    CONTEXT_JSON=$({{ python }} "{{ scripts_dir }}/analyze-route-context.py" \
         --gpx "$GPX_PATH" \
         --boundary "$DATA_DIR/area.geojson" \
         --samples 15 \
@@ -663,7 +667,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     echo ""
 
     echo "🧠 Step 3: Calculating resource strategy..."
-    STRATEGY_JSON=$({{ python }} scripts/calculate-area.py "$DATA_DIR/area.geojson")
+    STRATEGY_JSON=$({{ python }} "{{ scripts_dir }}/calculate-area.py" "$DATA_DIR/area.geojson")
     AREA_KM2=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['area_km2'])")
     TIER=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['tier'])")
     DEM_SOURCE=$(echo "$STRATEGY_JSON" | {{ python }} -c "import sys, json; print(json.load(sys.stdin)['recommendations']['dem_source'])")
@@ -680,21 +684,21 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     echo "📦 Step 4: Preparing data..."
     if [ ! -f "$DATA_DIR/dem.tif" ]; then
         echo "   ⛰️  Downloading DEM (${DEM_SOURCE})..."
-        {{ python }} scripts/download-dem.py --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
+        {{ python }} "{{ scripts_dir }}/download-dem.py" --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
     else
         echo "   ✓ DEM exists"
     fi
 
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
-        {{ python }} scripts/download-osm-layers.py --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --source "$OSM_SOURCE"
+        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE"
     else
         echo "   ✓ Layers exist"
     fi
 
     if [ ! -f "$DATA_DIR/satellite.tif" ]; then
         echo "   🛰️  Downloading satellite imagery (zoom ${SAT_ZOOM})..."
-        {{ python }} scripts/download-satellite-image.py --geojson "$DATA_DIR/area.geojson" --output "$DATA_DIR/satellite.tif" --zoom "$SAT_ZOOM" --dpi "$DPI"
+        {{ python }} "{{ scripts_dir }}/download-satellite-image.py" --geojson "$DATA_DIR/area.geojson" --output "$DATA_DIR/satellite.tif" --zoom "$SAT_ZOOM" --dpi "$DPI"
     else
         echo "   ✓ Satellite imagery exists"
     fi
@@ -715,10 +719,11 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     if [ -n "$TEXT_LOCATION" ]; then CONFIG_ARGS+=("--text-location" "$TEXT_LOCATION"); fi
     if [ -n "$TEXT_STATS" ]; then CONFIG_ARGS+=("--text-stats" "$TEXT_STATS"); fi
 
-    {{ python }} scripts/generate-config.py \
+    {{ python }} "{{ scripts_dir }}/generate-config.py" \
         "$DATA_DIR/layers"/*.gpkg \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$CONFIG_BASE" \
+        --schemes-dir "{{ schemes_dir }}" \
         --scheme "$SCHEME" \
         --dem "$DATA_DIR/dem.tif" \
         --satellite "$DATA_DIR/satellite.tif" \
@@ -726,7 +731,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 
     if [ -f "$CONFIG_OVERLAY" ]; then
         echo "   ✓ Applying overlay: $CONFIG_OVERLAY"
-        {{ python }} scripts/merge-config.py "$CONFIG_BASE" "$CONFIG_OVERLAY" "$CONFIG_FINAL"
+        {{ python }} "{{ scripts_dir }}/merge-config.py" "$CONFIG_BASE" "$CONFIG_OVERLAY" "$CONFIG_FINAL"
     else
         cp "$CONFIG_BASE" "$CONFIG_FINAL"
     fi
@@ -734,7 +739,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     echo "🎨 Step 6: Rendering map..."
     OUTPUT_FILE="$OUTPUT_DIR/${ROUTE_NAME}-${SCHEME}.${FORMAT}"
 
-    {{ python }} scripts/generate-map.py \
+    {{ python }} "{{ scripts_dir }}/generate-map.py" \
         "$CONFIG_FINAL" \
         --geojson "$DATA_DIR/area.geojson" \
         --output "$OUTPUT_FILE" \

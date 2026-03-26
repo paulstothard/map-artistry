@@ -4,7 +4,7 @@ map:
     ec: "#05050d"
   frame:
     enabled: true
-    color: "#f2f1ed"
+    color: "#2a2f35"
     padding: 0.04
   scheme: satellite
   info:
@@ -62,8 +62,8 @@ map:
     position: bottom
     height: 0.12
     background:
-      color: "#ffd54f"
-      alpha: 1.0
+      color: "#101418"
+      alpha: 0.88
     padding: 0.015
     zorder: 1000
     elements:
@@ -75,7 +75,7 @@ map:
         font: Inter
         font_weight: bold
         size: 0.42
-        color: "#1a1a1a"
+        color: "#f3f5f7"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -88,7 +88,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#2d2d2d"
+        color: "#b8c2cc"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -101,7 +101,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#2d2d2d"
+        color: "#b8c2cc"
         alpha: 1.0
         align: right
         transform: uppercase
@@ -117,23 +117,23 @@ map:
         font: Inter
         value_size: 0.22
         value_weight: bold
-        value_color: "#1a1a1a"
+        value_color: "#f3f5f7"
         value_alpha: 1.0
         label_size: 0.10
         label_weight: normal
-        label_color: "#2d2d2d"
+        label_color: "#b8c2cc"
         label_alpha: 1.0
         transform: uppercase
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#ffd54f"
+    color: "#1a2027"
     alpha: 0.9
     route:
       enabled: true
       color: "#ffd54f"
       linewidth: 4.0
-      alpha: 0.85
+      alpha: 0.92
       sampling:
         mode: distance_interval
         interval_m: 300

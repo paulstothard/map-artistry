@@ -5,7 +5,7 @@ map:
   debug_water_hillshade: false
   elevation_profile:
     alpha: 0.9
-    color: '#63ffff'
+    color: '#ff5cf0'
     enabled: true
     height: 0.04
     route:
@@ -18,14 +18,14 @@ map:
         core_radius_scale: 0.17
         fill_color: '#020304'
         ring_color: '#ff5c93'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
-      linewidth: 3.2
+      linewidth: 4.0
       outline:
         color: '#07141b'
         enabled: true
-        linewidth: 0.7
+        linewidth: 0.9
       sampling:
         interval_m: 300
         max_points: 500
@@ -37,8 +37,8 @@ map:
         core_radius_scale: 0.17
         fill_color: '#020304'
         ring_color: '#64d977'
-        ring_width_scale: 0.08
-        size: 4.8
+        ring_width_scale: 0.14
+        size: 8.0
         style: concentric_circles
   frame:
     color: '#67f8ff'

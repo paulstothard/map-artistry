@@ -62,7 +62,7 @@ map:
     position: bottom
     height: 0.12
     background:
-      color: "#ffffff"
+      color: "#1b0708"
       alpha: 1.0
     padding: 0.015
     zorder: 1000
@@ -75,7 +75,7 @@ map:
         font: Inter
         font_weight: bold
         size: 0.42
-        color: "#120001"
+        color: "#f0d6d6"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -88,7 +88,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#5d1010"
+        color: "#c78f8f"
         alpha: 1.0
         align: left
         transform: uppercase
@@ -101,7 +101,7 @@ map:
         font: Inter
         font_weight: normal
         size: 0.14
-        color: "#5d1010"
+        color: "#c78f8f"
         alpha: 1.0
         align: right
         transform: uppercase
@@ -117,23 +117,23 @@ map:
         font: Inter
         value_size: 0.22
         value_weight: bold
-        value_color: "#120001"
+        value_color: "#f0d6d6"
         value_alpha: 1.0
         label_size: 0.10
         label_weight: normal
-        label_color: "#5d1010"
+        label_color: "#c78f8f"
         label_alpha: 1.0
         transform: uppercase
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#ffffff"
-    alpha: 0.9
+    color: "#3a0d10"
+    alpha: 0.92
     route:
       enabled: true
-      color: "#ffffff"
+      color: "#f0d6a0"
       linewidth: 4.0
-      alpha: 0.85
+      alpha: 0.9
       sampling:
         mode: distance_interval
         interval_m: 300

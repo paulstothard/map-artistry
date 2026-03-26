@@ -1,10 +1,10 @@
 map:
   background:
-    fc: "#dfe7d6"
-    ec: "#dfe7d6"
+    fc: '#dfe7d6'
+    ec: '#dfe7d6'
   frame:
     enabled: true
-    color: "#2f3b2f"
+    color: '#2f3b2f'
     padding: 0.04
   scheme: natural
   debug_water_hillshade: true
@@ -14,20 +14,20 @@ map:
     position: bottom-right
     font: Gill Sans
     fontsize: 8
-    color: "#2f3b2f"
+    color: '#2f3b2f'
   hillshade:
     azimuth: 315
     altitude: 45
     azimuths:
-      - 315
-      - 45
-      - 270
-      - 90
+    - 315
+    - 45
+    - 270
+    - 90
     weights:
-      - 1.3
-      - 1.0
-      - 0.8
-      - 0.8
+    - 1.3
+    - 1.0
+    - 0.8
+    - 0.8
     multidirectional: true
     vert_exag: 2.0
     cmap: gray
@@ -46,25 +46,25 @@ map:
     alpha: 1.0
     zorder: 0
     percentiles:
-      - 2
-      - 98
+    - 2
+    - 98
     blend_mode: soft_light
     shade_strength: 0.6
     interpolation: bicubic
     colors:
-      - "#4a8c4a"
-      - "#6ba05a"
-      - "#8fb46b"
-      - "#b3c87a"
-      - "#d4c87a"
-      - "#c8a850"
-      - "#b08040"
-      - "#8c5820"
-      - "#6e3c10"
-      - "#8a7868"
-      - "#b0a090"
-      - "#d8d0c8"
-      - "#ffffff"
+    - '#4a8c4a'
+    - '#6ba05a'
+    - '#8fb46b'
+    - '#b3c87a'
+    - '#d4c87a'
+    - '#c8a850'
+    - '#b08040'
+    - '#8c5820'
+    - '#6e3c10'
+    - '#8a7868'
+    - '#b0a090'
+    - '#d8d0c8'
+    - '#ffffff'
   satellite:
     visible: false
     opacity: 1.0
@@ -73,76 +73,76 @@ map:
     position: bottom
     height: 0.12
     background:
-      color: "#1f3a2b"
+      color: '#1f3a2b'
       alpha: 1.0
     padding: 0.015
     zorder: 1000
     elements:
-      - type: title
-        id: title
-        content: ""
-        x: 0.03
-        y: 0.65
-        font: Inter
-        font_weight: bold
-        size: 0.42
-        color: "#f3f7ef"
-        alpha: 1.0
-        align: left
-        transform: uppercase
-        tracking: 0.10
-      - type: text
-        id: subtitle
-        content: ""
-        x: 0.03
-        y: 0.25
-        font: Inter
-        font_weight: normal
-        size: 0.14
-        color: "#d5e2cf"
-        alpha: 1.0
-        align: left
-        transform: uppercase
-        tracking: 0.06
-      - type: text
-        id: location
-        content: ""
-        x: 0.97
-        y: 0.65
-        font: Inter
-        font_weight: normal
-        size: 0.14
-        color: "#d5e2cf"
-        alpha: 1.0
-        align: right
-        transform: uppercase
-        tracking: 0.06
-      - type: stats
-        id: stats
-        items: []
-        x: 0.97
-        y: 0.30
-        align: right
-        layout: horizontal
-        spacing: 0.04
-        font: Inter
-        value_size: 0.22
-        value_weight: bold
-        value_color: "#f3f7ef"
-        value_alpha: 1.0
-        label_size: 0.10
-        label_weight: normal
-        label_color: "#d5e2cf"
-        label_alpha: 1.0
-        transform: uppercase
+    - type: title
+      id: title
+      content: ''
+      x: 0.03
+      y: 0.65
+      font: Inter
+      font_weight: bold
+      size: 0.42
+      color: '#f3f7ef'
+      alpha: 1.0
+      align: left
+      transform: uppercase
+      tracking: 0.1
+    - type: text
+      id: subtitle
+      content: ''
+      x: 0.03
+      y: 0.25
+      font: Inter
+      font_weight: normal
+      size: 0.14
+      color: '#d5e2cf'
+      alpha: 1.0
+      align: left
+      transform: uppercase
+      tracking: 0.06
+    - type: text
+      id: location
+      content: ''
+      x: 0.97
+      y: 0.65
+      font: Inter
+      font_weight: normal
+      size: 0.14
+      color: '#d5e2cf'
+      alpha: 1.0
+      align: right
+      transform: uppercase
+      tracking: 0.06
+    - type: stats
+      id: stats
+      items: []
+      x: 0.97
+      y: 0.3
+      align: right
+      layout: horizontal
+      spacing: 0.04
+      font: Inter
+      value_size: 0.22
+      value_weight: bold
+      value_color: '#f3f7ef'
+      value_alpha: 1.0
+      label_size: 0.1
+      label_weight: normal
+      label_color: '#d5e2cf'
+      label_alpha: 1.0
+      transform: uppercase
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#1f3a2b"
+    color: '#1f3a2b'
     alpha: 0.9
     route:
       enabled: true
-      color: "#f7fbe9"
+      color: '#f7fbe9'
       linewidth: 4.0
       alpha: 0.85
       sampling:
@@ -152,29 +152,29 @@ map:
         max_points: 500
       outline:
         enabled: true
-        color: "#284932"
+        color: '#284932'
         linewidth: 0.9
       start_marker:
         style: concentric_circles
-        color: "#3f7c4c"
-        ring_color: "#3f7c4c"
-        fill_color: "#dfe7d6"
+        color: '#3f7c4c'
+        ring_color: '#3f7c4c'
+        fill_color: '#dfe7d6'
         size: 8.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
       end_marker:
         style: concentric_circles
-        color: "#8c3b2a"
-        ring_color: "#8c3b2a"
-        fill_color: "#dfe7d6"
+        color: '#8c3b2a'
+        ring_color: '#8c3b2a'
+        fill_color: '#dfe7d6'
         size: 8.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
 water:
-  fc: "#4f7d95"
-  ec: "#4f7d95"
+  fc: '#4f7d95'
+  ec: '#4f7d95'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -196,8 +196,8 @@ water:
     interpolation: bilinear
     max_texture_dim: 1024
 ocean:
-  fc: "#5a879f"
-  ec: "#5a879f"
+  fc: '#5a879f'
+  ec: '#5a879f'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -219,8 +219,8 @@ ocean:
     interpolation: bilinear
     max_texture_dim: 1024
 waterway:
-  fc: "#4f7f98"
-  ec: "#4f7f98"
+  fc: '#4f7f98'
+  ec: '#4f7f98'
   alpha: 1.0
   ew: 0
   zorder: 3
@@ -243,17 +243,17 @@ waterway:
     rapids: 0
   default_lw: 0.25
 road:
-  fc: "#ffffff"
-  ec: "#ffffff"
-  alpha: 0.0
+  fc: '#8a826d'
+  ec: '#8a826d'
+  alpha: 0.42
   ew: 0
   zorder: 6
-  visible: false
+  visible: true
   geometry_visibility:
     Point: false
     MultiPoint: false
-    LineString: false
-    MultiLineString: false
+    LineString: true
+    MultiLineString: true
     Polygon: false
     MultiPolygon: false
   palette: []
@@ -270,23 +270,23 @@ road:
     track: 0.15
   default_lw: 0.15
 building:
-  fc: "#ffffff"
-  ec: "#ffffff"
-  alpha: 0.0
+  fc: '#9a947f'
+  ec: '#9a947f'
+  alpha: 0.22
   zorder: 7
   ew: 0
-  visible: false
+  visible: true
   geometry_visibility:
     Point: false
     MultiPoint: false
     LineString: false
     MultiLineString: false
-    Polygon: false
-    MultiPolygon: false
+    Polygon: true
+    MultiPolygon: true
   palette: []
 natural:
-  fc: "#7f9a70"
-  ec: "#7f9a70"
+  fc: '#7f9a70'
+  ec: '#7f9a70'
   alpha: 0.0
   zorder: 1
   ew: 0
@@ -300,8 +300,8 @@ natural:
     MultiPolygon: true
   palette: []
 landuse:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 2
   ew: 0
@@ -315,8 +315,8 @@ landuse:
     MultiPolygon: false
   palette: []
 railway:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -331,8 +331,8 @@ railway:
   palette: []
   default_lw: 0.15
 transport:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -347,8 +347,8 @@ transport:
   palette: []
   default_lw: 0.15
 places:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -362,8 +362,8 @@ places:
     MultiPolygon: false
   palette: []
 poi:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 1
   ew: 0
@@ -379,8 +379,8 @@ poi:
   marker: o
   size: 0.1
 pofw:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -394,8 +394,8 @@ pofw:
     MultiPolygon: false
   palette: []
 traffic:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -410,8 +410,8 @@ traffic:
   palette: []
   default_lw: 0.15
 other:
-  fc: "#ffffff"
-  ec: "#ffffff"
+  fc: '#ffffff'
+  ec: '#ffffff'
   alpha: 0.0
   zorder: 0
   ew: 0

@@ -155,7 +155,7 @@ map:
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#123d57"
+    color: "#0f3348"
     alpha: 1.0
     route:
       enabled: true
