@@ -35,6 +35,16 @@ GPX_ONLY_TEXT_TITLE="RIVER VALLEY LOOP"
 GPX_ONLY_TEXT_SUBTITLE="GPX-DERIVED REGION"
 GPX_ONLY_TEXT_STATS="48 KM||DISTANCE;;326 M||ELEV GAIN"
 
+ALKI_ROUTE_GPX_FILE="Alki_Three_Tree_Point_Normandy_Park_Lake_Washington.gpx"
+ALKI_ROUTE_TEXT_TITLE="ALKI, THREE TREE POINT, NORMANDY PARK, LAKE WASHINGTON"
+ALKI_ROUTE_TEXT_SUBTITLE="PUGET SOUND COASTAL LOOP"
+ALKI_ROUTE_TEXT_STATS="51.0 MI||DISTANCE;;2,690 FT||ELEV GAIN"
+
+BOSTON_ROUTE_GPX_FILE="Boston-Emerald_Necklace_Bicycle_Adventure.gpx"
+BOSTON_ROUTE_TEXT_TITLE="BOSTON-EMERALD NECKLACE BICYCLE ADVENTURE"
+BOSTON_ROUTE_TEXT_SUBTITLE="OLMSTED PARKS TOUR"
+BOSTON_ROUTE_TEXT_STATS="38.5 MI||DISTANCE;;1,260 FT||ELEV GAIN"
+
 usage() {
   cat <<'EOF'
 Usage: ./generate-example-maps.sh [options]
@@ -96,6 +106,8 @@ CYCLING_ROUTES_DIR="$DOWNLOADS_DIR/cycling-routes"
 
 EDMONTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$EDMONTON_ROUTE_GPX_FILE"
 GPX_ONLY_ROUTE_GPX="$CYCLING_ROUTES_DIR/$GPX_ONLY_ROUTE_GPX_FILE"
+ALKI_ROUTE_GPX="$CYCLING_ROUTES_DIR/$ALKI_ROUTE_GPX_FILE"
+BOSTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$BOSTON_ROUTE_GPX_FILE"
 
 # Get schemes dynamically
 SCHEMES=$(just schemes 2>/dev/null)
@@ -118,9 +130,21 @@ if [ ! -f "$GPX_ONLY_ROUTE_GPX" ]; then
   exit 1
 fi
 
+if [ ! -f "$ALKI_ROUTE_GPX" ]; then
+  echo "❌ Missing GPX for Alki route examples: $ALKI_ROUTE_GPX"
+  exit 1
+fi
+
+if [ ! -f "$BOSTON_ROUTE_GPX" ]; then
+  echo "❌ Missing GPX for Boston route examples: $BOSTON_ROUTE_GPX"
+  exit 1
+fi
+
 EDMONTON_ROUTE_REGION_SLUG=$(slugify_region "$EDMONTON_ROUTE_REGION")
 EDMONTON_ROUTE_SLUG=$(slugify_route "$EDMONTON_ROUTE_GPX")
 GPX_ONLY_ROUTE_SLUG=$(slugify_route "$GPX_ONLY_ROUTE_GPX")
+ALKI_ROUTE_SLUG=$(slugify_route "$ALKI_ROUTE_GPX")
+BOSTON_ROUTE_SLUG=$(slugify_route "$BOSTON_ROUTE_GPX")
 
 echo "Checking existing maps..."
 echo ""
@@ -182,6 +206,40 @@ for scheme in $SCHEMES; do
   else
     NEEDED=$((NEEDED + 1))
     NEEDED_MAPS+=("route-gpx-only|$GPX_ONLY_ROUTE_GPX|$scheme")
+  fi
+done
+
+# 4) Alki route examples (all schemes)
+for scheme in $SCHEMES; do
+  TOTAL=$((TOTAL + 1))
+  output_file="$OUTPUT_DIR/${ALKI_ROUTE_SLUG}-${scheme}/${ALKI_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+  if [ -f "$output_file" ]; then
+    EXISTING=$((EXISTING + 1))
+    if [ "$FORCE" = true ]; then
+      NEEDED=$((NEEDED + 1))
+      NEEDED_MAPS+=("route-gpx-only|$ALKI_ROUTE_GPX|$scheme")
+    fi
+  else
+    NEEDED=$((NEEDED + 1))
+    NEEDED_MAPS+=("route-gpx-only|$ALKI_ROUTE_GPX|$scheme")
+  fi
+done
+
+# 5) Boston route examples (all schemes)
+for scheme in $SCHEMES; do
+  TOTAL=$((TOTAL + 1))
+  output_file="$OUTPUT_DIR/${BOSTON_ROUTE_SLUG}-${scheme}/${BOSTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+  if [ -f "$output_file" ]; then
+    EXISTING=$((EXISTING + 1))
+    if [ "$FORCE" = true ]; then
+      NEEDED=$((NEEDED + 1))
+      NEEDED_MAPS+=("route-gpx-only|$BOSTON_ROUTE_GPX|$scheme")
+    fi
+  else
+    NEEDED=$((NEEDED + 1))
+    NEEDED_MAPS+=("route-gpx-only|$BOSTON_ROUTE_GPX|$scheme")
   fi
 done
 
@@ -281,6 +339,46 @@ if [ $NEEDED -gt 0 ]; then
         --text-subtitle "$GPX_ONLY_TEXT_SUBTITLE" \
         --text-stats "$GPX_ONLY_TEXT_STATS" \
         "$GPX_ONLY_ROUTE_GPX" "$scheme"
+    done
+
+    # 4) Alki route examples
+    for scheme in $SCHEMES; do
+      output_file="$OUTPUT_DIR/${ALKI_ROUTE_SLUG}-${scheme}/${ALKI_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+      if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
+        echo "⏭ GPX-only $(basename "$ALKI_ROUTE_GPX") — $scheme"
+        echo "   Skipping existing output: $output_file"
+        continue
+      fi
+
+      echo "▶ GPX-only $(basename "$ALKI_ROUTE_GPX") — $scheme"
+      build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
+      just build-gpx "${build_args[@]}" \
+        --buffer-km 1 \
+        --text-title "$ALKI_ROUTE_TEXT_TITLE" \
+        --text-subtitle "$ALKI_ROUTE_TEXT_SUBTITLE" \
+        --text-stats "$ALKI_ROUTE_TEXT_STATS" \
+        "$ALKI_ROUTE_GPX" "$scheme"
+    done
+
+    # 5) Boston route examples
+    for scheme in $SCHEMES; do
+      output_file="$OUTPUT_DIR/${BOSTON_ROUTE_SLUG}-${scheme}/${BOSTON_ROUTE_SLUG}-${scheme}.${FORMAT}"
+
+      if [ "$FORCE" != true ] && [ -f "$output_file" ]; then
+        echo "⏭ GPX-only $(basename "$BOSTON_ROUTE_GPX") — $scheme"
+        echo "   Skipping existing output: $output_file"
+        continue
+      fi
+
+      echo "▶ GPX-only $(basename "$BOSTON_ROUTE_GPX") — $scheme"
+      build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
+      just build-gpx "${build_args[@]}" \
+        --buffer-km 1 \
+        --text-title "$BOSTON_ROUTE_TEXT_TITLE" \
+        --text-subtitle "$BOSTON_ROUTE_TEXT_SUBTITLE" \
+        --text-stats "$BOSTON_ROUTE_TEXT_STATS" \
+        "$BOSTON_ROUTE_GPX" "$scheme"
     done
 
     echo ""
