@@ -90,10 +90,10 @@ map:
         weight: 0.35
   info:
     color: '#808080'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -203,16 +203,16 @@ layers:
     file: downloads/regions/edmonton-ab/layers/building.gpkg
     layer: building
     geometry_type: Polygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#00eaff'
+      ec: '#007d8a'
+      alpha: 0.9
       zorder: 7
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
-      edge_width: 0
+      edge_color: '#007d8a'
+      edge_width: 0.08
     attributes:
       element:
       - way
@@ -223,16 +223,16 @@ layers:
     file: downloads/regions/edmonton-ab/layers/building.gpkg
     layer: building
     geometry_type: MultiPolygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#00eaff'
+      ec: '#007d8a'
+      alpha: 0.9
       zorder: 7
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
-      edge_width: 0
+      edge_color: '#007d8a'
+      edge_width: 0.08
     attributes:
       element:
       - relation
@@ -298,11 +298,11 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#00eaff'
+      ec: '#007d8a'
+      alpha: 0.9
       zorder: 7
-      visible: false
+      visible: true
       palette: []
       linewidth: 1.0
       marker: o
@@ -327,11 +327,11 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#00eaff'
+      ec: '#007d8a'
+      alpha: 0.9
       zorder: 7
-      visible: false
+      visible: true
       palette: []
       linewidth: 1.0
     attributes:
@@ -345,15 +345,15 @@ layers:
     file: downloads/regions/edmonton-ab/layers/highway.gpkg
     layer: highway
     geometry_type: LineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -2077,37 +2077,37 @@ layers:
     style_rules:
       highway:
         secondary:
-          linewidth: 0.4
+          linewidth: 1.1
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         cycleway: {}
         footway: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         construction: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         secondary_link: {}
         tertiary_link: {}
         path: {}
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         pedestrian: {}
         motorway_link: {}
         motorway:
-          linewidth: 0.6
+          linewidth: 1.35
         primary:
-          linewidth: 0.4
+          linewidth: 1.15
         primary_link: {}
         corridor: {}
         steps: {}
         road: {}
         trunk:
-          linewidth: 0.5
+          linewidth: 1.25
         trunk_link: {}
         proposed: {}
         busway: {}
@@ -2139,13 +2139,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -2985,15 +2985,15 @@ layers:
     file: downloads/regions/edmonton-ab/layers/highway.gpkg
     layer: highway
     geometry_type: MultiLineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -3503,22 +3503,22 @@ layers:
     style_rules:
       highway:
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         footway: {}
         cycleway: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         road: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         construction: {}
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
       maxspeed:
         '40': {}
         '15': {}
@@ -3532,15 +3532,15 @@ layers:
     file: downloads/regions/edmonton-ab/layers/highway.gpkg
     layer: highway
     geometry_type: Polygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
+      edge_color: '#1f4e79'
       edge_width: 0
     attributes:
       element:
@@ -4053,7 +4053,7 @@ layers:
         services: {}
         elevator: {}
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         rest_area: {}
     style_order:
@@ -4596,7 +4596,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -4610,7 +4610,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__LineString:
@@ -4625,7 +4625,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -4642,17 +4642,17 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
         ditch:
-          linewidth: 0
+          linewidth: 0.3
         flowline: {}
         dam: {}
         drain:
-          linewidth: 0
+          linewidth: 0.35
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         canal:
-          linewidth: 0
+          linewidth: 1.0
         outfall: {}
     style_order:
     - waterway
@@ -4668,7 +4668,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
       marker: o
       size: 3
     attributes:

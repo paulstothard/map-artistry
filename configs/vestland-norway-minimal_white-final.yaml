@@ -42,8 +42,11 @@ map:
         style: concentric_circles
   frame:
     alpha: 0.35
+    color: '#b08f8f'
     ec: '#b08f8f'
+    enabled: true
     fc: '#b08f8f'
+    padding: 0.04
   hillshade:
     alpha: 1.0
     altitude: 36
@@ -87,10 +90,10 @@ map:
     zorder: 0
   info:
     color: '#b8b8b2'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -481,8 +484,8 @@ layers:
     geometry_type: MultiPolygon
     visible: true
     default:
-      fc: '#eeefea'
-      ec: '#eeefea'
+      fc: '#d4e2ed'
+      ec: '#d4e2ed'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -495,7 +498,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.04
         visible: true
-      edge_color: '#eeefea'
+      edge_color: '#d4e2ed'
       edge_width: 0
     attributes:
       NAME:
@@ -544,13 +547,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -724,13 +727,13 @@ layers:
     geometry_type: MultiLineString
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -798,8 +801,8 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#f1f2ee'
-      ec: '#f1f2ee'
+      fc: '#dce8f2'
+      ec: '#dce8f2'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -812,7 +815,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.03
         visible: true
-      edge_color: '#f1f2ee'
+      edge_color: '#dce8f2'
       edge_width: 0
     attributes:
       featurecla:
@@ -906,13 +909,13 @@ layers:
     geometry_type: LineString
     visible: true
     default:
-      fc: '#dfe0da'
-      ec: '#dfe0da'
-      alpha: 0.75
+      fc: '#9fbfd5'
+      ec: '#9fbfd5'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.3
     attributes:
       dissolve:
       - 1003River

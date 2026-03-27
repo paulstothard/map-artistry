@@ -59,10 +59,10 @@ map:
     cmap: gray
     interpolation: bicubic
     multidirectional: true
-    sigma: 0.0
-    unsharp_amount: 1.2
-    unsharp_radius: 2.0
-    vert_exag: 2.0
+    sigma: 0.6
+    unsharp_amount: 0.7
+    unsharp_radius: 1.0
+    vert_exag: 1.2
     weights:
     - 1.3
     - 1.0
@@ -90,10 +90,10 @@ map:
         weight: 0.35
   info:
     color: '#2f3b2f'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -188,7 +188,7 @@ map:
     percentiles:
     - 2
     - 98
-    shade_strength: 0.6
+    shade_strength: 0.45
     visible: true
     zorder: 0
   water_hillshade:
@@ -203,14 +203,14 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#9a947f'
-      ec: '#9a947f'
-      alpha: 0.22
+      fc: '#d9c7ad'
+      ec: '#3b342d'
+      alpha: 0.88
       zorder: 7
       visible: true
       palette: []
-      edge_color: '#9a947f'
-      edge_width: 0
+      edge_color: '#3b342d'
+      edge_width: 0.08
     attributes:
       element:
       - way
@@ -238,13 +238,13 @@ layers:
     geometry_type: LineString
     visible: true
     default:
-      fc: '#8a826d'
-      ec: '#8a826d'
-      alpha: 0.42
+      fc: '#2b2b2b'
+      ec: '#2b2b2b'
+      alpha: 0.92
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -497,22 +497,22 @@ layers:
     style_rules:
       highway:
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         footway: {}
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         construction: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         primary:
-          linewidth: 0.4
+          linewidth: 1.15
         bridleway: {}
         steps: {}
       maxspeed:
@@ -533,13 +533,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#8a826d'
-      ec: '#8a826d'
-      alpha: 0.42
+      fc: '#2b2b2b'
+      ec: '#2b2b2b'
+      alpha: 0.92
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -674,13 +674,13 @@ layers:
     geometry_type: MultiLineString
     visible: true
     default:
-      fc: '#8a826d'
-      ec: '#8a826d'
-      alpha: 0.42
+      fc: '#2b2b2b'
+      ec: '#2b2b2b'
+      alpha: 0.92
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -846,15 +846,15 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         footway: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
     style_order:
     - highway
   landuse__Polygon:
@@ -1281,7 +1281,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1293,9 +1293,9 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.4
+          linewidth: 0.55
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         dam: {}
     style_order:
     - waterway
@@ -1311,7 +1311,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1325,7 +1325,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.4
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Polygon:

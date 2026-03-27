@@ -1,7 +1,0 @@
-# Overlay config for Iceland - Dark Relief scheme
-# Disables roads, ferry routes, and natural features
-layers:
-  road:
-    visible: false
-  natural:
-    visible: false

@@ -90,10 +90,10 @@ map:
     zorder: 0
   info:
     color: '#9a9a93'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -553,7 +553,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -733,7 +733,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -915,7 +915,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.2
+      linewidth: 0.3
     attributes:
       dissolve:
       - 1003River

@@ -1,5 +1,0 @@
-# Overlay config for San Francisco, CA - Dark Relief scheme
-# Disables ferry routes
-layers:
-  highway__LineString:
-    visible: false

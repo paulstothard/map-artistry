@@ -1,7 +1,0 @@
-# Overlay config for Vestland, Norway - Dark Relief scheme
-# Disables ferry routes
-layers:
-  road__LineString:
-    visible: false
-  road__MultiLineString:
-    visible: false

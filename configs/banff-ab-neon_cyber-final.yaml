@@ -48,7 +48,7 @@ map:
     enabled: true
     padding: 0.04
   hillshade:
-    alpha: 1.0
+    alpha: 0.12
     altitude: 34
     azimuth: 315
     azimuths:
@@ -66,7 +66,7 @@ map:
         weight: 0.58
       - sigma: 1.4
         weight: 0.42
-    render_mode: tinted
+    render_mode: cmap
     sigma: 0.0
     tint:
       highlight_color: '#52f7ff'
@@ -79,9 +79,9 @@ map:
       clip_low: 0.18
       contrast: 1.55
       gamma: 0.92
-    unsharp_amount: 0.7
-    unsharp_radius: 1.1
-    vert_exag: 2.5
+    unsharp_amount: 0.2
+    unsharp_radius: 0.6
+    vert_exag: 1.4
     weights:
     - 1.3
     - 1.0
@@ -90,10 +90,10 @@ map:
     zorder: 0
   info:
     color: '#67f8ff'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -276,15 +276,15 @@ layers:
     file: downloads/regions/banff-ab/layers/highway.gpkg
     layer: highway
     geometry_type: LineString
-    visible: false
+    visible: true
     default:
-      fc: '#6b4dff'
-      ec: '#6b4dff'
-      alpha: 0.0
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -855,28 +855,28 @@ layers:
       highway:
         path: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         tertiary_link: {}
         footway: {}
         cycleway: {}
         steps: {}
         secondary:
-          linewidth: 0.4
+          linewidth: 1.1
         bridleway: {}
         motorway:
-          linewidth: 0.7
+          linewidth: 1.35
         corridor: {}
         motorway_link: {}
         unclassified:
-          linewidth: 0.2
+          linewidth: 0.34
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         pedestrian: {}
         busway: {}
         secondary_link: {}
@@ -899,13 +899,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#6b4dff'
-      ec: '#6b4dff'
-      alpha: 0.0
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -1207,15 +1207,15 @@ layers:
     file: downloads/regions/banff-ab/layers/highway.gpkg
     layer: highway
     geometry_type: Polygon
-    visible: false
+    visible: true
     default:
-      fc: '#6b4dff'
-      ec: '#6b4dff'
-      alpha: 0.0
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#6b4dff'
+      edge_color: '#ffd84d'
       edge_width: 0
     attributes:
       element:
@@ -1442,15 +1442,15 @@ layers:
     file: downloads/regions/banff-ab/layers/highway.gpkg
     layer: highway
     geometry_type: MultiLineString
-    visible: false
+    visible: true
     default:
-      fc: '#6b4dff'
-      ec: '#6b4dff'
-      alpha: 0.0
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -1696,12 +1696,12 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         footway: {}
       maxspeed:
         '30': {}
@@ -1984,8 +1984,8 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#02070a'
-      ec: '#02070a'
+      fc: '#06243a'
+      ec: '#06243a'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -1998,7 +1998,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.12
         visible: true
-      edge_color: '#02070a'
+      edge_color: '#06243a'
       edge_width: 0
     attributes:
       element:
@@ -2019,8 +2019,8 @@ layers:
     geometry_type: MultiPolygon
     visible: true
     default:
-      fc: '#02070a'
-      ec: '#02070a'
+      fc: '#06243a'
+      ec: '#06243a'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -2033,7 +2033,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.12
         visible: true
-      edge_color: '#02070a'
+      edge_color: '#06243a'
       edge_width: 0
     attributes:
       element:
@@ -2048,13 +2048,13 @@ layers:
     geometry_type: LineString
     visible: true
     default:
-      fc: '#2effff'
-      ec: '#2effff'
-      alpha: 0.9
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -2070,15 +2070,15 @@ layers:
     style_rules:
       waterway:
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
         canal:
-          linewidth: 0.25
+          linewidth: 1.0
         dam: {}
         flowline: {}
         ditch:
-          linewidth: 0
+          linewidth: 0.3
         waterfall: {}
     style_order:
     - waterway
@@ -2088,13 +2088,13 @@ layers:
     geometry_type: MultiLineString
     visible: true
     default:
-      fc: '#2effff'
-      ec: '#2effff'
-      alpha: 0.9
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -2105,7 +2105,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Point:
@@ -2114,13 +2114,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#2effff'
-      ec: '#2effff'
-      alpha: 0.9
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
       marker: o
       size: 3
     attributes:

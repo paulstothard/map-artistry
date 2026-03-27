@@ -881,6 +881,72 @@ def _render_panel_stats_element(
             current_x += stat["width"] + spacing
 
 
+def _render_map_info_text(fig, ax, info_cfg):
+    """Render lightweight map info text with panel-style scalable typography."""
+    if not info_cfg or not info_cfg.get("show", False):
+        return
+
+    content = str(info_cfg.get("text", "")).strip()
+    if not content:
+        return
+
+    transform_type = info_cfg.get("transform", "none")
+    if transform_type == "uppercase":
+        content = content.upper()
+    elif transform_type == "lowercase":
+        content = content.lower()
+
+    pos_map = {
+        "top-left": (0.01, 0.99),
+        "top-right": (0.99, 0.99),
+        "bottom-left": (0.01, 0.01),
+        "bottom-right": (0.99, 0.01),
+    }
+    position = info_cfg.get("position", "bottom-right")
+    x_default, y_default = pos_map.get(position, (0.99, 0.01))
+    x = float(info_cfg.get("x", x_default))
+    y = float(info_cfg.get("y", y_default))
+
+    default_ha = "right" if "right" in position else "left"
+    default_va = "top" if "top" in position else "bottom"
+    ha = info_cfg.get("h_align", default_ha)
+    va = info_cfg.get("v_align", default_va)
+
+    font_family = info_cfg.get("font", "Inter")
+    font_weight = info_cfg.get("font_weight", "normal")
+    color = info_cfg.get("color", "#000000")
+    alpha = float(info_cfg.get("alpha", 1.0))
+    tracking = float(info_cfg.get("tracking", 0.0))
+
+    map_height_fraction = float(ax.get_position().height)
+    map_height_pts = fig.get_size_inches()[1] * map_height_fraction * 72.0
+
+    size_frac = float(info_cfg.get("size", 0.01))
+    fontsize = max(1.0, float(size_frac) * map_height_pts)
+
+    if tracking > 0:
+        spaced_text = content[0] if content else ""
+        for char in content[1:]:
+            spaced_text += "\u200a" * max(1, int(tracking * 10)) + char
+        content = spaced_text
+
+    ax.text(
+        x,
+        y,
+        content,
+        transform=ax.transAxes,
+        ha=ha,
+        va=va,
+        fontfamily=font_family,
+        fontweight=font_weight,
+        fontsize=fontsize,
+        color=color,
+        alpha=alpha,
+        zorder=info_cfg.get("zorder", 2000),
+        clip_on=False,
+    )
+
+
 def _local_name(tag):
     return tag.rsplit("}", 1)[-1] if "}" in tag else tag
 
@@ -2426,29 +2492,6 @@ def draw_map_from_config(
                 ax, route_coords, elevation_data, elevation_cfg, mask_gdf
             )
 
-    # Draw info text if enabled
-    info = mcfg.get("info", {})
-    if info.get("show", False) and info.get("text"):
-        pos_map = {
-            "top-left": (0.01, 0.99),
-            "top-right": (0.99, 0.99),
-            "bottom-left": (0.01, 0.01),
-            "bottom-right": (0.99, 0.01),
-        }
-        x, y = pos_map.get(info["position"], (0.99, 0.01))
-        ax.text(
-            x,
-            y,
-            info["text"],
-            transform=ax.transAxes,
-            ha="right" if "right" in info["position"] else "left",
-            va="top" if "top" in info["position"] else "bottom",
-            font=info.get("font", "DejaVu Sans"),
-            fontsize=info.get("fontsize", 10),
-            color=info.get("color", "#000000"),
-            zorder=100,
-        )
-
     # Render info panel if configured
     panel_cfg = mcfg.get("info_panel")
     if panel_cfg and panel_cfg.get("enabled", False):
@@ -2467,6 +2510,9 @@ def draw_map_from_config(
             cfg,
             use_separate_axes=(panel_ax is not None),
         )
+
+    # Draw info text last so it is never hidden by profile/panel overlays.
+    _render_map_info_text(fig, ax, mcfg.get("info", {}))
 
     # always save to file
     fig.savefig(

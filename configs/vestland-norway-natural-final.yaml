@@ -56,10 +56,10 @@ map:
     cmap: gray
     interpolation: bicubic
     multidirectional: true
-    sigma: 0.0
-    unsharp_amount: 1.2
-    unsharp_radius: 2.0
-    vert_exag: 2.0
+    sigma: 0.6
+    unsharp_amount: 0.7
+    unsharp_radius: 1.0
+    vert_exag: 1.2
     weights:
     - 1.3
     - 1.0
@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#2f3b2f'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -185,7 +185,7 @@ map:
     percentiles:
     - 2
     - 98
-    shade_strength: 0.6
+    shade_strength: 0.45
     visible: true
     zorder: 0
   water_hillshade:
@@ -546,13 +546,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#8a826d'
-      ec: '#8a826d'
-      alpha: 0.42
+      fc: '#2b2b2b'
+      ec: '#2b2b2b'
+      alpha: 0.92
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -726,13 +726,13 @@ layers:
     geometry_type: MultiLineString
     visible: false
     default:
-      fc: '#8a826d'
-      ec: '#8a826d'
-      alpha: 0.42
+      fc: '#2b2b2b'
+      ec: '#2b2b2b'
+      alpha: 0.92
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -914,7 +914,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       dissolve:
       - 1003River

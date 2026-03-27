@@ -12,7 +12,7 @@ map:
     height: 0.04
     route:
       alpha: 0.9
-      color: '#ff7a7a'
+      color: '#f0d6a0'
       enabled: true
       end_marker:
         color: '#ffe082'
@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#ffffff'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -623,7 +623,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -772,7 +772,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -838,7 +838,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       dissolve:
       - 187River

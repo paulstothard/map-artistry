@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#000000'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -302,7 +302,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -1707,33 +1707,33 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         footway: {}
         steps: {}
         path: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         tertiary_link: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         primary:
-          linewidth: 0.4
+          linewidth: 1.15
         primary_link: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         corridor: {}
         trunk:
-          linewidth: 0.5
+          linewidth: 1.25
         secondary_link: {}
         secondary:
-          linewidth: 0.4
+          linewidth: 1.1
         cycleway: {}
         motorway:
-          linewidth: 0.6
+          linewidth: 1.35
         trunk_link: {}
         motorway_link: {}
         pedestrian: {}
@@ -1771,7 +1771,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -2217,18 +2217,18 @@ layers:
       highway:
         footway: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         corridor: {}
         path: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         steps: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
     style_order:
     - highway
   highway__Point:
@@ -2243,7 +2243,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -3234,12 +3234,12 @@ layers:
       highway:
         pedestrian: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         footway: {}
         corridor: {}
         elevator: {}
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         rest_area: {}
         street_lamp: {}
@@ -3722,7 +3722,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -3740,15 +3740,15 @@ layers:
     style_rules:
       waterway:
         drain:
-          linewidth: 0.25
+          linewidth: 0.35
         stream:
-          linewidth: 0.4
+          linewidth: 0.55
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         canal:
-          linewidth: 0.8
+          linewidth: 1.0
         ditch:
-          linewidth: 0.2
+          linewidth: 0.3
         weir: {}
         tidal_channel: {}
         dam: {}
@@ -3767,7 +3767,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
       marker: o
       size: 3
     attributes:

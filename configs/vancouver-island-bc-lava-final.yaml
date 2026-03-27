@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#808080'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -635,13 +635,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -782,15 +782,15 @@ layers:
     file: downloads/regions/vancouver-island-bc/layers/road.gpkg
     layer: road
     geometry_type: MultiLineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -856,7 +856,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       dissolve:
       - 187River

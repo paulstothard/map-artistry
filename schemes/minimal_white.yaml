@@ -15,8 +15,8 @@ map:
     text: map-artistry
     show: false
     position: bottom-right
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
+    size: 0.01
     color: '#b8b8b2'
   hillshade:
     azimuth: 315
@@ -193,8 +193,8 @@ map:
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
 water:
-  fc: '#f1f2ee'
-  ec: '#f1f2ee'
+  fc: '#dce8f2'
+  ec: '#dce8f2'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -216,8 +216,8 @@ water:
     interpolation: bilinear
     max_texture_dim: 1024
 ocean:
-  fc: '#eeefea'
-  ec: '#eeefea'
+  fc: '#d4e2ed'
+  ec: '#d4e2ed'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -239,9 +239,9 @@ ocean:
     interpolation: bilinear
     max_texture_dim: 1024
 waterway:
-  fc: '#dfe0da'
-  ec: '#dfe0da'
-  alpha: 0.75
+  fc: '#9fbfd5'
+  ec: '#9fbfd5'
+  alpha: 0.92
   ew: 0
   zorder: 3
   visible: true
@@ -254,18 +254,18 @@ waterway:
     MultiPolygon: true
   palette: []
   lw:
-    river: 0.5
-    canal: 0
-    stream: 0.15
-    drain: 0
-    ditch: 0
-    moat: 0
-    rapids: 0
-  default_lw: 0.15
+    river: 1.0
+    canal: 1.0
+    stream: 0.55
+    drain: 0.35
+    ditch: 0.3
+    moat: 0.3
+    rapids: 0.35
+  default_lw: 0.3
 road:
-  fc: '#b4a29a'
-  ec: '#b4a29a'
-  alpha: 0.42
+  fc: '#1a1a1a'
+  ec: '#1a1a1a'
+  alpha: 0.95
   ew: 0
   zorder: 6
   visible: true
@@ -278,17 +278,17 @@ road:
     MultiPolygon: false
   palette: []
   lw:
-    motorway: 0.6
-    trunk: 0.5
-    primary: 0.4
-    secondary: 0.4
-    tertiary: 0.25
-    residential: 0.25
-    unclassified: 0.15
-    service: 0.15
-    living_street: 0.15
-    track: 0.15
-  default_lw: 0.15
+    motorway: 1.35
+    trunk: 1.25
+    primary: 1.15
+    secondary: 1.1
+    tertiary: 0.92
+    residential: 0.85
+    unclassified: 0.34
+    service: 0.34
+    living_street: 0.32
+    track: 0.28
+  default_lw: 0.22
 building:
   fc: '#ddd9d2'
   ec: '#ddd9d2'

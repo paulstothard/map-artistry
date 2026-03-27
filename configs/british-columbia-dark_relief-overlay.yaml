@@ -1,7 +1,0 @@
-# Overlay config for British Columbia - Dark Relief scheme
-# Disables roads and ferry routes
-layers:
-  road__LineString:
-    visible: false
-  road__MultiLineString:
-    visible: false

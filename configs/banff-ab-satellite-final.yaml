@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#000000'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -281,7 +281,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -852,28 +852,28 @@ layers:
       highway:
         path: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         tertiary_link: {}
         footway: {}
         cycleway: {}
         steps: {}
         secondary:
-          linewidth: 0.4
+          linewidth: 1.1
         bridleway: {}
         motorway:
-          linewidth: 0.6
+          linewidth: 1.35
         corridor: {}
         motorway_link: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         pedestrian: {}
         busway: {}
         secondary_link: {}
@@ -902,7 +902,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -1447,7 +1447,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -1693,12 +1693,12 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         footway: {}
       maxspeed:
         '30': {}
@@ -2035,7 +2035,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -2051,15 +2051,15 @@ layers:
     style_rules:
       waterway:
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         stream:
-          linewidth: 0.4
+          linewidth: 0.55
         canal:
-          linewidth: 0.8
+          linewidth: 1.0
         dam: {}
         flowline: {}
         ditch:
-          linewidth: 0.2
+          linewidth: 0.3
         waterfall: {}
     style_order:
     - waterway
@@ -2075,7 +2075,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -2086,7 +2086,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.4
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Point:
@@ -2101,7 +2101,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
       marker: o
       size: 3
     attributes:

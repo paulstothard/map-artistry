@@ -90,10 +90,10 @@ map:
         weight: 0.35
   info:
     color: '#808080'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -203,16 +203,16 @@ layers:
     file: downloads/regions/patagonia/layers/building.gpkg
     layer: building
     geometry_type: Polygon
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#00eaff'
+      ec: '#007d8a'
+      alpha: 0.9
       zorder: 7
-      visible: false
+      visible: true
       palette: []
-      edge_color: '#ffffff'
-      edge_width: 0
+      edge_color: '#007d8a'
+      edge_width: 0.08
     attributes:
       element:
       - way
@@ -238,15 +238,15 @@ layers:
     file: downloads/regions/patagonia/layers/highway.gpkg
     layer: highway
     geometry_type: LineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -499,22 +499,22 @@ layers:
     style_rules:
       highway:
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         footway: {}
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         construction: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         primary:
-          linewidth: 0.4
+          linewidth: 1.15
         bridleway: {}
         steps: {}
       maxspeed:
@@ -535,13 +535,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -674,15 +674,15 @@ layers:
     file: downloads/regions/patagonia/layers/highway.gpkg
     layer: highway
     geometry_type: MultiLineString
-    visible: false
+    visible: true
     default:
-      fc: '#ffffff'
-      ec: '#ffffff'
-      alpha: 0.0
+      fc: '#1f4e79'
+      ec: '#1f4e79'
+      alpha: 0.92
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -848,15 +848,15 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         footway: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
     style_order:
     - highway
   landuse__Polygon:
@@ -1283,7 +1283,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1295,9 +1295,9 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
         river:
-          linewidth: 0.8
+          linewidth: 1.0
         dam: {}
     style_order:
     - waterway
@@ -1313,7 +1313,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1327,7 +1327,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.25
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Polygon:

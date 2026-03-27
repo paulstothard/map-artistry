@@ -45,7 +45,7 @@ map:
     enabled: true
     padding: 0.04
   hillshade:
-    alpha: 1.0
+    alpha: 0.12
     altitude: 33
     azimuth: 315
     azimuths:
@@ -63,7 +63,7 @@ map:
         weight: 0.66
       - sigma: 2.2
         weight: 0.34
-    render_mode: tinted
+    render_mode: cmap
     sigma: 0.0
     tint:
       highlight_color: '#ead8bc'
@@ -76,9 +76,9 @@ map:
       clip_low: 0.08
       contrast: 1.02
       gamma: 1.03
-    unsharp_amount: 0.42
-    unsharp_radius: 1.3
-    vert_exag: 2.1
+    unsharp_amount: 0.2
+    unsharp_radius: 0.6
+    vert_exag: 1.4
     weights:
     - 1.25
     - 1.0
@@ -87,10 +87,10 @@ map:
     zorder: 0
   info:
     color: '#8a7358'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -481,8 +481,8 @@ layers:
     geometry_type: MultiPolygon
     visible: true
     default:
-      fc: '#d2bea0'
-      ec: '#d2bea0'
+      fc: '#adbbc7'
+      ec: '#adbbc7'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -495,7 +495,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.1
         visible: true
-      edge_color: '#d2bea0'
+      edge_color: '#adbbc7'
       edge_width: 0
     attributes:
       NAME:
@@ -544,13 +544,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#a18567'
-      ec: '#a18567'
-      alpha: 0.0
+      fc: '#5f4a36'
+      ec: '#5f4a36'
+      alpha: 0.78
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -724,13 +724,13 @@ layers:
     geometry_type: MultiLineString
     visible: false
     default:
-      fc: '#a18567'
-      ec: '#a18567'
-      alpha: 0.0
+      fc: '#5f4a36'
+      ec: '#5f4a36'
+      alpha: 0.78
       zorder: 6
-      visible: false
+      visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '9'
@@ -798,8 +798,8 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#d8c6a7'
-      ec: '#d8c6a7'
+      fc: '#b7c4cf'
+      ec: '#b7c4cf'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -812,7 +812,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.08
         visible: true
-      edge_color: '#d8c6a7'
+      edge_color: '#b7c4cf'
       edge_width: 0
     attributes:
       featurecla:
@@ -906,13 +906,13 @@ layers:
     geometry_type: LineString
     visible: true
     default:
-      fc: '#b08b62'
-      ec: '#b08b62'
-      alpha: 0.85
+      fc: '#6e7f8b'
+      ec: '#6e7f8b'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.2
+      linewidth: 0.3
     attributes:
       dissolve:
       - 1003River

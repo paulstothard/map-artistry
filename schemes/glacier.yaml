@@ -12,8 +12,8 @@ map:
     text: map-artistry
     show: false
     position: bottom-right
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
+    size: 0.01
     color: '#3d4e57'
   hillshade:
     azimuth: 315
@@ -231,18 +231,18 @@ waterway:
     MultiPolygon: true
   palette: []
   lw:
-    river: 0.8
-    canal: 0
-    stream: 0.4
-    drain: 0
-    ditch: 0
-    moat: 0
-    rapids: 0
-  default_lw: 0.25
+    river: 1.0
+    canal: 1.0
+    stream: 0.55
+    drain: 0.35
+    ditch: 0.3
+    moat: 0.3
+    rapids: 0.35
+  default_lw: 0.3
 road:
-  fc: '#5b737d'
-  ec: '#5b737d'
-  alpha: 0.48
+  fc: '#1f5f8b'
+  ec: '#1f5f8b'
+  alpha: 0.94
   ew: 0
   zorder: 6
   visible: true
@@ -255,23 +255,23 @@ road:
     MultiPolygon: false
   palette: []
   lw:
-    motorway: 0.6
-    trunk: 0.5
-    primary: 0.4
-    secondary: 0.4
-    tertiary: 0.25
-    residential: 0.25
-    unclassified: 0.15
-    service: 0.15
-    living_street: 0.15
-    track: 0.15
-  default_lw: 0.15
+    motorway: 1.35
+    trunk: 1.25
+    primary: 1.15
+    secondary: 1.1
+    tertiary: 0.92
+    residential: 0.85
+    unclassified: 0.34
+    service: 0.34
+    living_street: 0.32
+    track: 0.28
+  default_lw: 0.22
 building:
-  fc: '#6d828c'
-  ec: '#6d828c'
-  alpha: 0.18
+  fc: '#c77f54'
+  ec: '#f1efe8'
+  alpha: 0.86
   zorder: 7
-  ew: 0
+  ew: 0.08
   visible: true
   geometry_visibility:
     Point: false

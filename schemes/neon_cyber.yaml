@@ -1,10 +1,10 @@
 map:
   background:
-    fc: "#020304"
-    ec: "#020304"
+    fc: '#020304'
+    ec: '#020304'
   frame:
     enabled: true
-    color: "#67f8ff"
+    color: '#67f8ff'
     padding: 0.04
   scheme: neon_cyber
   debug_water_hillshade: false
@@ -12,32 +12,32 @@ map:
     text: map-artistry
     show: false
     position: bottom-right
-    font: Gill Sans
-    fontsize: 8
-    color: "#67f8ff"
+    font: Inter
+    size: 0.01
+    color: '#67f8ff'
   hillshade:
     azimuth: 315
     altitude: 34
     azimuths:
-      - 315
-      - 45
-      - 270
-      - 90
+    - 315
+    - 45
+    - 270
+    - 90
     weights:
-      - 1.3
-      - 1.0
-      - 0.7
-      - 0.7
+    - 1.3
+    - 1.0
+    - 0.7
+    - 0.7
     multidirectional: true
-    vert_exag: 2.5
+    vert_exag: 1.4
     cmap: gray
-    alpha: 1.0
+    alpha: 0.12
     sigma: 0.0
-    unsharp_radius: 1.1
-    unsharp_amount: 0.7
+    unsharp_radius: 0.6
+    unsharp_amount: 0.2
     interpolation: bicubic
     zorder: 0
-    render_mode: tinted
+    render_mode: cmap
     tone:
       clip_low: 0.18
       clip_high: 0.97
@@ -46,16 +46,16 @@ map:
       bias: 0.0
       ambient: 0.1
     tint:
-      shadow_color: "#010203"
-      mid_color: "#08141b"
-      highlight_color: "#52f7ff"
+      shadow_color: '#010203'
+      mid_color: '#08141b'
+      highlight_color: '#52f7ff'
     multiscale:
       enabled: true
       scales:
-        - sigma: 6.5
-          weight: 0.58
-        - sigma: 1.4
-          weight: 0.42
+      - sigma: 6.5
+        weight: 0.58
+      - sigma: 1.4
+        weight: 0.42
   water_hillshade:
     blur_sigma: 7.0
     contrast: 0.25
@@ -65,23 +65,23 @@ map:
     alpha: 1.0
     zorder: 0
     percentiles:
-      - 2
-      - 98
+    - 2
+    - 98
     stretch: linear
     stretch_exponent: 1.0
     blend_mode: soft_light
     shade_strength: 0.6
     interpolation: bicubic
     colors:
-      - "#010203"
-      - "#041017"
-      - "#061720"
-      - "#0a2430"
-      - "#0f3441"
-      - "#184a58"
-      - "#246f7c"
-      - "#35a9b2"
-      - "#63ffff"
+    - '#010203'
+    - '#041017'
+    - '#061720'
+    - '#0a2430'
+    - '#0f3441'
+    - '#184a58'
+    - '#246f7c'
+    - '#35a9b2'
+    - '#63ffff'
   satellite:
     visible: false
     opacity: 1.0
@@ -90,76 +90,76 @@ map:
     position: bottom
     height: 0.12
     background:
-      color: "#63ffff"
+      color: '#63ffff'
       alpha: 1.0
     padding: 0.015
     zorder: 1000
     elements:
-      - type: title
-        id: title
-        content: ""
-        x: 0.03
-        y: 0.65
-        font: Inter
-        font_weight: bold
-        size: 0.42
-        color: "#020304"
-        alpha: 1.0
-        align: left
-        transform: uppercase
-        tracking: 0.10
-      - type: text
-        id: subtitle
-        content: ""
-        x: 0.03
-        y: 0.25
-        font: Inter
-        font_weight: normal
-        size: 0.14
-        color: "#0a1a20"
-        alpha: 1.0
-        align: left
-        transform: uppercase
-        tracking: 0.06
-      - type: text
-        id: location
-        content: ""
-        x: 0.97
-        y: 0.65
-        font: Inter
-        font_weight: normal
-        size: 0.14
-        color: "#0a1a20"
-        alpha: 1.0
-        align: right
-        transform: uppercase
-        tracking: 0.06
-      - type: stats
-        id: stats
-        items: []
-        x: 0.97
-        y: 0.30
-        align: right
-        layout: horizontal
-        spacing: 0.04
-        font: Inter
-        value_size: 0.22
-        value_weight: bold
-        value_color: "#020304"
-        value_alpha: 1.0
-        label_size: 0.10
-        label_weight: normal
-        label_color: "#0a1a20"
-        label_alpha: 1.0
-        transform: uppercase
+    - type: title
+      id: title
+      content: ''
+      x: 0.03
+      y: 0.65
+      font: Inter
+      font_weight: bold
+      size: 0.42
+      color: '#020304'
+      alpha: 1.0
+      align: left
+      transform: uppercase
+      tracking: 0.1
+    - type: text
+      id: subtitle
+      content: ''
+      x: 0.03
+      y: 0.25
+      font: Inter
+      font_weight: normal
+      size: 0.14
+      color: '#0a1a20'
+      alpha: 1.0
+      align: left
+      transform: uppercase
+      tracking: 0.06
+    - type: text
+      id: location
+      content: ''
+      x: 0.97
+      y: 0.65
+      font: Inter
+      font_weight: normal
+      size: 0.14
+      color: '#0a1a20'
+      alpha: 1.0
+      align: right
+      transform: uppercase
+      tracking: 0.06
+    - type: stats
+      id: stats
+      items: []
+      x: 0.97
+      y: 0.3
+      align: right
+      layout: horizontal
+      spacing: 0.04
+      font: Inter
+      value_size: 0.22
+      value_weight: bold
+      value_color: '#020304'
+      value_alpha: 1.0
+      label_size: 0.1
+      label_weight: normal
+      label_color: '#0a1a20'
+      label_alpha: 1.0
+      transform: uppercase
   elevation_profile:
     enabled: true
     height: 0.04
-    color: "#ff5cf0"
+    color: '#ff5cf0'
     alpha: 0.9
     route:
       enabled: true
-      color: "#ff5cf0"
+      color: '#ff5cf0'
       linewidth: 4.0
       alpha: 0.85
       sampling:
@@ -169,29 +169,29 @@ map:
         max_points: 500
       outline:
         enabled: true
-        color: "#07141b"
+        color: '#07141b'
         linewidth: 0.9
       start_marker:
         style: concentric_circles
-        color: "#64d977"
-        ring_color: "#64d977"
-        fill_color: "#020304"
+        color: '#64d977'
+        ring_color: '#64d977'
+        fill_color: '#020304'
         size: 8.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
       end_marker:
         style: concentric_circles
-        color: "#ff5c93"
-        ring_color: "#ff5c93"
-        fill_color: "#020304"
+        color: '#ff5c93'
+        ring_color: '#ff5c93'
+        fill_color: '#020304'
         size: 8.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
 water:
-  fc: "#02070a"
-  ec: "#02070a"
+  fc: '#06243a'
+  ec: '#06243a'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -213,8 +213,8 @@ water:
     interpolation: bilinear
     max_texture_dim: 1024
 ocean:
-  fc: "#010508"
-  ec: "#010508"
+  fc: '#041a2b'
+  ec: '#041a2b'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -236,9 +236,9 @@ ocean:
     interpolation: bilinear
     max_texture_dim: 1024
 waterway:
-  fc: "#2effff"
-  ec: "#2effff"
-  alpha: 0.9
+  fc: '#55f6ff'
+  ec: '#55f6ff'
+  alpha: 0.96
   ew: 0
   zorder: 3
   visible: true
@@ -251,44 +251,44 @@ waterway:
     MultiPolygon: true
   palette: []
   lw:
-    river: 0.8
-    canal: 0.25
-    stream: 0.25
-    drain: 0
-    ditch: 0
-    moat: 0
-    rapids: 0
-  default_lw: 0.25
+    river: 1.0
+    canal: 1.0
+    stream: 0.55
+    drain: 0.35
+    ditch: 0.3
+    moat: 0.3
+    rapids: 0.35
+  default_lw: 0.3
 road:
-  fc: "#6b4dff"
-  ec: "#6b4dff"
-  alpha: 0.0
+  fc: '#ffd84d'
+  ec: '#ffd84d'
+  alpha: 0.92
   ew: 0
   zorder: 6
-  visible: false
+  visible: true
   geometry_visibility:
     Point: false
     MultiPoint: false
-    LineString: false
-    MultiLineString: false
-    Polygon: false
-    MultiPolygon: false
+    LineString: true
+    MultiLineString: true
+    Polygon: true
+    MultiPolygon: true
   palette: []
   lw:
-    motorway: 0.7
-    trunk: 0.6
-    primary: 0.5
-    secondary: 0.4
-    tertiary: 0.25
-    residential: 0.25
-    unclassified: 0.2
-    service: 0.15
-    living_street: 0.15
-    track: 0.15
-  default_lw: 0.15
+    motorway: 1.35
+    trunk: 1.25
+    primary: 1.15
+    secondary: 1.1
+    tertiary: 0.92
+    residential: 0.85
+    unclassified: 0.34
+    service: 0.34
+    living_street: 0.32
+    track: 0.28
+  default_lw: 0.22
 building:
-  fc: "#00c2ff"
-  ec: "#00c2ff"
+  fc: '#00c2ff'
+  ec: '#00c2ff'
   alpha: 0.0
   zorder: 7
   ew: 0
@@ -302,8 +302,8 @@ building:
     MultiPolygon: false
   palette: []
 natural:
-  fc: "#041117"
-  ec: "#041117"
+  fc: '#041117'
+  ec: '#041117'
   alpha: 0.0
   zorder: 1
   ew: 0
@@ -317,8 +317,8 @@ natural:
     MultiPolygon: true
   palette: []
 landuse:
-  fc: "#041117"
-  ec: "#041117"
+  fc: '#041117'
+  ec: '#041117'
   alpha: 0.0
   zorder: 2
   ew: 0
@@ -332,8 +332,8 @@ landuse:
     MultiPolygon: false
   palette: []
 railway:
-  fc: "#8f74ff"
-  ec: "#8f74ff"
+  fc: '#8f74ff'
+  ec: '#8f74ff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -348,8 +348,8 @@ railway:
   palette: []
   default_lw: 0.15
 transport:
-  fc: "#8f74ff"
-  ec: "#8f74ff"
+  fc: '#8f74ff'
+  ec: '#8f74ff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -364,8 +364,8 @@ transport:
   palette: []
   default_lw: 0.15
 places:
-  fc: "#67f8ff"
-  ec: "#67f8ff"
+  fc: '#67f8ff'
+  ec: '#67f8ff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -379,8 +379,8 @@ places:
     MultiPolygon: false
   palette: []
 poi:
-  fc: "#67f8ff"
-  ec: "#67f8ff"
+  fc: '#67f8ff'
+  ec: '#67f8ff'
   alpha: 0.0
   zorder: 1
   ew: 0
@@ -396,8 +396,8 @@ poi:
   marker: o
   size: 0.1
 pofw:
-  fc: "#8f74ff"
-  ec: "#8f74ff"
+  fc: '#8f74ff'
+  ec: '#8f74ff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -411,8 +411,8 @@ pofw:
     MultiPolygon: false
   palette: []
 traffic:
-  fc: "#8f74ff"
-  ec: "#8f74ff"
+  fc: '#8f74ff'
+  ec: '#8f74ff'
   alpha: 0.0
   zorder: 5
   ew: 0
@@ -427,8 +427,8 @@ traffic:
   palette: []
   default_lw: 0.15
 other:
-  fc: "#8f74ff"
-  ec: "#8f74ff"
+  fc: '#8f74ff'
+  ec: '#8f74ff'
   alpha: 0.0
   zorder: 0
   ew: 0

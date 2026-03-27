@@ -87,10 +87,10 @@ map:
         weight: 0.35
   info:
     color: '#3d4e57'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -630,13 +630,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#5b737d'
-      ec: '#5b737d'
-      alpha: 0.48
+      fc: '#1f5f8b'
+      ec: '#1f5f8b'
+      alpha: 0.94
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -779,13 +779,13 @@ layers:
     geometry_type: MultiLineString
     visible: true
     default:
-      fc: '#5b737d'
-      ec: '#5b737d'
-      alpha: 0.48
+      fc: '#1f5f8b'
+      ec: '#1f5f8b'
+      alpha: 0.94
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       scalerank:
       - '3'
@@ -851,7 +851,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.25
+      linewidth: 0.3
     attributes:
       dissolve:
       - 187River

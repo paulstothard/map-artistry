@@ -90,10 +90,10 @@ map:
     zorder: 0
   info:
     color: '#9a9a93'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -242,7 +242,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -495,22 +495,22 @@ layers:
     style_rules:
       highway:
         unclassified:
-          linewidth: 0.25
+          linewidth: 0.34
         tertiary:
-          linewidth: 0.4
+          linewidth: 0.92
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         footway: {}
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         construction: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         primary:
-          linewidth: 0.6
+          linewidth: 1.15
         bridleway: {}
         steps: {}
       maxspeed:
@@ -537,7 +537,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -678,7 +678,7 @@ layers:
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -844,15 +844,15 @@ layers:
     style_rules:
       highway:
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         footway: {}
         tertiary:
-          linewidth: 0.4
+          linewidth: 0.92
     style_order:
     - highway
   landuse__Polygon:
@@ -1279,7 +1279,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.2
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1291,9 +1291,9 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.2
+          linewidth: 0.55
         river:
-          linewidth: 0.6
+          linewidth: 1.0
         dam: {}
     style_order:
     - waterway
@@ -1309,7 +1309,7 @@ layers:
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.2
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -1323,7 +1323,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.2
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Polygon:

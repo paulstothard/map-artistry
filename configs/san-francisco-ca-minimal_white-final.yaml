@@ -42,8 +42,11 @@ map:
         style: concentric_circles
   frame:
     alpha: 0.35
+    color: '#b08f8f'
     ec: '#b08f8f'
+    enabled: true
     fc: '#b08f8f'
+    padding: 0.04
   hillshade:
     alpha: 1.0
     altitude: 36
@@ -87,10 +90,10 @@ map:
     zorder: 0
   info:
     color: '#b8b8b2'
-    font: Gill Sans
-    fontsize: 8
+    font: Inter
     position: bottom-right
     show: false
+    size: 0.01
     text: map-artistry
   info_panel:
     background:
@@ -294,13 +297,13 @@ layers:
     geometry_type: MultiLineString
     visible: true
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -1358,23 +1361,23 @@ layers:
     style_rules:
       highway:
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         path: {}
         footway: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         cycleway: {}
         bridleway: {}
         tertiary_link: {}
         steps: {}
         corridor: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         pedestrian: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
       maxspeed:
         5 mph: {}
         25 mph: {}
@@ -1389,13 +1392,13 @@ layers:
     geometry_type: LineString
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
     attributes:
       element:
       - way
@@ -4637,26 +4640,26 @@ layers:
     style_rules:
       highway:
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         primary:
-          linewidth: 0.4
+          linewidth: 1.15
         trunk:
-          linewidth: 0.5
+          linewidth: 1.25
         path: {}
         tertiary:
-          linewidth: 0.25
+          linewidth: 0.92
         cycleway: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         secondary:
-          linewidth: 0.4
+          linewidth: 1.1
         motorway:
-          linewidth: 0.6
+          linewidth: 1.35
         motorway_link: {}
         residential:
-          linewidth: 0.25
+          linewidth: 0.85
         footway: {}
         secondary_link: {}
         tertiary_link: {}
@@ -4672,7 +4675,7 @@ layers:
         platform: {}
         proposed: {}
         living_street:
-          linewidth: 0.15
+          linewidth: 0.32
         ladder: {}
         escape: {}
         raceway: {}
@@ -4702,13 +4705,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.22
       marker: o
       size: 3
     attributes:
@@ -6533,13 +6536,13 @@ layers:
     geometry_type: Polygon
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      edge_color: '#b4a29a'
+      edge_color: '#1a1a1a'
       edge_width: 0
     attributes:
       element:
@@ -7791,15 +7794,15 @@ layers:
         platform: {}
         elevator: {}
         unclassified:
-          linewidth: 0.15
+          linewidth: 0.34
         service:
-          linewidth: 0.15
+          linewidth: 0.34
         path: {}
         steps: {}
         bus_stop: {}
         rest_area: {}
         track:
-          linewidth: 0.15
+          linewidth: 0.28
         corridor: {}
         hitchhiking: {}
     style_order:
@@ -7810,13 +7813,13 @@ layers:
     geometry_type: MultiPolygon
     visible: false
     default:
-      fc: '#b4a29a'
-      ec: '#b4a29a'
-      alpha: 0.42
+      fc: '#1a1a1a'
+      ec: '#1a1a1a'
+      alpha: 0.95
       zorder: 6
       visible: true
       palette: []
-      edge_color: '#b4a29a'
+      edge_color: '#1a1a1a'
       edge_width: 0
     attributes:
       element:
@@ -8909,8 +8912,8 @@ layers:
     geometry_type: MultiPolygon
     visible: true
     default:
-      fc: '#eeefea'
-      ec: '#eeefea'
+      fc: '#d4e2ed'
+      ec: '#d4e2ed'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -8923,7 +8926,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.04
         visible: true
-      edge_color: '#eeefea'
+      edge_color: '#d4e2ed'
       edge_width: 0
     attributes:
       NAME:
@@ -9180,8 +9183,8 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#f1f2ee'
-      ec: '#f1f2ee'
+      fc: '#dce8f2'
+      ec: '#dce8f2'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -9194,7 +9197,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.03
         visible: true
-      edge_color: '#f1f2ee'
+      edge_color: '#dce8f2'
       edge_width: 0
     attributes:
       element:
@@ -9225,8 +9228,8 @@ layers:
     geometry_type: MultiPolygon
     visible: true
     default:
-      fc: '#f1f2ee'
-      ec: '#f1f2ee'
+      fc: '#dce8f2'
+      ec: '#dce8f2'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -9239,7 +9242,7 @@ layers:
         max_texture_dim: 1024
         strength: 0.03
         visible: true
-      edge_color: '#f1f2ee'
+      edge_color: '#dce8f2'
       edge_width: 0
     attributes:
       element:
@@ -9262,8 +9265,8 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#f1f2ee'
-      ec: '#f1f2ee'
+      fc: '#dce8f2'
+      ec: '#dce8f2'
       alpha: 1.0
       zorder: 4
       visible: true
@@ -9293,13 +9296,13 @@ layers:
     geometry_type: LineString
     visible: true
     default:
-      fc: '#dfe0da'
-      ec: '#dfe0da'
-      alpha: 0.75
+      fc: '#9fbfd5'
+      ec: '#9fbfd5'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -9320,18 +9323,18 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.15
+          linewidth: 0.55
         canal:
-          linewidth: 0
+          linewidth: 1.0
         drain:
-          linewidth: 0
+          linewidth: 0.35
         pressurised: {}
         ditch:
-          linewidth: 0
+          linewidth: 0.3
         dam: {}
         tidal_channel: {}
         river:
-          linewidth: 0.5
+          linewidth: 1.0
         floating_barrier: {}
         flowline: {}
         sluice_gate: {}
@@ -9344,13 +9347,13 @@ layers:
     geometry_type: MultiLineString
     visible: true
     default:
-      fc: '#dfe0da'
-      ec: '#dfe0da'
-      alpha: 0.75
+      fc: '#9fbfd5'
+      ec: '#9fbfd5'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.3
     attributes:
       element:
       - way
@@ -9363,7 +9366,7 @@ layers:
     style_rules:
       waterway:
         stream:
-          linewidth: 0.15
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Point:
@@ -9372,13 +9375,13 @@ layers:
     geometry_type: Point
     visible: false
     default:
-      fc: '#dfe0da'
-      ec: '#dfe0da'
-      alpha: 0.75
+      fc: '#9fbfd5'
+      ec: '#9fbfd5'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      linewidth: 0.15
+      linewidth: 0.3
       marker: o
       size: 3
     attributes:
@@ -9420,7 +9423,7 @@ layers:
         fairway: {}
         lock_gate: {}
         stream:
-          linewidth: 0.15
+          linewidth: 0.55
     style_order:
     - waterway
   waterway__Polygon:
@@ -9429,13 +9432,13 @@ layers:
     geometry_type: Polygon
     visible: true
     default:
-      fc: '#dfe0da'
-      ec: '#dfe0da'
-      alpha: 0.75
+      fc: '#9fbfd5'
+      ec: '#9fbfd5'
+      alpha: 0.92
       zorder: 3
       visible: true
       palette: []
-      edge_color: '#dfe0da'
+      edge_color: '#9fbfd5'
       edge_width: 0
     attributes:
       element:
