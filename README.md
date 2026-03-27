@@ -94,6 +94,9 @@ just build --width 36 --height 24 "Iceland" river_runs_red
 # Build with custom dimensions, DPI, format, and boundary buffer
 just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
 
+# Save output to a custom folder
+just build --output-dir my-maps "Edmonton, AB" coral
+
 # List available color schemes
 just schemes
 ```
@@ -247,7 +250,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/banff-ab-night.png"><img src="examples/thumbnails/banff-ab-night.png" alt="Banff - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -305,7 +309,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/british-columbia-night.png"><img src="examples/thumbnails/british-columbia-night.png" alt="British Columbia - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -363,7 +368,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/cape-town-south-africa-night.png"><img src="examples/thumbnails/cape-town-south-africa-night.png" alt="Cape Town - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -421,7 +427,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/edmonton-ab-night.png"><img src="examples/thumbnails/edmonton-ab-night.png" alt="Edmonton - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -479,7 +486,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/iceland-night.png"><img src="examples/thumbnails/iceland-night.png" alt="Iceland - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -537,7 +545,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/oahu-hi-night.png"><img src="examples/thumbnails/oahu-hi-night.png" alt="Oahu - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -595,7 +604,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/patagonia-night.png"><img src="examples/thumbnails/patagonia-night.png" alt="Patagonia - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -653,7 +663,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/san-francisco-ca-night.png"><img src="examples/thumbnails/san-francisco-ca-night.png" alt="San Francisco - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -711,7 +722,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/vancouver-bc-night.png"><img src="examples/thumbnails/vancouver-bc-night.png" alt="Vancouver - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -769,7 +781,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/vancouver-island-bc-night.png"><img src="examples/thumbnails/vancouver-island-bc-night.png" alt="Vancouver Island - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -827,7 +840,8 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/vestland-norway-night.png"><img src="examples/thumbnails/vestland-norway-night.png" alt="Vestland - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -892,7 +906,8 @@ directly from the GPX track bounding box, with no separate region argument requi
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/edmonton-ab-route-edmonton-110km-night.png"><img src="examples/thumbnails/edmonton-ab-route-edmonton-110km-night.png" alt="Edmonton Loop - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>
@@ -950,7 +965,8 @@ directly from the GPX track bounding box, with no separate region argument requi
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <sub>night (coming soon)</sub>
+      <a href="examples/full/edmonton-50km-night.png"><img src="examples/thumbnails/edmonton-50km-night.png" alt="River Valley Loop - Night" width="200"></a><br>
+      <sub>night</sub>
     </td>
   </tr>
 </table>

@@ -7,6 +7,7 @@
 #   just build "Edmonton, AB" coral
 #   just build --width 36 --height 24 "Vancouver Island, BC" natural
 #   just build --buffer-km 20 "Victoria, BC" natural
+#   just build --output-dir my-maps "Edmonton, AB" coral
 #   just build-route "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
 #   just build-route --text-title "EDMONTON LOOP" --text-stats "94 KM||DISTANCE" "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral
 #   just build-gpx downloads/cycling-routes/my-ride.gpx coral
@@ -46,8 +47,9 @@ cache_dir := "cache"
 [arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
-build region scheme width="24" height="24" dpi="600" format="png" buffer_km="":
-    @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}"
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+build region scheme width="24" height="24" dpi="600" format="png" buffer_km="" output_dir="output":
+    @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ output_dir }}"
 
 # Build a route map from region + GPX (region boundary with GPX route overlay)
 [arg("height", long="height", help="Map height in inches")]
@@ -60,8 +62,9 @@ build region scheme width="24" height="24" dpi="600" format="png" buffer_km="":
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-build-route region gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto":
-    @just _build-map-route "{{ region }}" "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}"
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+build-route region gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
+    @just _build-map-route "{{ region }}" "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
 # Build a route map from GPX only (derive region boundary from GPX bbox)
 [arg("height", long="height", help="Map height in inches")]
@@ -74,8 +77,9 @@ build-route region gpx scheme width="24" height="24" dpi="600" format="png" buff
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-build-gpx gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto":
-    @just _build-map-gpx "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}"
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+build-gpx gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
+    @just _build-map-gpx "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
 # List available color schemes
 schemes:
@@ -86,9 +90,9 @@ help:
     @echo "Map Artistry - Dynamic Map Generation"
     @echo ""
     @echo "Usage:"
-    @echo "  just build [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] REGION SCHEME"
-    @echo "  just build-route [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] REGION GPX SCHEME"
-    @echo "  just build-gpx [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km 20] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] GPX SCHEME"
+    @echo "  just build [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] [--output-dir output] REGION SCHEME"
+    @echo "  just build-route [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] REGION GPX SCHEME"
+    @echo "  just build-gpx [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km 20] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] GPX SCHEME"
     @echo ""
     @echo "Examples:"
     @echo '  just build "Edmonton, AB" coral'
@@ -111,6 +115,7 @@ help:
     @echo "  --text-location  Stats panel location label (build-route / build-gpx only)"
     @echo "  --text-stats     Stats panel metrics: VALUE||LABEL pairs separated by ;; (build-route / build-gpx only)"
     @echo "  --text-units     Route stat units: auto, metric, imperial (default: auto)"
+    @echo "  --output-dir     Output folder for generated images (default: output)"
     @echo ""
     @echo "Other commands:"
     @echo "  just schemes  - List available color schemes"
@@ -133,7 +138,7 @@ help:
 # ============================================================================
 
 # Main build orchestration
-_build-map region scheme width height dpi format buffer:
+_build-map region scheme width height dpi format buffer output_dir:
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -384,7 +389,7 @@ _build-map region scheme width height dpi format buffer:
     echo ""
 
 # Build orchestration for region + GPX route map
-_build-map-route region gpx scheme width height dpi format buffer text_title text_subtitle text_location text_stats text_units:
+_build-map-route region gpx scheme width height dpi format buffer text_title text_subtitle text_location text_stats text_units output_dir:
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -599,7 +604,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo "✅ Route map complete: $OUTPUT_FILE"
 
 # Build orchestration for GPX-only route map (region derived from GPX bbox)
-_build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitle text_location text_stats text_units:
+_build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitle text_location text_stats text_units output_dir:
     #!/usr/bin/env bash
     set -euo pipefail
 
