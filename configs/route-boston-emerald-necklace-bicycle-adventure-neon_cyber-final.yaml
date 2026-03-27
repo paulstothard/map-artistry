@@ -1,0 +1,7439 @@
+# YAML configuration for map rendering
+# zorder controls drawing order: higher values are drawn on top
+# You can override default styles per feature type by editing the style_rules section
+map:
+  background:
+    ec: '#020304'
+    fc: '#020304'
+  debug_water_hillshade: false
+  elevation_profile:
+    alpha: 0.9
+    color: '#ff5cf0'
+    enabled: true
+    height: 0.04
+    route:
+      alpha: 0.85
+      color: '#ff5cf0'
+      enabled: true
+      end_marker:
+        color: '#ff5c93'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#020304'
+        ring_color: '#ff5c93'
+        ring_width_scale: 0.14
+        size: 8.0
+        style: concentric_circles
+      linewidth: 4.0
+      outline:
+        color: '#07141b'
+        enabled: true
+        linewidth: 0.9
+      sampling:
+        interval_m: 300
+        max_points: 500
+        min_points: 40
+        mode: distance_interval
+      start_marker:
+        color: '#64d977'
+        core_edge_width_scale: 0.035
+        core_radius_scale: 0.17
+        fill_color: '#020304'
+        ring_color: '#64d977'
+        ring_width_scale: 0.14
+        size: 8.0
+        style: concentric_circles
+  frame:
+    color: '#67f8ff'
+    enabled: true
+    padding: 0.04
+  hillshade:
+    alpha: 0.12
+    altitude: 34
+    azimuth: 315
+    azimuths:
+    - 315
+    - 45
+    - 270
+    - 90
+    cmap: gray
+    interpolation: bicubic
+    multidirectional: true
+    multiscale:
+      enabled: true
+      scales:
+      - sigma: 6.5
+        weight: 0.58
+      - sigma: 1.4
+        weight: 0.42
+    render_mode: cmap
+    sigma: 0.0
+    tint:
+      highlight_color: '#52f7ff'
+      mid_color: '#08141b'
+      shadow_color: '#010203'
+    tone:
+      ambient: 0.1
+      bias: 0.0
+      clip_high: 0.97
+      clip_low: 0.18
+      contrast: 1.55
+      gamma: 0.92
+    unsharp_amount: 0.2
+    unsharp_radius: 0.6
+    vert_exag: 1.4
+    weights:
+    - 1.3
+    - 1.0
+    - 0.7
+    - 0.7
+    zorder: 0
+  info:
+    color: '#67f8ff'
+    font: Inter
+    position: bottom-right
+    show: false
+    size: 0.01
+    text: map-artistry
+  info_panel:
+    background:
+      alpha: 1.0
+      color: '#63ffff'
+    elements:
+    - align: left
+      alpha: 1.0
+      color: '#020304'
+      content: BOSTON-EMERALD NECKLACE BICYCLE ADVENTURE
+      font: Inter
+      font_weight: bold
+      id: title
+      size: 0.42
+      tracking: 0.1
+      transform: uppercase
+      type: title
+      x: 0.03
+      y: 0.65
+    - align: left
+      alpha: 1.0
+      color: '#0a1a20'
+      content: OLMSTED PARKS TOUR
+      font: Inter
+      font_weight: normal
+      id: subtitle
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.03
+      y: 0.25
+    - align: right
+      alpha: 1.0
+      color: '#0a1a20'
+      content: ''
+      font: Inter
+      font_weight: normal
+      id: location
+      size: 0.14
+      tracking: 0.06
+      transform: uppercase
+      type: text
+      x: 0.97
+      y: 0.65
+    - align: right
+      font: Inter
+      id: stats
+      items:
+      - value: 38.5 MI
+        label: DISTANCE
+      - value: 1,260 FT
+        label: ELEV GAIN
+      label_alpha: 1.0
+      label_color: '#0a1a20'
+      label_size: 0.1
+      label_weight: normal
+      layout: horizontal
+      spacing: 0.04
+      transform: uppercase
+      type: stats
+      value_alpha: 1.0
+      value_color: '#020304'
+      value_size: 0.22
+      value_weight: bold
+      x: 0.97
+      y: 0.3
+    enabled: true
+    height: 0.12
+    padding: 0.015
+    position: bottom
+    zorder: 1000
+  satellite:
+    opacity: 1.0
+    visible: false
+    path: downloads/routes/boston-emerald-necklace-bicycle-adventure/satellite.tif
+  scheme: neon_cyber
+  terrain:
+    alpha: 1.0
+    blend_mode: soft_light
+    colors:
+    - '#010203'
+    - '#041017'
+    - '#061720'
+    - '#0a2430'
+    - '#0f3441'
+    - '#184a58'
+    - '#246f7c'
+    - '#35a9b2'
+    - '#63ffff'
+    interpolation: bicubic
+    percentiles:
+    - 2
+    - 98
+    shade_strength: 0.6
+    stretch: linear
+    stretch_exponent: 1.0
+    visible: false
+    zorder: 0
+  water_hillshade:
+    bias: 0.02
+    blur_sigma: 7.0
+    contrast: 0.25
+  route_gpx: downloads/cycling-routes/Boston-Emerald_Necklace_Bicycle_Adventure.gpx
+  dem: downloads/routes/boston-emerald-necklace-bicycle-adventure/dem.tif
+layers:
+  building__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/building.gpkg
+    layer: building
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#00c2ff'
+      ec: '#00c2ff'
+      alpha: 0.0
+      zorder: 7
+      visible: false
+      palette: []
+      edge_color: '#00c2ff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 266511
+      building: 98
+  building__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/building.gpkg
+    layer: building
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#00c2ff'
+      ec: '#00c2ff'
+      alpha: 0.0
+      zorder: 7
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 186
+      building:
+      - 'yes'
+      - retail
+      - office
+      - hospital
+      - university
+      - roof
+      - residential
+      - industrial
+      - boathouse
+      - public
+      - 'no'
+      - commercial
+      - bunker
+      - shed
+      - brewery
+  building__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/building.gpkg
+    layer: building
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#00c2ff'
+      ec: '#00c2ff'
+      alpha: 0.0
+      zorder: 7
+      visible: false
+      palette: []
+      edge_color: '#00c2ff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id:
+      - '214074973'
+      - '552194320'
+      - '20348880'
+      - '8718736'
+      - '8724504'
+      - '20325815'
+      - '341650826'
+      - '20304843'
+      - '20345313'
+      - '20345318'
+      - '20270834'
+      - '2843139'
+      - '6021747'
+      - '20304842'
+      - '20313704'
+      - '214731070'
+      - '214731075'
+      - '214731087'
+      - '9075962'
+      - '29837034'
+      - '29896413'
+      - '29966916'
+      - '216423509'
+      - '212016907'
+      - '216423496'
+      - '196448949'
+      - '196458222'
+      - '196448910'
+      - '139812660'
+      - '36894801'
+      - '65377'
+      - '200090901'
+      - '29938924'
+      building:
+      - 'yes'
+      - train_station
+      - university
+      - apartments
+      - train_station;yes
+      - school
+      - retail
+      - public
+  highway__LineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/highway.gpkg
+    layer: highway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.22
+    attributes:
+      element:
+      - way
+      id: 132348
+      highway:
+      - primary
+      - residential
+      - service
+      - motorway
+      - motorway_link
+      - trunk
+      - footway
+      - secondary
+      - tertiary
+      - trunk_link
+      - secondary_link
+      - tertiary_link
+      - path
+      - unclassified
+      - track
+      - cycleway
+      - steps
+      - proposed
+      - primary_link
+      - pedestrian
+      - construction
+      - busway
+      - living_street
+      - corridor
+      - residential_link
+      - emergency_bay
+      stop: []
+      traffic_signals:
+      - signal
+      - 'no'
+      - 'yes'
+      traffic_signals:direction: []
+      crossing:
+      - uncontrolled
+      - unmarked
+      - traffic_signals
+      - marked
+      - zebra
+      - '2'
+      - '22'
+      - informal
+      - pedestrian_signals
+      - unknown
+      - 'yes'
+      - marking
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing:markings:
+      - ladder
+      - 'yes'
+      - 'no'
+      - surface
+      - lines
+      - ladder:skewed
+      - solid_color
+      - zebra
+      - dots
+      - dashes
+      - ladder:paired
+      - transverse_liness
+      - lines;surface
+      - pictograms
+      - surface;lines
+      - dashes;pictograms
+      - longitudinal_bars2
+      - lines:paired
+      - lader
+      - zebra;lines
+      - dashes;surface
+      kerb:
+      - lowered
+      - raised
+      tactile_paving:
+      - 'yes'
+      - 'no'
+      - incorrect
+      - partial
+      restriction:
+      - only_right_turn
+      noref: []
+      direction:
+      - backward
+      - forward
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      - ped_sign
+      - traffic_signals
+      button_operated:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound:
+      - walk
+      - 'yes'
+      - 'no'
+      - locate
+      - sensor
+      traffic_signals:vibration:
+      - 'yes'
+      - 'no'
+      mapillary: 82
+      survey:date:
+      - '2024-03-12'
+      - '2022-07-23'
+      - '2021-04-29'
+      - '2024-03-19'
+      - '2024-03-04'
+      - '2024-03-15'
+      - '2024-03-14'
+      - '2021-07-21'
+      - '2023-03-26'
+      - '2023-03-24'
+      - '2023-07-11'
+      - '2023-03-27'
+      surface:
+      - asphalt
+      - concrete
+      - unpaved
+      - paved
+      - dirt
+      - gravel
+      - brick
+      - paving_stones
+      - wood
+      - ground
+      - fine_gravel
+      - grass
+      - compacted
+      - metal
+      - woodchips
+      - pebblestone
+      - concrete:plates
+      - bricks
+      - stone
+      - bitmac
+      - grass_paver
+      - rock
+      - artificial_turf
+      - cobblestone
+      - stepping_stones
+      - sett
+      - as'
+      - concrete:lanes
+      - concrete;asphalt
+      - asphalt;concrete
+      - metal_grid
+      - unhewn_cobblestone
+      - carpet
+      - block
+      - sand
+      - rubber
+      - earth
+      - dirt/sand
+      - paving_stonesc
+      - stones
+      - cobblestone:flattened
+      - crushed_stone
+      crossing_ref:
+      - ladder
+      - standard
+      - zebra
+      - unmarked
+      bicycle:
+      - 'no'
+      - designated
+      - 'yes'
+      - unknown
+      - private
+      - dismount
+      - permissive
+      - destination
+      - discouraged
+      - permit
+      junction:
+      - roundabout
+      - jughandle
+      - circular
+      - intersection
+      image: []
+      traffic_calming:
+      - table
+      - 'no'
+      - rumble_strip
+      - choker
+      - hump
+      name: 9153
+      ref: 146
+      ref:left: []
+      attribution:
+      - Office of Geographic and Environmental Information (MassGIS)
+      - MassGIS;Local Knowledge;Bing
+      - Office of Geographic and Environmental Information (MassGIS)c
+      source: 146
+      bus:
+      - 'yes'
+      - designated
+      - 'no'
+      - only
+      departures_board: []
+      network:
+      - rcn
+      network:wikidata: []
+      network:wikipedia: []
+      operator:
+      - Division of State Parks and Recreation
+      - MBTA
+      - Massachusetts Bay Transportation Authority
+      - Eastern Nazarene College
+      - Friends of the Public Garden
+      - Massachusetts Institute of Techonology
+      - Massachusetts Department of Environmental Protection
+      - MassDOT
+      - DCR
+      public_transport:
+      - platform
+      - platform_access
+      shelter:
+      - 'yes'
+      traffic_signals:turn:backward: []
+      turning_circle: []
+      traffic_signals:turn:forward: []
+      old_ref:
+      - US 1
+      - SR 3
+      automated: []
+      currency:USD: []
+      fee:
+      - 'yes'
+      - 'no'
+      height: []
+      man_made:
+      - pier
+      - pipeline
+      manufacturer: []
+      material:
+      - granite
+      - concrete
+      - stone
+      - brick
+      - wood
+      operator:short:
+      - MBTA
+      operator:type:
+      - government
+      - private
+      operator:wikidata:
+      - Q130236044
+      - Q171985
+      payment:e_zpass: []
+      payment:online: []
+      support: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      toll:
+      - 'yes'
+      - 'no'
+      ref:right: []
+      fixme:
+      - What's the access on this stretch, and is the bridge open?
+      - Roughed in sidewalk but may need field verfication
+      - Is this a real road? Have driven by it and it always looks like a footway.
+      - Alignment may be incorrect
+      - Access=private implies people wouldn't be able to get here without trespassing,
+        which I doubt is the case here. Remove that tag?
+      - missing slope
+      - field check surface
+      - is this a sidewalk anymore?
+      - These width values are ridiculously large, please correct
+      - What level is this crossing on? It connects to -1 but crosses 1
+      - Is this really the entry route for hazmats returning to I-93 SB? It seems
+        a bit premature...but someone's going to have to ground-truth what the trailblazer
+        signs say about the route
+      - rough location of footbridge between CFLS and BIDMC based on memory and aerial
+        photography - may need addition check
+      - Check for bike lane in one direction (not clear in imagery)
+      - Check for bike lane (not clear in imagery)
+      - layers need work in this area - see keepright
+      - check lanes
+      - 'yes'
+      - where does this have access or connect to a road network?
+      - Need help locating this segment. Should it be deleted?
+      email:
+      - info@cryomedboston.com
+      phone: []
+      place: []
+      website:
+      - https://www.cambridgema.gov/CDD/Projects/Transportation/GrandJunctionPathway
+      - http://pathfriends.org/
+      - http://minutemanbikeway.org/
+      - http://www.minutemanbikeway.org/
+      - https://www.neighborways.com/somernova-alley
+      - https://www.mass.gov/service-details/find-a-healthy-heart-trail
+      - https://www.winthropma.gov/187/Parking-Rules-at-the-Public-Landing
+      brand: []
+      charge:
+      - $10
+      network:short: []
+      supervised: []
+      traffic_sign:backward: []
+      traffic_signals:countdown:
+      - 'yes'
+      - 'no'
+      check_date:crossing: []
+      hazard:
+      - deer
+      alt_name: 51
+      line: []
+      massgis:geom_id: []
+      bench:
+      - 'yes'
+      - 'no'
+      bin:
+      - 'yes'
+      - 'no'
+      lit:
+      - 'yes'
+      - 'no'
+      - 24/7
+      wikidata:
+      - Q1247150
+      - Q2298678
+      - Q5082069
+      - Q7337834
+      - Q14629066
+      - Q1907324
+      - Q87748080
+      - Q133249312
+      - Q12061865
+      - Q87742155
+      - Q7961482
+      - Q4716578
+      - Q896007
+      - Q7017243
+      - Q1116311
+      - Q118220523
+      - Q11276979
+      - Q1587840
+      - Q4875985
+      - Q6029752
+      - Q8026344
+      - Q8026342
+      - Q49477780
+      - Q5171732
+      - Q134095606
+      - Q4947932
+      - Q151966
+      - Q151956
+      - Q5090136
+      - Q78076712
+      gtfs:stop_id: []
+      wheelchair:
+      - 'yes'
+      - 'no'
+      - designated
+      - limited
+      level:
+      - 1;0
+      - 0;1
+      - '1'
+      - '0'
+      - '-1'
+      - 0;-1
+      - '-0.5'
+      - '-2'
+      - -1;-1.5
+      - '-1.5'
+      - -0.5;-1.5
+      - -1.5;-0.5
+      - 0;-0.5
+      - -0.5;-1
+      - -1.5;-2
+      - -1;-2
+      - '2'
+      - -1;-0.5
+      - -0.5;0
+      - -1;0
+      - '6'
+      - '3'
+      - 0;0.5
+      - '0.5'
+      - 0.5;0
+      - 0;-2
+      - 1;2
+      - 2;3
+      - 2;1
+      - -1;2
+      - 1;-1
+      - -1;1
+      - '4'
+      - 0;2
+      - '7'
+      - 0;1;2;3;4;5;6;7
+      - 6;7
+      - 0;1;2;3;4;5;6
+      - -2;-1
+      - 0;2;4
+      - 1;2;3;4
+      - 0.5;1
+      - 1-3
+      - 1;3
+      - 3;2
+      - 1;2;3
+      check_date:shelter: []
+      addr:city: []
+      addr:housenumber:
+      - '66'
+      - 'yes'
+      addr:postcode:
+      - permit
+      addr:state: []
+      addr:street:
+      - Colborne Road
+      amenity: []
+      wikipedia:
+      - en:Storrow Drive
+      - en:Soldiers Field Road
+      - en:Charles River Bike Path
+      - en:River Street Bridge (Charles River)
+      - en:John W. Weeks Bridge
+      - en:Massachusetts Avenue (metropolitan Boston)
+      - en:Minuteman Bikeway
+      - en:Walden Street Cattle Pass
+      - en:Alewife Linear Park
+      - en:South Bay Harbor Trail
+      - en:Boylston Street
+      - en:Newbury Street
+      - en:Commonwealth Avenue (Boston)
+      - en:Boston Opera House (1980)
+      - en:Boston Fire Department
+      - en:Harvard Bridge
+      - en:Beacon Street
+      - en:Boston Public Garden Foot Bridge
+      - en:Winter Street Concourse
+      - en:Winter Street (Boston)
+      - en:Cornhill, Boston
+      - en:Boston Harborwalk
+      description:
+      - Birch Street Plaza
+      - Alley Primarily used for private parking and dumpsters
+      - Apartment complex called Bradford Terrace
+      - Station and community path access
+      - Alley
+      - raised crossing with concrete sidewalk panels and outlining curbing
+      - Low tide path
+      - parking alley for multiple residenses
+      - BCEC freight and bus
+      - BCEC parking an Loading Dock access
+      - BCEC freight and bus and parking
+      - BCEC freight and parking
+      - MBTA bus lane
+      - covid19=temporary pedestrian-only
+      - covid19=temporary cycleway
+      - Tunnel Egress (TE-505)
+      - Tunnel Egress (TE-609)
+      - 'Water Street is shown on Boston City Maps: <http://app01.cityofboston.gov/parcelviewer/>,
+        <https://mapjunction.com/bra> E-Streets Layer, and <https://goo.gl/maps/hEA1ZTdoPAD2>
+        St. Signs. Note: Warren St Bridge was replaced by New Charles River Dam ~1977.'
+      - Covered, enclosed footbridge from Station Landing Garage to Wellington Station
+      note: 102
+      kerb:left: []
+      kerb:right: []
+      footway:crossing:markings:
+      - ladder
+      - zebra
+      lamp_mount: []
+      lamp_type: []
+      check_date: 77
+      check_date:lit:
+      - '2025-11-02'
+      - '2026-01-04'
+      route_ref: []
+      gtfs:feed: []
+      network:guid: []
+      layer:
+      - '1'
+      - '-1'
+      - '2'
+      - '0'
+      - '3'
+      - '-2'
+      - '-1.5'
+      - '-3'
+      hiking: []
+      information: []
+      mtb:
+      - 'no'
+      tourism:
+      - attraction
+      check_date:traffic_signals:sound: []
+      check_date:traffic_signals:vibration: []
+      barrier:
+      - kerb
+      cycleway:
+      - lane
+      - shared_lane
+      - track
+      - crossing
+      - traffic_island
+      - separate
+      - 'no'
+      - 'yes'
+      - shared
+      - share_busway
+      - construction
+      - link
+      indoor:
+      - 'yes'
+      - 'no'
+      check_date:tactile_paving:
+      - '2025-06-04'
+      - '2023-06-23'
+      covered:
+      - 'yes'
+      - 'no'
+      - asphalt
+      - colonnade
+      - building_arcade
+      kerb:approach_aid: []
+      passenger_information_display: []
+      disused:highway: []
+      emergency:
+      - designated
+      - 'yes'
+      old_name: 129
+      addr:unit: []
+      not:network:wikidata: []
+      light_rail: []
+      railway:
+      - abandoned
+      - platform
+      flag: []
+      pole: []
+      shelter_type: []
+      loc_name:
+      - Maranville Street
+      - Scary Way
+      designation:
+      - public_footpath
+      passenger_information_display:speech_output: []
+      temporary:access: []
+      trolleybus:
+      - 'yes'
+      check_date:bench: []
+      check_date:bin: []
+      train: []
+      access:
+      - private
+      - 'yes'
+      - destination
+      - customers
+      - permissive
+      - 'no'
+      - unknown
+      - permit
+      - residents
+      - restricted
+      - designated
+      - service
+      - delivery
+      - emergency
+      - employees
+      - bus
+      - hov
+      noexit:
+      - 'yes'
+      light:method: []
+      crossing:barrier: []
+      foot:
+      - 'no'
+      - 'yes'
+      - designated
+      - permissive
+      - private
+      - use_sidepath
+      - unknown
+      - destination
+      - permit
+      - customers
+      surface:colour:
+      - red
+      - yellow
+      colour:
+      - yellow
+      - green
+      gate:type: []
+      locked:
+      - 'no'
+      historic:
+      - 'yes'
+      start_date: 55
+      traffic_sign:forward: []
+      power: []
+      transformer: []
+      location:transition: []
+      traffic_sign:
+      - 'yes'
+      traffic_signals:lanes: []
+      flashing_lights:
+      - button
+      - button;sensor
+      - 'no'
+      - sensor
+      - 'yes'
+      couplings: []
+      fire_hydrant:position: []
+      fire_hydrant:type: []
+      water_source: []
+      ele:
+      - '1'
+      ele:msl: []
+      ele:source: []
+      location:
+      - outdoor
+      - roof
+      - underground
+      - indoor
+      brand:wikidata: []
+      elevator: []
+      automatic_door: []
+      door: []
+      parking:
+      - surface
+      addr:country: []
+      distance: []
+      marker: []
+      milestone_type: []
+      wikimedia_commons:
+      - Category:Boylston Street
+      - Category:Newbury Street
+      contact:email: []
+      denotation: []
+      generator:source: []
+      heritage:operator: []
+      inscription: []
+      lamp_operator: []
+      light:colour: []
+      bollard: []
+      bridge:support: []
+      access:conditional:
+      - 'no'
+      - private @ (Mo 07:00-07:30,15:15-15:45; Tu 07:00-07:30,13:50-14:15; We-Th 07:00-07:30,15:15-15:45;
+        Fr 07:00-07:30,13:50-14:15)
+      - destination @ (Mo-Fr 15:15-15:45)
+      - destination @ (Mo-Fr 07:00-17:00)
+      - no @ 20:00-07:00
+      - yes @ (Mo-Sa 10:00-21:00; Su 11:00-19:00)
+      - yes @ (sunrise-sunset)
+      artist_name: []
+      artwork_type: []
+      camera:direction: []
+      camera:mount: []
+      camera:type: []
+      generator:method: []
+      generator:output:electricity: []
+      generator:type: []
+      maxspeed:
+      - 45 mph
+      - 55 mph
+      - 25 mph
+      - 30 mph
+      - 35 mph
+      - 15 mph
+      - 10 mph
+      - 20 mph
+      - 40 mph
+      - 5 mph
+      - signals
+      - 6 mph
+      - 50 mph
+      - 7 mph
+      - '25'
+      - '20'
+      - 3 mph
+      - 24 mph
+      - 8 mph
+      lamp:direction: []
+      camera:height: []
+      lamp:height: []
+      contact:website: []
+      capacity: []
+      maxweight:
+      - '2.27'
+      - 2.5 st
+      - '2.5'
+      - 80000 lbs
+      - 11 st
+      - 20 st
+      - '5'
+      - 32 st
+      - 6 st
+      - 12000 lbs
+      - 9000 lbs
+      - 10 st
+      - '86.4'
+      - 8 st
+      check_date:wheelchair: []
+      entrance: []
+      communication: []
+      oneway:
+      - 'yes'
+      - 'no'
+      - '-1'
+      - reversible
+      - alternating
+      tunnel:
+      - building_passage
+      - 'yes'
+      - covered
+      - 'no'
+      - passage
+      marked: []
+      access:disabled:
+      - designated
+      maxwidth: []
+      source:maxwidth: []
+      boat: []
+      waterway:sign: []
+      access:delivery: []
+      footway:
+      - sidewalk
+      - crossing
+      - traffic_island
+      - access_aisle
+      - link
+      - private
+      - platform
+      - residential
+      - crosswalk
+      - path
+      smoothness:
+      - very_bad
+      - horrible
+      - good
+      - intermediate
+      - excellent
+      - bad
+      - impassable
+      - very_horrible
+      crossing:markings:colour:
+      - white
+      traffic_signals:arrow:
+      - 'yes'
+      ref:signed: []
+      public_transport:version: []
+      crossing:continuous:
+      - 'yes'
+      line_attachment: []
+      lanes:
+      - '2'
+      - '1'
+      - '5'
+      - '4'
+      - '3'
+      - '6'
+      - '7'
+      sidewalk:
+      - 'no'
+      - right
+      - both
+      - separate
+      - left
+      - 'yes'
+      turn:lanes: 263
+      light_source: []
+      light:tilt: []
+      bridge:
+      - 'yes'
+      - viaduct
+      - boardwalk
+      - covered
+      - movable
+      - pedestrian
+      condition:
+      - fair
+      - deficient
+      - good
+      - intolerable
+      - poor
+      - fair;good
+      - deficient;fair
+      - fair;deficient
+      - good;deficient
+      - good;fair
+      - goodc
+      - working
+      hgv:
+      - 'yes'
+      - designated
+      - 'no'
+      - destination
+      massgis:way_id: 11272
+      width: 284
+      sidewalk:both:
+      - separate
+      - 'no'
+      - 'yes'
+      lanes:backward:
+      - '2'
+      - '1'
+      - '3'
+      - '4'
+      lanes:forward:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      massgis:ref: 86
+      parking:both:
+      - lane
+      - 'no'
+      - 'yes'
+      - separate
+      - street_side
+      turn:lanes:forward: 74
+      cycleway:buffer:
+      - 'no'
+      - 'yes'
+      - 2'
+      - 4'
+      - 5'
+      - 3'
+      cycleway:width:
+      - 6'0"
+      - 13'8"
+      - 10'4"
+      - 5'
+      - 6'
+      - 7'
+      - '7'
+      - 3'0"
+      - 5'10"
+      source:hgv:
+      - MassGIS
+      source:maxspeed:
+      - massgis
+      - Massachusetts General Law 90-17
+      - survey
+      - sign
+      - Note 4632605
+      cycleway:right:
+      - lane
+      - shared_lane
+      - 'no'
+      - track
+      - separate
+      - shoulder
+      - share_busway
+      - separation
+      - 'yes'
+      cycleway:both:
+      - shared_lane
+      - 'no'
+      - lane
+      - track
+      - separate
+      - share_busway
+      - shoulder
+      parking:left:
+      - 'no'
+      - 'yes'
+      - lane
+      - separate
+      - street_side
+      - half_on_kerb
+      - shoulder
+      - on_street
+      parking:right:
+      - 'yes'
+      - 'no'
+      - street_side
+      - lane
+      - half_on_kerb
+      - on_kerb
+      - separate
+      - parallel
+      parking:right:orientation:
+      - parallel
+      - diagonal
+      - perpendicular
+      cycleway:left:
+      - shared_lane
+      - lane
+      - 'no'
+      - share_busway
+      - track
+      - separate
+      - shoulder
+      - ep
+      cycleway:both:lane:
+      - pictogram
+      - exclusive
+      - advisory
+      parking:both:orientation:
+      - parallel
+      - diagonal
+      cycleway:left:lane:
+      - pictogram
+      - exclusive
+      - advisory
+      maxspeed:type:
+      - sign
+      - US:urban
+      turn:lanes:backward: 65
+      cycleway:separation:
+      - flex_post
+      - 'yes'
+      - kerb
+      - parking_lane
+      - solid_line
+      parking:left:orientation:
+      - parallel
+      - diagonal
+      - perpendicular
+      sidewalk:left:
+      - separate
+      - 'no'
+      - 'yes'
+      sidewalk:right:
+      - 'no'
+      - separate
+      - 'yes'
+      cycleway:right:lane:
+      - exclusive
+      - pictogram
+      - advisory
+      cycleway:left:buffer:
+      - 'no'
+      - 'yes'
+      - 3'
+      - 4'
+      cycleway:left:width:
+      - 5'
+      - 6'
+      cycleway:right:buffer:
+      - 'no'
+      - 'yes'
+      - 3'
+      cycleway:oneway:
+      - 'yes'
+      busway:right:
+      - 'yes'
+      - lane
+      - right_lane
+      lanes:bus:
+      - '1'
+      - '2'
+      bicycle_road:
+      - 'yes'
+      oneway:bicycle:
+      - 'no'
+      - 'yes'
+      parking:lane:both:
+      - parallel
+      - 'no'
+      oneway:conditional:
+      - yes @ (Sep 1-Jun 1 Mo-Fr 09:00-16:00)
+      - '-1 @ (17:00-19:00); '
+      - yes @ (07:00-09:00,15:00-19:00)
+      - yes @ (Mo-Fr 15:00-18:00)
+      - yes @ (Mo-Fr 7:00-9:00)
+      - yes @ (18:00-06:00)
+      - yes @ (Mo-Fr 7:30-15:30)
+      - yes @ (07:00-09:00; 14:00-15:00)
+      cycleway:right:oneway:
+      - 'yes'
+      - 'no'
+      - '-1'
+      cycleway:right:separation:
+      - flex_post
+      - 'no'
+      - kerb
+      - 'yes'
+      sidewalk:both:kerb:
+      - raised
+      sidewalk:both:surface:
+      - concrete
+      - paving_stones
+      - concrete:plates
+      shoulder:
+      - right
+      - 'no'
+      - left
+      - both
+      - 'yes'
+      service:
+      - parking_aisle
+      - driveway
+      - drive-through
+      - alley
+      - emergency_access
+      - siding
+      - slipway
+      - shared_driveway
+      - school driveway
+      - pipestem
+      - spur
+      - Bus_Lane
+      lane_markings:
+      - 'no'
+      - 'yes'
+      maxweight:hgv:
+      - 2.5 st
+      - 7 st
+      - 5000 lbs
+      - '2.5'
+      orig_name: 172
+      ramp:
+      - 'no'
+      - 'yes'
+      - separate
+      official_name:
+      - Dorothy "Dottie" Doyle Way
+      - Edwin H. Land Boulevard
+      - Rev Nazareno Properzi Way
+      - Medford Veterans Memorial Highway
+      - Honorable Thomas S Burgin Parkway
+      - General Casimir Pulaski Skyway
+      - Sergeant William G. Walsh Expressway
+      - L. Rafael Reif Innovation Corridor
+      - Robert Lowney Way
+      - William F. McClellan Highway
+      - Timothy J. Mahoney Memorial Circle
+      parking:both:restriction:
+      - no_parking
+      - no_stopping
+      - permit
+      turn:
+      - right
+      - left
+      - through
+      - reverse
+      NHS:
+      - 'yes'
+      name:wam:
+      - "napanatashe ta\uA74Fm\xE2\xF4k"
+      - "nequsuktashe ta\uA74Fm\xE2\xF4k"
+      - "nek\xF4ne ta\uA74Fm\xE2\xF4k"
+      - "neeshwe ta\uA74Fm\xE2\xF4k"
+      - "neese ta\uA74Fm\xE2\xF4k"
+      - "nees\xE2usuktashe ta\uA74Fm\xE2\xF4k"
+      - "neeshw\xF4suktashe ta\uA74Fm\xE2\xF4k"
+      cycleway:left:oneway:
+      - '-1'
+      - 'no'
+      - 'yes'
+      cycleway:left:separation:
+      - flex_post
+      - 'no'
+      - kerb
+      destination: 401
+      destination:ref: 95
+      parking:condition:both:
+      - residents
+      - customers
+      - no_stopping
+      - no_parking
+      - ticket;residents
+      - free
+      sidewalk:right:surface:
+      - concrete
+      - paving_stones
+      - asphalt
+      - concrete:plates
+      - compacted
+      horse:
+      - 'no'
+      - 'yes'
+      - unknown
+      - private
+      - permissive
+      - designated
+      motor_vehicle:
+      - 'no'
+      - 'yes'
+      - permissive
+      - private
+      - destination
+      - customers
+      - permit
+      - designated
+      - emergency
+      - discouraged
+      - delivery
+      - service
+      maxheight: 67
+      maxweight:signed:
+      - 'no'
+      - 'yes'
+      parking:right:restriction:
+      - no_stopping
+      - no_parking
+      - permit
+      name:etymology:wikidata:
+      - Q950330
+      - Q49017151
+      - Q49087220
+      - Q880970
+      - Q771
+      - Q49110
+      - Q7557389
+      - Q366363
+      - Q39419155
+      - Q794927
+      - Q11335096
+      - Q3559737
+      - Q9696
+      - Q8010610
+      - Q2567590
+      - Q307
+      - Q976773
+      - Q380134
+      - Q49838713
+      - Q1043
+      - Q15144
+      - Q8027
+      - Q15488405
+      - Q43303
+      - Q61819200
+      - Q7369
+      - Q23384
+      - Q6501235
+      - Q1339151
+      - Q168432
+      - Q164327
+      - Q1701967
+      - Q192935
+      - Q172478
+      - Q13194939
+      - Q966182
+      - Q529
+      - Q3072064
+      - Q6257847
+      - Q4971853
+      - Q43436
+      - Q249020
+      - Q271628
+      - Q171446
+      - Q182559
+      - Q3954
+      - Q5164087
+      parking:condition:left:
+      - residents
+      - free
+      - no_parking
+      - ticket;residents
+      - ticket
+      parking:lane:left:parallel:
+      - on_street
+      parking:left:restriction:
+      - no_stopping
+      - no_parking
+      destination:symbol:
+      - hospital
+      - motorway
+      - airport
+      - toll
+      sidewalk:left:surface:
+      - concrete
+      - concrete:plates
+      - asphalt
+      segregated:
+      - 'no'
+      - 'yes'
+      - noc
+      check_date:surface:
+      - '2022-09-10'
+      - '2023-05-26'
+      - '2023-07-19'
+      - '2025-07-23'
+      - '2025-11-09'
+      - '2025-01-18'
+      - '2025-06-17'
+      - '2024-07-14'
+      - '2026-01-11'
+      - '2025-08-04'
+      - '2023-11-01'
+      - '2025-11-21'
+      - '2025-11-01'
+      - '2025-11-02'
+      - '2023-03-29'
+      - '2021-04-22'
+      - '2023-06-23'
+      - '2025-01-23'
+      - '2025-08-02'
+      - '2021-05-12'
+      - '2025-05-11'
+      - '2023-11-13'
+      - '2025-07-24'
+      - '2021-07-11'
+      - '2025-09-06'
+      - '2023-08-16'
+      - '2025-08-20'
+      - '2023-05-12'
+      - '2025-11-26'
+      - '2025-06-09'
+      - '2025-06-04'
+      - '2023-02-11'
+      - '2021-08-28'
+      - '2023-06-07'
+      - '2021-09-01'
+      - '2023-03-22'
+      source:width:
+      - ARCore
+      - https://brooklinehistoricalsociety.org/paths/Rawson/rawsonPath.asp
+      - estimated
+      cycleway:both:buffer:
+      - 'no'
+      - 'yes'
+      check_date:smoothness:
+      - '2023-04-15'
+      - '2025-07-22'
+      - '2024-05-12'
+      - '2023-01-13'
+      - '2025-07-21'
+      parking:condition:right:
+      - customers
+      - no_parking
+      - residents
+      - free
+      expressway:
+      - 'no'
+      - 'yes'
+      note:lanes:
+      - 1 northbound, 2 southbound
+      ownership:
+      - municipal
+      - private
+      - public
+      check_date:cycleway:surface:
+      - '2025-05-11'
+      cycleway:surface:
+      - asphalt
+      - concrete
+      - wood
+      footway:surface:
+      - concrete
+      - asphalt
+      - wood
+      - paving_stones
+      parking:fee:
+      - 'yes'
+      name:mk:
+      - "\u0411\u0440\u043E\u0434\u0432\u0435\u0458"
+      - "\u0410\u0432\u0435\u043D\u0438\u0458\u0430 \u041C\u0430\u0441\u0430\u0447\
+        \u0443\u0441\u0435\u0442\u0441"
+      - "\u041F\u0438\u0431\u043E\u0434\u0438 \u0421\u0442\u0440\u0438\u0442"
+      - "\u041A\u0435\u043C\u0431\u0440\u0438\u045F \u0421\u0442\u0440\u0438\u0442"
+      - "\u041E\u043A\u0441\u0444\u043E\u0440\u0434 \u0421\u0442\u0440\u0438\u0442"
+      parking:right:access:
+      - private
+      - permit
+      trolley_wire:
+      - 'yes'
+      - 'no'
+      hazmat:
+      - designated
+      - 'no'
+      - destination
+      short_name:
+      - VFW Parkway
+      - BU Bridge
+      - Birmingham Parkway
+      - O'Brien Highway
+      - Msgr Lydon Way
+      - O'Callaghan Way
+      - Gavin Way
+      - O'Connor Way
+      - Logan Way
+      - Sterling Square
+      - Devine Way
+      - McDonough Way
+      - Reverend Burke Street
+      - Land Boulevard
+      - Grieco Terrace
+      narrow:
+      - 'yes'
+      note:highway:
+      - busway
+      noname:
+      - 'yes'
+      - 'no'
+      FIXME:hgv:
+      - verify
+      destination:street:
+      - Jamaicaway
+      - Riverway
+      - Fresh Pond Parkway
+      - Washington Street
+      - Park Avenue
+      - Lake Street
+      - Dow Avenue
+      - McGrath Highway
+      - Burgin Parkway
+      - Bryant Avenue
+      - Adams Street
+      - Gallivan Boulevard
+      - Morrissey Boulevard
+      - Columbia Road
+      - Southampton Street
+      - William J. Day Boulevard
+      - Brookline Avenue;Boylston Street
+      - Massachusetts Avenue South
+      - Memorial Drive West
+      - Memorial Drive East
+      - Purchase Street
+      - Storrow Drive
+      construction:
+      - tertiary
+      - cycleway
+      - footway
+      - residential
+      - service
+      - unclassified
+      - path
+      - primary
+      - steps
+      incline:
+      - up
+      - down
+      - 0%
+      - -0%
+      - 15%
+      - -15%
+      - 10%
+      - 20%
+      - 'yes'
+      - -10%
+      name:en:
+      - Cambridge Street
+      - Franklin Street
+      name:etymology:
+      - Abby Eldridge
+      - William Hyslop Sumner
+      - John Silber
+      name:etymology:wikipedia:
+      - en:William H. Sumner
+      - en:John Silber
+      maxheight:signed:
+      - 'no'
+      source:maxheight:
+      - ARCore
+      busway:
+      - lane
+      - designated
+      created_by:
+      - JOSM
+      - Potlatch 0.10f
+      tracktype:
+      - grade2
+      - grade3
+      - grade4
+      - grade5
+      - grade1
+      parking:lane:left:
+      - parallel
+      - on_street
+      name_orig:
+      - Ramp-rt 95 Nb To Rt 1a Sb
+      - Ramp-rt 1 Nb To Rt 95 Nb
+      - Ramp-rt 95 Nb To Rt 1 Sb
+      - Ramp-rt 1a Nb To Rt 95 Nb
+      - Ramp-rt 93 Nb To Rt 28 Nb/mystic Ave
+      - Ramp-rt 28 Sb To Rt 93 Sb/mystic Ave
+      - Ramp-rt 28 Sb To Rt 93 Sb
+      - Ramp-granite Ave Sb To Rt 93 Sb
+      - Ramp-rt 93 Sb To Granite Ave Sb
+      - Ramp-rt 93 Sb To Granite Ave Nb
+      - Ramp - Rt 93 Sb To Rt 3a Sb
+      - Ramp - Rt 90 Eb To Airport Road
+      - Ramp - Airport Road To Rt 90 Wb
+      - Ramp - Rt 90 Eb To Hotel Drive
+      - Ramp - Harborside Drive To Rt 90 Wb
+      - Ramp - Rt 1a/ Rt 90 Wb To Airport Road
+      - Ramp - Harborside Drive To Airport Road
+      - Ramp - Airport Road To Hotel Drive
+      - Ramp - Airport Road To Rt 90 Eb/ Rt 1a Nb
+      - Ramp - Rt 3 To Rt 28 Sb
+      - Ramp - Sr-2 To Rt 90 Eb/ Rt 1a Nb
+      - Ramp - Rt 1a Sb/ Rt 90 Wb To Harborside Drive
+      - Ramp - East Boston Expressway To Frankfort Street
+      - Ramp - Rt 1a Nb To Neptune Rd
+      - Ramp - Neptune Rd To Rt 1a Sb
+      - Ramp - Rt 1 Sb To Leverett Connector
+      - Ramp - Leverett Connector To Rt 1 Nb
+      - Ramp-rt 16 Wb To Rt 1 Sb
+      - Ramp-rt 16 Eb To Rt 1 Nb;Ramp-rt 16 Wb To Rt 1 Nb
+      - Ramp-rt 1 Nb To Rt 16 Eb
+      - Ramp-rt 1 Sb To Rt 16 Wb;Ramp-rt 1 Sb To Rt 16 Eb
+      - Ramp-revere Beach Pkwy To Bell Circle
+      - Ramp-burbank Hwy To Revere Beach Pkwy
+      bridge:movable:
+      - lift
+      - bascule
+      bridge:name:
+      - Francis X Coppinger Bridge
+      - Medford Veterans Memorial Bridge
+      - Chelsea Street Bridge
+      - North Bank Bridge
+      - Andrew McArdle Bridge
+      destination:lanes: 156
+      destination:ref:lanes:
+      - MA 9 West||
+      - I 90|I 90
+      - I 90|I 90|
+      - '||||MA 60'
+      - '|||MA 60'
+      - MA 16 East;US 3 North;MA 16 West;US 3 South;MA 2 East|MA 16 West;US 3 South;MA
+        2 East
+      - I 93 North|I 93 South
+      - '|I 93 North;MA 3 North'
+      - I 90 East;I 90 West|I 90 West
+      - '|I 90 West'
+      - I 93 South|I 93 North
+      - '|I 93 South'
+      - I 93 South|I 90 West
+      - '||I 93 South;I 90 West|'
+      - '|I 90 West|'
+      - MA 1A Toll|
+      - MA 1A North;I 93 South
+      - MA 28 North;none|
+      - MA 1A North|MA 145
+      - I 93 North|MA 3 North
+      - MA 1A|
+      abutters:
+      - residential
+      - commercial
+      - mixed
+      postal_code:
+      - '02132'
+      - '02131'
+      - 02186
+      - '02126'
+      hgv:lanes:
+      - no|no|yes|yes
+      - no|no|yes|yes|yes
+      - no|no|no|yes|yes
+      hgv:lanes:conditional:
+      - no|no|no|yes|yes @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - no|yes|yes @ (Mo-Fr 05:00-10:00); no|no|no|yes|yes @ (Mo-Th 15:00-19:00; Fr
+        14:00-19:00)
+      - no|yes|yes @ (Mo-Fr 05:00-10:00)
+      - no|yes|yes|yes @ (Mo-Fr 05:00-10:00)
+      - no|yes|yes @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - no|yes|yes|yes @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - no|no|no|yes|yes @ (Mo-Fr 05:00-10:00)
+      - no|no|yes|yes @ (Mo-Fr 05:00-10:00)
+      hgv:national_network:
+      - 'yes'
+      lanes:conditional:
+      - 5 @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - 0 @ (Mo-Fr 00:00-05:00,10:00-24:00; Sa,Su)
+      - 3 @ (Mo-Fr 05:00-10:00); 5 @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - 3 @ (Mo-Fr 05:00-10:00)
+      - 0 @ (Mo-Th 00:00-15:00,19:00-24:00; Fr 00:00-14:00,19:00-24:00; Sa,Su)
+      - 4 @ (Mo-Fr 05:00-10:00)
+      - 3 @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - 4 @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - 5 @ (Mo-Fr 05:00-10:00)
+      source:hgv:national_network:
+      - https://www.ecfr.gov/current/title-23/chapter-I/subchapter-G/part-658;https://hepgis-usdot.hub.arcgis.com/apps/usdot::national-network-conventional-combination-trucks-map
+      source_ref:
+      - http://www.ci.boston.ma.us/parks/
+      - http://www.state.ma.us/mdc/
+      - Doug Mink <dmink@massbike.org>
+      - http://www.bostonharborwalk.com/placestogo/maps/dorchester.pdf
+      - http://hubmaps1.cityofboston.gov/datahub/
+      - http://www.state.ma.us/mdc
+      - http://www.massbike.org/eng/
+      - http://hubmaps1.cityofboston.gov/egis/Map.aspx
+      - http://www.state.ma.us/mdc/charlesr.htm
+      junction:ref: 53
+      maxspeed:advisory:
+      - 30 mph
+      - 15 mph
+      - 25 mph
+      - 35 mph
+      - 20 mph
+      - 5 mph
+      - 45 mph
+      destination:ref:to:
+      - MA 1A
+      - MA 9 East
+      - MA 2 West
+      - MA 16 East
+      - MA 16 West
+      - I 93 North
+      - I 95
+      - MA 3
+      - I-95
+      - I 93 South
+      - MA 203
+      - I 93
+      - MA 2A
+      - MA 2
+      - I 90;MA 2
+      - I 93;MA 28 North
+      - I 90;I 93
+      - MA 99
+      - US 1 North
+      - MA 16
+      destination:forward:
+      - West Roxbury
+      - Newton Centre
+      - West Roxbury;Boston
+      - Copley Square;V.A. Hospital
+      - Cambridge
+      - Storrow Drive East;Boston
+      - Medford;Somerville
+      - Boston;Watertown
+      - Medford
+      - Morton Street
+      - Express To Airport;HOV 2+ Only
+      - Storrow Drive
+      - Longfellow Bridge to Kendall Square Cambridge;Storrow Drive
+      - North Grove Street
+      - Charlestown
+      - Boston
+      rcn_ref:
+      - '1'
+      centerline:
+      - 'no'
+      - 'yes'
+      goods:
+      - 'no'
+      - 'yes'
+      destination:backward:
+      - Wellesley;Worcester
+      - Jamaicaway;Dedham;Providence Rhode Island
+      - Copley Square;V.A. Hospital
+      - Brookline
+      - Boston
+      - Watertown;West Newton
+      - Arlington;Medford
+      - Watertown;Boston
+      - Neponset Avenue
+      - Grove Street
+      - Storrow Drive;Boston
+      destination:ref:backward:
+      - MA 9 West
+      - MA 9 East
+      - MA 2 East;US 3 South
+      - MA 16 West
+      - MA 2 West;US 3 North;MA 16 East
+      - US 3 South;MA 16 West
+      destination:ref:to:forward:
+      - MA 2 West
+      note:en:
+      - we use the metric system in OSM - please, dont use feet, yard or miles !
+      width:feet:
+      - '29.6'
+      - '30.2'
+      hazmat:conditional:
+      - designated @ (20:00-06:00)
+      source:hazmat:
+      - sign
+      class:bicycle:
+      - '-3'
+      - '-2'
+      - '-1'
+      hov:
+      - designated @ (Mo-Fr 06:00-10:00)
+      - designated
+      hov:minimum:
+      - '2'
+      cycleway:lane:
+      - advisory
+      - exclusive
+      - pictogram
+      rideshare:
+      - 'yes'
+      - 'no'
+      parking:lane:right:
+      - parallel
+      motor_vehicle:conditional:
+      - no @ (Sep 1-Jun 1 Mo-Fr 09:00-16:00)
+      - private @ (Mo-Su 07:00-09:00,16:00-18:00)
+      - no @ (20:00-7:00)
+      - yes @ (Mo-Fr 05:00-10:00)
+      - yes @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - delivery @ (18:00-11:00)
+      cutting:
+      - both
+      - 'yes'
+      - hollow_way
+      - 'no'
+      embedded_rails:
+      - light_rail
+      taxi:
+      - 'yes'
+      - designated
+      check_date:cycleway:
+      - '2021-12-29'
+      - '2022-02-18'
+      - '2021-09-25'
+      - '2025-04-17'
+      - '2025-03-24'
+      placement:
+      - transition
+      - right_of:1
+      - middle_of:1
+      - left_of:2
+      - middle_of:2
+      - right_of:2
+      maxlength:
+      - 40'0"
+      - 23'6"
+      - 26'
+      source:loc_name:
+      - https://www.cbsnews.com/boston/news/maranville-street-mbta-bus-stop-brookline-teen/
+      motorcar:
+      - 'no'
+      - private
+      source:name:
+      - survey
+      - OSM US TIGER 2012 ROADS OVERLAY
+      - Somerville Assessors Map
+      - Tiger 2013
+      parking:condition:right:maxstay:
+      - 2 hours
+      - 2 h
+      parking:condition:right:time_interval:
+      - 08:00-18:00
+      - Mo-Fr 08:00-18:00
+      source:oneway:
+      - survey
+      oneway:bus:
+      - 'no'
+      note:sidewalk:
+      - There is a sidewalk but it is impassible. It is very narrow and is blocked
+        by street signs and parked cars.
+      restriction:conditional:
+      - no_right_turn @ (Mo-Sa 15:00-19:00)
+      - no_left_turn @ (Mo-Sa 15:00-19:00)
+      - no_left_turn @ (Mo-Su 16:00-19:00)
+      heritage:website:
+      - https://culturenow.org/entry&permalink=14138&seo=Province-Street-Governors-Alley_Peter-Vanderwarker_Boston-MA
+      psv:
+      - 'yes'
+      - designated
+      - 'no'
+      coach:
+      - 'no'
+      hgv_articulated:
+      - 'no'
+      lhv:
+      - 'no'
+      bus:lanes:
+      - no|designated
+      - yes|yes|yes|designated
+      - no|no|designated
+      - no|no|no|designated
+      - yes|designated
+      - yes|yes|designated
+      vehicle:lanes:
+      - yes|yes|no
+      - yes|no
+      - no|yes|no|yes|yes
+      destination:to:
+      - Brookline;Boston
+      - Massachusetts Avenue
+      opening_date:
+      - '2027-10-29'
+      - '2023-07-28'
+      - '2023-09-01'
+      - '2023-06-10'
+      - '2028'
+      - 2027-08
+      - '2024-05-31'
+      url:
+      - http://www.stanthonysfeast.com/faqs.html
+      destination:ref:forward:
+      - MA 9 East
+      - MA 2 West;US 3 North;MA 16 East
+      - MA 2 East;US 3 South;MA 16 West
+      - MA 16 East
+      - I 93 South
+      - I 93;US 1;MA 3
+      - MA 1A South
+      handrail:
+      - 'yes'
+      - 'no'
+      - center
+      - both
+      addr:suburb:
+      - Hyde Park
+      restriction:hgv:
+      - no_left_turn
+      stroller:
+      - limited
+      - 'yes'
+      - 'no'
+      destination:street:lanes:
+      - '|||Lake Street'
+      - '|||Park Avenue'
+      - '||||Park Avenue'
+      - '|Lake Street'
+      - '|||Dow Avenue'
+      - '|||Park Avenue|'
+      access:lanes:
+      - yes|yes|yes|no
+      - yes|no
+      driveway:
+      - pipestem
+      golf:
+      - cartpath
+      - path
+      golf_cart:
+      - designated
+      - 'yes'
+      check_date:ramp:
+      - '2025-05-24'
+      - '2025-06-17'
+      - '2025-07-10'
+      - '2024-08-04'
+      - '2025-06-02'
+      - '2025-06-09'
+      - '2023-07-04'
+      - '2023-09-16'
+      - '2025-03-05'
+      - '2023-01-13'
+      - '2023-08-12'
+      - '2025-09-14'
+      dog:
+      - 'yes'
+      - leashed
+      - 'no'
+      step_count:
+      - '16'
+      - '14'
+      - '20'
+      - '17'
+      - '25'
+      - '12'
+      - '8'
+      - '3'
+      - '7'
+      - '6'
+      - '10'
+      - '2'
+      - '11'
+      - '9'
+      - '67'
+      - '48'
+      - '38'
+      - '15'
+      - '43'
+      - '4'
+      - '18'
+      - '19'
+      - '5'
+      - '27'
+      - '21'
+      - '30'
+      - '24'
+      - '36'
+      - '28'
+      - '29'
+      - '47'
+      - '13'
+      - '92'
+      - '32'
+      - '22'
+      - '41'
+      - '51'
+      - '1'
+      - '35'
+      destination:lanes:conditional:
+      - '||||Furnace Brook Parkway;Quincy @ (Mo-Fr 05:00-10:00)'
+      - none|none|none;Adams Street;Milton;North Quincy @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - '||none;Furnace;Brook Parkway;Quincy @ (Mo-Fr 05:00-10:00)'
+      - none|none|Furnace;Brook Parkway;Quincy;Bryant Avenue;West Quincy @ (Mo-Fr
+        05:00-10:00)
+      - '||Morrissey Boulevard;Savin Hill;Freeport Street;Dorchester @ (Mo-Th 15:00-19:00;
+        Fr 14:00-19:00)'
+      - none|none|none|Granite Avenue;Ashmont @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - '|||Granite Avenue;East Milton @ (Mo-Fr 05:00-10:00)'
+      - '||Granite Avenue;East Milton;Ashmont @ (Mo-Fr 05:00-10:00)'
+      - '||Granite Avenue;Ashmont;East Milton|Neponset;Quincy @ (Mo-Fr 05:00-10:00)'
+      turn:lanes:conditional:
+      - merge_to_right|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - '|||merge_to_left @ (Mo-Fr 05:00-10:00)'
+      - '|||merge_to_left @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)'
+      - slight_left||||slight_right @ (Mo-Fr 05:00-10:00)
+      - none|none|through;slight_right @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - '||through;slight_right @ (Mo-Fr 05:00-10:00)'
+      - none|none|through;slight_right @ (Mo-Fr 05:00-10:00)
+      - '||through;slight_right @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)'
+      - none|none|none|right @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - '|||slight_right @ (Mo-Fr 05:00-10:00)'
+      - slight_left|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - merge_to_right|||| @ (Mo-Fr 05:00-10:00)
+      lanes:both_ways:
+      - '1'
+      turn:lanes:both_ways:
+      - left
+      parking:lane:left:diagonal:
+      - street_side
+      bus:lanes:forward:
+      - no|designated|no
+      - yes|yes|designated
+      - yes|designated
+      vehicle:lanes:forward:
+      - yes|no
+      - yes|yes|no
+      parking:left:access:
+      - permit
+      full_name:
+      - Rev Nazareno Properzi Way
+      embankment:
+      - 'yes'
+      - 'no'
+      railway_name:
+      - Dedham Branch
+      - Dedham Industrial Track
+      - Walter Baker Chocolate Factory Siding
+      - Victory Branch
+      - Boston, Revere Beach and Lynn Railroad Original Alignment
+      bicycle:signed:
+      - 'yes'
+      mtb:scale:imba:
+      - '3'
+      - '2'
+      - '1'
+      old_railway_operator:
+      - NYNH&H
+      - B&M
+      - Fore River Railroad
+      - OCRR
+      - Boston & Maine
+      step:contrast:
+      - 'no'
+      bus:lanes:conditional:
+      - designated|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - designated|||| @ (Mo-Fr 05:00-10:00)
+      hov:lanes:conditional:
+      - designated|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - designated|||| @ (Mo-Fr 05:00-10:00)
+      maxweight:lanes:conditional:
+      - 5|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - 5|||| @ (Mo-Fr 05:00-10:00)
+      motorcycle:lanes:conditional:
+      - designated|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - designated|||| @ (Mo-Fr 05:00-10:00)
+      trailer:lanes:conditional:
+      - no|||| @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      - no|||| @ (Mo-Fr 05:00-10:00)
+      bridge:material:
+      - wood
+      bridge:structure:
+      - beam
+      area:
+      - 'no'
+      informal:
+      - 'yes'
+      - 'no'
+      ramp:wheelchair:
+      - separate
+      - 'yes'
+      - 'no'
+      lanes:bus:backward:
+      - '1'
+      lanes:bus:forward:
+      - '1'
+      - '2'
+      - '0'
+      maxweight:hgv:conditional:
+      - 21 st @ (axles=3); 33 st @ (trailer)
+      sac_scale:
+      - hiking
+      - demanding_mountain_hiking
+      source:noname:
+      - 2012 US Census Tiger/Line Shapefiles (All Roads, Norfolk County)
+      trail_visibility:
+      - excellent
+      - intermediate
+      - good
+      - bad
+      old_name:1970:
+      - Dedham Secondary
+      - Milton Secondary
+      source:old_name:1970:
+      - New Haven Region Timetable No. 2, January 18, 1970
+      motorcycle:
+      - 'no'
+      - private
+      parking:lane:both:parallel:
+      - street_side
+      usage:
+      - industrial
+      frontage_road:
+      - 'yes'
+      busway:left:
+      - lane
+      bicycle:lanes:
+      - yes|designated
+      - designated|yes|designated|yes|yes
+      note:old_railway_operator:
+      - Fitchburg
+      - Central Massachusetts
+      - Boston and Lowell
+      - Eastern Railroad
+      route:
+      - bicycle
+      - path
+      type:
+      - route
+      - industrial
+      check_date:handrail:
+      - '2022-09-10'
+      - '2023-04-24'
+      - '2025-11-09'
+      - '2025-06-04'
+      - '2024-09-13'
+      - '2025-03-20'
+      - '2026-01-15'
+      - '2024-08-16'
+      vehicle:
+      - 'yes'
+      hour_off:
+      - '18:00:00'
+      hour_on:
+      - 06:00:00
+      bus_bay:
+      - left
+      - right
+      horse_scale:
+      - impossible
+      source:cycleway:width:
+      - ARCore
+      proposed:
+      - steps
+      - footway
+      - cycleway
+      - secondary
+      - service
+      - residential
+      cycleway:smoothness:
+      - excellent
+      width:carriageway:
+      - '8'
+      - '9'
+      - '10.5'
+      - '2.8'
+      - '18.9'
+      - '5.88'
+      floating:
+      - 'yes'
+      - 'no'
+      mooring:
+      - 'yes'
+      - 'no'
+      conveying:
+      - 'yes'
+      - forward
+      - backward
+      subway: []
+      platform:type: []
+      fishing:
+      - 'yes'
+      - 'no'
+      ramp:bicycle:
+      - 'yes'
+      parking:condition:left:maxstay:
+      - 2 hours
+      - 2 h
+      parking:condition:left:time_interval:
+      - Mo-Fr 08:00-18:00
+      - Mo-Fr 07:00-18:00
+      destination:lanes:forward:
+      - Newton;Arlington;Cambridge|Cambridge|Cambridge
+      steps:
+      - 'yes'
+      parking:right:fee:
+      - 'yes'
+      private:
+      - students
+      parking:condition:both:maxstay:
+      - 2 hours
+      parking:condition:both:time_interval:
+      - 08:00-18:00
+      - Mo-Fr 08:00-18:00
+      parking:lane:
+      - no_parking
+      - 'no'
+      - parallel
+      parking:lane:both_1:
+      - parallel
+      maxspeed:variable:
+      - school_zone
+      parking:right:maxstay:conditional:
+      - 2 hours @ Mo-Fr 08:00-18:00
+      shoulder:right:
+      - 'yes'
+      air_conditioning: []
+      cycleway:right:bicycle:backward:
+      - 'no'
+      cycleway:right:bicycle:forward:
+      - 'yes'
+      disused:
+      - 'yes'
+      - highway
+      leisure:
+      - slipway
+      parking:condition:both:customers:
+      - CVS
+      min_level:
+      - '2'
+      turn:backward:
+      - left
+      - right
+      hazmat:lanes:
+      - '||no|'
+      maxheight:lanes:
+      - '||13''9"|'
+      sidewalk:right:bicycle:
+      - 'yes'
+      sidewalk:separate:
+      - both
+      - right
+      cycleway:both:separation:
+      - 'no'
+      street:name:
+      - Pearl Street
+      - Franklin Street
+      - Kilby Street
+      - Batterymarch Street
+      - Milk Street
+      - Broad Street
+      - Post Office Square
+      - Water Street
+      - Liberty Square
+      - Exchange Place
+      - Congress Street
+      - State Street
+      abandoned:service:
+      - siding
+      landing:
+      - '2'
+      handrail:center:
+      - 'yes'
+      width:lanes:
+      - 3|3
+      hgv:conditional:
+      - no @ (19:00-7:00)
+      note:service:
+      - Primary use is for car pickup at the Gym/Arts Loop
+      bus:lanes:backward:
+      - no|designated
+      - yes|yes|designated
+      former:name:
+      - Frisbie Place
+      mtb:scale:
+      - '0'
+      - '1'
+      - '2'
+      bicycle:lanes:backward:
+      - yes|yes|designated
+      cycleway:lanes:backward:
+      - none|none|lane
+      vehicle:lanes:backward:
+      - yes|yes|no
+      surface:note:
+      - rubberized playground
+      contact:facebook:
+      - https://www.facebook.com/pages/MBTAMass-DOT-Emergency-Training-Center/610263472353006
+      change:lanes:forward:
+      - no|no
+      access_aisle:
+      - handicap
+      signal:
+      - uncontrolled
+      fountain:
+      - 'yes'
+      architect: []
+      artist:wikidata: []
+      memorial: []
+      handrail:left:
+      - 'yes'
+      handrail:right:
+      - 'yes'
+      subject:wikidata:
+      - Q881258
+      subject:wikimedia_commons:
+      - File:Curtis_Guild_Jr.jpg
+      subject:wikipedia:
+      - en:Curtis Guild Jr.
+      disabled:
+      - 'yes'
+      foot:backward:
+      - 'yes'
+      raised:
+      - 'yes'
+      platform_lift:
+      - 'no'
+      tactile_writing:
+      - 'no'
+      area:highway: []
+      was:bridge:movable:
+      - retractable
+      building:levels: []
+      building:material: []
+      roof:colour: []
+      toilets: []
+      waterway: []
+      natural: []
+      stairs:
+      - 'yes'
+      designated_direction: []
+      path:
+      - crossing
+      brand:website: []
+      traffic_island:
+      - 'yes'
+      parking:lane:right:parallel:
+      - painted_area_only
+      - street_side
+      check_date:footway:surface:
+      - '2024-09-07'
+      construction:bicycle:
+      - designated
+      construction:cycleway:
+      - shared_lane
+      exit:
+      - emergency
+      building: []
+      room: []
+      abandoned:railway:
+      - rail
+      maxspeed:bus:
+      - 20 mph
+      maxspeed:hgv:
+      - 20 mph
+      massgis:ARTICLE97:
+      - '9'
+      massgis:ASSESS_ACR:
+      - '0.30000000'
+      massgis:ATT_DATE:
+      - 1998/07/07
+      massgis:COMMENTS:
+      - PARKING LOT
+      massgis:DCAM_ID:
+      - '0'
+      massgis:DEED_ACRES:
+      - '0.00000000'
+      massgis:EOEAINVOLV:
+      - '0'
+      massgis:FEESYM:
+      - M
+      massgis:FEE_OWNER:
+      - Town of Brookline
+      massgis:FY_FUNDING:
+      - '0'
+      massgis:LEV_PROT:
+      - N
+      massgis:MANAGER:
+      - Town of Brookline Department of Public Works
+      massgis:MANAGR_ABR:
+      - M046DPW
+      massgis:MANAGR_TYP:
+      - M
+      massgis:OS_DEED_BO:
+      - '0'
+      massgis:OS_DEED_PA:
+      - '0'
+      massgis:OS_ID:
+      - 46-138
+      massgis:OWNER_ABRV:
+      - M046
+      massgis:OWNER_TYPE:
+      - M
+      massgis:POLY_ID:
+      - '138'
+      massgis:PRIM_PURP:
+      - O
+      massgis:PUB_ACCESS:
+      - Y
+      massgis:SITE_NAME:
+      - HEALTH DEPT LOT
+      massgis:SOURCE_MAP:
+      - GIS
+      massgis:TOWN_ID:
+      - '46'
+      owner:
+      - Town Of Brookline
+      maxheight:physical:
+      - 12'3"
+      cycleway:buffer:right:
+      - 'yes'
+      aeroway:
+      - jet_bridge
+      bicycle:conditional:
+      - dismount @ (may-sep)
+      tidal:
+      - 'yes'
+      sport: []
+      bus:conditional:
+      - designated @ (Mo-Fr 05:00-10:00)
+      - designated @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      change:
+      - 'no'
+      highway:conditional:
+      - no @ (Mo-Fr 00:00-05:00,10:00-24:00; Sa,Su)
+      - no @ (Mo-Th 00:00-15:00,19:00-24:00; Fr 00:00-14:00,19:00-24:00; Sa,Su)
+      hov:conditional:
+      - designated @ (Mo-Fr 05:00-10:00)
+      - designated @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      motorcycle:conditional:
+      - designated @ (Mo-Fr 05:00-10:00)
+      - designated @ (Mo-Th 15:00-19:00; Fr 14:00-19:00)
+      trailer:
+      - 'no'
+      separation:left:
+      - bump
+      - flex_post
+      stairs:type:
+      - full
+      portage:
+      - 'yes'
+      was:railway:
+      - abandoned
+      railway:service:
+      - spur
+      railway:usage:
+      - industrial
+      change:lanes:
+      - yes|yes|not_right|no
+      oneway:emergency:
+      - 'no'
+      obstacle:
+      - vegetation
+      overgrown:
+      - 'yes'
+      ramp:stroller:
+      - separate
+      name:left:
+      - River Street
+      name:right:
+      - Western Avenue
+      parking:both:maxstay:
+      - 2 hours
+      markings:
+      - zebra
+      boundary: []
+      abandoned: []
+      gnis:feature_id: []
+      bicycle_parking: []
+      bicycle_rental: []
+      heating: []
+      opening_hours: []
+      payment:app: []
+      seasonal: []
+    style_rules:
+      highway:
+        primary:
+          linewidth: 1.15
+        residential:
+          linewidth: 0.85
+        service:
+          linewidth: 0.34
+        motorway:
+          linewidth: 1.35
+        motorway_link: {}
+        trunk:
+          linewidth: 1.25
+        footway: {}
+        secondary:
+          linewidth: 1.1
+        tertiary:
+          linewidth: 0.92
+        trunk_link: {}
+        secondary_link: {}
+        tertiary_link: {}
+        path: {}
+        unclassified:
+          linewidth: 0.34
+        track:
+          linewidth: 0.28
+        cycleway: {}
+        steps: {}
+        proposed: {}
+        primary_link: {}
+        pedestrian: {}
+        construction: {}
+        busway: {}
+        living_street:
+          linewidth: 0.32
+        corridor: {}
+        residential_link: {}
+        emergency_bay: {}
+      maxspeed:
+        45 mph: {}
+        55 mph: {}
+        25 mph: {}
+        30 mph: {}
+        35 mph: {}
+        15 mph: {}
+        10 mph: {}
+        20 mph: {}
+        40 mph: {}
+        5 mph: {}
+        signals: {}
+        6 mph: {}
+        50 mph: {}
+        7 mph: {}
+        '25': {}
+        '20': {}
+        3 mph: {}
+        24 mph: {}
+        8 mph: {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/highway.gpkg
+    layer: highway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.22
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 52620
+      highway:
+      - turning_circle
+      - motorway_junction
+      - stop
+      - traffic_signals
+      - crossing
+      - bus_stop
+      - street_lamp
+      - turning_loop
+      - give_way
+      - priority
+      - stop;crossing
+      - trailhead
+      - milestone
+      - toll_gantry
+      - elevator
+      - emergency_access_point
+      - traffic_signals;crossing
+      - mini_roundabout
+      - emergency_bay
+      - crossing;traffic_signals
+      - speed_display
+      - traffic_mirror
+      - do not enter sign
+      stop:
+      - all
+      - minor
+      - 'yes'
+      - all;minor
+      traffic_signals:
+      - signal
+      - pedestrian_crossing
+      - traffic_lights
+      - stop
+      - emergency
+      - blinker
+      - bus_priority
+      - ramp_meter
+      - 'yes'
+      - bridge
+      traffic_signals:direction:
+      - forward
+      - backward
+      - both
+      crossing:
+      - uncontrolled
+      - marked;uncontrolled
+      - unmarked
+      - marked
+      - traffic_signals
+      - informal
+      - traffic_signals;marked
+      - zebra
+      - zebra;uncontrolled
+      - 'no'
+      - traffic_signals;uncontrolled
+      - cycleway
+      - 'yes'
+      - marked;traffic_signals
+      - uncontrolled;marked
+      - uncontrolled;unmarked
+      - uncontrolled;traffic_signals
+      - marking
+      - zebra;marked
+      - marked;unmarked
+      crossing:island:
+      - 'no'
+      - 'yes'
+      crossing:markings:
+      - 'no'
+      - lines
+      - 'yes'
+      - ladder:skewed
+      - ladder
+      - ladder;yes
+      - zebra
+      - solid_color
+      - dashes
+      - surface
+      - dots
+      - lines;yes
+      - yes;zebra
+      - ladder:paired
+      - yes;ladder
+      - lines;surface
+      - zebra;yes
+      - pictograms
+      - surface;dashes
+      - lines:paired
+      - dashes;pictograms
+      - lader
+      - zebra;lines
+      - yes;lines
+      - dashes;surface
+      - zebra:skewed
+      - lines;no
+      kerb:
+      - raised
+      - lowered
+      - flush
+      - 'no'
+      - 'yes'
+      - separate
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      - partial
+      - incorrect
+      - no;yes
+      restriction:
+      - no_right_turn_on_red
+      noref:
+      - 'yes'
+      direction: 110
+      crossing:signals:
+      - 'no'
+      - 'yes'
+      - ped_sign
+      - traffic_signals
+      button_operated:
+      - 'yes'
+      - 'no'
+      traffic_signals:sound:
+      - 'yes'
+      - walk
+      - 'no'
+      traffic_signals:vibration:
+      - 'no'
+      - 'yes'
+      mapillary: 187
+      survey:date:
+      - '2020-01-18'
+      - '2019-12-22'
+      - '2020-02-15'
+      - '2018-08-23'
+      - '2018-12-01'
+      - '2018-06-18'
+      - '2018-07-25'
+      - '2018-07-24'
+      - '2019-12-21'
+      - '2019-12-23'
+      - '2020-01-20'
+      - '2018-07-04'
+      - '2018-05-18'
+      - '2018-07-27'
+      - '2020-01-10'
+      - '2019-02-17'
+      - '2019-01-02'
+      - '2018-12-05'
+      - '2018-12-10'
+      - '2018-06-25'
+      - '2019-02-27'
+      - '2019-02-26'
+      - '2019-02-20'
+      - '2018-09-17'
+      - '2019-02-25'
+      - '2019-01-18'
+      - '2025-06-20'
+      - '2020-01-09'
+      - '2020-01-14'
+      - '2018-07-07'
+      - '2020-01-17'
+      surface:
+      - asphalt
+      - paving_stones
+      - concrete
+      - brick
+      crossing_ref:
+      - ladder
+      - standard
+      - hawk
+      - zebra
+      bicycle:
+      - 'yes'
+      - 'no'
+      - designated
+      junction:
+      - roundabout
+      image:
+      - https://storage8.openstreetcam.org/files/photo/2018/5/18/lth/1183901_978ca_50.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_36dd0_3450.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_36dd0_3440.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_9d8ed_3494.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_9d8ed_3495.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_36dd0_3446.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_36dd0_3464.jpg
+      - https://storage4.openstreetcam.org/files/photo/2019/1/2/lth/1321497_36dd0_3473.jpg
+      - https://storage9.openstreetcam.org/files/photo/2018/12/5/lth/1311601_788f4_5c0803583978f.jpg
+      - https://storage11.openstreetcam.org/files/photo/2019/2/17/lth/1341803_9eb83_1763.jpg
+      - https://storage8.openstreetcam.org/files/photo/2018/6/23/lth/1254395_0a4b5_1349.jpg
+      - https://storage8.openstreetcam.org/files/photo/2018/7/7/lth/1262203_04372_5458.jpg
+      - https://storage8.openstreetcam.org/files/photo/2018/7/7/lth/1262203_53b40_6102.jpg
+      traffic_calming:
+      - table
+      - 'yes'
+      - choker
+      - hump
+      - 'no'
+      - bump
+      name: 3837
+      ref: 4166
+      ref:left:
+      - '42'
+      - 43A
+      - '7'
+      - 134C-B
+      - I 93 North;I 93 South
+      - 134C
+      - '134'
+      - 17B
+      - US 1 North
+      attribution:
+      - massDOT
+      - Office of Geographic and Environmental Information (MassGIS)
+      - Herald St @ Harrison Ave
+      source:
+      - massdot_import_081211
+      - Yahoo
+      - survey
+      - Bing
+      - massdot_import_081211;esri/Boston_MA_Addresses
+      - massdot_import_081511
+      - survey;local knowledge
+      - USGS Geonames
+      - bing
+      - massdot_import_081211;survey;local knowledge
+      - GPS
+      - https://www.cityofboston.gov/veterans/herosquares/
+      bus:
+      - 'yes'
+      departures_board:
+      - 'no'
+      - realtime
+      - 'yes'
+      - timetable
+      network:
+      - MBTA
+      - MBTA (Massachusetts)
+      - MIT
+      - EZRide
+      - BAT
+      - UMass Boston
+      - UMass Boston Shuttle Service
+      - Logan Express
+      - Merrimack Valley Transit
+      network:wikidata:
+      - Q171985
+      - Q4972867
+      - Q6820290
+      network:wikipedia:
+      - en:Massachusetts Bay Transportation Authority
+      - en:Brockton Area Transit Authority
+      operator:
+      - MBTA
+      - Massachusetts Bay Transportation Authority
+      - MBTA (Massachusetts)
+      - Massachusetts Department of Transportation
+      - MIT Transportation
+      - Charles River TMA
+      - Brockton Area Transit Authority
+      - UMass Boston
+      - Massport
+      - MASSDOT
+      - First Transit
+      - Boston Public Works Lighting Division
+      - City of Boston Public Works, Street Lighting Division
+      - Boston Athletic Association
+      - Boston Fire Department
+      - Friends of the Public Garden
+      - DCR
+      - MassDOT
+      - TD Garden
+      public_transport:
+      - platform
+      - stop_position
+      - station
+      shelter:
+      - 'no'
+      - 'yes'
+      traffic_signals:turn:backward:
+      - all|not_right_on_red
+      turning_circle:
+      - circle
+      - knuckle
+      traffic_signals:turn:forward:
+      - all|not_right_on_red
+      old_ref:
+      - '14'
+      - '17'
+      - '20'
+      - '18'
+      - '19'
+      - 19-18
+      - 20A-B
+      - '26'
+      - 24 A-B-C
+      - 25-24
+      - '25'
+      - '22'
+      automated:
+      - 'yes'
+      currency:USD:
+      - 'yes'
+      fee:
+      - 'yes'
+      height:
+      - '7'
+      - '5'
+      - '2'
+      - '4.9'
+      - '3'
+      - '6.4'
+      - '4'
+      - '4.8'
+      - '7.2'
+      - '0.2'
+      - '0.1'
+      - '2.5'
+      - '8'
+      - '10'
+      man_made:
+      - utility_pole
+      - surveillance
+      manufacturer:
+      - TransCore
+      - Raytheon
+      material:
+      - brick
+      - wood
+      - steel
+      - metal
+      - bronze
+      - iron
+      operator:short:
+      - MBTA
+      - MassDOT
+      operator:type:
+      - government
+      operator:wikidata:
+      - Q171985
+      - Q2483364
+      payment:e_zpass:
+      - 'yes'
+      payment:online:
+      - 'yes'
+      support:
+      - pole
+      - ground
+      - wall_mounted
+      - pedestal
+      - high_mast
+      surveillance:
+      - public
+      - traffic
+      - outdoor
+      surveillance:type:
+      - ALPR
+      - camera
+      surveillance:zone:
+      - traffic
+      - parking
+      - public
+      - area
+      toll:
+      - 'yes'
+      - transponder
+      ref:right:
+      - '41'
+      - 43B
+      - 134A
+      - 1344B
+      - '135'
+      - 17A
+      fixme:
+      - 'Add to routes: Quad Express, Allston Loop, Mather Express. node is on the
+        shelter'
+      - kurb
+      - Needs resurvey, probably a 311 ticket. Southern tactile plate is half missing.
+      - MBTA Bus 16 Inbound and Bus 17 Inbound stop here and will need to be appropriately
+        added
+      - 2 platforms for busses, needs verification of which platform each bus go to
+      - Routes serving this stop may be incorrect
+      - verify
+      - Does MVRTA operate here?
+      - does MVRTA operate here?
+      - active work to make flush kerbs and tactile pacing,one side not yet complete
+      - Also includes yellow "Safety Zone" sign
+      email:
+      - veterans@boston.com
+      phone:
+      - +1-617-635-4900
+      - +1-617-241-8387
+      place:
+      - square
+      website:
+      - https://www.mass.gov/ezdrivema
+      - https://www.mbta.com/stops/2531
+      - https://www.mbta.com/stops/33
+      - http://www.landing-studio.com/new-page-2/
+      - https://transcore.com/rfid/parking-access-control
+      - https://www.massport.com/logan-airport/to-from-logan/transportation-options/logan-express/back-bay
+      - https://www.baa.org/races/boston-marathon
+      - https://www.sinceremetalworks.com/work/boston-marathon-memorial/
+      - https://www.mbta.com/stops/175
+      - https://bostonfirebox.com/1571
+      - http://www.wfrjr.com/data/monument/Boston/Lombard.html
+      - https://www.boston.gov/departments/arts-and-culture/boston-art-commission
+      - https://www.cityofboston.gov/veterans/herosquares/View.aspx?id=30
+      - https://www.rossmiller.com/five-beacons
+      brand:
+      - E-ZPass
+      - FlixBus
+      charge:
+      - 1.00 USD E-ZPass MA;1.25 USD E-ZPass Other;1.55 USD Pay By Plate
+      network:short:
+      - MBTA
+      - MeVa
+      supervised:
+      - 'no'
+      traffic_sign:backward:
+      - stop
+      traffic_signals:countdown:
+      - 'yes'
+      - 'no'
+      check_date:crossing:
+      - '2021-11-20'
+      - '2021-09-14'
+      - '2022-04-30'
+      - '2023-01-13'
+      hazard:
+      - pedestrian_crossing
+      alt_name:
+      - Mt Vernon @University Drive Outbound (UMass Shuttle)
+      - Bayside Inbound (UMass Shuttle)
+      - Bayside Outbound (UMass Shuttle)
+      - Mt Vernon @ University Drive Inbound (UMass Shuttle)
+      - Washington St @ W Newton St
+      - Washington St @ E Berkeley St
+      - Washington St @ E Newton St
+      - Washington St @ W Dedham St
+      - Washington St @ Union Pk
+      - Washington St @ Herald St
+      - Washington St @ Tufts Med Ctr
+      - Essex St @ Atlantic Ave
+      - Washington St @ Essex St
+      - Tremont St @ Boylston Station
+      - Temple Pl @ Washington St
+      - Washington St @ Melnea Cass Blvd
+      - Washington St @ Melnea Cass Blvd - Silver Line
+      - Washington St @ Lenox St
+      - Washington St @ Massachusetts Ave
+      - Washington St @ Worcester St
+      line:
+      - Silver
+      massgis:geom_id:
+      - '153'
+      - '121'
+      - '143'
+      - '144'
+      - '148'
+      - '122'
+      - '142'
+      - '146'
+      - '147'
+      - '132'
+      - '133'
+      - '135'
+      - '125'
+      - '126'
+      - '127'
+      - '149'
+      - '128'
+      - '138'
+      - '141'
+      - '150'
+      - '130'
+      - '123'
+      - '124'
+      - '129'
+      - '152'
+      - '140'
+      - '137'
+      bench:
+      - 'yes'
+      - 'no'
+      bin:
+      - 'yes'
+      - 'no'
+      - yes;no
+      lit:
+      - 'yes'
+      - 'no'
+      wikidata:
+      - Q5123369
+      - Q5651649
+      - Q826038
+      - Q85770837
+      - Q5090033
+      gtfs:stop_id:
+      - '875'
+      - '10642'
+      - '8178'
+      - '2044'
+      - '32549'
+      - '5104'
+      - '11413'
+      - '1743'
+      - '10413'
+      - '1188'
+      - '1215'
+      - '1266'
+      - '1265'
+      - '17091'
+      - '74624'
+      - '74614'
+      - '74617'
+      - '74612'
+      - '74616'
+      - '74637'
+      - '74636'
+      - '74632'
+      - '74633'
+      - '74630'
+      - '74631'
+      - '15795'
+      wheelchair:
+      - 'yes'
+      - 'no'
+      - limited
+      - designated
+      level:
+      - '1'
+      - '0'
+      - '-1.5'
+      - '-1'
+      - '-2'
+      - 0;-1
+      - 0.5;-1
+      - -1;-2
+      - 0;-2
+      - '7'
+      - 1;2
+      - 2;3
+      - 1-3
+      - '2'
+      - -1;2
+      - 0;1
+      - 0;1;2;3;4;5;6;7
+      - 0;-2;-1
+      - 0;-1;3
+      - 0-4
+      - 0.5;1
+      - 1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36
+      - 1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25
+      - 1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50;51;52
+      - 1;0;-1;-2
+      - 1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17
+      - 0;1;2;3
+      - 1;0
+      - 1;2;3
+      - 1;-1
+      - -1,-2
+      - 0;1;2;3;4
+      - 0;-1;-2;-3;-4;-5
+      - 1-9
+      - -2;0
+      - 1;3
+      check_date:shelter:
+      - '2025-03-29'
+      - '2022-10-03'
+      - '2026-02-02'
+      - '2021-11-20'
+      - '2024-09-19'
+      - '2023-07-28'
+      - '2026-01-04'
+      - '2026-03-03'
+      - '2023-12-16'
+      - '2023-09-14'
+      - '2026-02-21'
+      - '2025-05-22'
+      - '2026-03-04'
+      - '2025-09-17'
+      - '2023-08-10'
+      - '2025-06-09'
+      - '2025-06-02'
+      - '2024-10-30'
+      addr:city:
+      - Allston
+      - Boston
+      addr:housenumber:
+      - '6'
+      - '764'
+      - 90p
+      - '665'
+      - '165'
+      addr:postcode:
+      - '02134'
+      - '02127'
+      - '02116'
+      - '02114'
+      addr:state:
+      - MA
+      addr:street:
+      - Barrows Street
+      - East First Street
+      - Boylston Street
+      - Cambridge Street
+      amenity:
+      - shelter
+      - bus_station
+      - parking_entrance
+      wikipedia:
+      - en:City Point Bus Terminal
+      - en:Boston Marathon
+      - en:Japanese Lantern (Boston)
+      - en:Bellingham Square station
+      description:
+      - broken
+      - raised crossing with concrete sidewalk panels and outlining curbing
+      - Dinosaur
+      - Public Elevator
+      - 1 - Harvard Square via Mass Ave, CT1 - Central Square, M2- Harvard Square
+        stop
+      - Gifted to the City of Boston by Bunkio Matsuki in 1904
+      - 'Bus 112: Stop bypassed when Snow Route is active'
+      - Bypassed during Snow Route, Flag Bus on Medford Street or use MBTA Bus 92
+      - 'Bus 110: Stop bypassed when Snow Route is active'
+      note:
+      - I'm not sure if this light ever goes red, but it has all three bulbs
+      - Service on bus route 52 ended December 2019.
+      - temp location until 10/29/27 for pierce school redo
+      - Route 64
+      - Closed due to construction
+      - No Turn On Red Arrow
+      - was previously a marked crossing but too faded now.
+      - Faded but marked
+      - Curb lowered on one side and one could use the driveway cut on the other side.
+        I still marked it as raised.
+      - Only one side has a lowered curb, one could use a driveway on the otherside.
+      - Marked curb as yes as it is there but unsure if it is flush or raised
+      - curb cuts nearby, one on the corner and one along liberty but not helpful
+        for the crossing.
+      - south side could use different curb cut, and the driveway on the north side
+      - Curb cuts could be used on side streets
+      - Curb cut is along North street not raymond Ave
+      - This crossing sucks as the northern half curb cut is facing the wrong way
+      - This is a weird light on the Hancock Court side. It's mostly for pedestrians.
+      - sign missing
+      - This might be obsolete
+      - This stop has no Berth designation but is used as a Drop-Off location for
+        busses whose terminus is Nubian Station coming from Warren Street
+      - this appears to be a bus stop for MBTA employees only
+      - 'Engraved on this marker: "BOSTON 3 MILES 1729"'
+      - Not controlled
+      - Edward J. Clark Square may be at exact intersection with London Street to
+        the southwest. Was designated before intersection realignment.
+      - Stop will eventually be moved to the area near Clinton St. However, it is
+        currently under construction so the move has been delayed. The name has changed
+        though.
+      kerb:left:
+      - raised
+      - lowered
+      kerb:right:
+      - lowered
+      - raised
+      - 'yes'
+      footway:crossing:markings:
+      - ladder
+      lamp_mount:
+      - straight_mast
+      - bent_mast
+      - straight_mastzoning_and_property_rights:_an_analysis_of_the_american_system_of_land-use_regulation
+      - high_mast
+      - pole
+      - suspended
+      - wall
+      - lamppost
+      - straight_mast1.4
+      - "straight_mast\u201Cyou're_the_one\u201D"
+      - ground
+      - cast_steel_mast
+      lamp_type:
+      - electric
+      - LED
+      - led
+      - Street_Light
+      - street_light
+      - high_pressure_sodium
+      - led1
+      - gaslight
+      - gaslight1
+      - lantern
+      check_date:
+      - '2025-06-21'
+      - '2024-11-19'
+      - '2025-10-30'
+      - '2026-01-07'
+      - '2026-02-05'
+      - '2025-03-27'
+      - '2025-07-06'
+      - '2025-02-17'
+      - '2026-01-08'
+      - '2025-11-22'
+      - '2024-09-19'
+      - '2025-11-21'
+      - '2025-07-02'
+      - '2025-11-03'
+      check_date:lit:
+      - '2025-10-30'
+      - '2024-09-19'
+      - '2025-08-27'
+      - '2021-09-07'
+      route_ref:
+      - 47; CT2
+      - '47'
+      - 1;CT1
+      - '69'
+      - '83'
+      - 83;87
+      - '85'
+      - 220;221;222
+      - '223'
+      - '9'
+      gtfs:feed:
+      - US-MA-MBTA
+      network:guid:
+      - US-MA-MBTA
+      layer:
+      - '1'
+      - '-1'
+      - '-2'
+      - '0'
+      hiking:
+      - 'yes'
+      information:
+      - map
+      - sign
+      mtb:
+      - 'yes'
+      tourism:
+      - information
+      - artwork
+      - attraction
+      check_date:traffic_signals:sound:
+      - '2025-03-27'
+      - '2025-07-06'
+      check_date:traffic_signals:vibration:
+      - '2025-07-11'
+      - '2025-07-06'
+      - '2025-02-17'
+      - '2025-11-22'
+      - '2025-07-21'
+      - '2025-07-02'
+      - '2025-06-17'
+      barrier:
+      - gate
+      - kerb
+      - bollard
+      cycleway:
+      - crossing
+      - shared_lane
+      indoor:
+      - 'no'
+      - 'yes'
+      - room
+      check_date:tactile_paving:
+      - '2024-09-01'
+      - '2022-04-17'
+      - '2023-04-12'
+      - '2023-04-21'
+      - '2022-10-22'
+      - '2023-06-09'
+      - '2023-04-20'
+      - '2023-07-09'
+      - '2023-01-14'
+      - '2026-01-07'
+      - '2026-02-05'
+      - '2026-01-08'
+      - '2024-09-19'
+      - '2023-09-04'
+      - '2022-11-06'
+      - '2023-04-22'
+      - '2023-06-08'
+      - '2021-08-08'
+      - '2023-04-01'
+      - '2021-09-19'
+      - '2023-03-08'
+      - '2023-08-03'
+      - '2024-06-02'
+      - '2023-08-11'
+      - '2023-05-14'
+      - '2022-06-20'
+      - '2021-10-21'
+      - '2021-10-16'
+      - '2022-08-27'
+      covered:
+      - 'yes'
+      - 'no'
+      kerb:approach_aid:
+      - 'no'
+      passenger_information_display:
+      - 'no'
+      - 'yes'
+      disused:highway:
+      - bus_stop
+      emergency:
+      - fire_alarm_box
+      - phone
+      - fire_hydrant
+      old_name:
+      - Harvard St @ Williams St
+      - Broadway @ Ware St
+      addr:unit:
+      - '3'
+      not:network:wikidata:
+      - Q171985
+      light_rail:
+      - 'yes'
+      - 'no'
+      railway:
+      - level_crossing;crossing
+      - crossing
+      - platform
+      - level_crossing
+      - subway_entrance
+      flag:
+      - 'no'
+      pole:
+      - 'yes'
+      - 'no'
+      shelter_type:
+      - public_transport
+      loc_name:
+      - Bellingham Square
+      - Mystic Mall
+      designation:
+      - Bus Stop, 90 and 88
+      passenger_information_display:speech_output:
+      - 'no'
+      temporary:access:
+      - 'no'
+      trolleybus:
+      - 'yes'
+      check_date:bench:
+      - '2021-11-20'
+      - '2024-09-19'
+      check_date:bin:
+      - '2024-09-19'
+      train:
+      - 'yes'
+      access:
+      - 'yes'
+      - permissive
+      - customers
+      - private
+      - permit
+      noexit:
+      - 'yes'
+      light:method:
+      - electric
+      crossing:barrier:
+      - 'no'
+      foot:
+      - 'no'
+      - 'yes'
+      - designated
+      surface:colour:
+      - red
+      colour:
+      - green
+      - black
+      - silver
+      - gold
+      - white
+      - grey
+      - bronze
+      - yellow
+      gate:type:
+      - swing
+      locked:
+      - key-pad
+      historic:
+      - milestone
+      - 'yes'
+      start_date:
+      - '1729'
+      - '1897-04-19'
+      - '1980-09-24'
+      - '1587'
+      traffic_sign:forward:
+      - stop
+      power:
+      - pole
+      - generator
+      transformer:
+      - distribution
+      location:transition:
+      - 'yes'
+      traffic_sign:
+      - stop
+      - maxspeed
+      - US:R2-1[20]
+      traffic_signals:lanes:
+      - yes|yes|no|no|no
+      - yes|no|no
+      - yes|no
+      flashing_lights:
+      - button
+      - 'no'
+      - 'yes'
+      couplings:
+      - '3'
+      fire_hydrant:position:
+      - sidewalk
+      fire_hydrant:type:
+      - pillar
+      water_source:
+      - main
+      ele:
+      - '-21.0'
+      ele:msl:
+      - '-21.0'
+      ele:source:
+      - GPS
+      location:
+      - indoor
+      - outdoor
+      - underground
+      - indoor;underground
+      brand:wikidata:
+      - Q15712258
+      elevator:
+      - wheelchair
+      - 'yes'
+      automatic_door:
+      - sliding
+      - button
+      - 'yes'
+      door:
+      - sliding
+      - overhead
+      parking:
+      - surface
+      addr:country:
+      - US
+      distance:
+      - '42.195'
+      marker:
+      - route
+      milestone_type:
+      - terminus
+      wikimedia_commons:
+      - File:Photograph overlooking the finish line of the Boston Marathon (12191484396).jpg
+      contact:email:
+      - publicworks@boston.gov
+      denotation:
+      - park
+      generator:source:
+      - electricity_network
+      - solar
+      heritage:operator:
+      - Friends of the Public Garden
+      inscription:
+      - Memorial to the Massachusetts family members lost on September 11, 2001
+      - "Given to the City of Boston by CHANEL\xAE"
+      - '"This Lombard Lamp is presented to the people of Boston, in salute to their
+        historic spirit of freedom on the occasion of the 350th anniversary of the
+        City of Boston and as a gesture of true international friendship by the people
+        of the Free And Hanseatic'
+      lamp_operator:
+      - Boston Public Works Lighting Division
+      light:colour:
+      - red
+      - yellow
+      - blue;red
+      bollard:
+      - fixed
+      bridge:support:
+      - pier
+      access:conditional:
+      - yes @ (Mo-Sa 10:00-21:00; Su 11:00-19:00)
+      artist_name:
+      - Unknown
+      - Ross Miller
+      artwork_type:
+      - installation
+      - sculpture
+      camera:direction:
+      - '160'
+      - 160;340
+      - 70;250
+      - 50;270
+      camera:mount:
+      - pole
+      - street_lamp
+      camera:type:
+      - fixed
+      - dome
+      generator:method:
+      - photovoltaic
+      generator:output:electricity:
+      - 'yes'
+      generator:type:
+      - solar_photovoltaic_panel
+      maxspeed:
+      - 25 mph
+      - 30 mph
+      lamp:direction:
+      - '340'
+      - '320'
+      camera:height:
+      - '5'
+      lamp:height:
+      - '7'
+      contact:website:
+      - https://www.boston.gov/departments/public-works/how-fix-common-issues-streetlights
+      capacity:
+      - '15'
+      maxweight:
+      - '1125'
+      check_date:wheelchair:
+      - '2025-06-04'
+      entrance:
+      - main
+      - garage
+      communication:
+      - terminal
+      oneway:
+      - 'yes'
+      - 'no'
+      tunnel:
+      - building_passage
+      marked:
+      - unmarked
+      access:disabled:
+      - designated
+      maxwidth:
+      - 16'4"
+      source:maxwidth:
+      - ARCore
+      boat:
+      - designated
+      - 'yes'
+      waterway:sign:
+      - notice
+      access:delivery:
+      - 'no'
+      footway:
+      - crossing
+      smoothness:
+      - intermediate
+      crossing:markings:colour:
+      - white
+      traffic_signals:arrow:
+      - 'yes'
+      ref:signed:
+      - 'no'
+      public_transport:version:
+      - '2'
+      crossing:continuous:
+      - 'yes'
+      line_attachment:
+      - pin
+      lanes:
+      - '3'
+      sidewalk:
+      - right
+      turn:lanes:
+      - left|left|through
+      light_source:
+      - lantern
+      light:tilt:
+      - '90'
+      bridge: []
+      condition: []
+      hgv: []
+      massgis:way_id: []
+      width: []
+      sidewalk:both: []
+      lanes:backward: []
+      lanes:forward: []
+      massgis:ref: []
+      parking:both: []
+      turn:lanes:forward: []
+      cycleway:buffer: []
+      cycleway:width: []
+      source:hgv: []
+      source:maxspeed: []
+      cycleway:right: []
+      cycleway:both: []
+      parking:left: []
+      parking:right: []
+      parking:right:orientation: []
+      cycleway:left: []
+      cycleway:both:lane: []
+      parking:both:orientation: []
+      cycleway:left:lane: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      cycleway:separation: []
+      parking:left:orientation: []
+      sidewalk:left: []
+      sidewalk:right: []
+      cycleway:right:lane: []
+      cycleway:left:buffer: []
+      cycleway:left:width: []
+      cycleway:right:buffer: []
+      cycleway:oneway: []
+      busway:right: []
+      lanes:bus: []
+      bicycle_road: []
+      oneway:bicycle: []
+      parking:lane:both: []
+      oneway:conditional: []
+      cycleway:right:oneway: []
+      cycleway:right:separation: []
+      sidewalk:both:kerb: []
+      sidewalk:both:surface: []
+      shoulder: []
+      service: []
+      lane_markings: []
+      maxweight:hgv: []
+      orig_name: []
+      ramp: []
+      official_name: []
+      parking:both:restriction: []
+      turn: []
+      NHS: []
+      name:wam: []
+      cycleway:left:oneway: []
+      cycleway:left:separation: []
+      destination: []
+      destination:ref: []
+      parking:condition:both: []
+      sidewalk:right:surface: []
+      horse: []
+      motor_vehicle: []
+      maxheight: []
+      maxweight:signed: []
+      parking:right:restriction: []
+      name:etymology:wikidata: []
+      parking:condition:left: []
+      parking:lane:left:parallel: []
+      parking:left:restriction: []
+      destination:symbol: []
+      sidewalk:left:surface: []
+      segregated: []
+      check_date:surface: []
+      source:width: []
+      cycleway:both:buffer: []
+      check_date:smoothness: []
+      parking:condition:right: []
+      expressway: []
+      note:lanes: []
+      ownership: []
+      check_date:cycleway:surface: []
+      cycleway:surface: []
+      footway:surface: []
+      parking:fee: []
+      name:mk: []
+      parking:right:access: []
+      trolley_wire: []
+      hazmat: []
+      short_name: []
+      narrow: []
+      note:highway: []
+      noname: []
+      FIXME:hgv: []
+      destination:street: []
+      construction: []
+      incline: []
+      name:en: []
+      name:etymology: []
+      name:etymology:wikipedia: []
+      maxheight:signed: []
+      source:maxheight: []
+      busway: []
+      created_by: []
+      tracktype: []
+      parking:lane:left: []
+      name_orig: []
+      bridge:movable: []
+      bridge:name: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      abutters: []
+      postal_code: []
+      hgv:lanes: []
+      hgv:lanes:conditional: []
+      hgv:national_network: []
+      lanes:conditional: []
+      source:hgv:national_network: []
+      source_ref: []
+      junction:ref: []
+      maxspeed:advisory: []
+      destination:ref:to: []
+      destination:forward: []
+      rcn_ref: []
+      centerline: []
+      goods: []
+      destination:backward: []
+      destination:ref:backward: []
+      destination:ref:to:forward: []
+      note:en: []
+      width:feet: []
+      hazmat:conditional: []
+      source:hazmat: []
+      class:bicycle: []
+      hov: []
+      hov:minimum: []
+      cycleway:lane: []
+      rideshare: []
+      parking:lane:right: []
+      motor_vehicle:conditional: []
+      cutting: []
+      embedded_rails: []
+      taxi: []
+      check_date:cycleway: []
+      placement: []
+      maxlength: []
+      source:loc_name: []
+      motorcar: []
+      source:name: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      source:oneway: []
+      oneway:bus: []
+      note:sidewalk: []
+      restriction:conditional: []
+      heritage:website: []
+      psv: []
+      coach: []
+      hgv_articulated: []
+      lhv: []
+      bus:lanes: []
+      vehicle:lanes: []
+      destination:to: []
+      opening_date: []
+      url: []
+      destination:ref:forward: []
+      handrail: []
+      addr:suburb: []
+      restriction:hgv: []
+      stroller: []
+      destination:street:lanes: []
+      access:lanes: []
+      driveway: []
+      golf: []
+      golf_cart: []
+      check_date:ramp: []
+      dog: []
+      step_count: []
+      destination:lanes:conditional: []
+      turn:lanes:conditional: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      parking:lane:left:diagonal: []
+      bus:lanes:forward: []
+      vehicle:lanes:forward: []
+      parking:left:access: []
+      full_name: []
+      embankment: []
+      railway_name: []
+      bicycle:signed: []
+      mtb:scale:imba: []
+      old_railway_operator: []
+      step:contrast: []
+      bus:lanes:conditional: []
+      hov:lanes:conditional: []
+      maxweight:lanes:conditional: []
+      motorcycle:lanes:conditional: []
+      trailer:lanes:conditional: []
+      bridge:material: []
+      bridge:structure: []
+      area: []
+      informal: []
+      ramp:wheelchair: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      maxweight:hgv:conditional: []
+      sac_scale: []
+      source:noname: []
+      trail_visibility: []
+      old_name:1970: []
+      source:old_name:1970: []
+      motorcycle: []
+      parking:lane:both:parallel: []
+      usage: []
+      frontage_road: []
+      busway:left: []
+      bicycle:lanes: []
+      note:old_railway_operator: []
+      route: []
+      type: []
+      check_date:handrail: []
+      vehicle: []
+      hour_off: []
+      hour_on: []
+      bus_bay: []
+      horse_scale: []
+      source:cycleway:width: []
+      proposed: []
+      cycleway:smoothness: []
+      width:carriageway: []
+      floating: []
+      mooring: []
+      conveying: []
+      subway: []
+      platform:type: []
+      fishing: []
+      ramp:bicycle: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      destination:lanes:forward: []
+      steps: []
+      parking:right:fee: []
+      private: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane: []
+      parking:lane:both_1: []
+      maxspeed:variable: []
+      parking:right:maxstay:conditional: []
+      shoulder:right: []
+      air_conditioning: []
+      cycleway:right:bicycle:backward: []
+      cycleway:right:bicycle:forward: []
+      disused: []
+      leisure: []
+      parking:condition:both:customers: []
+      min_level: []
+      turn:backward: []
+      hazmat:lanes: []
+      maxheight:lanes: []
+      sidewalk:right:bicycle: []
+      sidewalk:separate: []
+      cycleway:both:separation: []
+      street:name: []
+      abandoned:service: []
+      landing: []
+      handrail:center: []
+      width:lanes: []
+      hgv:conditional: []
+      note:service: []
+      bus:lanes:backward: []
+      former:name: []
+      mtb:scale: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      vehicle:lanes:backward: []
+      surface:note: []
+      contact:facebook: []
+      change:lanes:forward: []
+      access_aisle: []
+      signal: []
+      fountain: []
+      architect: []
+      artist:wikidata: []
+      memorial: []
+      handrail:left: []
+      handrail:right: []
+      subject:wikidata: []
+      subject:wikimedia_commons: []
+      subject:wikipedia: []
+      disabled: []
+      foot:backward: []
+      raised: []
+      platform_lift: []
+      tactile_writing: []
+      area:highway: []
+      was:bridge:movable: []
+      building:levels: []
+      building:material: []
+      roof:colour: []
+      toilets: []
+      waterway: []
+      natural: []
+      stairs: []
+      designated_direction: []
+      path: []
+      brand:website: []
+      traffic_island: []
+      parking:lane:right:parallel: []
+      check_date:footway:surface: []
+      construction:bicycle: []
+      construction:cycleway: []
+      exit: []
+      building: []
+      room: []
+      abandoned:railway: []
+      maxspeed:bus: []
+      maxspeed:hgv: []
+      massgis:ARTICLE97: []
+      massgis:ASSESS_ACR: []
+      massgis:ATT_DATE: []
+      massgis:COMMENTS: []
+      massgis:DCAM_ID: []
+      massgis:DEED_ACRES: []
+      massgis:EOEAINVOLV: []
+      massgis:FEESYM: []
+      massgis:FEE_OWNER: []
+      massgis:FY_FUNDING: []
+      massgis:LEV_PROT: []
+      massgis:MANAGER: []
+      massgis:MANAGR_ABR: []
+      massgis:MANAGR_TYP: []
+      massgis:OS_DEED_BO: []
+      massgis:OS_DEED_PA: []
+      massgis:OS_ID: []
+      massgis:OWNER_ABRV: []
+      massgis:OWNER_TYPE: []
+      massgis:POLY_ID: []
+      massgis:PRIM_PURP: []
+      massgis:PUB_ACCESS: []
+      massgis:SITE_NAME: []
+      massgis:SOURCE_MAP: []
+      massgis:TOWN_ID: []
+      owner: []
+      maxheight:physical: []
+      cycleway:buffer:right: []
+      aeroway: []
+      bicycle:conditional: []
+      tidal: []
+      sport: []
+      bus:conditional: []
+      change: []
+      highway:conditional: []
+      hov:conditional: []
+      motorcycle:conditional: []
+      trailer: []
+      separation:left: []
+      stairs:type: []
+      portage: []
+      was:railway: []
+      railway:service: []
+      railway:usage: []
+      change:lanes: []
+      oneway:emergency: []
+      obstacle: []
+      overgrown: []
+      ramp:stroller: []
+      name:left: []
+      name:right: []
+      parking:both:maxstay: []
+      markings: []
+      boundary: []
+      abandoned: []
+      gnis:feature_id: []
+      bicycle_parking: []
+      bicycle_rental: []
+      heating: []
+      opening_hours: []
+      payment:app: []
+      seasonal: []
+    style_rules:
+      highway:
+        turning_circle: {}
+        motorway_junction: {}
+        stop: {}
+        traffic_signals: {}
+        crossing: {}
+        bus_stop: {}
+        street_lamp: {}
+        turning_loop: {}
+        give_way: {}
+        priority: {}
+        stop;crossing: {}
+        trailhead: {}
+        milestone: {}
+        toll_gantry: {}
+        elevator: {}
+        emergency_access_point: {}
+        traffic_signals;crossing: {}
+        mini_roundabout: {}
+        emergency_bay: {}
+        crossing;traffic_signals: {}
+        speed_display: {}
+        traffic_mirror: {}
+        do not enter sign: {}
+      maxspeed:
+        25 mph: {}
+        30 mph: {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__MultiLineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/highway.gpkg
+    layer: highway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
+      zorder: 6
+      visible: true
+      palette: []
+      linewidth: 0.22
+    attributes:
+      element:
+      - way
+      id: 729
+      highway:
+      - residential
+      - service
+      - footway
+      - path
+      - cycleway
+      - track
+      - pedestrian
+      - motorway_link
+      - corridor
+      stop: []
+      traffic_signals: []
+      traffic_signals:direction: []
+      crossing:
+      - marked
+      crossing:island: []
+      crossing:markings:
+      - 'yes'
+      - 'no'
+      kerb: []
+      tactile_paving:
+      - 'no'
+      restriction: []
+      noref: []
+      direction: []
+      crossing:signals: []
+      button_operated: []
+      traffic_signals:sound: []
+      traffic_signals:vibration: []
+      mapillary: []
+      survey:date: []
+      surface:
+      - asphalt
+      - ground
+      - paved
+      - wood
+      - fine_gravel
+      - concrete
+      - gravel
+      - dirt
+      - paving_stones
+      - bricks
+      - unpaved
+      - concrete:plates
+      - stonedust
+      crossing_ref: []
+      bicycle:
+      - 'yes'
+      - 'no'
+      - designated
+      junction: []
+      image: []
+      traffic_calming: []
+      name: 87
+      ref: []
+      ref:left: []
+      attribution:
+      - Office of Geographic and Environmental Information (MassGIS)
+      source:
+      - massgis_import_v0.1_20071009102616
+      - massgis_import_v0.1_20071008193615
+      - DigitalGlobe-Premium
+      - Bing
+      - massgis_import_v0.1_20071009091627
+      - massgis_import_v0.1_20071009101959
+      - esri/Boston_MA_Footways
+      - massgis_import_v0.1_20071009094247
+      - massgis_import_v0.1_20071008165629
+      - massgis_import_v0.1_20071009101203
+      - massgis_import_v0.1_20071008144750
+      - massgis_import_v0.1_20071009093301
+      - http://www.ci.somerville.ma.us/
+      - massgis_import_v0.1_20090107171258
+      - massgis_import_v0.1_20071009094650
+      - massgis_import_v0.1_20071009092358
+      - massgis_import_v0.1_20071009091249
+      - OSM US TIGER 2012 Roads Overlay
+      - massgis_import_v0.1_20071008160221
+      - massgis_import_v0.1_20071008150341
+      - Yahoo
+      bus: []
+      departures_board: []
+      network: []
+      network:wikidata: []
+      network:wikipedia: []
+      operator: []
+      public_transport: []
+      shelter: []
+      traffic_signals:turn:backward: []
+      turning_circle: []
+      traffic_signals:turn:forward: []
+      old_ref: []
+      automated: []
+      currency:USD: []
+      fee: []
+      height: []
+      man_made: []
+      manufacturer: []
+      material: []
+      operator:short: []
+      operator:type: []
+      operator:wikidata: []
+      payment:e_zpass: []
+      payment:online: []
+      support: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      toll: []
+      ref:right: []
+      fixme: []
+      email: []
+      phone: []
+      place: []
+      website: []
+      brand: []
+      charge: []
+      network:short: []
+      supervised: []
+      traffic_sign:backward: []
+      traffic_signals:countdown: []
+      check_date:crossing: []
+      hazard: []
+      alt_name: []
+      line: []
+      massgis:geom_id: []
+      bench: []
+      bin: []
+      lit:
+      - 'yes'
+      - 'no'
+      wikidata: []
+      gtfs:stop_id: []
+      wheelchair:
+      - 'yes'
+      level:
+      - '-1'
+      - '0'
+      check_date:shelter: []
+      addr:city: []
+      addr:housenumber: []
+      addr:postcode: []
+      addr:state: []
+      addr:street: []
+      amenity: []
+      wikipedia: []
+      description: []
+      note: []
+      kerb:left: []
+      kerb:right: []
+      footway:crossing:markings: []
+      lamp_mount: []
+      lamp_type: []
+      check_date: []
+      check_date:lit: []
+      route_ref: []
+      gtfs:feed: []
+      network:guid: []
+      layer:
+      - '-1'
+      - '1'
+      hiking: []
+      information: []
+      mtb: []
+      tourism: []
+      check_date:traffic_signals:sound: []
+      check_date:traffic_signals:vibration: []
+      barrier: []
+      cycleway: []
+      indoor:
+      - 'yes'
+      check_date:tactile_paving: []
+      covered:
+      - 'no'
+      kerb:approach_aid: []
+      passenger_information_display: []
+      disused:highway: []
+      emergency: []
+      old_name:
+      - Munroe Street
+      - Yard Way
+      - Griffin Way
+      addr:unit: []
+      not:network:wikidata: []
+      light_rail: []
+      railway: []
+      flag: []
+      pole: []
+      shelter_type: []
+      loc_name: []
+      designation: []
+      passenger_information_display:speech_output: []
+      temporary:access: []
+      trolleybus: []
+      check_date:bench: []
+      check_date:bin: []
+      train: []
+      access:
+      - private
+      - customers
+      - 'no'
+      - 'yes'
+      - permissive
+      - destination
+      noexit: []
+      light:method: []
+      crossing:barrier: []
+      foot:
+      - 'yes'
+      - designated
+      - permissive
+      surface:colour: []
+      colour: []
+      gate:type: []
+      locked: []
+      historic: []
+      start_date:
+      - 07/07/2006
+      traffic_sign:forward: []
+      power: []
+      transformer: []
+      location:transition: []
+      traffic_sign: []
+      traffic_signals:lanes: []
+      flashing_lights: []
+      couplings: []
+      fire_hydrant:position: []
+      fire_hydrant:type: []
+      water_source: []
+      ele: []
+      ele:msl: []
+      ele:source: []
+      location: []
+      brand:wikidata: []
+      elevator: []
+      automatic_door: []
+      door: []
+      parking: []
+      addr:country: []
+      distance: []
+      marker: []
+      milestone_type: []
+      wikimedia_commons: []
+      contact:email: []
+      denotation: []
+      generator:source: []
+      heritage:operator: []
+      inscription: []
+      lamp_operator: []
+      light:colour: []
+      bollard: []
+      bridge:support: []
+      access:conditional: []
+      artist_name: []
+      artwork_type: []
+      camera:direction: []
+      camera:mount: []
+      camera:type: []
+      generator:method: []
+      generator:output:electricity: []
+      generator:type: []
+      maxspeed:
+      - 25 mph
+      - 10 mph
+      - 15 mph
+      - 20 mph
+      - 30 mph
+      - 5 mph
+      lamp:direction: []
+      camera:height: []
+      lamp:height: []
+      contact:website: []
+      capacity: []
+      maxweight: []
+      check_date:wheelchair: []
+      entrance: []
+      communication: []
+      oneway:
+      - 'no'
+      - 'yes'
+      tunnel: []
+      marked: []
+      access:disabled: []
+      maxwidth: []
+      source:maxwidth: []
+      boat: []
+      waterway:sign: []
+      access:delivery: []
+      footway:
+      - sidewalk
+      - crossing
+      - private
+      smoothness:
+      - good
+      crossing:markings:colour: []
+      traffic_signals:arrow: []
+      ref:signed: []
+      public_transport:version: []
+      crossing:continuous: []
+      line_attachment: []
+      lanes:
+      - '1'
+      - '2'
+      sidewalk:
+      - both
+      turn:lanes: []
+      light_source: []
+      light:tilt: []
+      bridge: []
+      condition:
+      - fair
+      - deficient
+      - good
+      hgv: []
+      massgis:way_id: 65
+      width:
+      - '9.1'
+      - '12.2'
+      - '15.2'
+      - '24.4'
+      - '13.7'
+      - '9.8'
+      - '12.8'
+      - '2'
+      - '11.0'
+      - '10.7'
+      - '10.1'
+      - '16.8'
+      - '2.4'
+      - '12.5'
+      - '3'
+      - '11.6'
+      sidewalk:both:
+      - separate
+      - 'no'
+      lanes:backward: []
+      lanes:forward: []
+      massgis:ref: []
+      parking:both: []
+      turn:lanes:forward: []
+      cycleway:buffer: []
+      cycleway:width: []
+      source:hgv: []
+      source:maxspeed:
+      - Posted sign
+      cycleway:right: []
+      cycleway:both:
+      - 'no'
+      parking:left: []
+      parking:right: []
+      parking:right:orientation: []
+      cycleway:left: []
+      cycleway:both:lane: []
+      parking:both:orientation: []
+      cycleway:left:lane: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      cycleway:separation: []
+      parking:left:orientation: []
+      sidewalk:left: []
+      sidewalk:right: []
+      cycleway:right:lane: []
+      cycleway:left:buffer: []
+      cycleway:left:width: []
+      cycleway:right:buffer: []
+      cycleway:oneway: []
+      busway:right: []
+      lanes:bus: []
+      bicycle_road: []
+      oneway:bicycle: []
+      parking:lane:both: []
+      oneway:conditional: []
+      cycleway:right:oneway: []
+      cycleway:right:separation: []
+      sidewalk:both:kerb: []
+      sidewalk:both:surface: []
+      shoulder: []
+      service:
+      - driveway
+      - parking_aisle
+      lane_markings: []
+      maxweight:hgv: []
+      orig_name:
+      - Ramp-rt 93 Nb To Rt 37
+      ramp: []
+      official_name: []
+      parking:both:restriction: []
+      turn: []
+      NHS: []
+      name:wam: []
+      cycleway:left:oneway: []
+      cycleway:left:separation: []
+      destination:
+      - Boston;Cape Cod
+      destination:ref:
+      - I 93 North;US 1 North
+      parking:condition:both: []
+      sidewalk:right:surface: []
+      horse:
+      - unknown
+      - 'no'
+      motor_vehicle:
+      - 'no'
+      maxheight: []
+      maxweight:signed: []
+      parking:right:restriction: []
+      name:etymology:wikidata: []
+      parking:condition:left: []
+      parking:lane:left:parallel: []
+      parking:left:restriction: []
+      destination:symbol: []
+      sidewalk:left:surface: []
+      segregated:
+      - 'no'
+      check_date:surface: []
+      source:width: []
+      cycleway:both:buffer: []
+      check_date:smoothness: []
+      parking:condition:right: []
+      expressway: []
+      note:lanes: []
+      ownership:
+      - private
+      check_date:cycleway:surface: []
+      cycleway:surface: []
+      footway:surface: []
+      parking:fee: []
+      name:mk: []
+      parking:right:access: []
+      trolley_wire: []
+      hazmat: []
+      short_name: []
+      narrow: []
+      note:highway: []
+      noname:
+      - 'yes'
+      FIXME:hgv: []
+      destination:street: []
+      construction:
+      - 'yes'
+      incline:
+      - 0%
+      name:en: []
+      name:etymology: []
+      name:etymology:wikipedia: []
+      maxheight:signed: []
+      source:maxheight: []
+      busway: []
+      created_by: []
+      tracktype:
+      - grade2
+      parking:lane:left: []
+      name_orig: []
+      bridge:movable: []
+      bridge:name: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      abutters: []
+      postal_code: []
+      hgv:lanes: []
+      hgv:lanes:conditional: []
+      hgv:national_network: []
+      lanes:conditional: []
+      source:hgv:national_network: []
+      source_ref: []
+      junction:ref: []
+      maxspeed:advisory: []
+      destination:ref:to:
+      - MA 3
+      destination:forward: []
+      rcn_ref: []
+      centerline: []
+      goods: []
+      destination:backward: []
+      destination:ref:backward: []
+      destination:ref:to:forward: []
+      note:en: []
+      width:feet: []
+      hazmat:conditional: []
+      source:hazmat: []
+      class:bicycle: []
+      hov: []
+      hov:minimum: []
+      cycleway:lane: []
+      rideshare: []
+      parking:lane:right: []
+      motor_vehicle:conditional: []
+      cutting: []
+      embedded_rails: []
+      taxi: []
+      check_date:cycleway: []
+      placement: []
+      maxlength: []
+      source:loc_name: []
+      motorcar: []
+      source:name: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      source:oneway: []
+      oneway:bus: []
+      note:sidewalk: []
+      restriction:conditional: []
+      heritage:website: []
+      psv: []
+      coach: []
+      hgv_articulated: []
+      lhv: []
+      bus:lanes: []
+      vehicle:lanes: []
+      destination:to: []
+      opening_date: []
+      url: []
+      destination:ref:forward: []
+      handrail: []
+      addr:suburb: []
+      restriction:hgv: []
+      stroller:
+      - 'yes'
+      destination:street:lanes: []
+      access:lanes: []
+      driveway: []
+      golf:
+      - cartpath
+      golf_cart:
+      - designated
+      - 'yes'
+      check_date:ramp: []
+      dog: []
+      step_count: []
+      destination:lanes:conditional: []
+      turn:lanes:conditional: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      parking:lane:left:diagonal: []
+      bus:lanes:forward: []
+      vehicle:lanes:forward: []
+      parking:left:access: []
+      full_name: []
+      embankment: []
+      railway_name: []
+      bicycle:signed: []
+      mtb:scale:imba: []
+      old_railway_operator: []
+      step:contrast: []
+      bus:lanes:conditional: []
+      hov:lanes:conditional: []
+      maxweight:lanes:conditional: []
+      motorcycle:lanes:conditional: []
+      trailer:lanes:conditional: []
+      bridge:material: []
+      bridge:structure: []
+      area: []
+      informal:
+      - 'yes'
+      ramp:wheelchair: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      maxweight:hgv:conditional: []
+      sac_scale: []
+      source:noname: []
+      trail_visibility: []
+      old_name:1970: []
+      source:old_name:1970: []
+      motorcycle: []
+      parking:lane:both:parallel: []
+      usage: []
+      frontage_road: []
+      busway:left: []
+      bicycle:lanes: []
+      note:old_railway_operator: []
+      route: []
+      type: []
+      check_date:handrail: []
+      vehicle: []
+      hour_off: []
+      hour_on: []
+      bus_bay: []
+      horse_scale: []
+      source:cycleway:width: []
+      proposed: []
+      cycleway:smoothness: []
+      width:carriageway: []
+      floating: []
+      mooring: []
+      conveying: []
+      subway: []
+      platform:type: []
+      fishing: []
+      ramp:bicycle: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      destination:lanes:forward: []
+      steps: []
+      parking:right:fee: []
+      private: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane: []
+      parking:lane:both_1: []
+      maxspeed:variable: []
+      parking:right:maxstay:conditional: []
+      shoulder:right: []
+      air_conditioning: []
+      cycleway:right:bicycle:backward: []
+      cycleway:right:bicycle:forward: []
+      disused: []
+      leisure: []
+      parking:condition:both:customers: []
+      min_level: []
+      turn:backward: []
+      hazmat:lanes: []
+      maxheight:lanes: []
+      sidewalk:right:bicycle: []
+      sidewalk:separate: []
+      cycleway:both:separation: []
+      street:name: []
+      abandoned:service: []
+      landing: []
+      handrail:center: []
+      width:lanes: []
+      hgv:conditional: []
+      note:service: []
+      bus:lanes:backward: []
+      former:name: []
+      mtb:scale: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      vehicle:lanes:backward: []
+      surface:note:
+      - rubbery asphalt
+      contact:facebook: []
+      change:lanes:forward: []
+      access_aisle: []
+      signal: []
+      fountain: []
+      architect: []
+      artist:wikidata: []
+      memorial: []
+      handrail:left: []
+      handrail:right: []
+      subject:wikidata: []
+      subject:wikimedia_commons: []
+      subject:wikipedia: []
+      disabled: []
+      foot:backward: []
+      raised: []
+      platform_lift: []
+      tactile_writing: []
+      area:highway: []
+      was:bridge:movable: []
+      building:levels: []
+      building:material: []
+      roof:colour: []
+      toilets: []
+      waterway: []
+      natural: []
+      stairs: []
+      designated_direction: []
+      path: []
+      brand:website: []
+      traffic_island: []
+      parking:lane:right:parallel: []
+      check_date:footway:surface: []
+      construction:bicycle: []
+      construction:cycleway: []
+      exit: []
+      building: []
+      room: []
+      abandoned:railway: []
+      maxspeed:bus: []
+      maxspeed:hgv: []
+      massgis:ARTICLE97: []
+      massgis:ASSESS_ACR: []
+      massgis:ATT_DATE: []
+      massgis:COMMENTS: []
+      massgis:DCAM_ID: []
+      massgis:DEED_ACRES: []
+      massgis:EOEAINVOLV: []
+      massgis:FEESYM: []
+      massgis:FEE_OWNER: []
+      massgis:FY_FUNDING: []
+      massgis:LEV_PROT: []
+      massgis:MANAGER: []
+      massgis:MANAGR_ABR: []
+      massgis:MANAGR_TYP: []
+      massgis:OS_DEED_BO: []
+      massgis:OS_DEED_PA: []
+      massgis:OS_ID: []
+      massgis:OWNER_ABRV: []
+      massgis:OWNER_TYPE: []
+      massgis:POLY_ID: []
+      massgis:PRIM_PURP: []
+      massgis:PUB_ACCESS: []
+      massgis:SITE_NAME: []
+      massgis:SOURCE_MAP: []
+      massgis:TOWN_ID: []
+      owner: []
+      maxheight:physical: []
+      cycleway:buffer:right: []
+      aeroway: []
+      bicycle:conditional: []
+      tidal: []
+      sport: []
+      bus:conditional: []
+      change: []
+      highway:conditional: []
+      hov:conditional: []
+      motorcycle:conditional: []
+      trailer: []
+      separation:left: []
+      stairs:type: []
+      portage: []
+      was:railway: []
+      railway:service: []
+      railway:usage: []
+      change:lanes: []
+      oneway:emergency: []
+      obstacle: []
+      overgrown: []
+      ramp:stroller: []
+      name:left: []
+      name:right: []
+      parking:both:maxstay: []
+      markings: []
+      boundary: []
+      abandoned: []
+      gnis:feature_id: []
+      bicycle_parking: []
+      bicycle_rental: []
+      heating: []
+      opening_hours: []
+      payment:app: []
+      seasonal: []
+    style_rules:
+      highway:
+        residential:
+          linewidth: 0.85
+        service:
+          linewidth: 0.34
+        footway: {}
+        path: {}
+        cycleway: {}
+        track:
+          linewidth: 0.28
+        pedestrian: {}
+        motorway_link: {}
+        corridor: {}
+      maxspeed:
+        25 mph: {}
+        10 mph: {}
+        15 mph: {}
+        20 mph: {}
+        30 mph: {}
+        5 mph: {}
+    style_order:
+    - highway
+    - maxspeed
+  highway__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/highway.gpkg
+    layer: highway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
+      zorder: 6
+      visible: true
+      palette: []
+      edge_color: '#ffd84d'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 503
+      highway:
+      - pedestrian
+      - platform
+      - elevator
+      - service
+      - track
+      - path
+      - steps
+      - corridor
+      - footway
+      - bus_stop
+      - rest_area
+      - 'yes'
+      stop: []
+      traffic_signals: []
+      traffic_signals:direction: []
+      crossing: []
+      crossing:island: []
+      crossing:markings: []
+      kerb: []
+      tactile_paving:
+      - 'no'
+      - 'yes'
+      restriction: []
+      noref: []
+      direction:
+      - '135'
+      - both
+      crossing:signals: []
+      button_operated: []
+      traffic_signals:sound: []
+      traffic_signals:vibration: []
+      mapillary: []
+      survey:date: []
+      surface:
+      - concrete
+      - asphalt
+      - paving_stones
+      - bricks
+      - wood
+      - paved
+      - brick
+      - grass
+      - concrete:plates
+      - sett
+      - stone
+      - fine_gravel
+      - sand
+      crossing_ref: []
+      bicycle:
+      - 'yes'
+      - 'no'
+      - permissive
+      - dismount
+      junction: []
+      image: []
+      traffic_calming: []
+      name: 72
+      ref:
+      - '875'
+      - '10642'
+      - '1555'
+      - '1526'
+      - '18511'
+      - '185'
+      - '11413'
+      - '1743'
+      - '10413'
+      - '1188'
+      - '1215'
+      - '1266'
+      - '1216'
+      - '1265'
+      - TE185
+      - TE-183
+      - '74624'
+      - '2'
+      - Platform 1
+      - Tracks 5 & 7
+      - '79'
+      - 70200;71199
+      - 70196;70197;70198;70199
+      - '70075'
+      - 70075;70076
+      - '70076'
+      - '70020'
+      - '70021'
+      - TE-505
+      - TE-609
+      - '74637'
+      - '74636'
+      - '74632'
+      - '74633'
+      - '74635'
+      - '74630'
+      - '74631'
+      - '5271'
+      ref:left: []
+      attribution: []
+      source:
+      - Bing
+      - survey;local knowledge
+      bus:
+      - 'yes'
+      departures_board:
+      - realtime
+      - 'no'
+      - 'yes'
+      - timetable
+      network:
+      - MBTA
+      network:wikidata:
+      - Q171985
+      network:wikipedia:
+      - en:Massachusetts Bay Transportation Authority
+      operator:
+      - Massachusetts Bay Transportation Authority
+      - MBTA
+      - Aeronaut Brewing Company
+      - Friends of the Public Garden
+      - BU
+      public_transport:
+      - platform
+      shelter:
+      - 'yes'
+      traffic_signals:turn:backward: []
+      turning_circle: []
+      traffic_signals:turn:forward: []
+      old_ref: []
+      automated: []
+      currency:USD: []
+      fee: []
+      height:
+      - '4'
+      - '3'
+      man_made:
+      - pier
+      manufacturer: []
+      material:
+      - glass
+      - stone
+      - granite
+      operator:short:
+      - MBTA
+      operator:type: []
+      operator:wikidata:
+      - Q171985
+      payment:e_zpass: []
+      payment:online: []
+      support: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      toll: []
+      ref:right: []
+      fixme: []
+      email: []
+      phone: []
+      place:
+      - square
+      website:
+      - https://commonspaces.harvard.edu/venues/the_plaza/plaza-tent
+      - https://www.cityofboston.gov/veterans/herosquares/View.aspx?id=260
+      - https://www.boston.gov/departments/womens-advancement/boston-womens-memorial
+      - https://esplanade.org/projects-programs/lotta-fountain/
+      - https://www.cbaland.com/south-plaza-park
+      brand: []
+      charge: []
+      network:short:
+      - MBTA
+      supervised: []
+      traffic_sign:backward: []
+      traffic_signals:countdown: []
+      check_date:crossing: []
+      hazard: []
+      alt_name:
+      - Suffolk Downs Raceway
+      line: []
+      massgis:geom_id: []
+      bench:
+      - 'yes'
+      - 'no'
+      bin:
+      - 'yes'
+      - 'no'
+      lit:
+      - 'yes'
+      - 'no'
+      wikidata:
+      - Q4846632
+      - Q2754409
+      - Q25005040
+      - Q75071891
+      - Q73269928
+      - Q75258878
+      gtfs:stop_id:
+      - '875'
+      - '10642'
+      - '1265'
+      - '18511'
+      - '185'
+      - '11413'
+      - '1743'
+      - '10413'
+      - '1188'
+      - '1215'
+      - '1266'
+      - '74624'
+      - '70075'
+      - '70076'
+      - '70020'
+      - '70021'
+      - '74637'
+      - '74636'
+      - '74632'
+      - '74633'
+      - '74635'
+      - '74630'
+      - '74631'
+      - '5271'
+      wheelchair:
+      - 'yes'
+      - 'no'
+      level:
+      - 0;-1.5
+      - 0;-1
+      - '0'
+      - -1;0;1
+      - '1'
+      - 0;-1;0.5
+      - 0;1
+      - -1;-2
+      - 0;-2
+      - -3;-4
+      - 1;2
+      - 0;2
+      - -1;0
+      - '-1'
+      - 1;0
+      - '-2'
+      - 0-9
+      - 0;1;2;3;4;5;6;7
+      check_date:shelter: []
+      addr:city: []
+      addr:housenumber: []
+      addr:postcode: []
+      addr:state: []
+      addr:street: []
+      amenity: []
+      wikipedia:
+      - en:Boylston station
+      - en:Dewey Square
+      - en:Boston Women's Memorial
+      - en:Parkman Plaza
+      - en:Lotta Fountain
+      - en:Commissioners Landing
+      description:
+      - Birch Street Plaza
+      - Publicly owned area of Porter Square, redesign completed in 2007 to include
+        art installations, trees, and seating.
+      - Inbound platform
+      - Outbound platform
+      - 'Track 3: B branch (Park Street) Track 4: B branch (Government Center), C
+        branch (North Station), E branch (North Station),'
+      - 'Track 1: C branch (Cleveland Circle), E branch (Heath Street) Track 2: B
+        branch (Boston College), D branch (Riverside)'
+      - 'Track 5: Southbound (Ashmont/Braintree)'
+      - 'Track 5: Southbound (Ashmont/Braintree) Track 6: Northbound (Alewife)'
+      - 'Track 6: Northbound (Alewife)'
+      - The former Suffolk Downs Racetrack, now a walking trail open from sunrise
+        to sunset
+      note: []
+      kerb:left: []
+      kerb:right: []
+      footway:crossing:markings: []
+      lamp_mount: []
+      lamp_type: []
+      check_date: []
+      check_date:lit: []
+      route_ref: []
+      gtfs:feed:
+      - US-MA-MBTA
+      network:guid:
+      - US-MA-MBTA
+      layer:
+      - '-1'
+      - '1'
+      - '0'
+      - '2'
+      - '-2'
+      - '4'
+      hiking: []
+      information: []
+      mtb: []
+      tourism:
+      - viewpoint
+      check_date:traffic_signals:sound: []
+      check_date:traffic_signals:vibration: []
+      barrier: []
+      cycleway: []
+      indoor:
+      - room
+      - 'yes'
+      - 'no'
+      check_date:tactile_paving: []
+      covered:
+      - 'yes'
+      - 'no'
+      - partial
+      kerb:approach_aid: []
+      passenger_information_display: []
+      disused:highway: []
+      emergency:
+      - 'yes'
+      old_name: []
+      addr:unit: []
+      not:network:wikidata: []
+      light_rail:
+      - 'yes'
+      railway:
+      - platform
+      flag: []
+      pole: []
+      shelter_type:
+      - roof
+      loc_name: []
+      designation: []
+      passenger_information_display:speech_output: []
+      temporary:access: []
+      trolleybus: []
+      check_date:bench: []
+      check_date:bin: []
+      train: []
+      access:
+      - 'no'
+      - 'yes'
+      - permissive
+      - private
+      - emergency
+      - permit
+      noexit: []
+      light:method: []
+      crossing:barrier: []
+      foot:
+      - 'yes'
+      - designated
+      - permit
+      surface:colour:
+      - '#c09480'
+      colour: []
+      gate:type: []
+      locked: []
+      historic:
+      - memorial
+      start_date:
+      - '1930'
+      - '1960'
+      traffic_sign:forward: []
+      power: []
+      transformer: []
+      location:transition: []
+      traffic_sign: []
+      traffic_signals:lanes: []
+      flashing_lights: []
+      couplings: []
+      fire_hydrant:position: []
+      fire_hydrant:type: []
+      water_source: []
+      ele: []
+      ele:msl: []
+      ele:source: []
+      location:
+      - indoor
+      - underground
+      - outdoor
+      - outsider
+      brand:wikidata: []
+      elevator:
+      - 'yes'
+      automatic_door: []
+      door: []
+      parking:
+      - surface
+      addr:country: []
+      distance: []
+      marker: []
+      milestone_type: []
+      wikimedia_commons:
+      - File:Lotta Fountain - IMG 3787.jpg
+      contact:email: []
+      denotation: []
+      generator:source: []
+      heritage:operator: []
+      inscription: []
+      lamp_operator: []
+      light:colour: []
+      bollard: []
+      bridge:support: []
+      access:conditional:
+      - yes @ (Mo-Sa 10:00-21:00; Su 11:00-19:00)
+      artist_name: []
+      artwork_type: []
+      camera:direction: []
+      camera:mount: []
+      camera:type: []
+      generator:method: []
+      generator:output:electricity: []
+      generator:type: []
+      maxspeed: []
+      lamp:direction: []
+      camera:height: []
+      lamp:height: []
+      contact:website: []
+      capacity:
+      - '15'
+      maxweight: []
+      check_date:wheelchair: []
+      entrance:
+      - 'no'
+      communication: []
+      oneway:
+      - 'yes'
+      - 'no'
+      tunnel:
+      - 'yes'
+      marked: []
+      access:disabled: []
+      maxwidth: []
+      source:maxwidth: []
+      boat: []
+      waterway:sign: []
+      access:delivery: []
+      footway:
+      - traffic_island
+      - indoor
+      smoothness:
+      - good
+      - excellent
+      - intermediate
+      - bad
+      crossing:markings:colour: []
+      traffic_signals:arrow: []
+      ref:signed: []
+      public_transport:version: []
+      crossing:continuous: []
+      line_attachment: []
+      lanes: []
+      sidewalk: []
+      turn:lanes: []
+      light_source: []
+      light:tilt: []
+      bridge:
+      - boardwalk
+      - 'yes'
+      - covered
+      condition: []
+      hgv: []
+      massgis:way_id: []
+      width:
+      - '2'
+      - '6'
+      - '10'
+      - '3'
+      - '5'
+      - '3.2'
+      - '12'
+      - '4'
+      - '1.5'
+      - '10.6'
+      - '11'
+      - '5.9'
+      - '7.3'
+      - '5.5'
+      - '7'
+      - '8'
+      - '1'
+      sidewalk:both: []
+      lanes:backward: []
+      lanes:forward: []
+      massgis:ref: []
+      parking:both: []
+      turn:lanes:forward: []
+      cycleway:buffer: []
+      cycleway:width: []
+      source:hgv: []
+      source:maxspeed: []
+      cycleway:right: []
+      cycleway:both: []
+      parking:left: []
+      parking:right: []
+      parking:right:orientation: []
+      cycleway:left: []
+      cycleway:both:lane: []
+      parking:both:orientation: []
+      cycleway:left:lane: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      cycleway:separation: []
+      parking:left:orientation: []
+      sidewalk:left: []
+      sidewalk:right: []
+      cycleway:right:lane: []
+      cycleway:left:buffer: []
+      cycleway:left:width: []
+      cycleway:right:buffer: []
+      cycleway:oneway: []
+      busway:right: []
+      lanes:bus: []
+      bicycle_road: []
+      oneway:bicycle: []
+      parking:lane:both: []
+      oneway:conditional: []
+      cycleway:right:oneway: []
+      cycleway:right:separation: []
+      sidewalk:both:kerb: []
+      sidewalk:both:surface: []
+      shoulder: []
+      service:
+      - alley
+      lane_markings: []
+      maxweight:hgv: []
+      orig_name: []
+      ramp: []
+      official_name:
+      - Admiral George E. Dewey Square
+      - George Francis Parkman Plaza
+      parking:both:restriction: []
+      turn: []
+      NHS: []
+      name:wam: []
+      cycleway:left:oneway: []
+      cycleway:left:separation: []
+      destination: []
+      destination:ref: []
+      parking:condition:both: []
+      sidewalk:right:surface: []
+      horse:
+      - 'no'
+      motor_vehicle:
+      - 'no'
+      - permit
+      maxheight: []
+      maxweight:signed: []
+      parking:right:restriction: []
+      name:etymology:wikidata:
+      - Q8005687
+      - Q4384803
+      parking:condition:left: []
+      parking:lane:left:parallel: []
+      parking:left:restriction: []
+      destination:symbol: []
+      sidewalk:left:surface: []
+      segregated: []
+      check_date:surface: []
+      source:width: []
+      cycleway:both:buffer: []
+      check_date:smoothness: []
+      parking:condition:right: []
+      expressway: []
+      note:lanes: []
+      ownership:
+      - private_nonprofit
+      check_date:cycleway:surface: []
+      cycleway:surface: []
+      footway:surface: []
+      parking:fee: []
+      name:mk: []
+      parking:right:access: []
+      trolley_wire: []
+      hazmat: []
+      short_name: []
+      narrow: []
+      note:highway: []
+      noname:
+      - 'yes'
+      FIXME:hgv: []
+      destination:street: []
+      construction: []
+      incline:
+      - down
+      - up
+      - 0%
+      name:en: []
+      name:etymology:
+      - William Bond
+      name:etymology:wikipedia:
+      - William Bond (Massachusetts politician)
+      maxheight:signed: []
+      source:maxheight: []
+      busway: []
+      created_by: []
+      tracktype:
+      - grade2
+      parking:lane:left: []
+      name_orig: []
+      bridge:movable: []
+      bridge:name: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      abutters: []
+      postal_code: []
+      hgv:lanes: []
+      hgv:lanes:conditional: []
+      hgv:national_network: []
+      lanes:conditional: []
+      source:hgv:national_network: []
+      source_ref: []
+      junction:ref: []
+      maxspeed:advisory: []
+      destination:ref:to: []
+      destination:forward: []
+      rcn_ref: []
+      centerline: []
+      goods: []
+      destination:backward: []
+      destination:ref:backward: []
+      destination:ref:to:forward: []
+      note:en: []
+      width:feet: []
+      hazmat:conditional: []
+      source:hazmat: []
+      class:bicycle: []
+      hov: []
+      hov:minimum: []
+      cycleway:lane: []
+      rideshare: []
+      parking:lane:right: []
+      motor_vehicle:conditional: []
+      cutting: []
+      embedded_rails: []
+      taxi: []
+      check_date:cycleway: []
+      placement: []
+      maxlength: []
+      source:loc_name: []
+      motorcar: []
+      source:name: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      source:oneway: []
+      oneway:bus: []
+      note:sidewalk: []
+      restriction:conditional: []
+      heritage:website: []
+      psv: []
+      coach: []
+      hgv_articulated: []
+      lhv: []
+      bus:lanes: []
+      vehicle:lanes: []
+      destination:to: []
+      opening_date: []
+      url: []
+      destination:ref:forward: []
+      handrail:
+      - 'yes'
+      - 'no'
+      addr:suburb: []
+      restriction:hgv: []
+      stroller:
+      - 'no'
+      - limited
+      - 'yes'
+      destination:street:lanes: []
+      access:lanes: []
+      driveway: []
+      golf:
+      - cartpath
+      golf_cart:
+      - designated
+      check_date:ramp: []
+      dog:
+      - leashed
+      - 'no'
+      - 'yes'
+      step_count:
+      - '12'
+      - '25'
+      - '40'
+      - '24'
+      - '6'
+      - '15'
+      - '20'
+      destination:lanes:conditional: []
+      turn:lanes:conditional: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      parking:lane:left:diagonal: []
+      bus:lanes:forward: []
+      vehicle:lanes:forward: []
+      parking:left:access: []
+      full_name: []
+      embankment: []
+      railway_name: []
+      bicycle:signed: []
+      mtb:scale:imba: []
+      old_railway_operator: []
+      step:contrast: []
+      bus:lanes:conditional: []
+      hov:lanes:conditional: []
+      maxweight:lanes:conditional: []
+      motorcycle:lanes:conditional: []
+      trailer:lanes:conditional: []
+      bridge:material: []
+      bridge:structure: []
+      area:
+      - 'yes'
+      informal: []
+      ramp:wheelchair: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      maxweight:hgv:conditional: []
+      sac_scale: []
+      source:noname: []
+      trail_visibility: []
+      old_name:1970: []
+      source:old_name:1970: []
+      motorcycle: []
+      parking:lane:both:parallel: []
+      usage: []
+      frontage_road: []
+      busway:left: []
+      bicycle:lanes: []
+      note:old_railway_operator: []
+      route: []
+      type:
+      - multipolygon
+      check_date:handrail: []
+      vehicle: []
+      hour_off: []
+      hour_on: []
+      bus_bay: []
+      horse_scale: []
+      source:cycleway:width: []
+      proposed: []
+      cycleway:smoothness: []
+      width:carriageway: []
+      floating:
+      - 'yes'
+      mooring: []
+      conveying:
+      - 'no'
+      - 'yes'
+      subway:
+      - 'yes'
+      platform:type:
+      - island
+      - side
+      fishing: []
+      ramp:bicycle: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      destination:lanes:forward: []
+      steps: []
+      parking:right:fee: []
+      private: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane: []
+      parking:lane:both_1: []
+      maxspeed:variable: []
+      parking:right:maxstay:conditional: []
+      shoulder:right: []
+      air_conditioning:
+      - 'no'
+      cycleway:right:bicycle:backward: []
+      cycleway:right:bicycle:forward: []
+      disused: []
+      leisure:
+      - outdoor_seating
+      - track
+      parking:condition:both:customers: []
+      min_level: []
+      turn:backward: []
+      hazmat:lanes: []
+      maxheight:lanes: []
+      sidewalk:right:bicycle: []
+      sidewalk:separate: []
+      cycleway:both:separation: []
+      street:name: []
+      abandoned:service: []
+      landing: []
+      handrail:center: []
+      width:lanes: []
+      hgv:conditional: []
+      note:service: []
+      bus:lanes:backward: []
+      former:name: []
+      mtb:scale: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      vehicle:lanes:backward: []
+      surface:note: []
+      contact:facebook: []
+      change:lanes:forward: []
+      access_aisle: []
+      signal: []
+      fountain: []
+      architect:
+      - Arthur Shurcliff
+      - Shurcliff & Merrill
+      - Catherine Truman Architects
+      artist:wikidata:
+      - Q6376210
+      memorial:
+      - sculpture
+      handrail:left: []
+      handrail:right: []
+      subject:wikidata: []
+      subject:wikimedia_commons: []
+      subject:wikipedia: []
+      disabled: []
+      foot:backward: []
+      raised: []
+      platform_lift: []
+      tactile_writing: []
+      area:highway:
+      - traffic_island
+      - 'yes'
+      was:bridge:movable: []
+      building:levels:
+      - '1'
+      building:material:
+      - cement_block
+      roof:colour:
+      - grey
+      toilets:
+      - 'no'
+      waterway:
+      - boatyard
+      natural:
+      - sand
+      stairs:
+      - 'yes'
+      designated_direction:
+      - up
+      - both
+      path: []
+      brand:website:
+      - https://www.lavazza.us/en_US.html
+      traffic_island: []
+      parking:lane:right:parallel: []
+      check_date:footway:surface: []
+      construction:bicycle: []
+      construction:cycleway: []
+      exit:
+      - 'yes'
+      building:
+      - 'yes'
+      - roof
+      room:
+      - elevator
+      abandoned:railway: []
+      maxspeed:bus: []
+      maxspeed:hgv: []
+      massgis:ARTICLE97:
+      - '0'
+      massgis:ASSESS_ACR:
+      - '0.00000000'
+      massgis:ATT_DATE:
+      - 1994/08/03
+      massgis:COMMENTS:
+      - PAVED PLAZA
+      massgis:DCAM_ID:
+      - '0'
+      massgis:DEED_ACRES:
+      - '0.00000000'
+      massgis:EOEAINVOLV:
+      - '0'
+      massgis:FEESYM:
+      - N
+      massgis:FEE_OWNER:
+      - CHRISTIAN SCIENCE CHURCH
+      massgis:FY_FUNDING:
+      - '0'
+      massgis:LEV_PROT:
+      - N
+      massgis:MANAGER: []
+      massgis:MANAGR_ABR: []
+      massgis:MANAGR_TYP: []
+      massgis:OS_DEED_BO:
+      - '0'
+      massgis:OS_DEED_PA:
+      - '0'
+      massgis:OS_ID:
+      - 35-332
+      massgis:OWNER_ABRV: []
+      massgis:OWNER_TYPE:
+      - N
+      massgis:POLY_ID:
+      - '332'
+      massgis:PRIM_PURP:
+      - O
+      massgis:PUB_ACCESS:
+      - Y
+      massgis:SITE_NAME:
+      - CHRISTIAN SCIENCE PLAZA
+      massgis:SOURCE_MAP: []
+      massgis:TOWN_ID:
+      - '35'
+      owner:
+      - Christian Science Church
+      maxheight:physical: []
+      cycleway:buffer:right: []
+      aeroway: []
+      bicycle:conditional: []
+      tidal: []
+      sport:
+      - athletics
+      bus:conditional: []
+      change: []
+      highway:conditional: []
+      hov:conditional: []
+      motorcycle:conditional: []
+      trailer: []
+      separation:left: []
+      stairs:type: []
+      portage: []
+      was:railway: []
+      railway:service: []
+      railway:usage: []
+      change:lanes: []
+      oneway:emergency: []
+      obstacle: []
+      overgrown: []
+      ramp:stroller: []
+      name:left: []
+      name:right: []
+      parking:both:maxstay: []
+      markings: []
+      boundary:
+      - landuse
+      abandoned:
+      - 'yes'
+      gnis:feature_id:
+      - '599103'
+      bicycle_parking: []
+      bicycle_rental: []
+      heating: []
+      opening_hours: []
+      payment:app: []
+      seasonal: []
+    style_rules:
+      highway:
+        pedestrian: {}
+        platform: {}
+        elevator: {}
+        service:
+          linewidth: 0.34
+        track:
+          linewidth: 0.28
+        path: {}
+        steps: {}
+        corridor: {}
+        footway: {}
+        bus_stop: {}
+        rest_area: {}
+        'yes': {}
+    style_order:
+    - highway
+  highway__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/highway.gpkg
+    layer: highway
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#ffd84d'
+      ec: '#ffd84d'
+      alpha: 0.92
+      zorder: 6
+      visible: true
+      palette: []
+      edge_color: '#ffd84d'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '18380501'
+      - '10918936'
+      - '10164706'
+      highway:
+      - pedestrian
+      stop: []
+      traffic_signals: []
+      traffic_signals:direction: []
+      crossing: []
+      crossing:island: []
+      crossing:markings: []
+      kerb: []
+      tactile_paving: []
+      restriction: []
+      noref: []
+      direction: []
+      crossing:signals: []
+      button_operated: []
+      traffic_signals:sound: []
+      traffic_signals:vibration: []
+      mapillary: []
+      survey:date: []
+      surface:
+      - paved
+      - bricks
+      - concrete
+      crossing_ref: []
+      bicycle:
+      - permissive
+      junction: []
+      image: []
+      traffic_calming: []
+      name:
+      - William C. Kelley Square
+      ref: []
+      ref:left: []
+      attribution: []
+      source: []
+      bus: []
+      departures_board: []
+      network: []
+      network:wikidata:
+      - Q3142157
+      network:wikipedia: []
+      operator: []
+      public_transport: []
+      shelter: []
+      traffic_signals:turn:backward: []
+      turning_circle: []
+      traffic_signals:turn:forward: []
+      old_ref: []
+      automated: []
+      currency:USD: []
+      fee:
+      - 'yes'
+      height: []
+      man_made: []
+      manufacturer: []
+      material: []
+      operator:short: []
+      operator:type:
+      - private
+      operator:wikidata:
+      - Q17077936
+      payment:e_zpass: []
+      payment:online: []
+      support: []
+      surveillance: []
+      surveillance:type: []
+      surveillance:zone: []
+      toll: []
+      ref:right: []
+      fixme: []
+      email: []
+      phone: []
+      place: []
+      website: []
+      brand: []
+      charge: []
+      network:short: []
+      supervised: []
+      traffic_sign:backward: []
+      traffic_signals:countdown: []
+      check_date:crossing: []
+      hazard: []
+      alt_name: []
+      line: []
+      massgis:geom_id: []
+      bench: []
+      bin: []
+      lit:
+      - 'yes'
+      wikidata: []
+      gtfs:stop_id: []
+      wheelchair: []
+      level: []
+      check_date:shelter: []
+      addr:city: []
+      addr:housenumber: []
+      addr:postcode:
+      - 02445-7638
+      addr:state:
+      - MA
+      addr:street:
+      - Tappan Street at Brookline Hills MBTA
+      amenity: []
+      wikipedia: []
+      description: []
+      note: []
+      kerb:left: []
+      kerb:right: []
+      footway:crossing:markings: []
+      lamp_mount: []
+      lamp_type: []
+      check_date: []
+      check_date:lit: []
+      route_ref: []
+      gtfs:feed: []
+      network:guid: []
+      layer: []
+      hiking: []
+      information: []
+      mtb: []
+      tourism: []
+      check_date:traffic_signals:sound: []
+      check_date:traffic_signals:vibration: []
+      barrier: []
+      cycleway: []
+      indoor: []
+      check_date:tactile_paving: []
+      covered:
+      - 'no'
+      kerb:approach_aid: []
+      passenger_information_display: []
+      disused:highway: []
+      emergency: []
+      old_name: []
+      addr:unit: []
+      not:network:wikidata: []
+      light_rail: []
+      railway: []
+      flag: []
+      pole: []
+      shelter_type: []
+      loc_name: []
+      designation: []
+      passenger_information_display:speech_output: []
+      temporary:access: []
+      trolleybus: []
+      check_date:bench: []
+      check_date:bin: []
+      train: []
+      access:
+      - 'no'
+      noexit: []
+      light:method: []
+      crossing:barrier: []
+      foot:
+      - 'yes'
+      surface:colour: []
+      colour: []
+      gate:type: []
+      locked: []
+      historic: []
+      start_date: []
+      traffic_sign:forward: []
+      power: []
+      transformer: []
+      location:transition: []
+      traffic_sign: []
+      traffic_signals:lanes: []
+      flashing_lights: []
+      couplings: []
+      fire_hydrant:position: []
+      fire_hydrant:type: []
+      water_source: []
+      ele: []
+      ele:msl: []
+      ele:source: []
+      location: []
+      brand:wikidata:
+      - Q3142157
+      elevator: []
+      automatic_door: []
+      door: []
+      parking: []
+      addr:country: []
+      distance: []
+      marker: []
+      milestone_type: []
+      wikimedia_commons: []
+      contact:email: []
+      denotation: []
+      generator:source: []
+      heritage:operator: []
+      inscription: []
+      lamp_operator: []
+      light:colour: []
+      bollard: []
+      bridge:support: []
+      access:conditional: []
+      artist_name: []
+      artwork_type: []
+      camera:direction: []
+      camera:mount: []
+      camera:type: []
+      generator:method: []
+      generator:output:electricity: []
+      generator:type: []
+      maxspeed: []
+      lamp:direction: []
+      camera:height: []
+      lamp:height: []
+      contact:website: []
+      capacity:
+      - '15'
+      maxweight: []
+      check_date:wheelchair: []
+      entrance: []
+      communication: []
+      oneway: []
+      tunnel: []
+      marked: []
+      access:disabled: []
+      maxwidth: []
+      source:maxwidth: []
+      boat: []
+      waterway:sign: []
+      access:delivery: []
+      footway: []
+      smoothness: []
+      crossing:markings:colour: []
+      traffic_signals:arrow: []
+      ref:signed: []
+      public_transport:version: []
+      crossing:continuous: []
+      line_attachment: []
+      lanes: []
+      sidewalk: []
+      turn:lanes: []
+      light_source: []
+      light:tilt: []
+      bridge: []
+      condition: []
+      hgv: []
+      massgis:way_id: []
+      width: []
+      sidewalk:both: []
+      lanes:backward: []
+      lanes:forward: []
+      massgis:ref: []
+      parking:both: []
+      turn:lanes:forward: []
+      cycleway:buffer: []
+      cycleway:width: []
+      source:hgv: []
+      source:maxspeed: []
+      cycleway:right: []
+      cycleway:both: []
+      parking:left: []
+      parking:right: []
+      parking:right:orientation: []
+      cycleway:left: []
+      cycleway:both:lane: []
+      parking:both:orientation: []
+      cycleway:left:lane: []
+      maxspeed:type: []
+      turn:lanes:backward: []
+      cycleway:separation: []
+      parking:left:orientation: []
+      sidewalk:left: []
+      sidewalk:right: []
+      cycleway:right:lane: []
+      cycleway:left:buffer: []
+      cycleway:left:width: []
+      cycleway:right:buffer: []
+      cycleway:oneway: []
+      busway:right: []
+      lanes:bus: []
+      bicycle_road: []
+      oneway:bicycle: []
+      parking:lane:both: []
+      oneway:conditional: []
+      cycleway:right:oneway: []
+      cycleway:right:separation: []
+      sidewalk:both:kerb: []
+      sidewalk:both:surface: []
+      shoulder: []
+      service: []
+      lane_markings: []
+      maxweight:hgv: []
+      orig_name: []
+      ramp: []
+      official_name: []
+      parking:both:restriction: []
+      turn: []
+      NHS: []
+      name:wam: []
+      cycleway:left:oneway: []
+      cycleway:left:separation: []
+      destination: []
+      destination:ref: []
+      parking:condition:both: []
+      sidewalk:right:surface: []
+      horse: []
+      motor_vehicle:
+      - permit
+      maxheight: []
+      maxweight:signed: []
+      parking:right:restriction: []
+      name:etymology:wikidata: []
+      parking:condition:left: []
+      parking:lane:left:parallel: []
+      parking:left:restriction: []
+      destination:symbol: []
+      sidewalk:left:surface: []
+      segregated: []
+      check_date:surface: []
+      source:width: []
+      cycleway:both:buffer: []
+      check_date:smoothness: []
+      parking:condition:right: []
+      expressway: []
+      note:lanes: []
+      ownership: []
+      check_date:cycleway:surface: []
+      cycleway:surface: []
+      footway:surface: []
+      parking:fee: []
+      name:mk: []
+      parking:right:access: []
+      trolley_wire: []
+      hazmat: []
+      short_name: []
+      narrow: []
+      note:highway: []
+      noname: []
+      FIXME:hgv: []
+      destination:street: []
+      construction: []
+      incline: []
+      name:en: []
+      name:etymology: []
+      name:etymology:wikipedia: []
+      maxheight:signed: []
+      source:maxheight: []
+      busway: []
+      created_by: []
+      tracktype: []
+      parking:lane:left: []
+      name_orig: []
+      bridge:movable: []
+      bridge:name: []
+      destination:lanes: []
+      destination:ref:lanes: []
+      abutters: []
+      postal_code: []
+      hgv:lanes: []
+      hgv:lanes:conditional: []
+      hgv:national_network: []
+      lanes:conditional: []
+      source:hgv:national_network: []
+      source_ref: []
+      junction:ref: []
+      maxspeed:advisory: []
+      destination:ref:to: []
+      destination:forward: []
+      rcn_ref: []
+      centerline: []
+      goods: []
+      destination:backward: []
+      destination:ref:backward: []
+      destination:ref:to:forward: []
+      note:en: []
+      width:feet: []
+      hazmat:conditional: []
+      source:hazmat: []
+      class:bicycle: []
+      hov: []
+      hov:minimum: []
+      cycleway:lane: []
+      rideshare: []
+      parking:lane:right: []
+      motor_vehicle:conditional: []
+      cutting: []
+      embedded_rails: []
+      taxi: []
+      check_date:cycleway: []
+      placement: []
+      maxlength: []
+      source:loc_name: []
+      motorcar: []
+      source:name: []
+      parking:condition:right:maxstay: []
+      parking:condition:right:time_interval: []
+      source:oneway: []
+      oneway:bus: []
+      note:sidewalk: []
+      restriction:conditional: []
+      heritage:website: []
+      psv: []
+      coach: []
+      hgv_articulated: []
+      lhv: []
+      bus:lanes: []
+      vehicle:lanes: []
+      destination:to: []
+      opening_date: []
+      url: []
+      destination:ref:forward: []
+      handrail: []
+      addr:suburb: []
+      restriction:hgv: []
+      stroller: []
+      destination:street:lanes: []
+      access:lanes: []
+      driveway: []
+      golf: []
+      golf_cart: []
+      check_date:ramp: []
+      dog: []
+      step_count: []
+      destination:lanes:conditional: []
+      turn:lanes:conditional: []
+      lanes:both_ways: []
+      turn:lanes:both_ways: []
+      parking:lane:left:diagonal: []
+      bus:lanes:forward: []
+      vehicle:lanes:forward: []
+      parking:left:access: []
+      full_name: []
+      embankment: []
+      railway_name: []
+      bicycle:signed: []
+      mtb:scale:imba: []
+      old_railway_operator: []
+      step:contrast: []
+      bus:lanes:conditional: []
+      hov:lanes:conditional: []
+      maxweight:lanes:conditional: []
+      motorcycle:lanes:conditional: []
+      trailer:lanes:conditional: []
+      bridge:material: []
+      bridge:structure: []
+      area:
+      - 'yes'
+      informal: []
+      ramp:wheelchair: []
+      lanes:bus:backward: []
+      lanes:bus:forward: []
+      maxweight:hgv:conditional: []
+      sac_scale: []
+      source:noname: []
+      trail_visibility: []
+      old_name:1970: []
+      source:old_name:1970: []
+      motorcycle: []
+      parking:lane:both:parallel: []
+      usage: []
+      frontage_road: []
+      busway:left: []
+      bicycle:lanes: []
+      note:old_railway_operator: []
+      route: []
+      type:
+      - multipolygon
+      check_date:handrail: []
+      vehicle: []
+      hour_off: []
+      hour_on: []
+      bus_bay: []
+      horse_scale: []
+      source:cycleway:width: []
+      proposed: []
+      cycleway:smoothness: []
+      width:carriageway: []
+      floating: []
+      mooring: []
+      conveying: []
+      subway: []
+      platform:type: []
+      fishing: []
+      ramp:bicycle: []
+      parking:condition:left:maxstay: []
+      parking:condition:left:time_interval: []
+      destination:lanes:forward: []
+      steps: []
+      parking:right:fee: []
+      private: []
+      parking:condition:both:maxstay: []
+      parking:condition:both:time_interval: []
+      parking:lane: []
+      parking:lane:both_1: []
+      maxspeed:variable: []
+      parking:right:maxstay:conditional: []
+      shoulder:right: []
+      air_conditioning: []
+      cycleway:right:bicycle:backward: []
+      cycleway:right:bicycle:forward: []
+      disused: []
+      leisure: []
+      parking:condition:both:customers: []
+      min_level: []
+      turn:backward: []
+      hazmat:lanes: []
+      maxheight:lanes: []
+      sidewalk:right:bicycle: []
+      sidewalk:separate: []
+      cycleway:both:separation: []
+      street:name: []
+      abandoned:service: []
+      landing: []
+      handrail:center: []
+      width:lanes: []
+      hgv:conditional: []
+      note:service: []
+      bus:lanes:backward: []
+      former:name: []
+      mtb:scale: []
+      bicycle:lanes:backward: []
+      cycleway:lanes:backward: []
+      vehicle:lanes:backward: []
+      surface:note: []
+      contact:facebook: []
+      change:lanes:forward: []
+      access_aisle: []
+      signal: []
+      fountain: []
+      architect: []
+      artist:wikidata: []
+      memorial: []
+      handrail:left: []
+      handrail:right: []
+      subject:wikidata: []
+      subject:wikimedia_commons: []
+      subject:wikipedia: []
+      disabled: []
+      foot:backward: []
+      raised: []
+      platform_lift: []
+      tactile_writing: []
+      area:highway: []
+      was:bridge:movable: []
+      building:levels: []
+      building:material: []
+      roof:colour: []
+      toilets: []
+      waterway: []
+      natural: []
+      stairs: []
+      designated_direction: []
+      path: []
+      brand:website: []
+      traffic_island: []
+      parking:lane:right:parallel: []
+      check_date:footway:surface: []
+      construction:bicycle: []
+      construction:cycleway: []
+      exit: []
+      building: []
+      room: []
+      abandoned:railway: []
+      maxspeed:bus: []
+      maxspeed:hgv: []
+      massgis:ARTICLE97: []
+      massgis:ASSESS_ACR: []
+      massgis:ATT_DATE: []
+      massgis:COMMENTS: []
+      massgis:DCAM_ID: []
+      massgis:DEED_ACRES: []
+      massgis:EOEAINVOLV: []
+      massgis:FEESYM: []
+      massgis:FEE_OWNER: []
+      massgis:FY_FUNDING: []
+      massgis:LEV_PROT: []
+      massgis:MANAGER: []
+      massgis:MANAGR_ABR: []
+      massgis:MANAGR_TYP: []
+      massgis:OS_DEED_BO: []
+      massgis:OS_DEED_PA: []
+      massgis:OS_ID: []
+      massgis:OWNER_ABRV: []
+      massgis:OWNER_TYPE: []
+      massgis:POLY_ID: []
+      massgis:PRIM_PURP: []
+      massgis:PUB_ACCESS: []
+      massgis:SITE_NAME: []
+      massgis:SOURCE_MAP: []
+      massgis:TOWN_ID: []
+      owner: []
+      maxheight:physical: []
+      cycleway:buffer:right: []
+      aeroway: []
+      bicycle:conditional: []
+      tidal: []
+      sport: []
+      bus:conditional: []
+      change: []
+      highway:conditional: []
+      hov:conditional: []
+      motorcycle:conditional: []
+      trailer: []
+      separation:left: []
+      stairs:type: []
+      portage: []
+      was:railway: []
+      railway:service: []
+      railway:usage: []
+      change:lanes: []
+      oneway:emergency: []
+      obstacle: []
+      overgrown: []
+      ramp:stroller: []
+      name:left: []
+      name:right: []
+      parking:both:maxstay: []
+      markings: []
+      boundary: []
+      abandoned: []
+      gnis:feature_id: []
+      bicycle_parking:
+      - stands
+      bicycle_rental:
+      - docking_station
+      heating:
+      - 'no'
+      opening_hours:
+      - 24/7
+      payment:app:
+      - 'yes'
+      seasonal:
+      - 'no'
+    style_rules:
+      highway:
+        pedestrian: {}
+    style_order:
+    - highway
+  landuse__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#041117'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 5370
+      landuse:
+      - residential
+      - railway
+      - recreation_ground
+      - grass
+      - forest
+      - retail
+      - commercial
+      - brownfield
+      - construction
+      - cemetery
+      - winter_sports
+      - industrial
+      - allotments
+      - meadow
+      - military
+      - sand
+      - farmland
+      - flowerbed
+      - religious
+      - orchard
+      - conservation
+      - reservoir_watershed
+      - quarry
+      - traffic_island
+      - farmyard
+      - greenfield
+      - village_green
+      - plant_nursery
+      - shrubs
+      - community garden
+      - government
+      - depot
+      - civic_admin
+      - healthcare
+      - fraternal_organization
+      - vacant
+      - governmental
+      - trees
+      - institutional
+      - utility
+      - commercial;retail
+      - events
+      - harbour
+      - recreation
+  landuse__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 2
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '585386181'
+      - '12074006626'
+      - '7693097330'
+      - '7683328308'
+      - '367780221'
+      - '10285316324'
+      - '7764042968'
+      - '7892125739'
+      - '7598474042'
+      - '7499693353'
+      - '7995234013'
+      - '7777246385'
+      - '7777246386'
+      - '7777246389'
+      - '7777246388'
+      - '595944000'
+      - '586843471'
+      - '358278081'
+      - '358258861'
+      - '13044552995'
+      - '7661362954'
+      - '7661362952'
+      - '7661362951'
+      - '7661362947'
+      - '7661362946'
+      landuse:
+      - quarry
+      - residential
+      - military
+      - industrial
+  landuse__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/landuse.gpkg
+    layer: landuse
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 2
+      visible: false
+      palette: []
+      edge_color: '#041117'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '15671575'
+      - '20224315'
+      - '7841564'
+      - '20223412'
+      - '20270785'
+      - '20224909'
+      - '18163179'
+      - '18799276'
+      - '14869457'
+      - '13088293'
+      - '19776351'
+      - '13108866'
+      - '17748448'
+      - '19178180'
+      - '13012407'
+      - '13012613'
+      - '20274151'
+      - '20262853'
+      - '19039240'
+      - '2916010'
+      - '18072197'
+      - '17289421'
+      - '15985396'
+      - '17370326'
+      - '17412221'
+      - '18046852'
+      - '16308136'
+      - '18046866'
+      - '18046894'
+      - '18858898'
+      - '11838397'
+      - '11833455'
+      - '1809827'
+      - '15852387'
+      - '1835523'
+      - '1810476'
+      - '11866110'
+      - '11866111'
+      - '16892902'
+      - '11181110'
+      - '11181111'
+      - '11607294'
+      - '14081229'
+      landuse:
+      - cemetery
+      - grass
+      - residential
+      - recreation_ground
+      - allotments
+      - construction
+      - commercial
+      - forest
+      - retail
+      - flowerbed
+  natural__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/natural.gpkg
+    layer: natural
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#041117'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id: 1324
+      natural:
+      - wood
+      - scrub
+      - wetland
+      - rock
+      - beach
+      - cliff
+  natural__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/natural.gpkg
+    layer: natural
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      edge_color: '#041117'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id:
+      - '20268124'
+      - '20284664'
+      - '20270438'
+      - '20288797'
+      - '20294102'
+      - '1337190'
+      - '17215601'
+      - '11838400'
+      - '11840708'
+      - '11884107'
+      - '20264649'
+      - '20264176'
+      - '20262854'
+      - '11918459'
+      - '20202406'
+      - '20256065'
+      - '20224426'
+      - '20228595'
+      - '445040738'
+      - '20224394'
+      - '14094745'
+      - '3359441'
+      - '3359442'
+      natural:
+      - wetland
+      - wood
+      - scrub
+      - beach
+  natural__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/natural.gpkg
+    layer: natural
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id: 130
+      natural:
+      - peak
+      - rock
+      - wood
+      - beach
+      - wetland
+      - cliff
+  natural__LineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/natural.gpkg
+    layer: natural
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#041117'
+      ec: '#041117'
+      alpha: 0.0
+      zorder: 1
+      visible: true
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id: 54
+      natural:
+      - cliff
+  ocean:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/ocean.gpkg
+    layer: ocean
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#041a2b'
+      ec: '#041a2b'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.02
+        blur_sigma: 14.0
+        contrast: 0.26
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.14
+        visible: true
+      edge_color: '#041a2b'
+      edge_width: 0
+    attributes:
+      NAME:
+      - North Atlantic Ocean
+      ID:
+      - '23'
+      Longitude:
+      - '-37.62424445723'
+      Latitude:
+      - '29.4800342448'
+      min_X:
+      - '-83.01491415486'
+      min_Y:
+      - '-0.00256264235'
+      max_X:
+      - '6.61996705678'
+      max_Y:
+      - '68.63871574364'
+      area:
+      - '34507128'
+      MRGID:
+      - '1912'
+  pois__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/pois.gpkg
+    layer: pois
+    geometry_type: Polygon
+    visible: false
+    default:
+      fc: '#67f8ff'
+      ec: '#67f8ff'
+      alpha: 0.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#67f8ff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 7579
+      name: 1688
+      amenity: 94
+  pois__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/pois.gpkg
+    layer: pois
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#67f8ff'
+      ec: '#67f8ff'
+      alpha: 0.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+      marker: o
+      size: 0.1
+    attributes:
+      element:
+      - node
+      id: 18170
+      name: 3779
+      amenity: 130
+  pois__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/pois.gpkg
+    layer: pois
+    geometry_type: MultiPolygon
+    visible: false
+    default:
+      fc: '#67f8ff'
+      ec: '#67f8ff'
+      alpha: 0.0
+      zorder: 1
+      visible: false
+      palette: []
+      edge_color: '#67f8ff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      - way
+      id:
+      - '19927290'
+      - '15936575'
+      - '15936574'
+      - '3905196'
+      - '17488356'
+      - '11207864'
+      - '17053853'
+      - '11201448'
+      - '14073612'
+      - '3844332'
+      - '3067396'
+      - '3073956'
+      - '3061383'
+      - '18139248'
+      - '11242618'
+      - '19725852'
+      - '17218279'
+      - '6587738'
+      - '65066'
+      - '17990533'
+      - '17990534'
+      - '17733088'
+      - '2415825'
+      - '11234989'
+      - '11234979'
+      - '9078072'
+      - '15805611'
+      - '10868706'
+      - '9075962'
+      - '3068256'
+      - '1216020925'
+      - '200090901'
+      - '36894782'
+      - '19603217'
+      name:
+      - Northeastern University
+      - Berklee College of Music
+      - Boston Architectural College
+      - Tufts School of Medicine
+      - Suffolk University
+      - Winthrop Middle/High School
+      - Catholic Memorial
+      - Massachusetts College of Art and Design
+      - Massachusetts College of Pharmacy and Health Science
+      - Brigham and Women's Hospital
+      - Harvard Medical School
+      - Simmons University
+      - Pleasant Street Lot
+      - Boston College
+      - Boston University
+      - Massachusetts Institute of Technology
+      - Lexus of Watertown
+      - Harvard Athletic Complex
+      - Harvard University
+      - Longy School of Music of Bard College
+      - Lesley University
+      - Fresh Pond Mobil
+      - Chico's Sunoco
+      - Conwell School
+      amenity:
+      - parking
+      - university
+      - college
+      - school
+      - hospital
+      - charging_station
+      - fuel
+    style_rules:
+      name:
+        Northeastern University: {}
+        Berklee College of Music: {}
+        Boston Architectural College: {}
+        Tufts School of Medicine: {}
+        Suffolk University: {}
+        Winthrop Middle/High School: {}
+        Catholic Memorial: {}
+        Massachusetts College of Art and Design: {}
+        Massachusetts College of Pharmacy and Health Science: {}
+        Brigham and Women's Hospital: {}
+        Harvard Medical School: {}
+        Simmons University: {}
+        Pleasant Street Lot: {}
+        Boston College: {}
+        Boston University: {}
+        Massachusetts Institute of Technology: {}
+        Lexus of Watertown: {}
+        Harvard Athletic Complex: {}
+        Harvard University: {}
+        Longy School of Music of Bard College: {}
+        Lesley University: {}
+        Fresh Pond Mobil: {}
+        Chico's Sunoco: {}
+        Conwell School: {}
+    style_order:
+    - name
+  pois__LineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/pois.gpkg
+    layer: pois
+    geometry_type: LineString
+    visible: false
+    default:
+      fc: '#67f8ff'
+      ec: '#67f8ff'
+      alpha: 0.0
+      zorder: 1
+      visible: false
+      palette: []
+      linewidth: 1.0
+    attributes:
+      element:
+      - way
+      id: 64
+      name: []
+      amenity:
+      - bench
+      - bicycle_parking
+      - parking
+  water__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/water.gpkg
+    layer: water
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#06243a'
+      ec: '#06243a'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.02
+        blur_sigma: 12.0
+        contrast: 0.24
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.12
+        visible: true
+      edge_color: '#06243a'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id: 344
+      water:
+      - oxbow
+      - pond
+      - basin
+      - stream
+      - river
+      - canal
+      - reservoir
+      - lake
+      - bay
+      - reflecting_pool
+      - 'yes'
+      - lagoon
+      - moat
+      - fountain
+  water__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/water.gpkg
+    layer: water
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#06243a'
+      ec: '#06243a'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.02
+        blur_sigma: 12.0
+        contrast: 0.24
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.12
+        visible: true
+      linewidth: 1.0
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '2182982942'
+      - '6064947285'
+      - '1523927828'
+      water:
+      - pond
+  water__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/water.gpkg
+    layer: water
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#06243a'
+      ec: '#06243a'
+      alpha: 1.0
+      zorder: 4
+      visible: true
+      palette: []
+      hillshade_texture:
+        bias: 0.02
+        blur_sigma: 12.0
+        contrast: 0.24
+        interpolation: bilinear
+        max_texture_dim: 1024
+        strength: 0.12
+        visible: true
+      edge_color: '#06243a'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '7453452'
+      - '18688859'
+      - '1337303'
+      - '19121065'
+      water:
+      - river
+  waterway__MultiLineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiLineString
+    visible: true
+    default:
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id:
+      - '131937581'
+      waterway:
+      - river
+    style_rules:
+      waterway:
+        river:
+          linewidth: 1.0
+    style_order:
+    - waterway
+  waterway__LineString:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: LineString
+    visible: true
+    default:
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+    attributes:
+      element:
+      - way
+      id: 786
+      waterway:
+      - stream
+      - river
+      - dam
+      - drain
+      - weir
+      - canal
+      - link
+      - ditch
+      - flowline
+      - floodgate
+      - tidal_channel
+      - fish_pass
+    style_rules:
+      waterway:
+        stream:
+          linewidth: 0.55
+        river:
+          linewidth: 1.0
+        dam: {}
+        drain:
+          linewidth: 0.35
+        weir: {}
+        canal:
+          linewidth: 1.0
+        link: {}
+        ditch:
+          linewidth: 0.3
+        flowline: {}
+        floodgate: {}
+        tidal_channel: {}
+        fish_pass: {}
+    style_order:
+    - waterway
+  waterway__Point:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Point
+    visible: false
+    default:
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
+      zorder: 3
+      visible: true
+      palette: []
+      linewidth: 0.3
+      marker: o
+      size: 3
+    attributes:
+      element:
+      - node
+      id:
+      - '2286215196'
+      - '597730690'
+      - '597730689'
+      - '597730691'
+      - '329047444'
+      - '13326304290'
+      - '358275910'
+      - '6518602300'
+      - '6528407252'
+      - '889630215'
+      - '7683105742'
+      - '7782496097'
+      - '7926481825'
+      - '981639487'
+      - '13326304278'
+      - '7781627934'
+      - '8073054198'
+      - '358267463'
+      - '7846771464'
+      - '5746087263'
+      - '5037912796'
+      - '328817657'
+      - '11835780301'
+      - '5154243688'
+      - '7841481409'
+      - '4913681783'
+      - '313747158'
+      - '12181374884'
+      - '7818291066'
+      - '12181386208'
+      - '12181386209'
+      - '7818291067'
+      - '7818291065'
+      - '7818291064'
+      - '1326621855'
+      - '981639327'
+      - '7926481830'
+      - '12945304423'
+      - '7841432879'
+      - '12945304420'
+      - '12181374886'
+      - '1057795666'
+      - '1001700761'
+      - '1057796109'
+      - '1057795967'
+      - '1057795832'
+      - '1057796608'
+      - '1057797389'
+      waterway:
+      - dock
+      - boatyard
+      - access_point
+      - lock_gate
+      - dam
+      - weir
+      - fuel
+      - waterfall
+      - sluice_gate
+      - s
+    style_rules:
+      waterway:
+        dock: {}
+        boatyard: {}
+        access_point: {}
+        lock_gate: {}
+        dam: {}
+        weir: {}
+        fuel: {}
+        waterfall: {}
+        sluice_gate: {}
+        s: {}
+    style_order:
+    - waterway
+  waterway__Polygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: Polygon
+    visible: true
+    default:
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
+      zorder: 3
+      visible: true
+      palette: []
+      edge_color: '#55f6ff'
+      edge_width: 0
+    attributes:
+      element:
+      - way
+      - relation
+      id:
+      - '144767695'
+      - '707113440'
+      - '319034414'
+      - '826798493'
+      - '849606614'
+      - '11377633'
+      - '311801326'
+      - '1181493940'
+      - '1303959585'
+      - '605950533'
+      - '196751528'
+      - '396483337'
+      - '1282607067'
+      - '792742467'
+      - '792364868'
+      - '847822015'
+      - '849610206'
+      - '849606615'
+      - '849606616'
+      - '1125850813'
+      - '226524669'
+      - '605950534'
+      waterway:
+      - dam
+      - dock
+      - boatyard
+    style_rules:
+      waterway:
+        dam: {}
+        dock: {}
+        boatyard: {}
+    style_order:
+    - waterway
+  waterway__MultiPolygon:
+    file: downloads/routes/boston-emerald-necklace-bicycle-adventure/layers/waterway.gpkg
+    layer: waterway
+    geometry_type: MultiPolygon
+    visible: true
+    default:
+      fc: '#55f6ff'
+      ec: '#55f6ff'
+      alpha: 0.96
+      zorder: 3
+      visible: true
+      palette: []
+      edge_color: '#55f6ff'
+      edge_width: 0
+    attributes:
+      element:
+      - relation
+      id:
+      - '12519257'
+      waterway:
+      - dam
+    style_rules:
+      waterway:
+        dam: {}
+    style_order:
+    - waterway

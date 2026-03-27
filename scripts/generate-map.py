@@ -723,6 +723,45 @@ def _render_panel_text_element(
             spaced_text += "\u200a" * max(1, int(tracking * 10)) + char
         text = spaced_text
 
+    # Auto-shrink title if it overflows the available panel width
+    fig = ax.get_figure()
+    renderer = fig.canvas.get_renderer()
+
+    # Calculate available width based on alignment
+    margin = 0.05  # 5% margin on edges
+    if align == "left":
+        available_width = 1.0 - x_rel - margin
+    elif align == "right":
+        available_width = x_rel - margin
+    else:  # center
+        available_width = min(x_rel, 1.0 - x_rel) * 2 - margin * 2
+
+    # Measure text width and shrink if needed
+    max_iterations = 10
+    for _ in range(max_iterations):
+        temp_text = ax.text(
+            x_rel,
+            y_axes,
+            text,
+            transform=ax.transAxes,
+            fontsize=fontsize,
+            fontfamily=font_family,
+            fontweight=font_weight,
+            alpha=0,  # invisible
+        )
+        bbox = temp_text.get_window_extent(renderer=renderer)
+        temp_text.remove()
+
+        # Convert pixel width to axes coordinates
+        axes_bbox = ax.get_window_extent(renderer=renderer)
+        text_width_axes = bbox.width / axes_bbox.width
+
+        if text_width_axes <= available_width or fontsize <= 4:
+            break
+
+        # Shrink by 10% and retry
+        fontsize *= 0.9
+
     # Render text
     ax.text(
         x_rel,

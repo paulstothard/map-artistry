@@ -86,7 +86,9 @@ def main() -> None:
         if primary_segment is not None
         else tuple(boundary.total_bounds)
     )
-    ocean = read_ocean(args.ocean_boundaries, bbox)
+    # Expand bbox slightly to catch ocean polygons near tight boundaries
+    expanded_bbox = (bbox[0] - 0.5, bbox[1] - 0.5, bbox[2] + 0.5, bbox[3] + 0.5)
+    ocean = read_ocean(args.ocean_boundaries, expanded_bbox)
 
     if ocean.empty:
         print(f"[ ] No nearby ocean features for {args.boundary}; skipping ocean layer")

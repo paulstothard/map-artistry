@@ -45,9 +45,9 @@ cache_dir := "cache"
 [arg("height", long="height", help="Map height in inches")]
 [arg("width", long="width", help="Map width in inches")]
 [arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
-[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 build region scheme width="24" height="24" dpi="600" format="png" buffer_km="" output_dir="output":
     @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ output_dir }}"
 
@@ -59,10 +59,10 @@ build region scheme width="24" height="24" dpi="600" format="png" buffer_km="" o
 [arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
 [arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
 [arg("text_title", long="text-title", help="Optional panel title")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 build-route region gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
     @just _build-map-route "{{ region }}" "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
@@ -74,10 +74,10 @@ build-route region gpx scheme width="24" height="24" dpi="600" format="png" buff
 [arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
 [arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
 [arg("text_title", long="text-title", help="Optional panel title")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-[arg("output_dir", long="output-dir", help="Output folder for generated images")]
 build-gpx gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
     @just _build-map-gpx "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
@@ -706,6 +706,12 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
         {{ python }} "{{ scripts_dir }}/download-satellite-image.py" --geojson "$DATA_DIR/area.geojson" --output "$DATA_DIR/satellite.tif" --zoom "$SAT_ZOOM" --dpi "$DPI"
     else
         echo "   ✓ Satellite imagery exists"
+    fi
+
+    OCEAN_SHP="{{ ocean_boundaries_dir }}/World_Seas_IHO_v3.shp"
+    if [ -f "$OCEAN_SHP" ] && [ ! -f "$DATA_DIR/layers/ocean.gpkg" ]; then
+        echo "   🌊 Preparing ocean layer..."
+        {{ python }} "{{ scripts_dir }}/prepare-ocean-layer.py" --boundary "$DATA_DIR/area.geojson" --ocean-boundaries "$OCEAN_SHP" --output "$DATA_DIR/layers/ocean.gpkg"
     fi
     echo ""
 

@@ -354,7 +354,7 @@ if [ $NEEDED -gt 0 ]; then
       echo "▶ GPX-only $(basename "$ALKI_ROUTE_GPX") — $scheme"
       build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
       just build-gpx "${build_args[@]}" \
-        --buffer-km 1 \
+        --buffer-km 5 \
         --text-title "$ALKI_ROUTE_TEXT_TITLE" \
         --text-subtitle "$ALKI_ROUTE_TEXT_SUBTITLE" \
         --text-stats "$ALKI_ROUTE_TEXT_STATS" \
@@ -374,7 +374,7 @@ if [ $NEEDED -gt 0 ]; then
       echo "▶ GPX-only $(basename "$BOSTON_ROUTE_GPX") — $scheme"
       build_args=(--width "$WIDTH" --height "$HEIGHT" --dpi "$DPI" --format "$FORMAT")
       just build-gpx "${build_args[@]}" \
-        --buffer-km 1 \
+        --buffer-km 5 \
         --text-title "$BOSTON_ROUTE_TEXT_TITLE" \
         --text-subtitle "$BOSTON_ROUTE_TEXT_SUBTITLE" \
         --text-stats "$BOSTON_ROUTE_TEXT_STATS" \
