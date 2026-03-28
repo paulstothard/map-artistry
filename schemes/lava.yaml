@@ -140,13 +140,18 @@ map:
   elevation_profile:
     enabled: true
     height: 0.04
-    color: '#4a0a0a'
+    color: '#ffffff'
     alpha: 0.92
+    outline:
+      enabled: true
+      color: '#ff1744'
+      linewidth: 0.8
+      alpha: 0.7
     route:
       enabled: true
-      color: '#ffb300'
-      linewidth: 4.0
-      alpha: 0.85
+      color: '#ffffff'
+      linewidth: 4.5
+      alpha: 0.95
       sampling:
         mode: distance_interval
         interval_m: 300
@@ -154,8 +159,8 @@ map:
         max_points: 500
       outline:
         enabled: true
-        color: '#1a1a1a'
-        linewidth: 0.9
+        color: '#ff1744'
+        linewidth: 1.2
       start_marker:
         style: concentric_circles
         color: '#00c853'

@@ -4,7 +4,7 @@ map:
     ec: '#000000'
   frame:
     enabled: true
-    color: '#ff6666'
+    color: '#2b0506'
     padding: 0.04
   scheme: river_runs_red
   info:
@@ -127,13 +127,18 @@ map:
   elevation_profile:
     enabled: true
     height: 0.04
-    color: '#3a0d10'
+    color: '#ffeb3b'
     alpha: 0.92
+    outline:
+      enabled: true
+      color: '#000000'
+      linewidth: 0.8
+      alpha: 0.7
     route:
       enabled: true
-      color: '#f0d6a0'
-      linewidth: 4.0
-      alpha: 0.9
+      color: '#ffeb3b'
+      linewidth: 4.5
+      alpha: 0.95
       sampling:
         mode: distance_interval
         interval_m: 300
@@ -141,8 +146,8 @@ map:
         max_points: 500
       outline:
         enabled: true
-        color: '#5d1010'
-        linewidth: 0.9
+        color: '#000000'
+        linewidth: 1.2
       start_marker:
         style: concentric_circles
         color: '#5a9a63'

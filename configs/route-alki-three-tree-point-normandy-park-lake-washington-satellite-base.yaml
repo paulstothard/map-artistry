@@ -7,9 +7,14 @@ map:
     fc: '#05050d'
   elevation_profile:
     alpha: 0.9
-    color: '#1a2027'
+    color: '#ffd54f'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#1a1a1a'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.92
       color: '#ffd54f'

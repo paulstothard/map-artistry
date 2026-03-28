@@ -8,9 +8,14 @@ map:
   debug_water_hillshade: true
   elevation_profile:
     alpha: 0.9
-    color: '#1f3a2b'
+    color: '#f7fbe9'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#284932'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.85
       color: '#f7fbe9'

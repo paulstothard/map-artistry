@@ -1751,13 +1751,34 @@ def _render_elevation_profile(ax, route_coords, elevation_data, profile_cfg, mas
     x_fill = np.concatenate([x_coords, [1.0, 0.0]])
     y_fill = np.concatenate([y_coords, [0.0, 0.0]])
 
+    # Check for outline configuration
+    outline_cfg = profile_cfg.get("outline", {})
+    outline_enabled = outline_cfg.get("enabled", False)
+    outline_color = outline_cfg.get("color", "#000000")
+    outline_width = float(outline_cfg.get("linewidth", 1.0))
+    outline_alpha = float(outline_cfg.get("alpha", 1.0))
+
+    # Convert outline color to RGBA with custom alpha
+    if outline_enabled:
+        from matplotlib.colors import to_rgba
+
+        outline_rgba = to_rgba(outline_color)
+        outline_rgba = (
+            outline_rgba[0],
+            outline_rgba[1],
+            outline_rgba[2],
+            outline_alpha,
+        )
+    else:
+        outline_rgba = "none"
+
     ax.fill(
         x_fill,
         y_fill,
         transform=ax.transAxes,
         facecolor=profile_cfg.get("color", "#2a2a2a"),
-        edgecolor="none",
-        linewidth=0,
+        edgecolor=outline_rgba,
+        linewidth=outline_width if outline_enabled else 0,
         alpha=profile_cfg.get("alpha", 0.9),
         zorder=1100,  # Above route and features
         antialiased=False,

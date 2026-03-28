@@ -157,6 +157,11 @@ map:
     height: 0.04
     color: '#ffd166'
     alpha: 1.0
+    outline:
+      enabled: true
+      color: '#071724'
+      linewidth: 0.8
+      alpha: 0.7
     route:
       enabled: true
       color: '#ffd166'
