@@ -27,7 +27,7 @@ map:
         fill_color: '#0a0000'
         ring_color: '#ff5252'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
       linewidth: 4.5
       outline:
@@ -46,7 +46,7 @@ map:
         fill_color: '#0a0000'
         ring_color: '#00c853'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
     color: '#000000'
