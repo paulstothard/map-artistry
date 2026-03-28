@@ -971,60 +971,60 @@ directly from the GPX track bounding box, with no separate region argument requi
   </tr>
 </table>
 
-#### Alki, Three Tree Point, Normandy Park, Lake Washington — GPX-Derived Route
+#### South Shore Coastal Ride — GPX-Derived Route
 
 <table>
   <tr>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-blueprint.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-blueprint.png" alt="Alki, Three Tree Point - Blueprint" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-blueprint.png"><img src="examples/thumbnails/south-shore-coastal-ride-blueprint.png" alt="South Shore Coastal Ride - Blueprint" width="200"></a><br>
       <sub>blueprint</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-coral.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-coral.png" alt="Alki, Three Tree Point - Coral" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-coral.png"><img src="examples/thumbnails/south-shore-coastal-ride-coral.png" alt="South Shore Coastal Ride - Coral" width="200"></a><br>
       <sub>coral</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-glacier.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-glacier.png" alt="Alki, Three Tree Point - Glacier" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-glacier.png"><img src="examples/thumbnails/south-shore-coastal-ride-glacier.png" alt="South Shore Coastal Ride - Glacier" width="200"></a><br>
       <sub>glacier</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-lava.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-lava.png" alt="Alki, Three Tree Point - Lava" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-lava.png"><img src="examples/thumbnails/south-shore-coastal-ride-lava.png" alt="South Shore Coastal Ride - Lava" width="200"></a><br>
       <sub>lava</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-minimal_white.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-minimal_white.png" alt="Alki, Three Tree Point - Minimal White" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-minimal_white.png"><img src="examples/thumbnails/south-shore-coastal-ride-minimal_white.png" alt="South Shore Coastal Ride - Minimal White" width="200"></a><br>
       <sub>minimal_white</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-natural.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-natural.png" alt="Alki, Three Tree Point - Natural" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-natural.png"><img src="examples/thumbnails/south-shore-coastal-ride-natural.png" alt="South Shore Coastal Ride - Natural" width="200"></a><br>
       <sub>natural</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-neon_cyber.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-neon_cyber.png" alt="Alki, Three Tree Point - Neon Cyber" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-neon_cyber.png"><img src="examples/thumbnails/south-shore-coastal-ride-neon_cyber.png" alt="South Shore Coastal Ride - Neon Cyber" width="200"></a><br>
       <sub>neon_cyber</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-porcelain_ink.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-porcelain_ink.png" alt="Alki, Three Tree Point - Porcelain Ink" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-porcelain_ink.png"><img src="examples/thumbnails/south-shore-coastal-ride-porcelain_ink.png" alt="South Shore Coastal Ride - Porcelain Ink" width="200"></a><br>
       <sub>porcelain_ink</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-river_runs_red.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-river_runs_red.png" alt="Alki, Three Tree Point - River Runs Red" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-river_runs_red.png"><img src="examples/thumbnails/south-shore-coastal-ride-river_runs_red.png" alt="South Shore Coastal Ride - River Runs Red" width="200"></a><br>
       <sub>river_runs_red</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-satellite.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-satellite.png" alt="Alki, Three Tree Point - Satellite" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-satellite.png"><img src="examples/thumbnails/south-shore-coastal-ride-satellite.png" alt="South Shore Coastal Ride - Satellite" width="200"></a><br>
       <sub>satellite</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-sepia_vintage.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-sepia_vintage.png" alt="Alki, Three Tree Point - Sepia Vintage" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-sepia_vintage.png"><img src="examples/thumbnails/south-shore-coastal-ride-sepia_vintage.png" alt="South Shore Coastal Ride - Sepia Vintage" width="200"></a><br>
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <a href="examples/full/alki-three-tree-point-normandy-park-lake-washington-night.png"><img src="examples/thumbnails/alki-three-tree-point-normandy-park-lake-washington-night.png" alt="Alki, Three Tree Point - Night" width="200"></a><br>
+      <a href="examples/full/south-shore-coastal-ride-night.png"><img src="examples/thumbnails/south-shore-coastal-ride-night.png" alt="South Shore Coastal Ride - Night" width="200"></a><br>
       <sub>night</sub>
     </td>
   </tr>
