@@ -84,7 +84,7 @@ map:
     - '#e6fbff'
   satellite:
     visible: false
-    opacity: 1.0
+    alpha: 1.0
   info_panel:
     enabled: false
     position: bottom

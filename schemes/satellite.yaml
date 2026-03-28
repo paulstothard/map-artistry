@@ -56,7 +56,7 @@ map:
     - '#F2F1ED'
   satellite:
     visible: true
-    opacity: 1.0
+    alpha: 1.0
   info_panel:
     enabled: false
     position: bottom

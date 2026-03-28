@@ -1956,7 +1956,7 @@ def draw_map_from_config(
                         src.bounds.top,
                     ],
                     zorder=satellite_cfg.get("zorder", 0),
-                    alpha=satellite_cfg.get("opacity", 1.0),
+                    alpha=satellite_cfg.get("alpha", 1.0),
                     aspect="auto",
                 )
                 if raster_clip_patch is not None:
