@@ -1485,8 +1485,8 @@ def _draw_start_marker(
     outline_color=None,
 ):
     marker_cfg = marker_cfg or {}
-    size_px = max(10.0, size_pts * dpi / 72.0)
-    canvas = size_px * 2.0
+    # DrawingArea uses points, not pixels
+    canvas = size_pts * 2.0
     center = canvas / 2.0
 
     fill_color = marker_cfg.get("fill_color", "white")
@@ -1500,19 +1500,19 @@ def _draw_start_marker(
     da.add_artist(
         mpatches.Circle(
             (center, center),
-            radius=size_px * 0.48,
+            radius=size_pts * 0.48,
             facecolor=fill_color,
             edgecolor=edge_color,
-            linewidth=max(0.8, size_px * ring_width_scale),
+            linewidth=max(0.8, size_pts * ring_width_scale),
         )
     )
     da.add_artist(
         mpatches.Circle(
             (center, center),
-            radius=size_px * max(0.05, core_radius_scale),
+            radius=size_pts * max(0.05, core_radius_scale),
             facecolor=core_color,
             edgecolor=fill_color,
-            linewidth=max(0.6, size_px * core_edge_scale),
+            linewidth=max(0.6, size_pts * core_edge_scale),
         )
     )
 
@@ -1554,11 +1554,11 @@ def _draw_concentric_circle_marker(
 
 
 def _draw_end_marker(ax, lon, lat, color, size_pts, dpi, zorder):
-    size_px = max(10.0, size_pts * dpi / 72.0)
-    canvas = size_px * 2.0
+    # DrawingArea uses points, not pixels
+    canvas = size_pts * 2.0
     center = canvas / 2.0
-    ring_radius = size_px * 0.48
-    ring_lw = max(1.0, size_px * 0.12)
+    ring_radius = size_pts * 0.48
+    ring_lw = max(1.0, size_pts * 0.12)
 
     # Centered 4x4 checker field sized so the square's corner points
     # exactly touch the inner edge of the circular ring.

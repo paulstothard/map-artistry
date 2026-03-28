@@ -117,6 +117,20 @@ help:
     @echo "  --text-units     Route stat units: auto, metric, imperial (default: auto)"
     @echo "  --output-dir     Output folder for generated images (default: output)"
     @echo ""
+    @echo "Image Processing Tools:"
+    @echo "  just publish [--input-dir output] [--output-dir publish] [--force true]"
+    @echo "      Smart copy images (only copies if newer or missing)"
+    @echo "  just create-examples [--full-width 1200] [--thumb-width 400] [--force true]"
+    @echo "      Create resized examples (full + thumbnails) with timestamp checking"
+    @echo "  just resize INPUT_DIR OUTPUT_DIR [--width 1200]"
+    @echo "      Batch resize images to specified width"
+    @echo "  just add-labels INPUT_DIR OUTPUT_DIR [--label-pattern \"{scheme}\"]"
+    @echo "      Add text labels to images (default: scheme name in upper-right)"
+    @echo "  just create-montage INPUT_DIR OUTPUT_FILE [--cols 4] [--add-labels true]"
+    @echo "      Create grid layout of images with optional labels"
+    @echo "  just create-pdf INPUT_DIR OUTPUT_FILE [--dpi 150] [--page-size letter]"
+    @echo "      Create multi-page PDF (one image per page)"
+    @echo ""
     @echo "Other commands:"
     @echo "  just schemes  - List available color schemes"
     @echo "  just help     - Show this help"
@@ -763,3 +777,160 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 
     echo ""
     echo "✅ GPX route map complete: $OUTPUT_FILE"
+
+# ============================================================================
+# Image Processing Tools
+# ============================================================================
+
+# Smart publish images (only copy if newer or missing)
+[arg("pattern", long="pattern", help="File pattern to match (default: *.png)")]
+[arg("force", long="force", help="Force copy all files (ignore timestamps)")]
+publish input_dir="output" output_dir="publish" pattern="*.png" force="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📤 Publishing images from {{ input_dir }} to {{ output_dir }}..."
+    FORCE_ARG=""
+    if [ "{{ force }}" = "true" ]; then
+        FORCE_ARG="--force"
+    fi
+    {{ python }} "{{ scripts_dir }}/smart-publish-images.py" \
+        --input "{{ input_dir }}" \
+        --output "{{ output_dir }}" \
+        --pattern "{{ pattern }}" \
+        $FORCE_ARG
+
+# Create resized examples for documentation
+[arg("force", long="force", help="Force recreate all examples (ignore timestamps)")]
+[arg("full_width", long="full-width", help="Width for full examples (default: 1200)")]
+[arg("thumb_width", long="thumb-width", help="Width for thumbnails (default: 400)")]
+create-examples input_dir="publish" examples_dir="examples" full_width="1200" thumb_width="400" force="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📸 Creating examples from {{ input_dir }}..."
+    mkdir -p "{{ examples_dir }}/full" "{{ examples_dir }}/thumbnails"
+
+    FULL_DIR="{{ examples_dir }}/full"
+    THUMB_DIR="{{ examples_dir }}/thumbnails"
+
+    UPDATED=0
+    SKIPPED=0
+    FORCE_FLAG="{{ force }}"
+
+    while IFS= read -r src_file; do
+        [ -f "$src_file" ] || continue
+        basename_file=$(basename "$src_file")
+        full_target="$FULL_DIR/$basename_file"
+        thumb_target="$THUMB_DIR/$basename_file"
+
+        need_full=false
+        need_thumb=false
+
+        if [ "$FORCE_FLAG" = "true" ] || [ ! -f "$full_target" ]; then
+            need_full=true
+        else
+            # Check if source is newer
+            src_mtime=$(stat -f%m "$src_file" 2>/dev/null || stat -c%Y "$src_file")
+            full_mtime=$(stat -f%m "$full_target" 2>/dev/null || stat -c%Y "$full_target")
+            if [ "$src_mtime" -gt "$full_mtime" ]; then
+                need_full=true
+            fi
+        fi
+
+        if [ "$FORCE_FLAG" = "true" ] || [ ! -f "$thumb_target" ]; then
+            need_thumb=true
+        else
+            # Check if source is newer
+            src_mtime=$(stat -f%m "$src_file" 2>/dev/null || stat -c%Y "$src_file")
+            thumb_mtime=$(stat -f%m "$thumb_target" 2>/dev/null || stat -c%Y "$thumb_target")
+            if [ "$src_mtime" -gt "$thumb_mtime" ]; then
+                need_thumb=true
+            fi
+        fi
+
+        if [ "$need_full" = false ] && [ "$need_thumb" = false ]; then
+            SKIPPED=$((SKIPPED + 1))
+            continue
+        fi
+
+        temp_dir=$(mktemp -d)
+        cp "$src_file" "$temp_dir/$basename_file"
+
+        if [ "$need_full" = true ]; then
+            {{ python }} "{{ scripts_dir }}/resize-images.py" \
+                --input "$temp_dir" \
+                --output "$FULL_DIR" \
+                --width {{ full_width }} >/dev/null
+        fi
+
+        if [ "$need_thumb" = true ]; then
+            {{ python }} "{{ scripts_dir }}/resize-images.py" \
+                --input "$temp_dir" \
+                --output "$THUMB_DIR" \
+                --width {{ thumb_width }} >/dev/null
+        fi
+
+        rm -rf "$temp_dir"
+        echo "  ✓ $basename_file"
+        UPDATED=$((UPDATED + 1))
+    done < <(find "{{ input_dir }}" -maxdepth 1 -type f -name "*.png" | sort)
+
+    echo ""
+    echo "✓ Examples created successfully"
+    echo "  Updated: $UPDATED"
+    echo "  Skipped (up-to-date): $SKIPPED"
+    echo "  Full examples: $FULL_DIR/"
+    echo "  Thumbnails: $THUMB_DIR/"
+
+# Resize images to specific width
+[arg("width", long="width", help="Target width in pixels")]
+resize input_dir output_dir width="1200":
+    @echo "🔄 Resizing images from {{ input_dir }} to {{ width }}px wide..."
+    @{{ python }} "{{ scripts_dir }}/resize-images.py" \
+        --input "{{ input_dir }}" \
+        --output "{{ output_dir }}" \
+        --width {{ width }}
+
+# Add text labels to images
+[arg("background", long="background", help="Background color (e.g., white, #ffffff, or none for transparent)")]
+[arg("label", long="label", help="Fixed label text for all images")]
+[arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
+[arg("position", long="position", help="Label position: upper-right, upper-left, lower-right, lower-left")]
+[arg("text_color", long="text-color", help="Text color (default: black)")]
+add-labels input_dir output_dir label="" label_pattern="{scheme}" position="upper-right" background="white" text_color="black":
+    @echo "🏷️  Adding labels to images..."
+    @{{ python }} "{{ scripts_dir }}/add-image-label.py" \
+        --input "{{ input_dir }}" \
+        --output "{{ output_dir }}" \
+        {{ if label != "" { "--label \"" + label + "\"" } else { "" } }} \
+        {{ if label_pattern != "" { "--label-pattern \"" + label_pattern + "\"" } else { "" } }} \
+        --position "{{ position }}" \
+        --background "{{ background }}" \
+        --text-color "{{ text_color }}"
+
+# Create a montage grid from images
+[arg("add_labels", long="add-labels", help="Add labels to each image")]
+[arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
+[arg("cols", long="cols", help="Number of columns (default: 4)")]
+[arg("spacing", long="spacing", help="Spacing between images in pixels (default: 10)")]
+create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_pattern="{scheme}":
+    @echo "🖼️  Creating montage from {{ input_dir }}..."
+    @{{ python }} "{{ scripts_dir }}/create-image-montage.py" \
+        --input "{{ input_dir }}" \
+        --output "{{ output_file }}" \
+        --cols {{ cols }} \
+        --spacing {{ spacing }} \
+        {{ if add_labels == "true" { "--add-labels" } else { "" } }} \
+        {{ if label_pattern != "" { "--label-pattern \"" + label_pattern + "\"" } else { "" } }}
+
+# Create a multi-page PDF from images
+[arg("fit_mode", long="fit-mode", help="How to fit images: contain, fill, actual")]
+[arg("page_size", long="page-size", help="Page size: letter, legal, tabloid, a4, a3")]
+[arg("dpi", long="dpi", help="Resolution in DPI (150-300 recommended, default: 150)")]
+create-pdf input_dir output_file dpi="150" page_size="letter" fit_mode="contain":
+    @echo "📄 Creating PDF from {{ input_dir }}..."
+    @{{ python }} "{{ scripts_dir }}/create-pdf-from-images.py" \
+        --input "{{ input_dir }}" \
+        --output "{{ output_file }}" \
+        --dpi {{ dpi }} \
+        --page-size "{{ page_size }}" \
+        --fit-mode "{{ fit_mode }}"

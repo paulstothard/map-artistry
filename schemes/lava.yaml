@@ -166,7 +166,7 @@ map:
         color: '#00c853'
         ring_color: '#00c853'
         fill_color: '#0a0000'
-        size: 8.0
+        size: 16.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
@@ -175,7 +175,7 @@ map:
         color: '#ff5252'
         ring_color: '#ff5252'
         fill_color: '#0a0000'
-        size: 8.0
+        size: 16.0
         ring_width_scale: 0.14
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035

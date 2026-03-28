@@ -392,82 +392,22 @@ else
 fi
 
 echo ""
-echo "📤 Publishing maps to publish/ (incremental)..."
-mkdir -p "$PUBLISH_DIR"
+echo "📤 Publishing maps to publish/ (smart copy with timestamp checking)..."
+FORCE_ARG=""
+if [ "$FORCE" = true ]; then
+  FORCE_ARG="--force true"
+fi
 
-PUBLISH_COPIED=0
-PUBLISH_SKIPPED=0
-
-while IFS= read -r map_file; do
-  [ -f "$map_file" ] || continue
-  basename_file=$(basename "$map_file")
-  publish_target="$PUBLISH_DIR/$basename_file"
-
-  if [ "$FORCE" = true ] || [ ! -f "$publish_target" ]; then
-    cp "$map_file" "$publish_target"
-    echo "  ✓ $basename_file"
-    PUBLISH_COPIED=$((PUBLISH_COPIED + 1))
-  else
-    PUBLISH_SKIPPED=$((PUBLISH_SKIPPED + 1))
-  fi
-done < <(find "$OUTPUT_DIR" -type f \( -name "*.png" -o -name "*.pdf" \) | sort)
-
-echo "  Copied: $PUBLISH_COPIED"
-echo "  Skipped existing: $PUBLISH_SKIPPED"
+just publish $FORCE_ARG
 
 echo ""
-echo "📸 Creating examples for GitHub README (incremental)..."
-mkdir -p "$EXAMPLES_FULL_DIR" "$EXAMPLES_THUMB_DIR"
+echo "📸 Creating examples for GitHub README (smart resize with timestamp checking)..."
+FORCE_ARG=""
+if [ "$FORCE" = true ]; then
+  FORCE_ARG="--force true"
+fi
 
-EXAMPLES_UPDATED=0
-EXAMPLES_SKIPPED=0
-
-while IFS= read -r publish_png; do
-  [ -f "$publish_png" ] || continue
-  basename_file=$(basename "$publish_png")
-  full_target="$EXAMPLES_FULL_DIR/$basename_file"
-  thumb_target="$EXAMPLES_THUMB_DIR/$basename_file"
-
-  need_full=false
-  need_thumb=false
-
-  if [ "$FORCE" = true ] || [ ! -f "$full_target" ]; then
-    need_full=true
-  fi
-  if [ "$FORCE" = true ] || [ ! -f "$thumb_target" ]; then
-    need_thumb=true
-  fi
-
-  if [ "$need_full" = false ] && [ "$need_thumb" = false ]; then
-    EXAMPLES_SKIPPED=$((EXAMPLES_SKIPPED + 1))
-    continue
-  fi
-
-  temp_input_dir=$(mktemp -d)
-  cp "$publish_png" "$temp_input_dir/$basename_file"
-
-  if [ "$need_full" = true ]; then
-    "$PYTHON_BIN" "$SCRIPTS_DIR/resize-images.py" \
-      --input "$temp_input_dir" \
-      --output "$EXAMPLES_FULL_DIR" \
-      --width "$FULL_WIDTH" >/dev/null
-  fi
-
-  if [ "$need_thumb" = true ]; then
-    "$PYTHON_BIN" "$SCRIPTS_DIR/resize-images.py" \
-      --input "$temp_input_dir" \
-      --output "$EXAMPLES_THUMB_DIR" \
-      --width "$THUMBNAIL_WIDTH" >/dev/null
-  fi
-
-  rm -rf "$temp_input_dir"
-
-  echo "  ✓ $basename_file"
-  EXAMPLES_UPDATED=$((EXAMPLES_UPDATED + 1))
-done < <(find "$PUBLISH_DIR" -maxdepth 1 -type f -name "*.png" | sort)
-
-echo "  Updated: $EXAMPLES_UPDATED"
-echo "  Skipped existing: $EXAMPLES_SKIPPED"
+just create-examples --full-width "$FULL_WIDTH" --thumb-width "$THUMBNAIL_WIDTH" $FORCE_ARG
 
 echo ""
 echo "✅ All steps complete"
