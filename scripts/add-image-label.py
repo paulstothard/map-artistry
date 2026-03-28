@@ -115,7 +115,7 @@ def add_labels_to_images(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    images = list(input_dir.glob("*.png")) + list(input_dir.glob("*.jpg"))
+    images = list(input_dir.rglob("*.png")) + list(input_dir.rglob("*.jpg"))
     if not images:
         print(f"No images found in {input_dir}")
         return

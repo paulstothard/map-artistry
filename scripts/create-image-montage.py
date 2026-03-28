@@ -45,8 +45,8 @@ def create_montage(
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Collect all images
-    images = sorted(list(input_dir.glob("*.png")) + list(input_dir.glob("*.jpg")))
+    # Collect all images (recursively)
+    images = sorted(list(input_dir.rglob("*.png")) + list(input_dir.rglob("*.jpg")))
     if not images:
         print(f"No images found in {input_dir}")
         return
