@@ -7,12 +7,17 @@ map:
     fc: '#000000'
   elevation_profile:
     alpha: 0.92
-    color: '#3a0d10'
+    color: '#ffeb3b'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#000000'
+      enabled: true
+      linewidth: 0.8
     route:
-      alpha: 0.9
-      color: '#f0d6a0'
+      alpha: 0.95
+      color: '#ffeb3b'
       enabled: true
       end_marker:
         color: '#ffe082'
@@ -21,13 +26,13 @@ map:
         fill_color: '#120001'
         ring_color: '#ffe082'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
-      linewidth: 4.0
+      linewidth: 4.5
       outline:
-        color: '#5d1010'
+        color: '#000000'
         enabled: true
-        linewidth: 0.9
+        linewidth: 1.2
       sampling:
         interval_m: 300
         max_points: 500
@@ -40,10 +45,10 @@ map:
         fill_color: '#120001'
         ring_color: '#5a9a63'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
-    color: '#ff6666'
+    color: '#2b0506'
     enabled: true
     padding: 0.04
   hillshade:
@@ -160,7 +165,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/edmonton-ab/satellite.tif
   scheme: river_runs_red

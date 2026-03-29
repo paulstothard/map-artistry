@@ -11,6 +11,11 @@ map:
     color: '#ff5cf0'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#07141b'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.85
       color: '#ff5cf0'
@@ -22,7 +27,7 @@ map:
         fill_color: '#020304'
         ring_color: '#ff5c93'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
       linewidth: 4.0
       outline:
@@ -41,10 +46,10 @@ map:
         fill_color: '#020304'
         ring_color: '#64d977'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
-    color: '#67f8ff'
+    color: '#1a0d2e'
     enabled: true
     padding: 0.04
   hillshade:
@@ -98,11 +103,11 @@ map:
   info_panel:
     background:
       alpha: 1.0
-      color: '#63ffff'
+      color: '#1a0d2e'
     elements:
     - align: left
       alpha: 1.0
-      color: '#020304'
+      color: '#e0d4f7'
       content: ''
       font: Inter
       font_weight: bold
@@ -115,7 +120,7 @@ map:
       y: 0.65
     - align: left
       alpha: 1.0
-      color: '#0a1a20'
+      color: '#b8a7d9'
       content: ''
       font: Inter
       font_weight: normal
@@ -128,7 +133,7 @@ map:
       y: 0.25
     - align: right
       alpha: 1.0
-      color: '#0a1a20'
+      color: '#b8a7d9'
       content: ''
       font: Inter
       font_weight: normal
@@ -144,7 +149,7 @@ map:
       id: stats
       items: []
       label_alpha: 1.0
-      label_color: '#0a1a20'
+      label_color: '#b8a7d9'
       label_size: 0.1
       label_weight: normal
       layout: horizontal
@@ -152,7 +157,7 @@ map:
       transform: uppercase
       type: stats
       value_alpha: 1.0
-      value_color: '#020304'
+      value_color: '#e0d4f7'
       value_size: 0.22
       value_weight: bold
       x: 0.97
@@ -163,7 +168,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/iceland/satellite.tif
   scheme: neon_cyber

@@ -5,9 +5,14 @@ map:
   debug_water_hillshade: false
   elevation_profile:
     alpha: 0.92
-    color: '#704d34'
+    color: '#c24b2f'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#f3e6cf'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.92
       color: '#c24b2f'
@@ -19,7 +24,7 @@ map:
         fill_color: '#f3eadb'
         ring_color: '#a0522d'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
       linewidth: 4.6
       outline:
@@ -38,7 +43,7 @@ map:
         fill_color: '#f3eadb'
         ring_color: '#4f8a5b'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
     color: '#6f563d'
@@ -160,7 +165,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/san-francisco-ca/satellite.tif
   scheme: sepia_vintage

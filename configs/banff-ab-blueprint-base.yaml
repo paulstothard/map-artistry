@@ -11,6 +11,11 @@ map:
     color: '#ffd166'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#071724'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.85
       color: '#ffd166'
@@ -22,7 +27,7 @@ map:
         fill_color: '#071724'
         ring_color: '#ff7b7b'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
       linewidth: 4.0
       outline:
@@ -41,7 +46,7 @@ map:
         fill_color: '#071724'
         ring_color: '#5fbf9b'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
     color: '#123d57'
@@ -163,7 +168,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/banff-ab/satellite.tif
   scheme: blueprint

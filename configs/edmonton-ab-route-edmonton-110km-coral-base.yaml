@@ -169,7 +169,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/edmonton-ab/satellite.tif
   scheme: coral

@@ -8,12 +8,17 @@ map:
   debug_water_hillshade: false
   elevation_profile:
     alpha: 0.9
-    color: '#4f6078'
+    color: '#1a237e'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#000000'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.95
-      color: '#4f6078'
+      color: '#1a237e'
       enabled: true
       end_marker:
         color: '#9a6f64'
@@ -22,13 +27,13 @@ map:
         fill_color: '#ffffff'
         ring_color: '#9a6f64'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
-      linewidth: 4.0
+      linewidth: 4.5
       outline:
-        color: '#ffffff'
+        color: '#000000'
         enabled: true
-        linewidth: 0.9
+        linewidth: 1.2
       sampling:
         interval_m: 300
         max_points: 500
@@ -41,7 +46,7 @@ map:
         fill_color: '#ffffff'
         ring_color: '#6f8a7a'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
     color: '#3a4048'
@@ -163,7 +168,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/oahu-hi/satellite.tif
   scheme: porcelain_ink

@@ -7,9 +7,14 @@ map:
     fc: '#aa332e'
   elevation_profile:
     alpha: 1.0
-    color: '#3d3d3d'
+    color: '#1f1f1f'
     enabled: true
     height: 0.04
+    outline:
+      alpha: 0.7
+      color: '#ffffff'
+      enabled: true
+      linewidth: 0.8
     route:
       alpha: 0.85
       color: '#1f1f1f'
@@ -21,7 +26,7 @@ map:
         fill_color: '#ffffff'
         ring_color: '#5d1a12'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
       linewidth: 5.5
       outline:
@@ -40,7 +45,7 @@ map:
         fill_color: '#ffffff'
         ring_color: '#2e7d32'
         ring_width_scale: 0.14
-        size: 8.0
+        size: 16.0
         style: concentric_circles
   frame:
     color: '#f7d0ca'
@@ -160,7 +165,7 @@ map:
     position: bottom
     zorder: 1000
   satellite:
-    opacity: 1.0
+    alpha: 1.0
     visible: false
     path: downloads/regions/oahu-hi/satellite.tif
   scheme: coral
