@@ -126,7 +126,18 @@ build-all-schemes region width="24" height="24" dpi="300" format="png" buffer_km
     SCHEMES=$(just _get-scheme-names)
     for SCHEME in $SCHEMES; do
         echo "  → Processing scheme: $SCHEME"
-        just build "{{ region }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ output_dir }}"
+        just build \
+            --width "{{ width }}" \
+            --height "{{ height }}" \
+            --dpi "{{ dpi }}" \
+            --format "{{ format }}" \
+            --buffer-km "{{ buffer_km }}" \
+            --text-title "{{ text_title }}" \
+            --text-subtitle "{{ text_subtitle }}" \
+            --text-location "{{ text_location }}" \
+            --text-stats "{{ text_stats }}" \
+            --output-dir "{{ output_dir }}" \
+            "{{ region }}" "$SCHEME"
     done
     echo "✅ Completed all schemes for {{ region }}"
 
@@ -149,7 +160,19 @@ build-all-route-schemes region gpx width="24" height="24" dpi="300" format="png"
     SCHEMES=$(just _get-scheme-names)
     for SCHEME in $SCHEMES; do
         echo "  → Processing scheme: $SCHEME"
-        just build-route "{{ region }}" "{{ gpx }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
+        just build-route \
+            --width "{{ width }}" \
+            --height "{{ height }}" \
+            --dpi "{{ dpi }}" \
+            --format "{{ format }}" \
+            --buffer-km "{{ buffer_km }}" \
+            --text-title "{{ text_title }}" \
+            --text-subtitle "{{ text_subtitle }}" \
+            --text-location "{{ text_location }}" \
+            --text-stats "{{ text_stats }}" \
+            --text-units "{{ text_units }}" \
+            --output-dir "{{ output_dir }}" \
+            "{{ region }}" "{{ gpx }}" "$SCHEME"
     done
     echo "✅ Completed all schemes for route"
 
@@ -172,7 +195,19 @@ build-all-gpx-schemes gpx width="24" height="24" dpi="300" format="png" buffer_k
     SCHEMES=$(just _get-scheme-names)
     for SCHEME in $SCHEMES; do
         echo "  → Processing scheme: $SCHEME"
-        just build-gpx "{{ gpx }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
+        just build-gpx \
+            --width "{{ width }}" \
+            --height "{{ height }}" \
+            --dpi "{{ dpi }}" \
+            --format "{{ format }}" \
+            --buffer-km "{{ buffer_km }}" \
+            --text-title "{{ text_title }}" \
+            --text-subtitle "{{ text_subtitle }}" \
+            --text-location "{{ text_location }}" \
+            --text-stats "{{ text_stats }}" \
+            --text-units "{{ text_units }}" \
+            --output-dir "{{ output_dir }}" \
+            "{{ gpx }}" "$SCHEME"
     done
     echo "✅ Completed all schemes for GPX"
 
@@ -182,7 +217,7 @@ schemes:
 
 # Internal: Get scheme names only (one per line)
 _get-scheme-names:
-    @{{ python }} "{{ scripts_dir }}/generate-config.py" --list-schemes --schemes-dir "{{ schemes_dir }}" 2>&1 | grep -E '^\s+•' | sed 's/.*• \([a-z_]*\).*/\1/'
+    @{{ python }} "{{ scripts_dir }}/generate-config.py" --list-scheme-names --schemes-dir "{{ schemes_dir }}"
 
 # Show help
 help:
@@ -1029,10 +1064,11 @@ add-labels input_dir output_dir label="" label_pattern="{scheme}" position="uppe
         --text-color "{{ text_color }}"
 
 # Create a montage grid from images
-[arg("add_labels", long="add-labels", help="Add labels to each image")]
+[arg("cols", long="cols", help="Number of columns or 'auto' for optimal layout")]
+[arg("spacing", long="spacing", help="Spacing between images in pixels")]
+[arg("add_labels", long="add-labels", help="Add labels to each image (use 'true')")]
 [arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
-[arg("cols", long="cols", help="Number of columns (default: 4)")]
-[arg("spacing", long="spacing", help="Spacing between images in pixels (default: 10)")]
+[arg("pattern", long="pattern", help="Glob pattern to filter images (e.g., 'maple-ridge-bc-*')")]
 create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_pattern="{scheme}" pattern="*":
     @echo "🖼️  Creating montage from {{ input_dir }}..."
     @{{ python }} "{{ scripts_dir }}/create-image-montage.py" \

@@ -506,6 +506,11 @@ if __name__ == "__main__":
         help="List all available color schemes and exit",
     )
     parser.add_argument(
+        "--list-scheme-names",
+        action="store_true",
+        help="List scheme names only (one per line, no formatting)",
+    )
+    parser.add_argument(
         "--text-title",
         dest="text_title",
         type=str,
@@ -546,6 +551,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     DESIGN_SETTINGS = load_schemes(args.schemes_dir)
+
+    # Handle --list-scheme-names (just names, no formatting)
+    if args.list_scheme_names:
+        for scheme_name in sorted(DESIGN_SETTINGS.keys()):
+            print(scheme_name)
+        sys.exit(0)
 
     # Handle --list-schemes
     if args.list_schemes:

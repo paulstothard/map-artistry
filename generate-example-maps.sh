@@ -99,8 +99,8 @@ GPX_ONLY_ROUTE_GPX="$CYCLING_ROUTES_DIR/$GPX_ONLY_ROUTE_GPX_FILE"
 SOUTH_SHORE_ROUTE_GPX="$CYCLING_ROUTES_DIR/$SOUTH_SHORE_ROUTE_GPX_FILE"
 BOSTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$BOSTON_ROUTE_GPX_FILE"
 
-# Get schemes dynamically
-SCHEMES=$(just schemes 2>/dev/null)
+# Get schemes dynamically (one per line)
+SCHEMES=$(just _get-scheme-names)
 
 slugify_region() {
   echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/[, ]/-/g' | sed 's/--*/-/g'

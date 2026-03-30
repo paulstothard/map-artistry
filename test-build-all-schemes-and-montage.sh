@@ -18,7 +18,7 @@ just create-montage "${OUTPUT_DIR}" "${MONTAGE_FILE}" --cols auto --add-labels t
 echo ""
 echo "📤 Publishing montage to examples/full/ (1200px) and examples/thumbnails/ (400px)..."
 
-# Copy montage to temp dir for resizing
+# Copy montage to temp dir for resizing (resize recipe works on directories)
 TEMP_DIR=$(mktemp -d)
 trap "rm -rf ${TEMP_DIR}" EXIT
 
