@@ -170,6 +170,31 @@ just build-gpx \
 
 All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated automatically based on region size. Use `--buffer-km` to override the automatic extra distance added around the region boundary, in kilometers.
 
+### Generating All Color Schemes
+
+Generate all 16 color schemes for a region and create a labeled montage:
+
+```bash
+# Generate all color schemes for Iceland
+just build-all-schemes "Iceland"
+
+# Create a montage with automatic layout and scheme labels
+just create-montage user/output iceland-montage.png --cols auto --add-labels true --pattern "iceland-*"
+
+# Or with custom columns and spacing
+just create-montage user/output iceland-4x4.png --cols 4 --spacing 20 --add-labels true --pattern "iceland-*"
+```
+
+The `--cols auto` option automatically calculates the optimal grid layout based on the number of images. The `--pattern` option filters which images to include (e.g., `"iceland-*"` for all Iceland maps, `"*-natural"` for all natural scheme maps). You can also generate all schemes for routes:
+
+```bash
+# Generate all schemes for a route
+just build-all-route-schemes "Boston, MA" downloads/my-route.gpx
+
+# Or for GPX-derived regions
+just build-all-gpx-schemes downloads/my-route.gpx
+```
+
 ### Text Panels
 
 All map types (`build`, `build-route`, and `build-gpx`) support optional text panels with title, subtitle, location, and custom statistics. Use the `--text-title`, `--text-subtitle`, `--text-location`, and `--text-stats` flags to add a styled info panel to your map. Stats use the format `VALUE||LABEL` with `;;` as a separator between multiple stats (e.g., `"94 KM||DISTANCE;;800 M||ELEV GAIN"`).

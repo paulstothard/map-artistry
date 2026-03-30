@@ -108,9 +108,81 @@ build-route region gpx scheme width="24" height="24" dpi="300" format="png" buff
 build-gpx gpx scheme width="24" height="24" dpi="300" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir=output_dir:
     @just _build-map-gpx "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
+# Build all color schemes for a region
+[arg("height", long="height", help="Map height in inches")]
+[arg("width", long="width", help="Map width in inches")]
+[arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
+[arg("text_location", long="text-location", help="Optional panel location")]
+[arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
+[arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
+[arg("text_title", long="text-title", help="Optional panel title")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+[arg("format", long="format", help="Output format: png, pdf, svg")]
+[arg("dpi", long="dpi", help="Resolution in DPI")]
+build-all-schemes region width="24" height="24" dpi="300" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" output_dir=output_dir:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🎨 Building all color schemes for region: {{ region }}"
+    SCHEMES=$(just _get-scheme-names)
+    for SCHEME in $SCHEMES; do
+        echo "  → Processing scheme: $SCHEME"
+        just build "{{ region }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ output_dir }}"
+    done
+    echo "✅ Completed all schemes for {{ region }}"
+
+# Build all color schemes for a region + GPX route
+[arg("height", long="height", help="Map height in inches")]
+[arg("width", long="width", help="Map width in inches")]
+[arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
+[arg("text_location", long="text-location", help="Optional panel location")]
+[arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
+[arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
+[arg("text_title", long="text-title", help="Optional panel title")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+[arg("format", long="format", help="Output format: png, pdf, svg")]
+[arg("dpi", long="dpi", help="Resolution in DPI")]
+[arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
+build-all-route-schemes region gpx width="24" height="24" dpi="300" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir=output_dir:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🎨 Building all color schemes for route: {{ region }} + {{ gpx }}"
+    SCHEMES=$(just _get-scheme-names)
+    for SCHEME in $SCHEMES; do
+        echo "  → Processing scheme: $SCHEME"
+        just build-route "{{ region }}" "{{ gpx }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
+    done
+    echo "✅ Completed all schemes for route"
+
+# Build all color schemes for a GPX file
+[arg("height", long="height", help="Map height in inches")]
+[arg("width", long="width", help="Map width in inches")]
+[arg("buffer_km", long="buffer-km", help="Optional extra distance around the route bbox, in kilometers")]
+[arg("text_location", long="text-location", help="Optional panel location")]
+[arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
+[arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
+[arg("text_title", long="text-title", help="Optional panel title")]
+[arg("output_dir", long="output-dir", help="Output folder for generated images")]
+[arg("format", long="format", help="Output format: png, pdf, svg")]
+[arg("dpi", long="dpi", help="Resolution in DPI")]
+[arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
+build-all-gpx-schemes gpx width="24" height="24" dpi="300" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir=output_dir:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🎨 Building all color schemes for GPX: {{ gpx }}"
+    SCHEMES=$(just _get-scheme-names)
+    for SCHEME in $SCHEMES; do
+        echo "  → Processing scheme: $SCHEME"
+        just build-gpx "{{ gpx }}" "$SCHEME" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
+    done
+    echo "✅ Completed all schemes for GPX"
+
 # List available color schemes
 schemes:
     @{{ python }} "{{ scripts_dir }}/generate-config.py" --list-schemes --schemes-dir "{{ schemes_dir }}"
+
+# Internal: Get scheme names only (one per line)
+_get-scheme-names:
+    @{{ python }} "{{ scripts_dir }}/generate-config.py" --list-schemes --schemes-dir "{{ schemes_dir }}" 2>&1 | grep -E '^\s+•' | sed 's/.*• \([a-z_]*\).*/\1/'
 
 # Show help
 help:
@@ -120,6 +192,9 @@ help:
     @echo "  just build [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--output-dir output] REGION SCHEME"
     @echo "  just build-route [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] REGION GPX SCHEME"
     @echo "  just build-gpx [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km 20] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] GPX SCHEME"
+    @echo "  just build-all-schemes [OPTIONS] REGION"
+    @echo "  just build-all-route-schemes [OPTIONS] REGION GPX"
+    @echo "  just build-all-gpx-schemes [OPTIONS] GPX"
     @echo ""
     @echo "Examples:"
     @echo '  just build "Edmonton, AB" coral'
@@ -131,6 +206,9 @@ help:
     @echo '  just build-route --text-title "EDMONTON LOOP" --text-subtitle "SUMMER TRAINING RIDE" --text-stats "94 KM||DISTANCE;;800 M||ELEV GAIN" "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral'
     @echo '  just build-gpx downloads/cycling-routes/my-ride.gpx coral'
     @echo '  just build-gpx --text-title "RIVER VALLEY LOOP" --text-subtitle "GPX-DERIVED REGION" --text-stats "64 KM||DISTANCE;;530 M||ELEV GAIN" downloads/cycling-routes/my-ride.gpx coral'
+    @echo '  just build-all-schemes "Iceland"'
+    @echo '  just build-all-schemes --width 36 --height 24 "Vancouver Island, BC"'
+    @echo '  just build-all-route-schemes "Boston, MA" downloads/cycling-routes/boston-loop.gpx'
     @echo ""
     @echo "Parameters:"
     @echo "  --width          Map width in inches (default: 24)"
@@ -154,7 +232,7 @@ help:
     @echo "      Batch resize images to specified width"
     @echo "  just add-labels INPUT_DIR OUTPUT_DIR [--label-pattern \"{scheme}\"]"
     @echo "      Add text labels to images (default: scheme name in upper-right)"
-    @echo "  just create-montage INPUT_DIR OUTPUT_FILE [--cols 4|auto] [--spacing 10] [--add-labels true]"
+    @echo "  just create-montage INPUT_DIR OUTPUT_FILE [--cols 4|auto] [--spacing 10] [--add-labels true] [--pattern \"*\"]"
     @echo "      Create grid layout of images with optional labels (use --cols auto for optimal layout)"
     @echo "  just create-pdf INPUT_DIR OUTPUT_FILE [--dpi 150] [--page-size letter]"
     @echo "      Create multi-page PDF (one image per page)"
@@ -955,7 +1033,7 @@ add-labels input_dir output_dir label="" label_pattern="{scheme}" position="uppe
 [arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
 [arg("cols", long="cols", help="Number of columns (default: 4)")]
 [arg("spacing", long="spacing", help="Spacing between images in pixels (default: 10)")]
-create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_pattern="{scheme}":
+create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_pattern="{scheme}" pattern="*":
     @echo "🖼️  Creating montage from {{ input_dir }}..."
     @{{ python }} "{{ scripts_dir }}/create-image-montage.py" \
         --input "{{ input_dir }}" \
@@ -963,7 +1041,8 @@ create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_p
         --cols {{ cols }} \
         --spacing {{ spacing }} \
         {{ if add_labels == "true" { "--add-labels" } else { "" } }} \
-        {{ if label_pattern != "" { "--label-pattern \"" + label_pattern + "\"" } else { "" } }}
+        {{ if label_pattern != "" { "--label-pattern \"" + label_pattern + "\"" } else { "" } }} \
+        --pattern "{{ pattern }}"
 
 # Create a multi-page PDF from images
 [arg("fit_mode", long="fit-mode", help="How to fit images: contain, fill, actual")]

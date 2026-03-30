@@ -66,14 +66,17 @@ def create_montage(
     label_background: str | None = "white",
     label_text_color: str = "black",
     label_padding: int = 10,
+    pattern: str = "*",
 ) -> None:
     """Create a grid montage from images in input directory."""
     input_dir = Path(input_dir)
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Collect all images (recursively)
-    images = sorted(list(input_dir.rglob("*.png")) + list(input_dir.rglob("*.jpg")))
+    # Collect images matching pattern (recursively)
+    png_images = list(input_dir.rglob(f"{pattern}.png"))
+    jpg_images = list(input_dir.rglob(f"{pattern}.jpg"))
+    images = sorted(png_images + jpg_images)
     if not images:
         print(f"No images found in {input_dir}")
         return
@@ -255,6 +258,12 @@ def main() -> None:
         default=10,
         help="Padding around label text (default: 10px)",
     )
+    parser.add_argument(
+        "--pattern",
+        type=str,
+        default="*",
+        help='Glob pattern to filter images (default: "*" for all images, e.g., "maple-ridge-bc-*")',
+    )
 
     args = parser.parse_args()
 
@@ -278,6 +287,7 @@ def main() -> None:
         label_background=label_bg,
         label_text_color=args.label_text_color,
         label_padding=args.label_padding,
+        pattern=args.pattern,
     )
 
 
