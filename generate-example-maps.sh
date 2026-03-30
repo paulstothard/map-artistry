@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Set workspace to examples/ directory for example map generation
+export WORKSPACE_DIR="$(dirname "$0")/examples"
+
 REGIONS=(
   "Banff, AB"
   "British Columbia"
@@ -78,30 +81,17 @@ done
 PYTHON_BIN="python3"
 [ -x "venv/bin/python" ] && PYTHON_BIN="venv/bin/python"
 
-get_just_var() {
-  local var_name="$1"
-  local fallback="$2"
-  local value
-
-  value=$(just --evaluate "$var_name" 2>/dev/null || true)
-  if [ -z "${value//[[:space:]]/}" ]; then
-    echo "$fallback"
-  else
-    echo "$value"
-  fi
-}
-
-SCRIPTS_DIR=$(get_just_var "scripts_dir" "scripts")
-DOWNLOADS_DIR=$(get_just_var "downloads_dir" "downloads")
-REGIONS_DIR=$(get_just_var "regions_dir" "$DOWNLOADS_DIR/regions")
-ROUTES_DIR=$(get_just_var "routes_dir" "$DOWNLOADS_DIR/routes")
-CONFIGS_DIR=$(get_just_var "configs_dir" "configs")
-OUTPUT_DIR=$(get_just_var "output_dir" "output")
-
-PUBLISH_DIR="publish"
-EXAMPLES_DIR="examples"
-EXAMPLES_FULL_DIR="$EXAMPLES_DIR/full"
-EXAMPLES_THUMB_DIR="$EXAMPLES_DIR/thumbnails"
+# With WORKSPACE_DIR set above, justfile will correctly evaluate workspace paths
+SCRIPTS_DIR=$(just --evaluate scripts_dir)
+DOWNLOADS_DIR=$(just --evaluate downloads_dir)
+REGIONS_DIR=$(just --evaluate regions_dir)
+ROUTES_DIR=$(just --evaluate routes_dir)
+CONFIGS_DIR=$(just --evaluate configs_dir)
+OUTPUT_DIR=$(just --evaluate output_dir)
+PUBLISH_DIR=$(just --evaluate publish_dir)
+EXAMPLES_DIR=$(just --evaluate examples_dir)
+EXAMPLES_FULL_DIR=$(just --evaluate examples_full_dir)
+EXAMPLES_THUMB_DIR=$(just --evaluate examples_thumb_dir)
 CYCLING_ROUTES_DIR="$DOWNLOADS_DIR/cycling-routes"
 
 EDMONTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$EDMONTON_ROUTE_GPX_FILE"

@@ -27,10 +27,37 @@ def extract_scheme_from_filename(filename: str) -> str:
     return stem
 
 
+def calculate_optimal_cols(num_images: int) -> int:
+    """Calculate optimal number of columns for a grid layout.
+    
+    Tries to create a layout that's as square as possible,
+    with a preference for wider (landscape) grids.
+    """
+    if num_images <= 0:
+        return 1
+    if num_images == 1:
+        return 1
+    if num_images == 2:
+        return 2
+    if num_images == 3:
+        return 3
+    
+    # For 4+, aim for square-ish but prefer landscape
+    sqrt = math.sqrt(num_images)
+    cols = math.ceil(sqrt)
+    
+    # Check if we can reduce cols while keeping reasonable aspect ratio
+    rows = math.ceil(num_images / cols)
+    if rows >= cols:
+        cols = cols + 1
+    
+    return cols
+
+
 def create_montage(
     input_dir: str | Path,
     output_path: str | Path,
-    cols: int = 4,
+    cols: int | str = 4,
     spacing: int = 10,
     background_color: str = "white",
     add_labels: bool = False,
@@ -52,6 +79,11 @@ def create_montage(
         return
 
     print(f"Creating montage from {len(images)} images...")
+    
+    # Auto-calculate columns if requested
+    if isinstance(cols, str) and cols.lower() == "auto":
+        cols = calculate_optimal_cols(len(images))
+        print(f"  Auto-calculated columns: {cols}")
 
     # Load all images and get max dimensions
     loaded_images = []
@@ -175,7 +207,10 @@ def main() -> None:
     parser.add_argument("--input", required=True, help="Input directory with images")
     parser.add_argument("--output", required=True, help="Output montage image path")
     parser.add_argument(
-        "--cols", type=int, default=4, help="Number of columns (default: 4)"
+        "--cols",
+        type=str,
+        default="4",
+        help='Number of columns or "auto" for optimal layout (default: 4)',
     )
     parser.add_argument(
         "--spacing", type=int, default=10, help="Spacing between images (default: 10px)"
@@ -227,11 +262,14 @@ def main() -> None:
     label_bg = (
         None if args.label_background.lower() == "none" else args.label_background
     )
+    
+    # Handle cols: "auto" or convert to int
+    cols_value = args.cols if args.cols.lower() == "auto" else int(args.cols)
 
     create_montage(
         args.input,
         args.output,
-        cols=args.cols,
+        cols=cols_value,
         spacing=args.spacing,
         background_color=args.background,
         add_labels=args.add_labels,

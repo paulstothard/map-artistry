@@ -2,50 +2,35 @@
 *.code-workspace
 .vscode/
 
-# Downloaded data (DEMs, satellite imagery, OSM layers)
-downloads/*
-!downloads/cycling-routes/
-!downloads/cycling-routes/**
-!downloads/natural-earth/
-!downloads/ocean-boundaries/
-!downloads/regions/
-!downloads/routes/
-downloads/natural-earth/*
-!downloads/natural-earth/.gitkeep
-downloads/ocean-boundaries/*
-!downloads/ocean-boundaries/.gitkeep
-downloads/regions/*
-!downloads/regions/.gitkeep
-downloads/routes/*
-!downloads/routes/.gitkeep
-
-# Output files
-output/
-
-# macOS system files
-.DS_Store
-
-# Python virtual environment
+# Python
 venv/
-
-# Python cache
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
+.DS_Store
 
-# Cache files
-cache/
+# User workspace - completely ignored (for personal maps)
+user/
 
-# Publish folder
-publish/
+# Examples workspace - only track configs and images for documentation
+# Ignore all generated data and downloads
+examples/cache/
+examples/downloads/
+examples/output/
+examples/publish/
+
+# But allow the images referenced in README
+!examples/full/
+!examples/full/*.png
+!examples/thumbnails/
+!examples/thumbnails/*.png
+
+# But track only overlay config files
+!examples/configs/
+!examples/configs/*-overlay.yaml
 
 # Deploy folder (symlink)
 deploy
 
 # Roadmap
 ROADMAP.md
-
-# Test output folders
-configs-text-tests/
-output-text-tests/

@@ -23,19 +23,40 @@
 python := if path_exists("venv/bin/python") == "true" { "venv/bin/python" } else { "python3" }
 
 # ============================================================================
-# Global Paths (edit these to relocate project folders)
+# Configuration - Portable Workspace System
+# ============================================================================
+# For portable use: Set MAP_ARTISTRY_REPO to the absolute path of the repo
+# Default: assume justfile is in the repo root
+repo_dir := env_var_or_default('MAP_ARTISTRY_REPO', justfile_directory())
+
+# Workspace: where downloads/configs/output are stored
+# Default: user/ subfolder in the repo (for personal maps)
+# Override with WORKSPACE_DIR env var (e.g., for examples: WORKSPACE_DIR=examples)
+workspace_dir := env_var_or_default('WORKSPACE_DIR', repo_dir / "user")
+
+# ============================================================================
+# Global Paths - Repo paths (immutable - where code lives)
 # ============================================================================
 
-scripts_dir := "scripts"
-schemes_dir := "schemes"
-downloads_dir := "downloads"
-regions_dir := "downloads/regions"
-routes_dir := "downloads/routes"
-natural_earth_cache_dir := "downloads/natural-earth"
-ocean_boundaries_dir := "downloads/ocean-boundaries"
-configs_dir := "configs"
-output_dir := "output"
-cache_dir := "cache"
+scripts_dir := repo_dir / "scripts"
+schemes_dir := repo_dir / "schemes"
+
+# ============================================================================
+# Global Paths - Workspace paths (where data is stored)
+# ============================================================================
+
+downloads_dir := workspace_dir / "downloads"
+regions_dir := workspace_dir / "downloads" / "regions"
+routes_dir := workspace_dir / "downloads" / "routes"
+natural_earth_cache_dir := workspace_dir / "downloads" / "natural-earth"
+ocean_boundaries_dir := workspace_dir / "downloads" / "ocean-boundaries"
+configs_dir := workspace_dir / "configs"
+output_dir := workspace_dir / "output"
+cache_dir := workspace_dir / "cache"
+publish_dir := workspace_dir / "publish"
+examples_dir := workspace_dir
+examples_full_dir := workspace_dir / "full"
+examples_thumb_dir := workspace_dir / "thumbnails"
 
 # ============================================================================
 # Main Commands
@@ -45,11 +66,15 @@ cache_dir := "cache"
 [arg("height", long="height", help="Map height in inches")]
 [arg("width", long="width", help="Map width in inches")]
 [arg("buffer_km", long="buffer-km", help="Optional extra distance around the region boundary, in kilometers")]
+[arg("text_location", long="text-location", help="Optional panel location")]
+[arg("text_stats", long="text-stats", help="Optional panel stats. Supports VALUE||LABEL and ';;' separator")]
+[arg("text_subtitle", long="text-subtitle", help="Optional panel subtitle")]
+[arg("text_title", long="text-title", help="Optional panel title")]
 [arg("output_dir", long="output-dir", help="Output folder for generated images")]
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
-build region scheme width="24" height="24" dpi="600" format="png" buffer_km="" output_dir="output":
-    @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ output_dir }}"
+build region scheme width="24" height="24" dpi="300" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" output_dir=output_dir:
+    @just _build-map "{{ region }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ output_dir }}"
 
 # Build a route map from region + GPX (region boundary with GPX route overlay)
 [arg("height", long="height", help="Map height in inches")]
@@ -63,7 +88,7 @@ build region scheme width="24" height="24" dpi="600" format="png" buffer_km="" o
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-build-route region gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
+build-route region gpx scheme width="24" height="24" dpi="300" format="png" buffer_km="" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir=output_dir:
     @just _build-map-route "{{ region }}" "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
 # Build a route map from GPX only (derive region boundary from GPX bbox)
@@ -78,7 +103,7 @@ build-route region gpx scheme width="24" height="24" dpi="600" format="png" buff
 [arg("format", long="format", help="Output format: png, pdf, svg")]
 [arg("dpi", long="dpi", help="Resolution in DPI")]
 [arg("text_units", long="text-units", help="Route stat units: auto, metric, imperial")]
-build-gpx gpx scheme width="24" height="24" dpi="600" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir="output":
+build-gpx gpx scheme width="24" height="24" dpi="300" format="png" buffer_km="5" text_title="" text_subtitle="" text_location="" text_stats="" text_units="auto" output_dir=output_dir:
     @just _build-map-gpx "{{ gpx }}" "{{ scheme }}" "{{ width }}" "{{ height }}" "{{ dpi }}" "{{ format }}" "{{ buffer_km }}" "{{ text_title }}" "{{ text_subtitle }}" "{{ text_location }}" "{{ text_stats }}" "{{ text_units }}" "{{ output_dir }}"
 
 # List available color schemes
@@ -90,15 +115,16 @@ help:
     @echo "Map Artistry - Dynamic Map Generation"
     @echo ""
     @echo "Usage:"
-    @echo "  just build [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] [--output-dir output] REGION SCHEME"
-    @echo "  just build-route [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] REGION GPX SCHEME"
-    @echo "  just build-gpx [--width 24] [--height 24] [--dpi 600] [--format png] [--buffer-km 20] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] GPX SCHEME"
+    @echo "  just build [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--output-dir output] REGION SCHEME"
+    @echo "  just build-route [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km N] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] REGION GPX SCHEME"
+    @echo "  just build-gpx [--width 24] [--height 24] [--dpi 300] [--format png] [--buffer-km 20] [--text-title ...] [--text-subtitle ...] [--text-location ...] [--text-stats ...] [--text-units auto] [--output-dir output] GPX SCHEME"
     @echo ""
     @echo "Examples:"
     @echo '  just build "Edmonton, AB" coral'
     @echo '  just build --width 36 --height 24 "Vancouver Island, BC" natural'
-    @echo '  just build --width 36 --height 24 --dpi 600 "Canada" lava'
+    @echo '  just build --width 36 --height 24 --dpi 300 "Canada" lava'
     @echo '  just build --buffer-km 20 "Victoria, BC" natural'
+    @echo '  just build --text-title "VICTORIA" --text-subtitle "BRITISH COLUMBIA" "Victoria, BC" natural'
     @echo '  just build-route "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral'
     @echo '  just build-route --text-title "EDMONTON LOOP" --text-subtitle "SUMMER TRAINING RIDE" --text-stats "94 KM||DISTANCE;;800 M||ELEV GAIN" "Edmonton, AB" downloads/cycling-routes/my-ride.gpx coral'
     @echo '  just build-gpx downloads/cycling-routes/my-ride.gpx coral'
@@ -107,14 +133,14 @@ help:
     @echo "Parameters:"
     @echo "  --width          Map width in inches (default: 24)"
     @echo "  --height         Map height in inches (default: 24)"
-    @echo "  --dpi            Resolution in DPI (default: 600)"
+    @echo "  --dpi            Resolution in DPI (default: 300)"
     @echo "  --format         Output format: png, pdf, svg (default: png)"
     @echo "  --buffer-km      Extra distance around the region/route boundary in km (build/build-route: auto-calculated; build-gpx: default 5)"
-    @echo "  --text-title     Stats panel title (build-route / build-gpx only)"
-    @echo "  --text-subtitle  Stats panel subtitle (build-route / build-gpx only)"
-    @echo "  --text-location  Stats panel location label (build-route / build-gpx only)"
-    @echo "  --text-stats     Stats panel metrics: VALUE||LABEL pairs separated by ;; (build-route / build-gpx only)"
-    @echo "  --text-units     Route stat units: auto, metric, imperial (default: auto)"
+    @echo "  --text-title     Stats panel title"
+    @echo "  --text-subtitle  Stats panel subtitle"
+    @echo "  --text-location  Stats panel location label"
+    @echo "  --text-stats     Stats panel metrics: VALUE||LABEL pairs separated by ;; (route maps can derive distance from GPX)"
+    @echo "  --text-units     Route stat units: auto, metric, imperial (default: auto; build-route / build-gpx only)"
     @echo "  --output-dir     Output folder for generated images (default: output)"
     @echo ""
     @echo "Image Processing Tools:"
@@ -126,8 +152,8 @@ help:
     @echo "      Batch resize images to specified width"
     @echo "  just add-labels INPUT_DIR OUTPUT_DIR [--label-pattern \"{scheme}\"]"
     @echo "      Add text labels to images (default: scheme name in upper-right)"
-    @echo "  just create-montage INPUT_DIR OUTPUT_FILE [--cols 4] [--add-labels true]"
-    @echo "      Create grid layout of images with optional labels"
+    @echo "  just create-montage INPUT_DIR OUTPUT_FILE [--cols 4|auto] [--spacing 10] [--add-labels true]"
+    @echo "      Create grid layout of images with optional labels (use --cols auto for optimal layout)"
     @echo "  just create-pdf INPUT_DIR OUTPUT_FILE [--dpi 150] [--page-size letter]"
     @echo "      Create multi-page PDF (one image per page)"
     @echo ""
@@ -152,7 +178,7 @@ help:
 # ============================================================================
 
 # Main build orchestration
-_build-map region scheme width height dpi format buffer output_dir:
+_build-map region scheme width height dpi format buffer text_title text_subtitle text_location text_stats output_dir:
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -163,6 +189,10 @@ _build-map region scheme width height dpi format buffer output_dir:
     DPI={{ dpi }}
     FORMAT={{ format }}
     USER_BUFFER="{{ buffer }}"
+    TEXT_TITLE="{{ text_title }}"
+    TEXT_SUBTITLE="{{ text_subtitle }}"
+    TEXT_LOCATION="{{ text_location }}"
+    TEXT_STATS="{{ text_stats }}"
 
     if [ -z "${SCHEME//[[:space:]]/}" ]; then
         echo "❌ Color scheme is required and cannot be empty"
@@ -351,6 +381,16 @@ _build-map region scheme width height dpi format buffer output_dir:
     CONFIG_OVERLAY="$CONFIG_DIR/${LOCATION}-${SCHEME}-overlay.yaml"
     CONFIG_FINAL="$CONFIG_DIR/${LOCATION}-${SCHEME}-final.yaml"
 
+    # Build config args array for text options
+    CONFIG_ARGS=()
+    if [ -n "$TEXT_TITLE" ] || [ -n "$TEXT_SUBTITLE" ] || [ -n "$TEXT_LOCATION" ] || [ -n "$TEXT_STATS" ]; then
+        CONFIG_ARGS+=("--enable-text")
+        if [ -n "$TEXT_TITLE" ]; then CONFIG_ARGS+=("--text-title" "$TEXT_TITLE"); fi
+        if [ -n "$TEXT_SUBTITLE" ]; then CONFIG_ARGS+=("--text-subtitle" "$TEXT_SUBTITLE"); fi
+        if [ -n "$TEXT_LOCATION" ]; then CONFIG_ARGS+=("--text-location" "$TEXT_LOCATION"); fi
+        if [ -n "$TEXT_STATS" ]; then CONFIG_ARGS+=("--text-stats" "$TEXT_STATS"); fi
+    fi
+
     # Generate base config
     {{ python }} "{{ scripts_dir }}/generate-config.py" \
         "$DATA_DIR/layers"/*.gpkg \
@@ -359,7 +399,8 @@ _build-map region scheme width height dpi format buffer output_dir:
         --schemes-dir "{{ schemes_dir }}" \
         --scheme "$SCHEME" \
         --dem "$DATA_DIR/dem.tif" \
-        --satellite "$DATA_DIR/satellite.tif"
+        --satellite "$DATA_DIR/satellite.tif" \
+        "${CONFIG_ARGS[@]}"
 
     # Apply overlay if exists
     if [ -f "$CONFIG_OVERLAY" ]; then
@@ -785,7 +826,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 # Smart publish images (only copy if newer or missing)
 [arg("pattern", long="pattern", help="File pattern to match (default: *.png)")]
 [arg("force", long="force", help="Force copy all files (ignore timestamps)")]
-publish input_dir="output" output_dir="publish" pattern="*.png" force="":
+publish input_dir=output_dir output_dir=publish_dir pattern="*.png" force="":
     #!/usr/bin/env bash
     set -euo pipefail
     echo "📤 Publishing images from {{ input_dir }} to {{ output_dir }}..."
@@ -803,7 +844,7 @@ publish input_dir="output" output_dir="publish" pattern="*.png" force="":
 [arg("force", long="force", help="Force recreate all examples (ignore timestamps)")]
 [arg("full_width", long="full-width", help="Width for full examples (default: 1200)")]
 [arg("thumb_width", long="thumb-width", help="Width for thumbnails (default: 400)")]
-create-examples input_dir="publish" examples_dir="examples" full_width="1200" thumb_width="400" force="":
+create-examples input_dir=publish_dir examples_dir=workspace_dir full_width="1200" thumb_width="400" force="":
     #!/usr/bin/env bash
     set -euo pipefail
     echo "📸 Creating examples from {{ input_dir }}..."

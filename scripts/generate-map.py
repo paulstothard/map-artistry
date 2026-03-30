@@ -1234,6 +1234,13 @@ def _load_gpx_route_coords(gpx_path: Path, sampling_cfg=None):
     else:
         parsed_elevation = None
 
+    # Calculate stats from ORIGINAL full-resolution data before downsampling
+    # This provides accurate distance and elevation gain
+    original_distance_km = _route_distance_km(route_coords)
+    original_elev_gain_m = (
+        _elevation_gain_m(parsed_elevation) if parsed_elevation is not None else None
+    )
+
     sampling_cfg = sampling_cfg or {}
     resampled_coords = _resample_route_coords(
         route_coords,
@@ -1245,12 +1252,18 @@ def _load_gpx_route_coords(gpx_path: Path, sampling_cfg=None):
     )
 
     # Resample elevation to match resampled coords
+    resampled_elevation = None
     if parsed_elevation is not None:
         orig_idx = np.linspace(0, 1, len(parsed_elevation))
         new_idx = np.linspace(0, 1, len(resampled_coords))
-        parsed_elevation = np.interp(new_idx, orig_idx, parsed_elevation)
+        resampled_elevation = np.interp(new_idx, orig_idx, parsed_elevation)
 
-    return resampled_coords, parsed_elevation
+    return (
+        resampled_coords,
+        resampled_elevation,
+        original_distance_km,
+        original_elev_gain_m,
+    )
 
 
 def _sample_dem_elevation(route_coords, dem_path):
@@ -2481,8 +2494,15 @@ def draw_map_from_config(
         sampling_cfg = route_cfg.get("sampling", {})
 
         gpx_elevation = None
+        gpx_distance_km = None
+        gpx_elev_gain_m = None
         try:
-            route_coords, gpx_elevation = _load_gpx_route_coords(
+            (
+                route_coords,
+                gpx_elevation,
+                gpx_distance_km,
+                gpx_elev_gain_m,
+            ) = _load_gpx_route_coords(
                 Path(route_gpx_path),
                 sampling_cfg=sampling_cfg,
             )
@@ -2491,9 +2511,12 @@ def draw_map_from_config(
 
         if route_coords:
             elevation_data = None
+            dem_elev_gain_m = None
             if dem_path:
                 try:
                     elevation_data = _sample_dem_elevation(route_coords, dem_path)
+                    if elevation_data is not None:
+                        dem_elev_gain_m = _elevation_gain_m(elevation_data)
                 except (
                     FileNotFoundError,
                     rasterio.errors.RasterioIOError,
@@ -2506,8 +2529,18 @@ def draw_map_from_config(
             if elevation_data is None:
                 elevation_data = gpx_elevation
 
-            derived_distance_km = _route_distance_km(route_coords)
-            derived_gain_m = _elevation_gain_m(elevation_data)
+            # Use accurate distance from original full-resolution GPX data
+            derived_distance_km = gpx_distance_km
+
+            # For elevation gain, prefer DEM if available (more accurate), otherwise use GPX
+            if dem_elev_gain_m is not None:
+                derived_gain_m = dem_elev_gain_m
+            elif gpx_elev_gain_m is not None:
+                derived_gain_m = gpx_elev_gain_m
+            else:
+                # Fallback to calculating from resampled data if nothing else available
+                derived_gain_m = _elevation_gain_m(elevation_data) if elevation_data is not None else 0.0
+
             supplied_distance, supplied_elev_gain = _extract_supplied_stats(cfg)
             resolved_units, units_reason = _select_route_units(
                 route_units,

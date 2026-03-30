@@ -4,6 +4,10 @@ Artistic topographic and GPX route map generator using OpenStreetMap, satellite 
 elevation models. Generates high-resolution, stylized region maps and route-overlay maps via a
 customizable pipeline.
 
+<p align="center">
+  <img src="examples/full/boston-emerald-necklace-bicycle-adventure-neon_cyber.png" width="300" alt="Boston Emerald Necklace - Neon Cyber Style">
+</p>
+
 ## Dependencies
 
 - [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on
@@ -63,26 +67,49 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Optional: Override Project Paths
+### 3. Understanding the Workspace Structure
 
-All major project paths are centralized as globals at the top of [justfile](justfile), including:
+The project separates code from data using two directories:
 
-- `scripts_dir`
-- `schemes_dir`
-- `downloads_dir` / `regions_dir` / `routes_dir`
-- `natural_earth_cache_dir` / `ocean_boundaries_dir`
-- `configs_dir`
-- `output_dir`
-- `cache_dir`
+- **`examples/`** — pre-configured example maps with their configs and outputs (tracked in Git)
+- **`user/`** — your personal workspace for creating custom maps (ignored by Git)
 
-Edit those values once to relocate folders; all `just` build flows use them automatically.
+Both directories have the same structure: `cache/`, `configs/`, `downloads/`, and `output/`.
+
+**By default, `just` commands use the `user/` workspace.** When you run `just build "City Name" scheme`, all configs, outputs, downloads, and cache files go to `user/configs/`, `user/output/`, `user/downloads/`, and `user/cache/`.
+
+The examples workspace is only used when running `./generate-example-maps.sh`, which sets the workspace to `examples/` automatically.
+
+### 4. Optional: Portable Justfile Usage
+
+You can copy [justfile](justfile) elsewhere and point it back to this repository using environment variables:
+
+```bash
+# Copy justfile to your custom workspace
+cp justfile ~/my-maps/
+cd ~/my-maps
+
+# Set the repo location and workspace
+export MAP_ARTISTRY_REPO="/Users/yourusername/map-artistry"
+export WORKSPACE_DIR="$PWD"
+
+# Now run just commands from your custom location
+just build "San Francisco, CA" coral
+```
+
+This creates all configs and outputs in your current directory while using the scripts and schemes from the repository.
+
+**Environment variables:**
+
+- `MAP_ARTISTRY_REPO` — path to the cloned repository (defaults to the directory containing justfile)
+- `WORKSPACE_DIR` — path to your workspace directory (defaults to `user/` within the repo)
 
 ## Usage
 
 ### Standard Maps
 
 ```bash
-# Build a map with default settings (24" × 24" @ 600 DPI, PNG format)
+# Build a map with default settings (24" × 24" @ 300 DPI, PNG format)
 just build "Edmonton, AB" coral
 
 # Build with a different location and color scheme
@@ -92,7 +119,13 @@ just build "Vancouver Island, BC" natural
 just build --width 36 --height 24 "Iceland" river_runs_red
 
 # Build with custom dimensions, DPI, format, and boundary buffer
-just build --width 24 --height 24 --dpi 600 --format png --buffer-km 20 "Victoria, BC" natural
+just build --width 24 --height 24 --dpi 300 --format png --buffer-km 20 "Victoria, BC" natural
+
+# Build with title and subtitle panel
+just build --text-title "VICTORIA" --text-subtitle "BRITISH COLUMBIA" "Victoria, BC" natural
+
+# Build with title, subtitle, and custom stats
+just build --text-title "SAN FRANCISCO" --text-subtitle "CALIFORNIA" --text-stats "37.77°N||LATITUDE;;122.42°W||LONGITUDE" "San Francisco, CA" coral
 
 # Save output to a custom folder
 just build --output-dir my-maps "Edmonton, AB" coral
@@ -137,6 +170,12 @@ All settings (boundary padding, DEM source, satellite zoom, layer source) are ca
 automatically based on region size. Use `--buffer-km` to override the automatic extra distance added
 around the region boundary, in kilometers.
 
+### Text Panels
+
+All map types (`build`, `build-route`, and `build-gpx`) support optional text panels with title, subtitle, location, and custom statistics. Use the `--text-title`, `--text-subtitle`, `--text-location`, and `--text-stats` flags to add a styled info panel to your map. Stats use the format `VALUE||LABEL` with `;;` as a separator between multiple stats (e.g., `"94 KM||DISTANCE;;800 M||ELEV GAIN"`).
+
+Route maps can derive distance metrics from the GPX track, while standard maps work well with custom stats like coordinates, elevation, area, or any other relevant information about the location.
+
 ### How Data Is Selected
 
 The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This
@@ -157,44 +196,16 @@ per-location overlay configs.
 
 ## Color Schemes
 
-Listed in the same order as each example image row.
+Available color schemes (listed alphabetically):
 
-- `blueprint` - dark navy blueprint style with cyan waterways, bright cyan roads, and visible
-  buildings; subtle natural and land use overlays remain visible
-- `coral` - warm coral-red style with white roads, waterways, and buildings; natural and land use
-  layers are hidden
-- `glacier` - cool pale terrain with blue-grey water, vivid blue roads, and warm terracotta
-  buildings with crisp light outlines; land use is hidden
-- `lava` - black-and-orange high-contrast style with vivid orange water and blue-highlighted roads;
-  buildings and land use are hidden
-- `minimal_white` - minimalist light style with soft blue water, dark roads, and faint building
-  footprints; natural and land use are suppressed
-- `natural` - earth-tone terrain with blue water, high-contrast dark roads, and warm sand-toned
-  buildings with thin dark outlines; land use is hidden
-- `night` - dark midnight palette with very dark roads, bright warm building footprints, and thin
-  contrasting outlines; designed for high legibility on low-light terrain
-- `neon_cyber` - black cyber style with electric cyan waterways and bright yellow roads; buildings
-  are hidden and natural and land use are minimized
-- `porcelain_ink` - porcelain-inspired monochrome ink style with soft blue water, dark roads, and
-  dark building fills; natural and land use are subdued
-- `river_runs_red` - black and red dramatic style with red waterways, white roads, and white
-  buildings; natural and land use layers are hidden
-- `satellite` - satellite imagery base with gray road and building overlays and blue waterways;
-  natural overlays are hidden while land use remains visible
-- `sepia_vintage` - warm sepia palette with muted blue-gray water and brown roads; buildings and
-  land use are hidden for a cleaner vintage relief look
+`blueprint` • `burgundy` • `copper` • `coral` • `glacier` • `lava` • `minimal_white` • `natural` • `neon_cyber` • `night` • `porcelain_ink` • `river_runs_red` • `satellite` • `sepia_vintage` • `slate` • `yellow`
 
-**Layer types:** natural (forests, wetlands, beaches, etc.), land use (urban areas), roads (street
-network), buildings (footprints), water/waterway (bodies of water and streams).
-
-Road and building visibility depends on source detail: when large areas use lower-detail Natural
-Earth layers (see area/source table above), these layers can be sparse or absent compared with
-OSM-backed city/region renders.
+Each scheme controls layer visibility, colors, hillshade, and terrain rendering. See `schemes/*.yaml` for full configuration details.
 
 ## Examples
 
 These README examples are `400×400` thumbnails linking to `1200×1200` full previews, rendered at
-`24" × 24" @ 150 DPI`. Full-resolution builds (default `600 DPI`) produce approximately
+`24" × 24" @ 150 DPI`. Full-resolution builds (default `300 DPI`) produce approximately
 `14400×14400` pixel images; use `--format pdf` for print-quality output.
 
 ### Banff, AB
@@ -206,6 +217,10 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>blueprint</sub>
     </td>
     <td align="center">
+      <a href="examples/full/banff-ab-burgundy.png"><img src="examples/thumbnails/banff-ab-burgundy.png" alt="Banff - Burgundy" width="200"></a><br>
+      <sub>burgundy</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/banff-ab-coral.png"><img src="examples/thumbnails/banff-ab-coral.png" alt="Banff - Coral" width="200"></a><br>
       <sub>coral</sub>
     </td>
@@ -213,34 +228,44 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <a href="examples/full/banff-ab-glacier.png"><img src="examples/thumbnails/banff-ab-glacier.png" alt="Banff - Glacier" width="200"></a><br>
       <sub>glacier</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-lava.png"><img src="examples/thumbnails/banff-ab-lava.png" alt="Banff - Lava" width="200"></a><br>
       <sub>lava</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-minimal_white.png"><img src="examples/thumbnails/banff-ab-minimal_white.png" alt="Banff - Minimal White" width="200"></a><br>
       <sub>minimal_white</sub>
     </td>
     <td align="center">
+      <a href="examples/full/banff-ab-copper.png"><img src="examples/thumbnails/banff-ab-copper.png" alt="Banff - Copper" width="200"></a><br>
+      <sub>copper</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/banff-ab-natural.png"><img src="examples/thumbnails/banff-ab-natural.png" alt="Banff - Natural" width="200"></a><br>
       <sub>natural</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-neon_cyber.png"><img src="examples/thumbnails/banff-ab-neon_cyber.png" alt="Banff - Neon Cyber" width="200"></a><br>
       <sub>neon_cyber</sub>
     </td>
     <td align="center">
+      <a href="examples/full/banff-ab-night.png"><img src="examples/thumbnails/banff-ab-night.png" alt="Banff - Night" width="200"></a><br>
+      <sub>night</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/banff-ab-porcelain_ink.png"><img src="examples/thumbnails/banff-ab-porcelain_ink.png" alt="Banff - Porcelain Ink" width="200"></a><br>
       <sub>porcelain_ink</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-river_runs_red.png"><img src="examples/thumbnails/banff-ab-river_runs_red.png" alt="Banff - River Runs Red" width="200"></a><br>
       <sub>river_runs_red</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-satellite.png"><img src="examples/thumbnails/banff-ab-satellite.png" alt="Banff - Satellite" width="200"></a><br>
       <sub>satellite</sub>
@@ -250,8 +275,12 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <a href="examples/full/banff-ab-night.png"><img src="examples/thumbnails/banff-ab-night.png" alt="Banff - Night" width="200"></a><br>
-      <sub>night</sub>
+      <a href="examples/full/banff-ab-slate.png"><img src="examples/thumbnails/banff-ab-slate.png" alt="Banff - Slate" width="200"></a><br>
+      <sub>slate</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/banff-ab-yellow.png"><img src="examples/thumbnails/banff-ab-yellow.png" alt="Banff - Yellow" width="200"></a><br>
+      <sub>yellow</sub>
     </td>
   </tr>
 </table>
@@ -265,6 +294,10 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>blueprint</sub>
     </td>
     <td align="center">
+      <a href="examples/full/british-columbia-burgundy.png"><img src="examples/thumbnails/british-columbia-burgundy.png" alt="British Columbia - Burgundy" width="200"></a><br>
+      <sub>burgundy</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/british-columbia-coral.png"><img src="examples/thumbnails/british-columbia-coral.png" alt="British Columbia - Coral" width="200"></a><br>
       <sub>coral</sub>
     </td>
@@ -272,34 +305,44 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <a href="examples/full/british-columbia-glacier.png"><img src="examples/thumbnails/british-columbia-glacier.png" alt="British Columbia - Glacier" width="200"></a><br>
       <sub>glacier</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-lava.png"><img src="examples/thumbnails/british-columbia-lava.png" alt="British Columbia - Lava" width="200"></a><br>
       <sub>lava</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-minimal_white.png"><img src="examples/thumbnails/british-columbia-minimal_white.png" alt="British Columbia - Minimal White" width="200"></a><br>
       <sub>minimal_white</sub>
     </td>
     <td align="center">
+      <a href="examples/full/british-columbia-copper.png"><img src="examples/thumbnails/british-columbia-copper.png" alt="British Columbia - Copper" width="200"></a><br>
+      <sub>copper</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/british-columbia-natural.png"><img src="examples/thumbnails/british-columbia-natural.png" alt="British Columbia - Natural" width="200"></a><br>
       <sub>natural</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-neon_cyber.png"><img src="examples/thumbnails/british-columbia-neon_cyber.png" alt="British Columbia - Neon Cyber" width="200"></a><br>
       <sub>neon_cyber</sub>
     </td>
     <td align="center">
+      <a href="examples/full/british-columbia-night.png"><img src="examples/thumbnails/british-columbia-night.png" alt="British Columbia - Night" width="200"></a><br>
+      <sub>night</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/british-columbia-porcelain_ink.png"><img src="examples/thumbnails/british-columbia-porcelain_ink.png" alt="British Columbia - Porcelain Ink" width="200"></a><br>
       <sub>porcelain_ink</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-river_runs_red.png"><img src="examples/thumbnails/british-columbia-river_runs_red.png" alt="British Columbia - River Runs Red" width="200"></a><br>
       <sub>river_runs_red</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-satellite.png"><img src="examples/thumbnails/british-columbia-satellite.png" alt="British Columbia - Satellite" width="200"></a><br>
       <sub>satellite</sub>
@@ -309,8 +352,12 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>sepia_vintage</sub>
     </td>
     <td align="center">
-      <a href="examples/full/british-columbia-night.png"><img src="examples/thumbnails/british-columbia-night.png" alt="British Columbia - Night" width="200"></a><br>
-      <sub>night</sub>
+      <a href="examples/full/british-columbia-slate.png"><img src="examples/thumbnails/british-columbia-slate.png" alt="British Columbia - Slate" width="200"></a><br>
+      <sub>slate</sub>
+    </td>
+    <td align="center">
+      <a href="examples/full/british-columbia-yellow.png"><img src="examples/thumbnails/british-columbia-yellow.png" alt="British Columbia - Yellow" width="200"></a><br>
+      <sub>yellow</sub>
     </td>
   </tr>
 </table>
@@ -1091,14 +1138,14 @@ directly from the GPX track bounding box, with no separate region argument requi
 
 ## Customizing a Map
 
-Each build produces two auto-generated files:
+Each build produces two auto-generated files in your workspace:
 
-- `configs/{location}-base.yaml` — full generated config
-- `configs/{location}-{scheme}-final.yaml` — final merged config (used for rendering)
-- `configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to
+- `user/configs/{location}-base.yaml` — full generated config
+- `user/configs/{location}-{scheme}-final.yaml` — final merged config (used for rendering)
+- `user/configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to
   auto-apply)
 
-Create an overlay file named `configs/{location}-{scheme}-overlay.yaml` and place it in `configs/`.
+Create an overlay file named `user/configs/{location}-{scheme}-overlay.yaml` in your workspace.
 The build detects it automatically and deep-merges it over the base config to produce the final
 config.
 
@@ -1107,10 +1154,10 @@ config.
 just build "Edmonton, AB" coral
 
 # 2. Copy the current final config as your overlay starting point
-cp configs/edmonton-ab-coral-final.yaml configs/edmonton-ab-coral-overlay.yaml
+cp user/configs/edmonton-ab-coral-final.yaml user/configs/edmonton-ab-coral-overlay.yaml
 
 # 3. Edit it — change whatever you like; leave everything else as-is
-vi configs/edmonton-ab-coral-overlay.yaml
+vi user/configs/edmonton-ab-coral-overlay.yaml
 
 # 4. Rebuild — the overlay is applied automatically
 just build "Edmonton, AB" coral
@@ -1176,32 +1223,43 @@ this directory is absent.
 schemes/                     # Color scheme definitions (YAML files)
   coral.yaml                 # Coral color scheme
   natural.yaml               # Natural color scheme
+  burgundy.yaml              # Burgundy color scheme
+  yellow.yaml                # Yellow color scheme
+  copper.yaml                # Copper color scheme
+  slate.yaml                 # Slate color scheme
   # ... other schemes
 
-downloads/
-  regions/                  # Per-region data (auto-downloaded by build / build-route)
-    edmonton-ab/
-      area.geojson           # Boundary polygon
-      dem.tif                # Digital elevation model
-      satellite.tif          # Satellite imagery
-      layers/*.gpkg          # Vector layers (roads, water, etc.)
-  routes/                   # Per-GPX data (auto-downloaded by build-gpx)
-    edmonton-50km/
-      area.geojson
-      dem.tif
-      satellite.tif
-      layers/*.gpkg
-  ocean-boundaries/          # IHO World Seas source (manual download)
-
-configs/                     # Base configs and optional overlays
-output/                      # Rendered maps
-cache/                       # OSM query cache (safe to delete)
 scripts/                     # Pipeline scripts
+
+examples/                    # Example maps workspace (tracked in Git)
+  configs/                   # Example map configs
+  downloads/                 # Example map data
+  output/                    # Example map outputs
+  cache/                     # Example cache
+
+user/                        # Your workspace (ignored by Git)
+  downloads/
+    regions/                 # Per-region data (auto-downloaded by build / build-route)
+      edmonton-ab/
+        area.geojson         # Boundary polygon
+        dem.tif              # Digital elevation model
+        satellite.tif        # Satellite imagery
+        layers/*.gpkg        # Vector layers (roads, water, etc.)
+    routes/                  # Per-GPX data (auto-downloaded by build-gpx)
+      edmonton-50km/
+        area.geojson
+        dem.tif
+        satellite.tif
+        layers/*.gpkg
+    ocean-boundaries/        # IHO World Seas source (manual download)
+  configs/                   # Base configs and optional overlays
+  output/                    # Rendered maps
+  cache/                     # OSM query cache (safe to delete)
 ```
 
 ## Cache
 
-OSM query responses are cached in `cache/`. It can be deleted at any time to force fresh downloads.
+OSM query responses are cached in your workspace's `cache/` directory (by default `user/cache/`). It can be deleted at any time to force fresh downloads.
 
 ## Author
 
