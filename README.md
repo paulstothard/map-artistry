@@ -209,15 +209,19 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>burgundy</sub>
     </td>
     <td align="center">
+      <a href="examples/full/banff-ab-copper.png"><img src="examples/thumbnails/banff-ab-copper.png" alt="Banff - Copper" width="200"></a><br>
+      <sub>copper</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/banff-ab-coral.png"><img src="examples/thumbnails/banff-ab-coral.png" alt="Banff - Coral" width="200"></a><br>
       <sub>coral</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-glacier.png"><img src="examples/thumbnails/banff-ab-glacier.png" alt="Banff - Glacier" width="200"></a><br>
       <sub>glacier</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/banff-ab-lava.png"><img src="examples/thumbnails/banff-ab-lava.png" alt="Banff - Lava" width="200"></a><br>
       <sub>lava</sub>
@@ -225,10 +229,6 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
     <td align="center">
       <a href="examples/full/banff-ab-minimal_white.png"><img src="examples/thumbnails/banff-ab-minimal_white.png" alt="Banff - Minimal White" width="200"></a><br>
       <sub>minimal_white</sub>
-    </td>
-    <td align="center">
-      <a href="examples/full/banff-ab-copper.png"><img src="examples/thumbnails/banff-ab-copper.png" alt="Banff - Copper" width="200"></a><br>
-      <sub>copper</sub>
     </td>
     <td align="center">
       <a href="examples/full/banff-ab-natural.png"><img src="examples/thumbnails/banff-ab-natural.png" alt="Banff - Natural" width="200"></a><br>
@@ -286,15 +286,19 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
       <sub>burgundy</sub>
     </td>
     <td align="center">
+      <a href="examples/full/british-columbia-copper.png"><img src="examples/thumbnails/british-columbia-copper.png" alt="British Columbia - Copper" width="200"></a><br>
+      <sub>copper</sub>
+    </td>
+    <td align="center">
       <a href="examples/full/british-columbia-coral.png"><img src="examples/thumbnails/british-columbia-coral.png" alt="British Columbia - Coral" width="200"></a><br>
       <sub>coral</sub>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-glacier.png"><img src="examples/thumbnails/british-columbia-glacier.png" alt="British Columbia - Glacier" width="200"></a><br>
       <sub>glacier</sub>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="examples/full/british-columbia-lava.png"><img src="examples/thumbnails/british-columbia-lava.png" alt="British Columbia - Lava" width="200"></a><br>
       <sub>lava</sub>
@@ -302,10 +306,6 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
     <td align="center">
       <a href="examples/full/british-columbia-minimal_white.png"><img src="examples/thumbnails/british-columbia-minimal_white.png" alt="British Columbia - Minimal White" width="200"></a><br>
       <sub>minimal_white</sub>
-    </td>
-    <td align="center">
-      <a href="examples/full/british-columbia-copper.png"><img src="examples/thumbnails/british-columbia-copper.png" alt="British Columbia - Copper" width="200"></a><br>
-      <sub>copper</sub>
     </td>
     <td align="center">
       <a href="examples/full/british-columbia-natural.png"><img src="examples/thumbnails/british-columbia-natural.png" alt="British Columbia - Natural" width="200"></a><br>
