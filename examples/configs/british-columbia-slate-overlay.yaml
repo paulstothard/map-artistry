@@ -1,5 +1,5 @@
-# Overlay config for Vestland, Norway - Minimal White scheme
-# Disables ferry routes
+# Overlay config for British Columbia - Slate scheme
+# Disables roads and ferry routes
 layers:
   road__LineString:
     visible: false

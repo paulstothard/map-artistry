@@ -1,5 +1,0 @@
-# Overlay config for San Francisco, CA - Minimal White scheme
-# Disables ferry routes
-layers:
-  highway__LineString:
-    visible: false

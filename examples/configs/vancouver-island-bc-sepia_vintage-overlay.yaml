@@ -1,5 +1,0 @@
-# Overlay config for Vancouver Island, BC - Sepia Vintage scheme
-# Disables ferry routes
-layers:
-  road__LineString:
-    visible: false

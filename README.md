@@ -2,9 +2,16 @@
 
 Artistic topographic and GPX route map generator using OpenStreetMap, satellite imagery, and digital elevation models. Generates high-resolution, stylized region maps and route-overlay maps via a customizable pipeline.
 
-<p align="center">
-  <img src="examples/full/boston-emerald-necklace-bicycle-adventure-neon_cyber.png" width="300" alt="Boston Emerald Necklace - Neon Cyber Style">
-</p>
+<table align="center">
+  <tr>
+    <td width="50%">
+      <img src="examples/full/iceland-natural.png" width="100%" alt="Iceland - Natural Style">
+    </td>
+    <td width="50%">
+      <img src="examples/full/boston-emerald-necklace-bicycle-adventure-neon_cyber.png" width="100%" alt="Boston Emerald Necklace - Neon Cyber Style">
+    </td>
+  </tr>
+</table>
 
 ## Dependencies
 

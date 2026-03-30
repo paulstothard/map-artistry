@@ -195,8 +195,8 @@ map:
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
 water:
-  fc: '#081e2c'
-  ec: '#081e2c'
+  fc: '#2b6d8f'
+  ec: '#2b6d8f'
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -218,8 +218,8 @@ water:
     interpolation: bilinear
     max_texture_dim: 1024
 ocean:
-  fc: '#061520'
-  ec: '#061520'
+  fc: '#2b6d8f'
+  ec: '#2b6d8f'
   alpha: 1.0
   zorder: 4
   ew: 0

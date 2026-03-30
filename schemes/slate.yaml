@@ -167,8 +167,8 @@ map:
         core_radius_scale: 0.17
         core_edge_width_scale: 0.035
 water:
-  fc: "#446f8d"
-  ec: "#446f8d"
+  fc: "#7099b8"
+  ec: "#7099b8"
   alpha: 1.0
   zorder: 4
   ew: 0
@@ -182,8 +182,8 @@ water:
     MultiPolygon: true
   palette: []
 ocean:
-  fc: "#446f8d"
-  ec: "#446f8d"
+  fc: "#7099b8"
+  ec: "#7099b8"
   alpha: 1.0
   zorder: 4
   ew: 0.15

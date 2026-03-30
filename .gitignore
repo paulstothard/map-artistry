@@ -25,8 +25,8 @@ examples/publish/
 !examples/thumbnails/
 !examples/thumbnails/*.png
 
-# But track only overlay config files
-!examples/configs/
+# But track only overlay config files in examples/configs/
+examples/configs/*
 !examples/configs/*-overlay.yaml
 
 # Deploy folder (symlink)

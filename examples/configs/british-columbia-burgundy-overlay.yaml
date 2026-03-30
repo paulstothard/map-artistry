@@ -1,5 +1,5 @@
-# Overlay config for Vestland, Norway - Lava scheme
-# Disables ferry routes
+# Overlay config for British Columbia - Burgundy scheme
+# Disables roads and ferry routes
 layers:
   road__LineString:
     visible: false

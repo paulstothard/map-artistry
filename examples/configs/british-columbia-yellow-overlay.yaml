@@ -1,5 +1,5 @@
-# Overlay config for Vestland, Norway - River Runs Red scheme
-# Disables ferry routes
+# Overlay config for British Columbia - Yellow scheme
+# Disables roads and ferry routes
 layers:
   road__LineString:
     visible: false

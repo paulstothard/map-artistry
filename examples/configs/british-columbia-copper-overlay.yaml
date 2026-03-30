@@ -1,5 +1,5 @@
-# Overlay config for Vestland, Norway - Satellite scheme
-# Disables ferry routes
+# Overlay config for British Columbia - Copper scheme
+# Disables roads and ferry routes
 layers:
   road__LineString:
     visible: false

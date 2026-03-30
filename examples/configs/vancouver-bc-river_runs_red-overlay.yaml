@@ -1,5 +1,0 @@
-# Overlay config for Vancouver, BC - River Runs Red scheme
-# Disables ferry routes
-layers:
-  highway__LineString:
-    visible: false
