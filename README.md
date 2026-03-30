@@ -175,17 +175,21 @@ All settings (boundary padding, DEM source, satellite zoom, layer source) are ca
 Generate all 16 color schemes for a region and create a labeled montage:
 
 ```bash
-# Generate all color schemes for Iceland
-just build-all-schemes "Iceland"
+# Generate all color schemes for Maple Ridge, BC
+just build-all-schemes "Maple Ridge, BC"
 
 # Create a montage with automatic layout and scheme labels
-just create-montage user/output iceland-montage.png --cols auto --add-labels true --pattern "iceland-*"
+just create-montage user/output maple-ridge-montage.png --cols auto --add-labels true --pattern "maple-ridge-bc-*"
 
 # Or with custom columns and spacing
-just create-montage user/output iceland-4x4.png --cols 4 --spacing 20 --add-labels true --pattern "iceland-*"
+just create-montage user/output maple-ridge-4x4.png --cols 4 --spacing 20 --add-labels true --pattern "maple-ridge-bc-*"
 ```
 
-The `--cols auto` option automatically calculates the optimal grid layout based on the number of images. The `--pattern` option filters which images to include (e.g., `"iceland-*"` for all Iceland maps, `"*-natural"` for all natural scheme maps). You can also generate all schemes for routes:
+<p align="center">
+  <img src="examples/full/maple-ridge-all-schemes-montage.png" width="100%" alt="Maple Ridge, BC - All 16 Color Schemes">
+</p>
+
+The `--cols auto` option automatically calculates the optimal grid layout based on the number of images. The `--pattern` option filters which images to include (e.g., `"maple-ridge-bc-*"` for all Maple Ridge maps, `"*-natural"` for all natural scheme maps). You can also generate all schemes for routes:
 
 ```bash
 # Generate all schemes for a route
