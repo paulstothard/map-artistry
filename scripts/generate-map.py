@@ -2539,7 +2539,11 @@ def draw_map_from_config(
                 derived_gain_m = gpx_elev_gain_m
             else:
                 # Fallback to calculating from resampled data if nothing else available
-                derived_gain_m = _elevation_gain_m(elevation_data) if elevation_data is not None else 0.0
+                derived_gain_m = (
+                    _elevation_gain_m(elevation_data)
+                    if elevation_data is not None
+                    else 0.0
+                )
 
             supplied_distance, supplied_elev_gain = _extract_supplied_stats(cfg)
             resolved_units, units_reason = _select_route_units(

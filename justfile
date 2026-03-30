@@ -27,11 +27,13 @@ python := if path_exists("venv/bin/python") == "true" { "venv/bin/python" } else
 # ============================================================================
 # For portable use: Set MAP_ARTISTRY_REPO to the absolute path of the repo
 # Default: assume justfile is in the repo root
+
 repo_dir := env_var_or_default('MAP_ARTISTRY_REPO', justfile_directory())
 
 # Workspace: where downloads/configs/output are stored
 # Default: user/ subfolder in the repo (for personal maps)
 # Override with WORKSPACE_DIR env var (e.g., for examples: WORKSPACE_DIR=examples)
+
 workspace_dir := env_var_or_default('WORKSPACE_DIR', repo_dir / "user")
 
 # ============================================================================

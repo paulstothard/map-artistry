@@ -1,8 +1,6 @@
 # map-artistry
 
-Artistic topographic and GPX route map generator using OpenStreetMap, satellite imagery, and digital
-elevation models. Generates high-resolution, stylized region maps and route-overlay maps via a
-customizable pipeline.
+Artistic topographic and GPX route map generator using OpenStreetMap, satellite imagery, and digital elevation models. Generates high-resolution, stylized region maps and route-overlay maps via a customizable pipeline.
 
 <p align="center">
   <img src="examples/full/boston-emerald-necklace-bicycle-adventure-neon_cyber.png" width="300" alt="Boston Emerald Necklace - Neon Cyber Style">
@@ -10,8 +8,7 @@ customizable pipeline.
 
 ## Dependencies
 
-- [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on
-  macOS)
+- [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on macOS)
 - Python 3
 - **Inter font** — required for text rendering on maps
 
@@ -136,8 +133,7 @@ just schemes
 
 ### Route Maps
 
-Route maps overlay a GPX track on the map and optionally display a stats panel with title, subtitle,
-and custom metrics.
+Route maps overlay a GPX track on the map and optionally display a stats panel with title, subtitle, and custom metrics.
 
 **Region + GPX route** — the map region is defined by a place name, with the GPX track drawn on top:
 
@@ -152,8 +148,7 @@ just build-route \
   "Edmonton, AB" ./my-ride.gpx coral
 ```
 
-**GPX-derived route** — the map region is derived automatically from the GPX track bounding box, no
-place name required:
+**GPX-derived route** — the map region is derived automatically from the GPX track bounding box, no place name required:
 
 ```bash
 just build-gpx ./my-ride.gpx coral
@@ -166,9 +161,7 @@ just build-gpx \
   ./my-ride.gpx coral
 ```
 
-All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated
-automatically based on region size. Use `--buffer-km` to override the automatic extra distance added
-around the region boundary, in kilometers.
+All settings (boundary padding, DEM source, satellite zoom, layer source) are calculated automatically based on region size. Use `--buffer-km` to override the automatic extra distance added around the region boundary, in kilometers.
 
 ### Text Panels
 
@@ -178,8 +171,7 @@ Route maps can derive distance metrics from the GPX track, while standard maps w
 
 ### How Data Is Selected
 
-The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This
-controls DEM source, satellite zoom, and vector layer source.
+The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This controls DEM source, satellite zoom, and vector layer source.
 
 | Tier      |            Area (km²) | DEM source   | Satellite zoom | Vector layer source |
 | --------- | --------------------: | ------------ | -------------: | ------------------- |
@@ -190,9 +182,7 @@ controls DEM source, satellite zoom, and vector layer source.
 
 Default buffer size also scales by area (`5`, `50`, `100`, `200` km), unless you set `--buffer-km`.
 
-Color schemes control layer visibility/opacity and styling in `schemes/*.yaml`. See the Color
-Schemes section below for details on each scheme. You can always override any defaults via
-per-location overlay configs.
+Color schemes control layer visibility/opacity and styling in `schemes/*.yaml`. See the Color Schemes section below for details on each scheme. You can always override any defaults via per-location overlay configs.
 
 ## Color Schemes
 
@@ -204,9 +194,7 @@ Each scheme controls layer visibility, colors, hillshade, and terrain rendering.
 
 ## Examples
 
-These README examples are `400×400` thumbnails linking to `1200×1200` full previews, rendered at
-`24" × 24" @ 150 DPI`. Full-resolution builds (default `300 DPI`) produce approximately
-`14400×14400` pixel images; use `--format pdf` for print-quality output.
+These README examples are `400×400` thumbnails linking to `1200×1200` full previews, rendered at `24" × 24" @ 150 DPI`. Full-resolution builds (default `300 DPI`) produce approximately `14400×14400` pixel images; use `--format pdf` for print-quality output.
 
 ### Banff, AB
 
@@ -895,10 +883,7 @@ These README examples are `400×400` thumbnails linking to `1200×1200` full pre
 
 ### Route Map Examples
 
-Route maps overlay a GPX track onto the map and include a stats panel with ride title, subtitle, and
-custom metrics. Two variants are supported: a region-bounded map (the map region is defined by a
-place name, with the GPX track drawn on top) and a GPX-derived map (the map region is derived
-directly from the GPX track bounding box, with no separate region argument required).
+Route maps overlay a GPX track onto the map and include a stats panel with ride title, subtitle, and custom metrics. Two variants are supported: a region-bounded map (the map region is defined by a place name, with the GPX track drawn on top) and a GPX-derived map (the map region is derived directly from the GPX track bounding box, with no separate region argument required).
 
 #### Edmonton Loop — Region + GPX Route
 
@@ -1142,12 +1127,9 @@ Each build produces two auto-generated files in your workspace:
 
 - `user/configs/{location}-base.yaml` — full generated config
 - `user/configs/{location}-{scheme}-final.yaml` — final merged config (used for rendering)
-- `user/configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to
-  auto-apply)
+- `user/configs/{location}-{scheme}-overlay.yaml` — your optional customizations (place here to auto-apply)
 
-Create an overlay file named `user/configs/{location}-{scheme}-overlay.yaml` in your workspace.
-The build detects it automatically and deep-merges it over the base config to produce the final
-config.
+Create an overlay file named `user/configs/{location}-{scheme}-overlay.yaml` in your workspace. The build detects it automatically and deep-merges it over the base config to produce the final config.
 
 ```bash
 # 1. Build the map first to generate the config files
@@ -1163,20 +1145,13 @@ vi user/configs/edmonton-ab-coral-overlay.yaml
 just build "Edmonton, AB" coral
 ```
 
-Leaving unchanged keys in the overlay is fine — the merge just keeps the same value. The base config
-is the raw generated config, while the `-final` file is the scheme-specific rendered config after
-overlay merging, so it is the better starting point if you want to copy what the map is currently
-using. The `{location}` is the region name lowercased with spaces and commas replaced by hyphens
-(e.g. `Edmonton, AB` → `edmonton-ab`).
+Leaving unchanged keys in the overlay is fine — the merge just keeps the same value. The base config is the raw generated config, while the `-final` file is the scheme-specific rendered config after overlay merging, so it is the better starting point if you want to copy what the map is currently using. The `{location}` is the region name lowercased with spaces and commas replaced by hyphens (e.g. `Edmonton, AB` → `edmonton-ab`).
 
 ## Adding New Color Schemes
 
-To create a new color scheme, simply add a new YAML file to the `schemes/` directory. Each color
-scheme defines styling for all map layers (terrain, hillshade, water, roads, buildings, etc.),
-including colors, visibility, opacity, line weights, and more.
+To create a new color scheme, simply add a new YAML file to the `schemes/` directory. Each color scheme defines styling for all map layers (terrain, hillshade, water, roads, buildings, etc.), including colors, visibility, opacity, line weights, and more.
 
-The easiest approach is to copy an existing scheme file (e.g., `coral.yaml`, `natural.yaml`,
-`glacier.yaml`) as a starting point, rename it, and modify the colors and settings to your liking:
+The easiest approach is to copy an existing scheme file (e.g., `coral.yaml`, `natural.yaml`, `glacier.yaml`) as a starting point, rename it, and modify the colors and settings to your liking:
 
 ```bash
 # Copy an existing scheme as a template
@@ -1206,16 +1181,11 @@ water:
 # ... other layers (waterway, road, building, etc.)
 ```
 
-After adding your YAML file to `schemes/`, the new color scheme is automatically discovered and can
-be used in builds without any code changes.
+After adding your YAML file to `schemes/`, the new color scheme is automatically discovered and can be used in builds without any code changes.
 
 ## Ocean Data
 
-For coastal regions, the pipeline can derive an ocean layer from the **World Seas (IHO Sea Areas)**
-dataset. Download `World_Seas_IHO_v3.zip` from
-[marineregions.org/downloads.php](https://www.marineregions.org/downloads.php), extract it, and
-place the files into `downloads/ocean-boundaries/`. The build will skip ocean processing silently if
-this directory is absent.
+For coastal regions, the pipeline can derive an ocean layer from the **World Seas (IHO Sea Areas)** dataset. Download `World_Seas_IHO_v3.zip` from [marineregions.org/downloads.php](https://www.marineregions.org/downloads.php), extract it, and place the files into `downloads/ocean-boundaries/`. The build will skip ocean processing silently if this directory is absent.
 
 ## Project Structure
 

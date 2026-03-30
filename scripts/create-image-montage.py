@@ -29,7 +29,7 @@ def extract_scheme_from_filename(filename: str) -> str:
 
 def calculate_optimal_cols(num_images: int) -> int:
     """Calculate optimal number of columns for a grid layout.
-    
+
     Tries to create a layout that's as square as possible,
     with a preference for wider (landscape) grids.
     """
@@ -41,16 +41,16 @@ def calculate_optimal_cols(num_images: int) -> int:
         return 2
     if num_images == 3:
         return 3
-    
+
     # For 4+, aim for square-ish but prefer landscape
     sqrt = math.sqrt(num_images)
     cols = math.ceil(sqrt)
-    
+
     # Check if we can reduce cols while keeping reasonable aspect ratio
     rows = math.ceil(num_images / cols)
     if rows >= cols:
         cols = cols + 1
-    
+
     return cols
 
 
@@ -79,7 +79,7 @@ def create_montage(
         return
 
     print(f"Creating montage from {len(images)} images...")
-    
+
     # Auto-calculate columns if requested
     if isinstance(cols, str) and cols.lower() == "auto":
         cols = calculate_optimal_cols(len(images))
@@ -262,7 +262,7 @@ def main() -> None:
     label_bg = (
         None if args.label_background.lower() == "none" else args.label_background
     )
-    
+
     # Handle cols: "auto" or convert to int
     cols_value = args.cols if args.cols.lower() == "auto" else int(args.cols)
 
