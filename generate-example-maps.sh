@@ -92,7 +92,7 @@ PUBLISH_DIR=$(just --evaluate publish_dir)
 EXAMPLES_DIR=$(just --evaluate examples_dir)
 EXAMPLES_FULL_DIR=$(just --evaluate examples_full_dir)
 EXAMPLES_THUMB_DIR=$(just --evaluate examples_thumb_dir)
-CYCLING_ROUTES_DIR="$DOWNLOADS_DIR/cycling-routes"
+CYCLING_ROUTES_DIR="$EXAMPLES_DIR/gpx"
 
 EDMONTON_ROUTE_GPX="$CYCLING_ROUTES_DIR/$EDMONTON_ROUTE_GPX_FILE"
 GPX_ONLY_ROUTE_GPX="$CYCLING_ROUTES_DIR/$GPX_ONLY_ROUTE_GPX_FILE"

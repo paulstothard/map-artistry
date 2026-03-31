@@ -51,7 +51,7 @@ downloads_dir := workspace_dir / "downloads"
 regions_dir := workspace_dir / "downloads" / "regions"
 routes_dir := workspace_dir / "downloads" / "routes"
 natural_earth_cache_dir := workspace_dir / "downloads" / "natural-earth"
-ocean_boundaries_dir := workspace_dir / "downloads" / "ocean-boundaries"
+ocean_boundaries_dir := repo_dir / "ocean-boundaries"
 configs_dir := workspace_dir / "configs"
 output_dir := workspace_dir / "output"
 cache_dir := workspace_dir / "cache"
@@ -385,7 +385,7 @@ _build-map region scheme width height dpi format buffer text_title text_subtitle
     echo "🌊 Step 4: Preparing optional ocean layer..."
     OCEAN_SHP="{{ ocean_boundaries_dir }}/World_Seas_IHO_v3.shp"
     if [ -f "$OCEAN_SHP" ]; then
-        echo "   ✓ Ocean boundary source available"
+        echo "   ✓ Ocean boundary source available: $OCEAN_SHP"
     else
         echo "   ℹ️  Ocean boundary source not installed - continuing without ocean layer"
     fi
@@ -656,7 +656,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
     echo "🌊 Step 5: Preparing optional ocean layer..."
     OCEAN_SHP="{{ ocean_boundaries_dir }}/World_Seas_IHO_v3.shp"
     if [ -f "$OCEAN_SHP" ]; then
-        echo "   ✓ Ocean boundary source available"
+        echo "   ✓ Ocean boundary source available: $OCEAN_SHP"
     else
         echo "   ℹ️  Ocean boundary source not installed - continuing without ocean layer"
     fi
@@ -1064,11 +1064,11 @@ add-labels input_dir output_dir label="" label_pattern="{scheme}" position="uppe
         --text-color "{{ text_color }}"
 
 # Create a montage grid from images
+[arg("add_labels", long="add-labels", help="Add labels to each image (use 'true')")]
+[arg("pattern", long="pattern", help="Glob pattern to filter images (e.g., 'maple-ridge-bc-*')")]
+[arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
 [arg("cols", long="cols", help="Number of columns or 'auto' for optimal layout")]
 [arg("spacing", long="spacing", help="Spacing between images in pixels")]
-[arg("add_labels", long="add-labels", help="Add labels to each image (use 'true')")]
-[arg("label_pattern", long="label-pattern", help="Label pattern with {scheme} or {filename}")]
-[arg("pattern", long="pattern", help="Glob pattern to filter images (e.g., 'maple-ridge-bc-*')")]
 create-montage input_dir output_file cols="4" spacing="10" add_labels="" label_pattern="{scheme}" pattern="*":
     @echo "🖼️  Creating montage from {{ input_dir }}..."
     @{{ python }} "{{ scripts_dir }}/create-image-montage.py" \

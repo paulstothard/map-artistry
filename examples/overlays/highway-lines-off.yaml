@@ -1,0 +1,5 @@
+layers:
+  highway__LineString:
+    visible: false
+  highway__MultiLineString:
+    visible: false

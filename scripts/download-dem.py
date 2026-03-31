@@ -33,6 +33,7 @@ Requirements:
 import argparse
 import gzip
 import math
+import os
 import tempfile
 from pathlib import Path
 
@@ -48,6 +49,21 @@ from rasterio.transform import array_bounds
 from shapely.geometry import mapping
 import numpy as np
 from geojson_bounds import apply_primary_segment_clip
+
+
+DEMO_OPENTOPOGRAPHY_API_KEY = "demoapikeyot2022"
+
+
+def get_opentopography_api_key() -> tuple[str, str]:
+    """Get OpenTopography API key from env with demo fallback.
+
+    Returns:
+        (api_key, mode) where mode is "personal" or "demo".
+    """
+    env_key = os.getenv("OPENTOPOGRAPHY_API_KEY", "").strip()
+    if env_key:
+        return env_key, "personal"
+    return DEMO_OPENTOPOGRAPHY_API_KEY, "demo"
 
 
 def get_tile_prefixes(minx, miny, maxx, maxy):
@@ -90,6 +106,12 @@ def download_opentopography_globaldem(
     """Download a Global DEM subset via OpenTopography API."""
     print(f"    Requesting {demtype} via OpenTopography API...")
 
+    api_key, key_mode = get_opentopography_api_key()
+    if key_mode == "personal":
+        print("    Using OpenTopography key from OPENTOPOGRAPHY_API_KEY")
+    else:
+        print("    Using shared OpenTopography demo key (rate-limited)")
+
     url = "https://portal.opentopography.org/API/globaldem"
     params = {
         "demtype": demtype,
@@ -98,7 +120,7 @@ def download_opentopography_globaldem(
         "west": minx,
         "east": maxx,
         "outputFormat": "GTiff",
-        "API_Key": "demoapikeyot2022",  # Demo key - users should get their own
+        "API_Key": api_key,
     }
 
     response = requests.get(url, params=params, stream=True)
@@ -111,7 +133,9 @@ def download_opentopography_globaldem(
             pass
         raise RuntimeError(
             error_msg
-            + "\n    Note: Check the dataset name, request bounds, and API key. The demo key is rate limited."
+            + "\n    Note: Check the dataset name, request bounds, and API key."
+            + "\n    Set OPENTOPOGRAPHY_API_KEY to use your personal key."
+            + "\n    The built-in demo key is shared and rate limited."
         )
 
     response.raise_for_status()

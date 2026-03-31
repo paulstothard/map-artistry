@@ -1,0 +1,22 @@
+# Minimal look: turn off buildings + natural area layers.
+layers:
+  building:
+    visible: false
+  building__Polygon:
+    visible: false
+  building__MultiPolygon:
+    visible: false
+  building__Point:
+    visible: false
+  natural:
+    visible: false
+  natural__Polygon:
+    visible: false
+  natural__MultiPolygon:
+    visible: false
+  natural__LineString:
+    visible: false
+  natural__MultiLineString:
+    visible: false
+  natural__Point:
+    visible: false

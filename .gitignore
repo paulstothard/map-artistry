@@ -12,6 +12,10 @@ __pycache__/
 # User workspace - completely ignored (for personal maps)
 user/
 
+# Ocean boundaries dataset (local data only; keep directory stub tracked)
+ocean-boundaries/*
+!ocean-boundaries/.gitkeep
+
 # Examples workspace - only track configs and images for documentation
 # Ignore all generated data and downloads
 examples/cache/
@@ -28,6 +32,10 @@ examples/publish/
 # But track only overlay config files in examples/configs/
 examples/configs/*
 !examples/configs/*-overlay.yaml
+
+# Track curated GPX inputs used by generate-example-maps.sh
+!examples/gpx/
+!examples/gpx/*.gpx
 
 # Deploy folder (symlink)
 deploy

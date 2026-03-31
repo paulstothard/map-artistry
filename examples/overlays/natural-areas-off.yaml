@@ -1,0 +1,14 @@
+# Turn off natural area layers in both region and GPX layer schemas.
+layers:
+  natural:
+    visible: false
+  natural__Polygon:
+    visible: false
+  natural__MultiPolygon:
+    visible: false
+  natural__LineString:
+    visible: false
+  natural__MultiLineString:
+    visible: false
+  natural__Point:
+    visible: false

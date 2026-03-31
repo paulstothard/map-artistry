@@ -1,0 +1,4 @@
+# No-op overlay placeholder.
+# Transport/Railway categories are not guaranteed to exist as top-level layer keys
+# in generated configs, so adding them here can create invalid layer entries.
+map: {}

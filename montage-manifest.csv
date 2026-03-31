@@ -1,0 +1,31 @@
+# Montage manifest for montage.py
+#
+# Comment lines (starting with #) are ignored.
+# Required CSV columns: region,gpx,scheme,buffer_km
+#
+# Row mode rules:
+# - region set, gpx blank  -> region-only panel (just build)
+# - region set, gpx set    -> region + GPX route panel (just build-route)
+# - region blank, gpx set  -> GPX-derived panel (just build-gpx)
+#
+# Optional columns:
+# - text_title, text_subtitle, text_location, text_stats, overlay_file
+# - overlay_file accepts either:
+#   * absolute path, or
+#   * path relative to this manifest file
+#
+# Required per-row value:
+# - buffer_km must be provided on every row
+# - buffer_km accepts: positive number or auto
+#   auto behavior by row type:
+#   * region-only (build): buffer is auto-calculated from region size
+#   * region+gpx (build-route): buffer is auto-calculated from region size
+#   * gpx-only (build-gpx): just recipe default buffer is used (currently 5 km)
+#
+region,gpx,scheme,text_title,text_subtitle,text_location,text_stats,buffer_km,overlay_file
+"Edmonton, AB",,coral,"EDMONTON","REGION PANEL","ALBERTA",,auto,
+"Iceland",,natural,"ICELAND","REGION PANEL",,,auto,examples/overlays/ferry-routes-off.yaml
+"Edmonton, AB",examples/gpx/edmonton-110km.gpx,glacier,"EDMONTON LOOP","REGION + GPX","ALBERTA","108 KM||DISTANCE;;715 M||ELEV GAIN",auto,
+,examples/gpx/edmonton-50km.gpx,slate,"RIVER VALLEY LOOP","GPX-DERIVED REGION",,"48 KM||DISTANCE;;326 M||ELEV GAIN",auto,
+,examples/gpx/South_Shore_Coastal_Ride.gpx,neon_cyber,"SOUTH SHORE COASTAL RIDE","GPX-DERIVED REGION",,"38.5 MI||DISTANCE;;1,200 FT||ELEV GAIN",auto,examples/overlays/ferry-routes-off.yaml
+,examples/gpx/Boston-Emerald_Necklace_Bicycle_Adventure.gpx,porcelain_ink,"BOSTON-EMERALD NECKLACE","GPX-DERIVED REGION",,"38.5 MI||DISTANCE;;1,260 FT||ELEV GAIN",auto,examples/overlays/buildings-off.yaml

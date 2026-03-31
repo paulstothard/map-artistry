@@ -236,21 +236,21 @@ road:
     MultiPolygon: true
   palette: []
   lw:
-    motorway: 1.35
-    trunk: 1.25
-    primary: 1.15
-    secondary: 1.10
-    tertiary: 0.92
-    residential: 0.85
-    unclassified: 0.34
-    service: 0.34
-    living_street: 0.32
-    track: 0.28
-  default_lw: 0.22
+    motorway: 1.05
+    trunk: 0.96
+    primary: 0.86
+    secondary: 0.76
+    tertiary: 0.62
+    residential: 0.46
+    unclassified: 0.22
+    service: 0.20
+    living_street: 0.18
+    track: 0.16
+  default_lw: 0.16
 building:
-  fc: "#ffffff"
-  ec: "#ffffff"
-  alpha: 1.0
+  fc: "#e8b4aa"
+  ec: "#e8b4aa"
+  alpha: 0.8
   zorder: 7
   ew: 0
   visible: true

@@ -1,0 +1,10 @@
+# Turn off buildings in both region and GPX layer schemas.
+layers:
+  building:
+    visible: false
+  building__Polygon:
+    visible: false
+  building__MultiPolygon:
+    visible: false
+  building__Point:
+    visible: false

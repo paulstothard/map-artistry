@@ -71,7 +71,36 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Understanding the Workspace Structure
+### 3. Optional: Configure OpenTopography API Key (Recommended)
+
+For country-scale DEM downloads (`cop90`), the project calls the OpenTopography Global DEM API.
+
+The code supports two modes:
+
+- **Personal key** via `OPENTOPOGRAPHY_API_KEY` (recommended)
+- **Built-in demo key fallback** (shared and rate-limited)
+
+Get a personal key:
+
+1. Create or sign in to your account at [OpenTopography](https://opentopography.org)
+2. Generate an API key in your account/API settings
+
+Set it in your shell (current session):
+
+```bash
+export OPENTOPOGRAPHY_API_KEY="your_key_here"
+```
+
+Persist it on macOS/Linux (zsh):
+
+```bash
+echo 'export OPENTOPOGRAPHY_API_KEY="your_key_here"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+If `OPENTOPOGRAPHY_API_KEY` is not set, map-artistry falls back to the public demo key supplied by OpenTopography. The demo key is shared across users and can hit daily quota limits.
+
+### 4. Understanding the Workspace Structure
 
 The project separates code from data using two directories:
 
@@ -84,7 +113,24 @@ Both directories have the same structure: `cache/`, `configs/`, `downloads/`, an
 
 The examples workspace is only used when running `./generate-example-maps.sh`, which sets the workspace to `examples/` automatically.
 
-### 4. Optional: Portable Justfile Usage
+### 5. Optional: Install Ocean Boundaries Data (Recommended for Coastal Maps)
+
+For coastal regions, the pipeline can add an ocean layer from the **World Seas (IHO Sea Areas)** dataset.
+
+1. Download `World_Seas_IHO_v3.zip` from [marineregions.org/downloads.php](https://www.marineregions.org/downloads.php)
+2. Extract the zip
+3. Put the extracted files in:
+
+`ocean-boundaries/`
+
+That repo-level path is the required setup and works for both:
+
+- normal maps in the default `user/` workspace
+- example-map generation in the `examples/` workspace
+
+You only need one copy of the dataset.
+
+### 6. Optional: Portable Justfile Usage
 
 You can copy [justfile](justfile) elsewhere and point it back to this repository using environment variables:
 
@@ -194,6 +240,40 @@ just build-all-route-schemes "Boston, MA" downloads/my-route.gpx
 # Or for GPX-derived regions
 just build-all-gpx-schemes downloads/my-route.gpx
 ```
+
+### Manifest-Based Montage Script
+
+Use `montage.py` when you want to build a mixed grid of panels (region maps, region+route maps, and GPX-derived route maps) from one CSV manifest.
+
+```bash
+# Build a montage from the manifest
+./montage.py --manifest montage-manifest.csv
+
+# Dry-run the panel plan without rendering
+./montage.py --manifest montage-manifest.csv --dry-run
+
+# Custom layout + output
+./montage.py \
+  --manifest montage-manifest.csv \
+  --cols 3 \
+  --spacing-px 24 \
+  --canvas-color "#f4f1ea" \
+  --final-width-in 36 \
+  --final-height-in 24 \
+  --final-dpi 300
+```
+
+Key options:
+
+- `--manifest`: CSV input file (required)
+- `--cols`: grid columns (`auto` or a number)
+- `--spacing-px`: spacing between panels
+- `--canvas-color`: background color for spacing/letterbox areas
+- `--output`: final montage file path
+- `--maps-dir`: where intermediate panel renders are written
+- `--dry-run`: print plan only
+
+If `--output` is not provided, the script writes to the active workspace output directory as `montage-<run-name>.png`.
 
 ### Text Panels
 
@@ -1449,10 +1529,6 @@ water:
 
 After adding your YAML file to `schemes/`, the new color scheme is automatically discovered and can be used in builds without any code changes.
 
-## Ocean Data
-
-For coastal regions, the pipeline can derive an ocean layer from the **World Seas (IHO Sea Areas)** dataset. Download `World_Seas_IHO_v3.zip` from [marineregions.org/downloads.php](https://www.marineregions.org/downloads.php), extract it, and place the files into `downloads/ocean-boundaries/`. The build will skip ocean processing silently if this directory is absent.
-
 ## Project Structure
 
 ```text
@@ -1466,6 +1542,8 @@ schemes/                     # Color scheme definitions (YAML files)
   # ... other schemes
 
 scripts/                     # Pipeline scripts
+
+ocean-boundaries/            # World Seas source data (manual download; not committed)
 
 examples/                    # Example maps workspace (tracked in Git)
   configs/                   # Example map configs
@@ -1487,7 +1565,6 @@ user/                        # Your workspace (ignored by Git)
         dem.tif
         satellite.tif
         layers/*.gpkg
-    ocean-boundaries/        # IHO World Seas source (manual download)
   configs/                   # Base configs and optional overlays
   output/                    # Rendered maps
   cache/                     # OSM query cache (safe to delete)

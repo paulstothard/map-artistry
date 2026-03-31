@@ -1,0 +1,56 @@
+# Hide ferry-like segments across both region and GPX layer schemas.
+layers:
+  road:
+    style_rules:
+      featurecla:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      type:
+        Ferry Route:
+          alpha: 0.0
+          linewidth: 0.0
+      route:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      highway:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+  highway__LineString:
+    style_rules:
+      route:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      highway:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      type:
+        Ferry Route:
+          alpha: 0.0
+          linewidth: 0.0
+      featurecla:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+  highway__MultiLineString:
+    style_rules:
+      route:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      highway:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      type:
+        Ferry Route:
+          alpha: 0.0
+          linewidth: 0.0
+      featurecla:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
