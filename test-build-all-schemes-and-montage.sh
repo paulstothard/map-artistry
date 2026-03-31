@@ -9,7 +9,7 @@ OUTPUT_DIR="user/output"
 MONTAGE_FILE="user/maple-ridge-all-schemes-montage.png"
 
 echo "🎨 Generating all color schemes for ${REGION}..."
-just build-all-schemes "${REGION}"
+just build-all-schemes --buffer-km 15 "${REGION}"
 
 echo ""
 echo "🖼️  Creating montage with automatic layout and scheme labels..."

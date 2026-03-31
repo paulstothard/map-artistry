@@ -48,7 +48,7 @@ def calculate_optimal_cols(num_images: int) -> int:
 
     # Check if we can reduce cols while keeping reasonable aspect ratio
     rows = math.ceil(num_images / cols)
-    if rows >= cols:
+    if rows > cols:
         cols = cols + 1
 
     return cols
