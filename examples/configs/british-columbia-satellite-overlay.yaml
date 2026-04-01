@@ -1,7 +1,71 @@
-# Overlay config for British Columbia - Satellite scheme
-# Disables roads and ferry routes
+# Overlay config for British Columbia schemes.
+# Keep roads hidden and also include explicit ferry styling for data variants.
 layers:
   road__LineString:
-    visible: false
+    style_order: [featurecla, type, route, highway, note, level, fclass]
+    style_rules:
+      featurecla:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      type:
+        Ferry Route:
+          alpha: 0.0
+          linewidth: 0.0
+      route:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      highway:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      note:
+        Ferry operated by CAN and USA:
+          alpha: 0.0
+          linewidth: 0.0
+      level:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      fclass:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
   road__MultiLineString:
-    visible: false
+    style_order: [featurecla, type, route, highway, note, level, fclass]
+    style_rules:
+      featurecla:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      type:
+        Ferry Route:
+          alpha: 0.0
+          linewidth: 0.0
+      route:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      highway:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      note:
+        Ferry operated by CAN and USA:
+          alpha: 0.0
+          linewidth: 0.0
+      level:
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0
+      fclass:
+        ferry:
+          alpha: 0.0
+          linewidth: 0.0
+        Ferry:
+          alpha: 0.0
+          linewidth: 0.0

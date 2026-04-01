@@ -1,3 +1,30 @@
+# Turn off road, transport, and rail-like layers when present.
 layers:
   road:
+    visible: false
+  road__LineString:
+    visible: false
+  road__MultiLineString:
+    visible: false
+  highway__LineString:
+    visible: false
+  highway__MultiLineString:
+    visible: false
+  transport:
+    visible: false
+  transport__LineString:
+    visible: false
+  transport__MultiLineString:
+    visible: false
+  rail:
+    visible: false
+  rail__LineString:
+    visible: false
+  rail__MultiLineString:
+    visible: false
+  railway:
+    visible: false
+  railway__LineString:
+    visible: false
+  railway__MultiLineString:
     visible: false

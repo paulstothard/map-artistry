@@ -1,4 +1,20 @@
-# No-op overlay placeholder.
-# Transport/Railway categories are not guaranteed to exist as top-level layer keys
-# in generated configs, so adding them here can create invalid layer entries.
-map: {}
+# Turn off transport and rail-like layers when present.
+layers:
+  transport:
+    visible: false
+  transport__LineString:
+    visible: false
+  transport__MultiLineString:
+    visible: false
+  rail:
+    visible: false
+  rail__LineString:
+    visible: false
+  rail__MultiLineString:
+    visible: false
+  railway:
+    visible: false
+  railway__LineString:
+    visible: false
+  railway__MultiLineString:
+    visible: false
