@@ -13,6 +13,8 @@ Artistic topographic and GPX route map generator using OpenStreetMap, satellite 
   </tr>
 </table>
 
+> **See [EXAMPLES.md](EXAMPLES.md) for a full gallery of example maps across all color schemes and locations.**
+
 ## Dependencies
 
 - [just](https://github.com/casey/just) 1.47.0 or newer — command runner (`brew install just` on macOS)
