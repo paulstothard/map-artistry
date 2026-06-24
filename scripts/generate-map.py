@@ -1844,7 +1844,7 @@ def _render_elevation_profile(ax, route_coords, elevation_data, profile_cfg, mas
         linewidth=outline_width if outline_enabled else 0,
         alpha=profile_cfg.get("alpha", 0.9),
         zorder=1100,  # Above route and features
-        antialiased=False,
+        antialiased=True,
     )
 
 

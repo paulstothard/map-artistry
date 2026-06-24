@@ -453,7 +453,9 @@ _build-map region scheme width height dpi format buffer text_title text_subtitle
             --output-dir "$DATA_DIR/layers" \
             --cache-dir "{{ cache_dir }}" \
             --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" \
-            --source "$OSM_SOURCE"
+            --source "$OSM_SOURCE" \
+            --fallback-to-natural-earth \
+            --fail-on-layer-error
     else
         echo "   ✓ Layers exist"
     fi
@@ -699,7 +701,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
 
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
-        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE"
+        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE" --fallback-to-natural-earth --fail-on-layer-error
     else
         echo "   ✓ Layers exist"
     fi
@@ -866,7 +868,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
 
     if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
-        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE"
+        {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE" --fallback-to-natural-earth --fail-on-layer-error
     else
         echo "   ✓ Layers exist"
     fi

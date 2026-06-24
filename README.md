@@ -316,6 +316,8 @@ The map pipeline chooses data sources dynamically from the estimated buffered ar
 
 Default buffer size also scales by area (`5`, `50`, `100`, `200` km), unless you set `--buffer-km`.
 
+When a build uses detailed OSM layers and an individual layer cannot be downloaded after retries, the standard build recipes retry that layer from Natural Earth when an equivalent is available. Other successfully downloaded layers are kept, so compact maps retain OSM detail while larger or less reliable requests can still complete with simplified fallback data.
+
 Color schemes control layer visibility/opacity and styling in `schemes/*.yaml`. See the Color Schemes section below for details on each scheme. You can always override any defaults via per-location overlay configs.
 
 ## Color Schemes

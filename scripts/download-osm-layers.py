@@ -196,6 +196,19 @@ def download_natural_earth_layer(poly, key, outdir, natural_earth_cache_dir):
         return False
 
 
+def remove_layer_outputs(outdir, key):
+    """Remove possible outputs for one requested layer before retrying it."""
+    output_names = {key}
+    dataset_info = NATURAL_EARTH_DATASETS.get(key)
+    if dataset_info:
+        output_names.add(dataset_info["rename"])
+
+    for output_name in output_names:
+        path = Path(outdir) / f"{output_name}.gpkg"
+        if path.exists():
+            path.unlink()
+
+
 def download_layer(poly, key, tags, outdir):
     print(f"> Downloading layer '{key}' …")
     attempts = 3
@@ -255,6 +268,70 @@ def download_layer(poly, key, tags, outdir):
     print(f"  ✓ saved {path}")
 
 
+def download_requested_layer(poly, key, args):
+    """Download one requested layer, with optional Natural Earth fallback."""
+    if args.source == "natural-earth":
+        if key not in NATURAL_EARTH_DATASETS:
+            print(f"⚠️  Natural Earth does not provide '{key}' layer, skipping")
+            return None
+
+        start = time.time()
+        success = download_natural_earth_layer(
+            poly, key, args.output_dir, args.natural_earth_cache_dir
+        )
+        if success:
+            elapsed = time.time() - start
+            print(f"✅ Completed '{key}' from Natural Earth in {elapsed:.1f} seconds")
+            return True
+
+        if args.fallback_to_osm and key in NATURAL_EARTH_DATASETS and key in TAG_MAP:
+            print(f"🔄 Falling back to OSM for '{key}'...")
+            start = time.time()
+            download_layer(poly, key, TAG_MAP[key], args.output_dir)
+            elapsed = time.time() - start
+            print(f"✅ Completed '{key}' from OSM fallback in {elapsed:.1f} seconds")
+            return True
+
+        return False
+
+    if key not in TAG_MAP:
+        print(f"⚠️  Unknown layer '{key}', skipping")
+        return False
+
+    start = time.time()
+    print(f"⏳ Downloading '{key}' from OSM...")
+    try:
+        download_layer(poly, key, TAG_MAP[key], args.output_dir)
+        elapsed = time.time() - start
+        print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
+        return True
+    except Exception as e:
+        print(f"❌ Error while downloading '{key}' from OSM: {e}")
+        if not args.fallback_to_natural_earth:
+            return False
+
+    if key not in NATURAL_EARTH_DATASETS:
+        print(f"⚠️  Natural Earth does not provide '{key}' layer, skipping")
+        remove_layer_outputs(args.output_dir, key)
+        return None
+
+    print(f"🔄 Falling back to Natural Earth for '{key}'...")
+    remove_layer_outputs(args.output_dir, key)
+    start = time.time()
+    success = download_natural_earth_layer(
+        poly, key, args.output_dir, args.natural_earth_cache_dir
+    )
+    if success:
+        elapsed = time.time() - start
+        print(
+            f"✅ Completed '{key}' from Natural Earth fallback in {elapsed:.1f} seconds"
+        )
+        return True
+
+    print(f"❌ Natural Earth fallback did not provide '{key}'")
+    return False
+
+
 def main():
     p = argparse.ArgumentParser(
         description="Download intersecting OSM layers as GeoPackages for a place name or GeoJSON polygon."
@@ -295,6 +372,16 @@ def main():
         "--fallback-to-osm",
         action="store_true",
         help="When using natural-earth source, fallback to OSM for layers with no features",
+    )
+    p.add_argument(
+        "--fallback-to-natural-earth",
+        action="store_true",
+        help="When using OSM source, retry failed layers from Natural Earth when available.",
+    )
+    p.add_argument(
+        "--fail-on-layer-error",
+        action="store_true",
+        help="Exit non-zero when a requested layer cannot be downloaded.",
     )
     p.add_argument(
         "--cache-dir",
@@ -348,56 +435,19 @@ def main():
 
     os.makedirs(args.output_dir, exist_ok=True)
 
+    failed_layers = []
+
     # download each requested layer
     for key in args.layers:
         print(f"\n🔍 Processing layer: {key}")
+        result = download_requested_layer(poly, key, args)
+        if result is False and args.source != "natural-earth":
+            failed_layers.append(key)
 
-        if args.source == "natural-earth":
-            # Natural Earth data source
-            start = time.time()
-            success = False
-            try:
-                success = download_natural_earth_layer(
-                    poly, key, args.output_dir, args.natural_earth_cache_dir
-                )
-                if success:
-                    elapsed = time.time() - start
-                    print(
-                        f"✅ Completed '{key}' from Natural Earth in {elapsed:.1f} seconds"
-                    )
-            except Exception as e:
-                print(f"❌ Error while downloading '{key}' from Natural Earth: {e}")
-
-            # Fallback to OSM only if enabled and layer is supposed to be in Natural Earth
-            if (
-                args.fallback_to_osm
-                and not success
-                and key in NATURAL_EARTH_DATASETS
-                and key in TAG_MAP
-            ):
-                print(f"🔄 Falling back to OSM for '{key}'...")
-                start = time.time()
-                try:
-                    download_layer(poly, key, TAG_MAP[key], args.output_dir)
-                    elapsed = time.time() - start
-                    print(
-                        f"✅ Completed '{key}' from OSM fallback in {elapsed:.1f} seconds"
-                    )
-                except Exception as e:
-                    print(f"❌ Error while downloading '{key}' from OSM fallback: {e}")
-        else:
-            # OSM data source
-            if key not in TAG_MAP:
-                print(f"⚠️  Unknown layer '{key}', skipping")
-                continue
-            start = time.time()
-            print(f"⏳ Downloading '{key}' from OSM...")
-            try:
-                download_layer(poly, key, TAG_MAP[key], args.output_dir)
-                elapsed = time.time() - start
-                print(f"✅ Completed '{key}' in {elapsed:.1f} seconds")
-            except Exception as e:
-                print(f"❌ Error while downloading '{key}': {e}")
+    if args.fail_on_layer_error and failed_layers:
+        raise SystemExit(
+            "Failed to download requested layer(s): " + ", ".join(failed_layers)
+        )
 
 
 if __name__ == "__main__":
