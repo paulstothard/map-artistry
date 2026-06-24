@@ -285,6 +285,24 @@ All map types (`build`, `build-route`, and `build-gpx`) support optional text pa
 
 Route maps can derive distance metrics from the GPX track, while standard maps work well with custom stats like coordinates, elevation, area, or any other relevant information about the location.
 
+### Elevation Profile Scaling
+
+Route elevation profiles use per-route auto scaling by default, so each GPX profile fills the configured profile height. This produces a strong standalone graphic, but it can make flat and mountainous routes look equally dramatic when comparing several maps.
+
+To keep elevation profiles comparable across a set of route maps, add a fixed scale in an overlay config:
+
+```yaml
+map:
+  elevation_profile:
+    scale:
+      mode: fixed
+      min_m: 0
+      max_m: 2800
+      clip: true
+```
+
+Use `mode: auto` or omit the `scale` block to preserve the default per-route scaling. `mode: fixed` maps `min_m` to the bottom of the profile and `max_m` to the top; `clip: true` keeps out-of-range values within the profile band.
+
 ### How Data Is Selected
 
 The map pipeline chooses data sources dynamically from the estimated buffered area (`tier`). This controls DEM source, satellite zoom, and vector layer source.

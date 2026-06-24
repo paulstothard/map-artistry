@@ -101,6 +101,61 @@ def _apply_elevation_stretch(
     return np.clip(stretched, 0.0, 1.0)
 
 
+def _normalize_route_elevation_profile(
+    elev: np.ndarray,
+    profile_cfg: dict,
+) -> np.ndarray:
+    """Normalize route elevations using auto or fixed profile scale settings."""
+    scale_cfg = profile_cfg.get("scale") or {}
+    if not isinstance(scale_cfg, dict):
+        scale_cfg = {}
+
+    mode = str(scale_cfg.get("mode", "auto")).strip().lower()
+    if mode in {"fixed", "constant"}:
+        try:
+            elev_min = float(scale_cfg.get("min_m"))
+            elev_max = float(scale_cfg.get("max_m"))
+        except (TypeError, ValueError):
+            print(
+                "Warning: elevation_profile.scale mode is fixed but min_m/max_m "
+                "are invalid; falling back to auto scaling."
+            )
+            mode = "auto"
+        else:
+            if not np.isfinite(elev_min) or not np.isfinite(elev_max):
+                print(
+                    "Warning: elevation_profile.scale mode is fixed but min_m/max_m "
+                    "are not finite; falling back to auto scaling."
+                )
+                mode = "auto"
+            elif elev_max <= elev_min:
+                print(
+                    "Warning: elevation_profile.scale max_m must be greater than "
+                    "min_m; falling back to auto scaling."
+                )
+                mode = "auto"
+    elif mode != "auto":
+        print(
+            f"Warning: unknown elevation_profile.scale mode '{mode}'; "
+            "falling back to auto scaling."
+        )
+        mode = "auto"
+
+    if mode == "auto":
+        elev_min = float(np.min(elev))
+        elev_max = float(np.max(elev))
+
+    if elev_max > elev_min:
+        normalized = (elev - elev_min) / (elev_max - elev_min)
+    else:
+        normalized = np.zeros_like(elev)
+
+    if mode in {"fixed", "constant"} and scale_cfg.get("clip", True):
+        normalized = np.clip(normalized, 0.0, 1.0)
+
+    return normalized
+
+
 def _normalize_dem_for_colormap(
     dem: np.ndarray,
     finite_mask: np.ndarray,
@@ -1751,12 +1806,7 @@ def _render_elevation_profile(ax, route_coords, elevation_data, profile_cfg, mas
         else:
             elev = np.full_like(elev, valid_vals[0])
 
-    elev_min = float(np.min(elev))
-    elev_max = float(np.max(elev))
-    if elev_max > elev_min:
-        elev_normalized = (elev - elev_min) / (elev_max - elev_min)
-    else:
-        elev_normalized = np.zeros_like(elev)
+    elev_normalized = _normalize_route_elevation_profile(elev, profile_cfg)
 
     x_coords = np.linspace(0.0, 1.0, len(elev_normalized))
     y_coords = elev_normalized * profile_height_fraction
