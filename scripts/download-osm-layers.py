@@ -22,6 +22,7 @@ Dependencies:
 """
 import os
 import argparse
+import json
 import geopandas as gpd
 import osmnx as ox
 import warnings
@@ -270,7 +271,35 @@ def download_layer(poly, key, tags, outdir):
 
 def download_requested_layer(poly, key, args):
     """Download one requested layer, with optional Natural Earth fallback."""
-    if args.source == "natural-earth":
+    return download_requested_layer_from_source(poly, key, args, args.source)
+
+
+def write_completion_manifest(args, final_source):
+    """Record that this layer directory was prepared by a complete command."""
+    path = Path(args.output_dir) / ".layers-complete.json"
+    payload = {
+        "requested_layers": args.layers,
+        "source": args.source,
+        "final_source": final_source,
+        "fallback_to_natural_earth": bool(args.fallback_to_natural_earth),
+        "fallback_to_osm": bool(args.fallback_to_osm),
+        "completed_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def clear_completion_manifest(outdir):
+    """Remove the completion marker before starting a layer-prep command."""
+    path = Path(outdir) / ".layers-complete.json"
+    if path.exists():
+        path.unlink()
+
+
+def download_requested_layer_from_source(poly, key, args, source):
+    """Download one requested layer from a selected source."""
+    if source == "natural-earth":
         if key not in NATURAL_EARTH_DATASETS:
             print(f"⚠️  Natural Earth does not provide '{key}' layer, skipping")
             return None
@@ -313,7 +342,7 @@ def download_requested_layer(poly, key, args):
     if key not in NATURAL_EARTH_DATASETS:
         print(f"⚠️  Natural Earth does not provide '{key}' layer, skipping")
         remove_layer_outputs(args.output_dir, key)
-        return None
+        return "fallback"
 
     print(f"🔄 Falling back to Natural Earth for '{key}'...")
     remove_layer_outputs(args.output_dir, key)
@@ -326,7 +355,7 @@ def download_requested_layer(poly, key, args):
         print(
             f"✅ Completed '{key}' from Natural Earth fallback in {elapsed:.1f} seconds"
         )
-        return True
+        return "fallback"
 
     print(f"❌ Natural Earth fallback did not provide '{key}'")
     return False
@@ -434,20 +463,42 @@ def main():
     print(f"Using bounding box: {poly.bounds}")
 
     os.makedirs(args.output_dir, exist_ok=True)
+    clear_completion_manifest(args.output_dir)
 
     failed_layers = []
+
+    current_source = args.source
 
     # download each requested layer
     for key in args.layers:
         print(f"\n🔍 Processing layer: {key}")
-        result = download_requested_layer(poly, key, args)
-        if result is False and args.source != "natural-earth":
+        previous_source = current_source
+        result = download_requested_layer_from_source(poly, key, args, current_source)
+        if previous_source == "osm" and result == "fallback":
+            print(
+                "⚠️  OSM layer download failed after retries; "
+                "using Natural Earth for remaining compatible layers."
+            )
+            current_source = "natural-earth"
+        if (
+            result is False
+            and previous_source == "osm"
+            and args.fallback_to_natural_earth
+        ):
+            print(
+                "⚠️  OSM layer download failed after retries; "
+                "using Natural Earth for remaining compatible layers."
+            )
+            current_source = "natural-earth"
+        if result is False and previous_source != "natural-earth":
             failed_layers.append(key)
 
     if args.fail_on_layer_error and failed_layers:
         raise SystemExit(
             "Failed to download requested layer(s): " + ", ".join(failed_layers)
         )
+
+    write_completion_manifest(args, current_source)
 
 
 if __name__ == "__main__":

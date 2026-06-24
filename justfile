@@ -407,6 +407,7 @@ _build-map region scheme width height dpi format buffer text_title text_subtitle
             rm -f "$DATA_DIR/dem.tif"
             rm -f "$DATA_DIR/satellite.tif"
             rm -f "$DATA_DIR/layers"/*.gpkg
+            rm -f "$DATA_DIR/layers/.layers-complete.json"
         fi
     fi
 
@@ -446,7 +447,7 @@ _build-map region scheme width height dpi format buffer text_title text_subtitle
     fi
 
     # Download layers
-    if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
+    if [ ! -f "$DATA_DIR/layers/.layers-complete.json" ]; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
         {{ python }} "{{ scripts_dir }}/download-osm-layers.py" \
             --geojson "$DATA_DIR/area.geojson" \
@@ -675,6 +676,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
             rm -f "$DATA_DIR/dem.tif"
             rm -f "$DATA_DIR/satellite.tif"
             rm -f "$DATA_DIR/layers"/*.gpkg
+            rm -f "$DATA_DIR/layers/.layers-complete.json"
         fi
     fi
     echo "$NEW_CHECKSUM" > "$CHECKSUM_FILE"
@@ -699,7 +701,7 @@ _build-map-route region gpx scheme width height dpi format buffer text_title tex
         echo "   ✓ DEM exists"
     fi
 
-    if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
+    if [ ! -f "$DATA_DIR/layers/.layers-complete.json" ]; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
         {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE" --fallback-to-natural-earth --fail-on-layer-error
     else
@@ -859,6 +861,21 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
     echo ""
 
     echo "📦 Step 4: Preparing data..."
+    CHECKSUM_FILE="$DATA_DIR/.geojson-checksum"
+    NEW_CHECKSUM=$(shasum -a 256 "$DATA_DIR/area.geojson" | cut -d' ' -f1)
+
+    if [ -f "$CHECKSUM_FILE" ]; then
+        OLD_CHECKSUM=$(cat "$CHECKSUM_FILE")
+        if [ "$NEW_CHECKSUM" != "$OLD_CHECKSUM" ]; then
+            echo "   ⚠️  Boundary changed - invalidating cached data..."
+            rm -f "$DATA_DIR/dem.tif"
+            rm -f "$DATA_DIR/satellite.tif"
+            rm -f "$DATA_DIR/layers"/*.gpkg
+            rm -f "$DATA_DIR/layers/.layers-complete.json"
+        fi
+    fi
+    echo "$NEW_CHECKSUM" > "$CHECKSUM_FILE"
+
     if [ ! -f "$DATA_DIR/dem.tif" ]; then
         echo "   ⛰️  Downloading DEM (${DEM_SOURCE})..."
         {{ python }} "{{ scripts_dir }}/download-dem.py" --boundary "$DATA_DIR/area.geojson" --output "$DATA_DIR/dem.tif" --source "$DEM_SOURCE"
@@ -866,7 +883,7 @@ _build-map-gpx gpx scheme width height dpi format buffer text_title text_subtitl
         echo "   ✓ DEM exists"
     fi
 
-    if ! ls "$DATA_DIR/layers"/*.gpkg 1> /dev/null 2>&1; then
+    if [ ! -f "$DATA_DIR/layers/.layers-complete.json" ]; then
         echo "   🗺️  Downloading layers (${OSM_SOURCE})..."
         {{ python }} "{{ scripts_dir }}/download-osm-layers.py" --geojson "$DATA_DIR/area.geojson" --output-dir "$DATA_DIR/layers" --cache-dir "{{ cache_dir }}" --natural-earth-cache-dir "{{ natural_earth_cache_dir }}" --source "$OSM_SOURCE" --fallback-to-natural-earth --fail-on-layer-error
     else
