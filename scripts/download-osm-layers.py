@@ -297,6 +297,12 @@ def clear_completion_manifest(outdir):
         path.unlink()
 
 
+def clear_requested_layer_outputs(outdir, layers):
+    """Remove prior outputs for the requested layer set before a fresh run."""
+    for key in layers:
+        remove_layer_outputs(outdir, key)
+
+
 def download_requested_layer_from_source(poly, key, args, source):
     """Download one requested layer from a selected source."""
     if source == "natural-earth":
@@ -464,6 +470,7 @@ def main():
 
     os.makedirs(args.output_dir, exist_ok=True)
     clear_completion_manifest(args.output_dir)
+    clear_requested_layer_outputs(args.output_dir, args.layers)
 
     failed_layers = []
 
