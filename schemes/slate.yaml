@@ -150,8 +150,8 @@ map:
         linewidth: 1.5
       start_marker:
         style: concentric_circles
-        color: "#ff6a00"
-        ring_color: "#ff6a00"
+        color: "#2e7d32"
+        ring_color: "#2e7d32"
         fill_color: "#ffffff"
         size: 16.0
         ring_width_scale: 0.14
@@ -159,8 +159,8 @@ map:
         core_edge_width_scale: 0.035
       end_marker:
         style: concentric_circles
-        color: "#ff6a00"
-        ring_color: "#ff6a00"
+        color: "#d32f2f"
+        ring_color: "#d32f2f"
         fill_color: "#ffffff"
         size: 16.0
         ring_width_scale: 0.14
